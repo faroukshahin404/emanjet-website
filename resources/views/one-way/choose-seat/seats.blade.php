@@ -1,0 +1,37 @@
+   <div class="col-md-6 mb-3">
+       <div class="d-flex justify-content-center align-items-center gap-3">
+           <div class="d-flex align-items-center gap-2">
+               <span class="chair-label">كرسيك</span>
+               <div class="your-chair"></div>
+           </div>
+           <div class="d-flex align-items-center gap-2">
+               <span class="chair-label">متاح</span>
+               <div class="available-chair"></div>
+           </div>
+           <div class="d-flex align-items-center gap-2">
+               <span class="chair-label">محجوز</span>
+               <div class="reserved-chair"></div>
+           </div>
+       </div>
+       <div class="d-flex justify-content-center align-items-center">
+        <div class="row mt-3 justify-content-center chairs" style="width: 250px;">
+            @foreach ($seats as $seat)
+                @if ($seat['type'] == 1)
+                    <div class="chair-number">
+                        <input type="checkbox"
+                            data-price="{{ $seat['price'] }}"
+                            data-name="{{ $seat['name'] }}"
+                            id="chair{{ $seat['tripSeat_id'] }}"
+                            class="chair-checkbox"
+                            {{ $seat['available'] ? '' : 'disabled' }}>
+                        <label for="chair{{ $seat['tripSeat_id'] }}">{{ $seat['name'] }}</label>
+                    </div>
+                @else
+                    <div style="width: 50px;"></div>
+                @endif
+            @endforeach
+        </div>
+    </div>
+
+
+   </div>

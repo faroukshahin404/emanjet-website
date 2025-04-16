@@ -1,4 +1,6 @@
-@extends('layouts.master')
+@extends('layouts.master', [
+    'isHome' => true,
+])
 @section('content')
     <!-- start hero section  -->
     <div class="hero-section">
@@ -8,17 +10,17 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title text-center fw-bold mb-3">احجز رحلتك دلوقتي!</h5>
-                            <form>
+                            <form action="{{ route('one-way.trips') }}">
                                 <!-- اختيار نوع الرحلة -->
                                 <div class="d-flex justify-content-center gap-3 mb-3 trip-type py-3">
                                     <div class="form-check">
                                         <input class="form-check-input form-check-input-pay" type="radio" name="tripType"
-                                            id="oneWayRadioDes" checked>
+                                            id="oneWayRadioDes" value="oneway" checked>
                                         <label class="form-check-label fw-bold text-black" for="oneWayRadioDes">ذهاب
                                             فقط</label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input form-check-input-pay" type="radio" name="tripType"
+                                        <input class="form-check-input form-check-input-pay" type="radio" value="round" name="tripType"
                                             id="roundTripRadioDes">
                                         <label class="form-check-label fw-bold text-black" for="roundTripRadioDes">ذهاب
                                             وعودة</label>
@@ -33,10 +35,12 @@
                                             <i class="fas fa-location-dot mx-1"></i>
                                             السفر من
                                         </label>
-                                        <select class="form-select trip-select">
-                                            <option>القاهرة</option>
-                                            <option>الإسكندرية</option>
-                                            <option>أسوان</option>
+                                        <select class="form-select trip-select" name="city_from_id">
+                                            @foreach ($cities as $key => $city)
+                                                <option value="{{ $city->id }}"
+                                                    {{ request()->city_from_id == $city->id || $key == 0 ? 'selected' : '' }}>
+                                                    {{ $city->name }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                     <div class="col-md-6">
@@ -44,10 +48,12 @@
                                             <i class="fas fa-location-dot mx-1"></i>
                                             الوصول إلى
                                         </label>
-                                        <select class="form-select  trip-select">
-                                            <option>مرسى مطروح</option>
-                                            <option>شرم الشيخ</option>
-                                            <option>الغردقة</option>
+                                        <select class="form-select trip-select" name="city_to_id">
+                                            @foreach ($cities as $key => $city)
+                                                <option value="{{ $city->id }}"
+                                                    {{ request()->city_to_id == $city->id || $key == 1 ? 'selected' : '' }}>
+                                                    {{ $city->name }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -60,11 +66,12 @@
                                         </label>
 
                                         <div class="position-relative">
-                                            <input type="text" class="form-control datepicker-text"
-                                                value="الإثنين 7 أبريل 2025" readonly id="dateTextInput">
+                                            <input type="text" class="form-control datepicker-text" value=""
+                                                readonly id="dateTextInput">
 
-                                            <input type="date" class="form-control datepicker-real" min="2025-04-07"
-                                                max="2027-04-07" value="2025-04-07" id="dateRealInput">
+                                            <input type="date" class="form-control datepicker-real"
+                                                min="{{ date('Y-m-d') }}" max="2027-04-07" name="go_date"
+                                                value="{{ request()->go_date ?? date('Y-m-d') }}" id="dateRealInput">
                                         </div>
                                     </div>
                                     <div class="col-md-6 d-none">
@@ -75,11 +82,13 @@
                                             </label>
 
                                             <div class="position-relative">
-                                                <input type="text" class="form-control datepicker-text"
-                                                    value="الإثنين 7 أبريل 2025" readonly id="dateTextInput2">
+                                                <input type="text" class="form-control datepicker-text" value=""
+                                                    readonly id="dateTextInput2">
 
-                                                <input type="date" class="form-control datepicker-real" min="2025-04-07"
-                                                    max="2027-04-07" value="2025-04-07" id="dateRealInput2">
+                                                <input type="date" class="form-control datepicker-real"
+                                                    min="{{ date('Y-m-d') }}" max="2027-04-07"
+                                                    value="{{ request()->back_date ?? date('Y-m-d') }}" id="dateRealInput2"
+                                                    name="back_date">
                                             </div>
                                         </div>
                                     </div>
@@ -102,6 +111,7 @@
                                             <i class="fas fa-plus"></i>
                                         </button>
                                         <span class="mx-3" id="passengerCountdesktop">1</span>
+                                        <input type="hidden" id="passengerCountDesktopInput" value="1" name="seats"/>
                                         <button type="button" class="minus-btn" onclick="decrementPassengersdesktop()">
                                             <i class="fas fa-minus"></i>
                                         </button>
@@ -810,7 +820,14 @@
         document.addEventListener('DOMContentLoaded', function() {
             const dateTextInput = document.getElementById('dateTextInput');
             const dateRealInput = document.getElementById('dateRealInput');
-
+            const selectedDate = new Date();
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            };
+            dateTextInput.value = selectedDate.toLocaleDateString('ar-EG', options);
             dateTextInput.addEventListener('click', function() {
                 dateRealInput.showPicker();
             });
@@ -824,6 +841,10 @@
                     day: 'numeric'
                 };
                 dateTextInput.value = selectedDate.toLocaleDateString('ar-EG', options);
+                const dateTextInput2 = document.getElementById('dateTextInput2');
+                dateTextInput2.value = dateTextInput.value;
+                const dateRealInput2 = document.getElementById('dateRealInput2');
+                dateRealInput2.value = selectedDate;
             });
         });
     </script>
@@ -832,7 +853,14 @@
         document.addEventListener('DOMContentLoaded', function() {
             const dateTextInput2 = document.getElementById('dateTextInput2');
             const dateRealInput2 = document.getElementById('dateRealInput2');
-
+            const selectedDate = new Date();
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            };
+            dateTextInput2.value = selectedDate.toLocaleDateString('ar-EG', options);
             dateTextInput2.addEventListener('click', function() {
                 dateRealInput2.showPicker();
             });
@@ -854,16 +882,19 @@
     <script>
         let passengerCountdesktop = 1;
         const countElementdesktop = document.getElementById('passengerCountdesktop');
+        const countElementdesktopInput = document.getElementById('passengerCountDesktopInput');
 
         function incrementPassengersdesktop() {
             passengerCountdesktop++;
             countElementdesktop.textContent = passengerCountdesktop;
+            countElementdesktopInput.value = passengerCountdesktop;
         }
 
         function decrementPassengersdesktop() {
             if (passengerCountdesktop > 1) {
                 passengerCountdesktop--;
                 countElementdesktop.textContent = passengerCountdesktop;
+                countElementdesktopInput.value = passengerCountdesktop;
             }
         }
     </script>

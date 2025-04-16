@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en" dir="rtl">
 
 @include('layouts.head')
 
