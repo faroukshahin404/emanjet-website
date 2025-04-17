@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OneWayTripController;
 use App\Http\Controllers\RoundTripController;
@@ -24,3 +25,36 @@ Route::group([], function () {
     Route::get('contact-us', [HomeController::class, 'contact_us'])->name('contact-us');
     Route::post('contact-us', [HomeController::class, 'submit_contact_form'])->name('submit-contact-form');
 });
+
+Route::prefix('auth')->name('auth.')->group(function () {
+
+    // راوتات OTP والتوثيق - مفتوحة للمستخدم إذا لم يتم التحقق
+    Route::get('otp', [AuthController::class, 'otp'])->name('otp');
+    Route::post('otp', [AuthController::class, 'postOtp'])->name('postOtp');
+    Route::post('resend-otp', [AuthController::class, 'resendOtp'])->name('resendOtp');
+
+    // راوتات الضيف (غير مسجل الدخول)
+    Route::middleware('guest')->group(function () {
+        Route::get('login', [AuthController::class, 'login'])->name('login');
+        Route::post('login', [AuthController::class, 'postLogin'])->name('postLogin');
+        Route::get('register', [AuthController::class, 'register'])->name('register');
+        Route::post('register', [AuthController::class, 'postRegister'])->name('postRegister');
+    });
+
+    // راوتات للمستخدم المسجل فقط
+    Route::middleware('auth')->group(function () {
+        Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+
+        // إذا لم يتم التحقق
+        Route::get('verify', [AuthController::class, 'showVerifyPage'])
+            ->name('verify')
+            ->middleware('checkUserNotVerified');
+
+        // إذا تم التحقق
+        Route::middleware('checkUserVerified')->group(function () {
+            Route::get('profile', [AuthController::class, 'profile'])->name('profile');
+            Route::post('profile', [AuthController::class, 'updateProfile'])->name('update-profile');
+        });
+    });
+});
+

@@ -185,7 +185,8 @@ html[dir="ltr"] .navbar-nav {
     /* color: white; */
 }
 
-.phoneInput {
+.phoneInput,
+.passwordInput {
     width: 100%;
     height: 66.73228454589844px;
     background-color: white;
@@ -2663,11 +2664,11 @@ footer .footer-links-top {
 .mo-view .otp-box {
     width: 42px;
     height: 38px;
+    align-items: center;
     border-radius: 10.96px;
     background-color: #D9D9D9;
     border: none;
     padding: 5px;
-    text-align: center;
     font-size: 16px;
     color: #000;
 }
@@ -2880,4 +2881,10 @@ footer .footer-links-top {
     border-radius: 12px;
     font-weight: 400;
     font-size: 15.18px;
+}
+
+.register-desktop,
+.otp-desktop {
+    margin-top: 120px;
+    margin-bottom: 50px;
 }

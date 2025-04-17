@@ -1,4 +1,3 @@
-
 <Footer>
     <div class="container-fluid">
         <div class="row">
@@ -41,7 +40,7 @@
                                 <p>Download On The</p>
                                 <h6>App Store</h6>
                             </div>
-                                <i class="fa-brands fa-apple"></i>
+                            <i class="fa-brands fa-apple"></i>
                         </div>
                     </button>
                     <button class="google-play-box-footer rounded-5">
@@ -50,7 +49,7 @@
                                 <p>Get It On</p>
                                 <h6>Google Play</h6>
                             </div>
-                            <img src="./images/google-play-icon.png" alt="goole-play">
+                            <img src="{{ asset('images/google-play-icon.png') }}" alt="goole-play">
                         </div>
                     </button>
                 </div>

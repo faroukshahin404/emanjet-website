@@ -49,25 +49,34 @@
                 <option value="en">English</option>
             </select>
 
-            <button class="loginBtn" data-bs-toggle="modal" data-bs-target="#loginModal">
-                <div class="d-flex align-items-center gap-2">
-                    <i class="fas fa-unlock"></i>
-                    <p class="m-0" data-lang='{"en": "Login", "ar": "تسجيل الدخول"}'>تسجيل الدخول</p>
+            @guest
+                <a class="loginBtn d-flex align-items-center" href="{{ route('auth.login') }}">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fas fa-unlock"></i>
+                        <p class="m-0" data-lang='{"en": "Login", "ar": "تسجيل الدخول"}'>تسجيل الدخول</p>
+                    </div>
+                </a>
+            @endguest
+
+            @auth
+                <div class="dropdown mx-2 px-2 " style="width:fit-content;">
+                    <button class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        مرحبًا, {{ implode(' ', array_slice(explode(' ', Auth::user()->name), 0, 2)) }}
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item" href="profile.html">رحلاتي</a></li>
+                        <li><a class="dropdown-item" href="{{ route('auth.profile') }}">بياناتي</a></li>
+                        <li>
+                            <button class="dropdown-item" type="button" data-bs-toggle="modal"
+                                data-bs-target="#logoutModal">
+                                تسجيل الخروج
+                            </button>
+                        </li>
+                    </ul>
                 </div>
-            </button>
 
-            <div class="dropdown mx-2">
-                <button class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
-                    aria-expanded="false">
-                    مرحبا , سيد اسامة
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item" href="profile.html">رحلاتي</a></li>
-                    <li><a class="dropdown-item" href="profile.html">بياناتي</a></li>
-                    <li><a class="dropdown-item" href="#">خروج</a></li>
-                </ul>
-            </div>
-
+            @endauth
             <!-- Modal -->
             <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true"
                 data-bs-backdrop="false">
@@ -80,7 +89,7 @@
                         </div>
 
                         <div class="modal-body">
-                            <form action="" class="login-form">
+                            <form class="login-form">
                                 <div class="position-relative">
                                     <input type="text" class="phoneInput" placeholder="رقم الهاتف">
                                     <i class="fas fa-phone phone-icon"></i>

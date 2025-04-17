@@ -19,7 +19,7 @@ document.getElementById("languageSelect").addEventListener("change", function ()
     changeLanguage(this.value);
 });
 
-//navbar scroll 
+//navbar scroll
 window.addEventListener("scroll", function () {
     const navbar = document.querySelector(".navbar");
     if (window.scrollY > 0) {
@@ -29,15 +29,19 @@ window.addEventListener("scroll", function () {
     }
 });
 
-// hero section 
+// hero section
 window.addEventListener('load', function () {
     const navbar = document.querySelector('.navbar');
     const heroSection = document.querySelector('.hero-section');
+
+    if (!navbar || !heroSection) return;
+
     const navbarHeight = navbar.offsetHeight;
     heroSection.style.paddingTop = `${navbarHeight}px`;
 });
 
-// active links 
+
+// active links
 document.addEventListener("DOMContentLoaded", function () {
     const currentPage = window.location.pathname.split("/").pop() || "index.html";
     const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
@@ -49,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-// heart btn 
+// heart btn
 document.addEventListener("DOMContentLoaded", function () {
     const heartButtons = document.querySelectorAll(".heart-btn");
 

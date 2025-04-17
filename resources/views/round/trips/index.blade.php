@@ -291,7 +291,7 @@
                                 </div>
                             </div>
                         </div>
-                        @forelse ($goTrips as $trip)
+                        @forelse ($backTrips as $trip)
                             <div class="border rounded-9 px-3 py-3 mb-3">
                                 <div class="row ">
                                     <div class="col-lg-8 col-md-12 ">

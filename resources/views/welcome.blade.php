@@ -20,11 +20,11 @@
     <!-- MDB CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css" rel="stylesheet">
     <!-- Favicon -->
-    <link rel="shortcut icon" href="./images/logo.png" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('images/logo.png') }}" type="image/x-icon">
     <!-- apple-touch-icon -->
-    <link rel="apple-touch-icon" href="./images/logo.png">
+    <link rel="apple-touch-icon" href="{{ asset('images/logo.png') }}">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <title>Super Jet</title>
 </head>
 
@@ -101,8 +101,9 @@
                                                 <input type="text" class="form-control datepicker-text"
                                                     value="الإثنين 7 أبريل 2025" readonly id="dateTextInput">
 
-                                                <input type="date" class="form-control datepicker-real" min="2025-04-07"
-                                                    max="2027-04-07" value="2025-04-07" id="dateRealInput">
+                                                <input type="date" class="form-control datepicker-real"
+                                                    min="2025-04-07" max="2027-04-07" value="2025-04-07"
+                                                    id="dateRealInput">
                                             </div>
                                         </div>
                                         <div class="col-md-6 d-none">
@@ -188,7 +189,7 @@
                                         <p>Get It On</p>
                                         <h6>Google Play</h6>
                                     </div>
-                                    <img src="./images/google-play-icon.png" alt="">
+                                    <img src="{{ asset('images/google-play-icon.png') }}" alt="">
                                 </div>
                             </button>
                         </div>
@@ -203,7 +204,8 @@
         <div class="any-where py-5 bg-white px-4">
             <div class="container-fluid px-5">
                 <div class="row">
-                    <div class="col-md-6 any-where-caption d-flex flex-column align-items-start justify-content-center">
+                    <div
+                        class="col-md-6 any-where-caption d-flex flex-column align-items-start justify-content-center">
                         <h2>سوبر جيت معك في آي مكان</h2>
                         <p class="mt-5">
                             لكن لا بد أن أوضح لك أن كل هذه الأفكار المغلوطة حول استنكار النشوة وتمجيد الألم نشأت بالفعل،
@@ -223,7 +225,7 @@
                         </h6>
                     </div>
                     <div class="col-md-6 position-relative map">
-                        <img class="" src="./images/map.png" alt="map">
+                        <img class="" src="{{ asset('images/map.png') }}" alt="map">
                         <div>
                             <div class="circle-alex"></div>
                             <div class="title-alex">الاسكندرية</div>
@@ -807,7 +809,8 @@
                                 <div>
                                     <div class="d-flex align-items-center gap-2">
                                         <i class="fas fa-location-dot from-icon"></i>
-                                        <input type="text" class="border-0 from-input" placeholder="من" value="القاهرة">
+                                        <input type="text" class="border-0 from-input" placeholder="من"
+                                            value="القاهرة">
                                     </div>
                                     <hr>
                                     <div class="d-flex align-items-center gap-2">
@@ -818,7 +821,7 @@
                                 </div>
                                 <button type="button" class="swap-btn bg-transparent border-0"
                                     aria-label="تبديل الوجهات">
-                                    <img src="./images/mobile/swap.png" alt="swap">
+                                    <img src="{{ asset('images/mobile/swap.png') }}" alt="swap">
                                 </button>
                             </div>
                         </div>
@@ -1060,7 +1063,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             new Swiper('.mySwiper', {
                 slidesPerView: 1,
                 spaceBetween: 10,
@@ -1070,16 +1073,25 @@
                     prevEl: ".swiper-button-prev",
                 },
                 breakpoints: {
-                    640: { slidesPerView: 2, spaceBetween: 10 },
-                    768: { slidesPerView: 3, spaceBetween: 10 },
-                    1024: { slidesPerView: 5, spaceBetween: 10 },
+                    640: {
+                        slidesPerView: 2,
+                        spaceBetween: 10
+                    },
+                    768: {
+                        slidesPerView: 3,
+                        spaceBetween: 10
+                    },
+                    1024: {
+                        slidesPerView: 5,
+                        spaceBetween: 10
+                    },
                 },
             });
         });
     </script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const isRTL = document.documentElement.dir === 'rtl';
 
             new Swiper('.mySwiper2', {
@@ -1088,16 +1100,25 @@
                 loop: false,
                 rtl: isRTL,
                 breakpoints: {
-                    640: { slidesPerView: 2, spaceBetween: 10 },
-                    768: { slidesPerView: 3, spaceBetween: 10 },
-                    1024: { slidesPerView: 5, spaceBetween: 10 },
+                    640: {
+                        slidesPerView: 2,
+                        spaceBetween: 10
+                    },
+                    768: {
+                        slidesPerView: 3,
+                        spaceBetween: 10
+                    },
+                    1024: {
+                        slidesPerView: 5,
+                        spaceBetween: 10
+                    },
                 },
             });
         });
     </script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const isRTL = document.documentElement.dir === 'rtl';
 
             new Swiper('.mySwiper3', {
@@ -1106,16 +1127,25 @@
                 loop: false,
                 rtl: isRTL,
                 breakpoints: {
-                    640: { slidesPerView: 2, spaceBetween: 10 },
-                    768: { slidesPerView: 3, spaceBetween: 10 },
-                    1024: { slidesPerView: 5, spaceBetween: 10 },
+                    640: {
+                        slidesPerView: 2,
+                        spaceBetween: 10
+                    },
+                    768: {
+                        slidesPerView: 3,
+                        spaceBetween: 10
+                    },
+                    1024: {
+                        slidesPerView: 5,
+                        spaceBetween: 10
+                    },
                 },
             });
         });
     </script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const isRTL = document.documentElement.dir === 'rtl';
 
             new Swiper('.mySwiper4', {
@@ -1124,43 +1154,62 @@
                 loop: false,
                 rtl: isRTL,
                 breakpoints: {
-                    640: { slidesPerView: 2, spaceBetween: 10 },
-                    768: { slidesPerView: 3, spaceBetween: 10 },
-                    1024: { slidesPerView: 5, spaceBetween: 10 },
+                    640: {
+                        slidesPerView: 2,
+                        spaceBetween: 10
+                    },
+                    768: {
+                        slidesPerView: 3,
+                        spaceBetween: 10
+                    },
+                    1024: {
+                        slidesPerView: 5,
+                        spaceBetween: 10
+                    },
                 },
             });
         });
     </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const dateTextInput = document.getElementById('dateTextInput');
             const dateRealInput = document.getElementById('dateRealInput');
 
-            dateTextInput.addEventListener('click', function () {
+            dateTextInput.addEventListener('click', function() {
                 dateRealInput.showPicker();
             });
 
-            dateRealInput.addEventListener('change', function () {
+            dateRealInput.addEventListener('change', function() {
                 const selectedDate = new Date(this.value);
-                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                const options = {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                };
                 dateTextInput.value = selectedDate.toLocaleDateString('ar-EG', options);
             });
         });
     </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const dateTextInput2 = document.getElementById('dateTextInput2');
             const dateRealInput2 = document.getElementById('dateRealInput2');
 
-            dateTextInput2.addEventListener('click', function () {
+            dateTextInput2.addEventListener('click', function() {
                 dateRealInput2.showPicker();
             });
 
-            dateRealInput2.addEventListener('change', function () {
+            dateRealInput2.addEventListener('change', function() {
                 const selectedDate = new Date(this.value);
-                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                const options = {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                };
                 dateTextInput2.value = selectedDate.toLocaleDateString('ar-EG', options);
             });
         });
@@ -1218,10 +1267,10 @@
     </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const swapBtn = document.querySelector('.swap-btn');
 
-            swapBtn.addEventListener('click', function () {
+            swapBtn.addEventListener('click', function() {
                 const fromInput = document.querySelector('.from-input');
                 const toInput = document.querySelector('.to-input');
 
@@ -1239,7 +1288,7 @@
     </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const oneWayRadio = document.getElementById('oneWayRadio');
             const roundTripRadio = document.getElementById('roundTripRadio');
             const returnDateCol = document.getElementById('returnDateCol');
@@ -1273,7 +1322,7 @@
     </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const oneWayRadioDes = document.getElementById('oneWayRadioDes');
             const roundTripRadioDes = document.getElementById('roundTripRadioDes');
             const returnDateContainer = document.querySelector('.col-md-6.d-none');
@@ -1284,7 +1333,7 @@
                 radio.addEventListener('change', updateTripTypeDisplay);
             });
 
-            arrivalTimeLink.addEventListener('click', function (e) {
+            arrivalTimeLink.addEventListener('click', function(e) {
                 e.preventDefault();
                 roundTripRadioDes.checked = true;
                 updateTripTypeDisplay();
@@ -1303,17 +1352,17 @@
     </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const bellBox = document.querySelector('.mo-bell-box');
             const dropdown = document.querySelector('.notifications-dropdown');
 
-            bellBox.addEventListener('click', function (e) {
+            bellBox.addEventListener('click', function(e) {
                 e.stopPropagation();
                 dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
             });
 
             // إغلاق القائمة عند النقر خارجها
-            document.addEventListener('click', function () {
+            document.addEventListener('click', function() {
                 dropdown.style.display = 'none';
             });
         });

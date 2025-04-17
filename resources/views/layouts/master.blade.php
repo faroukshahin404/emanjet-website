@@ -4,12 +4,14 @@
 @include('layouts.head')
 
 <body>
+    <div class="custom-toastr-container"></div>
+
     <div class="desktop d-lg-block d-none">
 
         @include('layouts.header')
         @yield('content')
         @include('layouts.footer')
-        
+
     </div>
     <div class="mobile d-lg-none d-block">
         <div class="container mo-view mb-5 mt-3 px-4 ">
@@ -87,7 +89,7 @@
                                 </div>
                                 <button type="button" class="swap-btn bg-transparent border-0"
                                     aria-label="تبديل الوجهات">
-                                    <img src="./images/mobile/swap.png" alt="swap">
+                                    <img src="{{ asset('images/mobile/swap.png') }}" alt="swap">
                                 </button>
                             </div>
                         </div>
@@ -232,7 +234,7 @@
                                         <span class="fs-20">30%</span>
                                         <p class="m-0">للمستخدمين الجدد</p>
                                     </div>
-                                    <img class="promo-img rounded-7" src="./images/mobile/promo.png"
+                                    <img class="promo-img rounded-7" src="{{ asset('images/mobile/promo.png') }}"
                                         alt="promo">
                                 </div>
                             </div>
@@ -244,7 +246,7 @@
                                         <span class="fs-20">30%</span>
                                         <p class="m-0">للمستخدمين الجدد</p>
                                     </div>
-                                    <img class="promo-img rounded-7" src="./images/mobile/promo.png"
+                                    <img class="promo-img rounded-7" src="{{ asset('images/mobile/promo.png') }}"
                                         alt="promo">
                                 </div>
                             </div>
@@ -261,35 +263,40 @@
 
                             <div class="swiper-slide">
                                 <div>
-                                    <img class="promo-img" src="./images/mobile/new-places.png" alt="new-places">
+                                    <img class="promo-img" src="{{ asset('images/mobile/new-places.png') }}"
+                                        alt="new-places">
                                     <p class="text-black">الاسكندرية</p>
                                 </div>
                             </div>
 
                             <div class="swiper-slide">
                                 <div>
-                                    <img class="promo-img" src="./images/mobile/new-places.png" alt="new-places">
+                                    <img class="promo-img" src="{{ asset('images/mobile/new-places.png') }}"
+                                        alt="new-places">
                                     <p class="text-black">الاسكندرية</p>
                                 </div>
                             </div>
 
                             <div class="swiper-slide">
                                 <div>
-                                    <img class="promo-img" src="./images/mobile/new-places.png" alt="new-places">
+                                    <img class="promo-img" src="{{ asset('images/mobile/new-places.png') }}"
+                                        alt="new-places">
                                     <p class="text-black">الاسكندرية</p>
                                 </div>
                             </div>
 
                             <div class="swiper-slide">
                                 <div>
-                                    <img class="promo-img" src="./images/mobile/new-places.png" alt="new-places">
+                                    <img class="promo-img" src="{{ asset('images/mobile/new-places.png') }}"
+                                        alt="new-places">
                                     <p class="text-black">الاسكندرية</p>
                                 </div>
                             </div>
 
                             <div class="swiper-slide">
                                 <div>
-                                    <img class="promo-img" src="./images/mobile/new-places.png" alt="new-places">
+                                    <img class="promo-img" src="{{ asset('images/mobile/new-places.png') }}"
+                                        alt="new-places">
                                     <p class="text-black">الاسكندرية</p>
                                 </div>
                             </div>
@@ -342,6 +349,25 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Custom JS -->
-    <script src="./js/main.js" defer></script>
+    <script src="{{ asset('js/main.js') }}" defer></script>
+    <script src="{{ asset('js/custom-toastr.js') }}"></script>
 
+    @if (session('success'))
+        <script>
+            showToast('success', "{{ session('success') }}");
+        </script>
+    @endif
+    @if (session('error'))
+        <script>
+            showToast('error', "{{ session('error') }}");
+        </script>
+    @endif
+
+    @if ($errors->any())
+        <script>
+            showToast('error', "{{ $errors->first() }}");
+        </script>
+    @endif
+
+    @include('includes.logout-modal')
 </body>
