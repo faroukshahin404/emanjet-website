@@ -10,7 +10,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title text-center fw-bold mb-3">احجز رحلتك دلوقتي!</h5>
-                            <form action="{{ route('one-way.trips') }}">
+                            <form id="tripForm" action="{{ route('one-way.trips') }}" method="GET">
                                 <!-- اختيار نوع الرحلة -->
                                 <div class="d-flex justify-content-center gap-3 mb-3 trip-type py-3">
                                     <div class="form-check">
@@ -20,42 +20,46 @@
                                             فقط</label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input form-check-input-pay" type="radio" value="round" name="tripType"
-                                            id="roundTripRadioDes">
+                                        <input class="form-check-input form-check-input-pay" type="radio" value="round"
+                                            name="tripType" id="roundTripRadioDes">
                                         <label class="form-check-label fw-bold text-black" for="roundTripRadioDes">ذهاب
                                             وعودة</label>
                                     </div>
                                     <span class="badge bg-warning text-white">خصم خاص</span>
                                 </div>
 
-                                <!-- اختيار المدن -->
+                                <!-- start from to  -->
                                 <div class="row g-3 mb-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-bold text-black text-center">
-                                            <i class="fas fa-location-dot mx-1"></i>
-                                            السفر من
-                                        </label>
-                                        <select class="form-select trip-select" name="city_from_id">
-                                            @foreach ($cities as $key => $city)
-                                                <option value="{{ $city->id }}"
-                                                    {{ request()->city_from_id == $city->id || $key == 0 ? 'selected' : '' }}>
-                                                    {{ $city->name }}</option>
-                                            @endforeach
-                                        </select>
+                                    <div class="col-md-6 position-relative">
+                                        <div
+                                            class="d-flex align-items-center gap-2 rounded-6 px-3 py-1 desktop-from-input-box">
+                                            <i class="fas fa-location-dot from-icon"></i>
+                                            <input type="text" class="border-0 from-input desktop-from-input"
+                                                placeholder="من" readonly data-bs-toggle="dropdown" aria-expanded="false"
+                                                id="fromInput">
+                                            <ul class="dropdown-menu p-0 main-stations" id="from-stations"></ul>
+                                            <ul class="dropdown-menu p-0 sub-stations-dropdown" id="from-sub-stations"></ul>
+                                        </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-bold text-black">
-                                            <i class="fas fa-location-dot mx-1"></i>
-                                            الوصول إلى
-                                        </label>
-                                        <select class="form-select trip-select" name="city_to_id">
-                                            @foreach ($cities as $key => $city)
-                                                <option value="{{ $city->id }}"
-                                                    {{ request()->city_to_id == $city->id || $key == 1 ? 'selected' : '' }}>
-                                                    {{ $city->name }}</option>
-                                            @endforeach
-                                        </select>
+
+                                    <div class="col-md-6 position-relative">
+                                        <div
+                                            class="d-flex align-items-center gap-2 rounded-6 px-3 py-1 desktop-from-input-box">
+                                            <i class="fas fa-circle-dot to-icon"></i>
+                                            <input type="text" class="border-0 to-input desktop-from-input"
+                                                placeholder="إلى" readonly data-bs-toggle="dropdown" aria-expanded="false"
+                                                id="toInput">
+                                            <ul class="dropdown-menu p-0 main-stations" id="to-stations"></ul>
+                                            <ul class="dropdown-menu p-0 sub-stations-dropdown" id="to-sub-stations"></ul>
+                                        </div>
                                     </div>
+
+                                    <!-- Hidden inputs for IDs -->
+                                    <input type="hidden" name="city_from_id" id="cityFrom_id">
+                                    <input type="hidden" name="city_to_id" id="cityTo_id">
+                                    <input type="hidden" name="station_from_id" id="stationFrom_id">
+                                    <input type="hidden" name="station_to_id" id="stationTo_id">
+
                                 </div>
 
                                 <div class="d-flex justify-content-between align-items-center gap-2">
@@ -111,7 +115,8 @@
                                             <i class="fas fa-plus"></i>
                                         </button>
                                         <span class="mx-3" id="passengerCountdesktop">1</span>
-                                        <input type="hidden" id="passengerCountDesktopInput" value="1" name="seats"/>
+                                        <input type="hidden" id="passengerCountDesktopInput" value="1"
+                                            name="seats" />
                                         <button type="button" class="minus-btn" onclick="decrementPassengersdesktop()">
                                             <i class="fas fa-minus"></i>
                                         </button>
@@ -1007,11 +1012,19 @@
 
             function updateTripTypeDisplay() {
                 if (roundTripRadioDes.checked) {
+                    // إظهار تاريخ العودة
                     returnDateContainer.classList.remove('d-none');
                     arrivalTimeSection.classList.add('d-none');
+
+                    // تغيير الـ action لرحلة ذهاب وعودة
+                    tripForm.action = "{{ route('round.trips') }}";
                 } else {
+                    // إخفاء تاريخ العودة
                     returnDateContainer.classList.add('d-none');
                     arrivalTimeSection.classList.remove('d-none');
+
+                    // تغيير الـ action لرحلة ذهاب فقط
+                    tripForm.action = "{{ route('one-way.trips') }}";
                 }
             }
         });
@@ -1031,6 +1044,229 @@
             document.addEventListener('click', function() {
                 dropdown.style.display = 'none';
             });
+        });
+    </script>
+    <style>
+        #to-sub-stations,
+        #from-sub-stations {
+            z-index: 9999999 !important;
+            max-height: 300px !important;
+            overflow-y: scroll !important;
+        }
+
+        .main-stations,
+        .sub-stations-dropdown {
+            transform: none !important;
+            top: 100% !important;
+            left: 0 !important;
+            position: absolute;
+            inset: 0px 0px auto auto;
+            margin: 0px;
+        }
+
+        /* لما تقف على الـ input */
+        .from-input,
+        .to-input {
+            cursor: pointer;
+        }
+
+        /* لما تقف على عناصر القائمة */
+        #fromInput,
+        #toInput,
+        #from-stations li,
+        #to-stations li,
+        #from-sub-stations li,
+        #to-sub-stations li {
+            cursor: pointer;
+        }
+    </style>
+
+    <!-- stations  -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // عناصر DOM
+            const fromInput = document.getElementById('fromInput');
+            const toInput = document.getElementById('toInput');
+            const fromStations = document.getElementById('from-stations');
+            const toStations = document.getElementById('to-stations');
+            const fromSubStations = document.getElementById('from-sub-stations');
+            const toSubStations = document.getElementById('to-sub-stations');
+
+            // تحميل المدن من API
+            async function loadCities() {
+                try {
+                    const response = await fetch('/get-cities');
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return await response.json();
+                } catch (error) {
+                    console.error('Error loading cities:', error);
+                    return [];
+                }
+            }
+
+            // تحميل المحطات من API
+            async function loadStations(cityId) {
+                try {
+                    const response = await fetch(`/get-stations/${cityId}`);
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return await response.json();
+                } catch (error) {
+                    console.error('Error loading stations:', error);
+                    return [];
+                }
+            }
+
+            // تهيئة القوائم المنسدلة
+            async function initDropdowns() {
+                const cities = await loadCities();
+
+                initDropdown('from', cities);
+                initDropdown('to', cities);
+
+                // أحداث النقر على المدخلات
+                fromInput.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    toggleDropdown('from-stations', true);
+                    toggleDropdown('from-sub-stations', false);
+                });
+
+                toInput.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    toggleDropdown('to-stations', true);
+                    toggleDropdown('to-sub-stations', false);
+                });
+
+                // إغلاق القوائم عند النقر خارجها
+                document.addEventListener('click', function() {
+                    toggleDropdown('from-stations', false);
+                    toggleDropdown('from-sub-stations', false);
+                    toggleDropdown('to-stations', false);
+                    toggleDropdown('to-sub-stations', false);
+                });
+            }
+
+            // تهيئة قائمة منسدلة واحدة
+            async function initDropdown(type, cities) {
+                const mainMenu = document.getElementById(`${type}-stations`);
+                const subMenu = document.getElementById(`${type}-sub-stations`);
+
+                // تفريغ القوائم
+                mainMenu.innerHTML = '';
+                subMenu.innerHTML = '';
+
+                // إضافة عنصر العنوان
+                const titleItem = document.createElement('li');
+                titleItem.className = 'dropdown-header py-2 px-3';
+                titleItem.textContent = 'اختر المحطة';
+                mainMenu.appendChild(titleItem);
+
+                // إضافة المدن الرئيسية
+                cities.forEach(city => {
+                    const item = document.createElement('li');
+                    item.className =
+                        'dropdown-item d-flex justify-content-between align-items-center py-2 px-3';
+                    item.innerHTML = `
+                <span>${city.name}</span>
+                <i class="fas fa-chevron-left ms-2"></i>
+            `;
+
+                    item.addEventListener('click', async (e) => {
+                        e.stopPropagation();
+
+                        // حط ID المدينة في الـ hidden input المناسب
+                        const cityInputId = type === 'from' ? 'cityFrom_id' : 'cityTo_id';
+                        document.getElementById(cityInputId).value = city.id;
+
+                        // عرض حالة التحميل
+                        const loadingItem = document.createElement('li');
+                        loadingItem.className = 'dropdown-item py-2 px-3 text-center';
+                        loadingItem.innerHTML =
+                            '<i class="fas fa-spinner fa-spin"></i> جاري التحميل...';
+                        subMenu.innerHTML = '';
+                        subMenu.appendChild(loadingItem);
+
+                        toggleDropdown(`${type}-stations`, false);
+                        toggleDropdown(`${type}-sub-stations`, true);
+
+                        // تحميل المحطات
+                        const stations = await loadStations(city.id);
+                        populateSubMenu(`${type}-sub-stations`, stations,
+                            `${type}-stations`, city.name, type);
+                    });
+
+
+                    mainMenu.appendChild(item);
+                });
+            }
+
+            // تعبئة القائمة الفرعية
+            function populateSubMenu(subMenuId, stations, mainMenuId, cityName, type) {
+                const subMenu = document.getElementById(subMenuId);
+                subMenu.innerHTML = '';
+
+                // زر الرجوع
+                const backItem = document.createElement('li');
+                backItem.className = 'dropdown-item d-flex align-items-center py-2 px-3';
+                backItem.innerHTML = `
+        <i class="fas fa-arrow-left me-2"></i>
+        <span>رجوع إلى ${cityName}</span>
+    `;
+                backItem.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toggleDropdown(subMenuId, false);
+                    toggleDropdown(mainMenuId, true);
+                });
+                subMenu.appendChild(backItem);
+
+                // العنوان
+                const titleItem = document.createElement('li');
+                titleItem.className = 'dropdown-header py-2 px-3';
+                titleItem.textContent = `اختر محطة في ${cityName}`;
+                subMenu.appendChild(titleItem);
+
+                // المحطات الفرعية
+                if (stations.length === 0) {
+                    const noStationsItem = document.createElement('li');
+                    noStationsItem.className = 'dropdown-item py-2 px-3 text-muted';
+                    noStationsItem.textContent = 'لا توجد محطات متاحة';
+                    subMenu.appendChild(noStationsItem);
+                } else {
+                    stations.forEach(station => {
+                        const item = document.createElement('li');
+                        item.className = 'dropdown-item py-2 px-3';
+                        item.textContent = station.name;
+                        item.addEventListener('click', () => {
+                            const inputId = subMenuId.includes('from') ? 'fromInput' : 'toInput';
+                            const hiddenId = subMenuId.includes('from') ? 'stationFrom_id' :
+                                'stationTo_id';
+                            document.getElementById(inputId).value = station.name;
+                            document.getElementById(hiddenId).value = station.id; // ✅ حفظ ID المحطة
+                            toggleDropdown(subMenuId, false);
+                        });
+                        subMenu.appendChild(item);
+                    });
+                }
+            }
+
+
+            // تبديل حالة القائمة المنسدلة
+            function toggleDropdown(menuId, show) {
+                const menu = document.getElementById(menuId);
+                if (menu) {
+                    menu.style.display = show ? 'block' : 'none';
+                    // تعديل position إذا كانت القائمة طويلة
+                    if (show) {
+                        const rect = menu.getBoundingClientRect();
+                        if (rect.bottom > window.innerHeight) {
+                            menu.style.top = 'auto';
+                            menu.style.bottom = '100%';
+                        }
+                    }
+                }
+            }
+
+            // تهيئة أولية
+            initDropdowns();
         });
     </script>
 @endpush

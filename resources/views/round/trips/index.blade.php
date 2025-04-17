@@ -2,10 +2,8 @@
 
 @section('content')
     <div class="reservation-header">
-        <div class="container">
+        <div class="container mb-5">
             <div class="row">
-
-
                 <div class="reservation-travel-box px-5 d-flex justify-content-between align-items-center">
 
                     <div class="reservation-container d-flex justify-content-between align-items-center w-50">
@@ -54,34 +52,6 @@
                     </button>
                 </div>
 
-                <div class="d-flex justify-content-center align-items-center gap-4 my-4">
-                    <div class="d-flex align-items-center gap-2 travel-direction">
-                        <div>
-                            <i class="fa fa-bus text-black"></i>
-                        </div>
-                        <div class="d-flex flex-column align-items-center">
-                            <div class="d-flex align-items-center gap-2">
-                                <h6 class="m-0 text-black">{{ $fromCity->name }}</h6>
-                                <i class="fa fa-arrow-left text-black"></i>
-                            </div>
-                            <div>
-                                <p class="m-0">
-                                    {{ $fromStation->name }}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="d-flex flex-column align-items-center travel-direction">
-                        <div class="d-flex align-items-center gap-2">
-                            <h6 class="m-0 text-black">{{ $toCity->name }}</h6>
-                        </div>
-                        <div>
-                            <p class="m-0">
-                                {{ $toStation->name }}
-                            </p>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
         <div class="px-3">
@@ -91,6 +61,7 @@
                     <div class="col-lg-3 col-md-12 mb-3 trip-details">
                         <div class="border rounded-9 px-3">
 
+                            {{-- المدن والمحطات --}}
                             <div class="d-flex justify-content-center align-items-center gap-4 my-4">
                                 <div class="d-flex align-items-center gap-2 travel-direction-box">
                                     <div>
@@ -98,14 +69,11 @@
                                     </div>
                                     <div class="d-flex flex-column align-items-center">
                                         <div class="d-flex align-items-center gap-2">
-
                                             <h6 class="m-0 text-black">{{ $fromCity->name }}</h6>
                                             <i class="fa fa-arrow-left text-black"></i>
                                         </div>
                                         <div>
-                                            <p class="m-0">
-                                                {{ $fromStation->name }}
-                                            </p>
+                                            <p class="m-0">{{ $fromStation->name }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -114,23 +82,27 @@
                                         <h6 class="m-0 text-black">{{ $toCity->name }}</h6>
                                     </div>
                                     <div>
-                                        <p class="m-0">
-                                            {{ $toStation->name }}
-                                        </p>
+                                        <p class="m-0">{{ $toStation->name }}</p>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <p class="m-0 text-black">
-                                        {{ request()->go_date }}
-                                    </p>
-                                </div>
-
+                            {{-- التاريخ --}}
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <p class="m-0 text-black">{{ request()->go_date }}</p>
                             </div>
+
+                            {{-- في حالة عدم اختيار الرحلات --}}
+                            <div id="no-selected-trip" style="text-align: center;">
+                                <i class="fas fa-ticket-alt" style="font-size: 50px;"></i>
+                                <br>
+                                <label>إختار رحلتك من جدول الرحلات</label>
+                            </div>
+
+                            {{-- تفاصيل الرحلة بعد الاختيار --}}
                             <div id="trip-details" style="display: none;">
-                                <form action="{{ route('one-way.choose-seat') }}">
+                                <form action="{{ route('round.choose-seat') }}">
+                                    {{-- بيانات الرحلة --}}
                                     <input type="hidden" name="tripType" value="{{ request()->tripType }}" />
                                     <input type="hidden" name="city_from_id" value="{{ request()->city_from_id }}" />
                                     <input type="hidden" name="city_to_id" value="{{ request()->city_to_id }}" />
@@ -140,80 +112,85 @@
                                     <input type="hidden" name="station_from_id"
                                         value="{{ request()->station_from_id }}" />
                                     <input type="hidden" name="station_to_id" value="{{ request()->station_to_id }}" />
-                                    <input type="hidden" id="selected-trip-price" value="" />
-                                    <input type="hidden" name="selected_trip_id" id="selected-trip-id">
                                     <input type="hidden" id="num-of-seats" value="{{ request()->seats }}" />
+
+                                    {{-- NEW: Hidden trip IDs & prices --}}
+                                    <input type="hidden" name="selected_go_trip_id" id="selected-go-trip-id">
+                                    <input type="hidden" id="selected-go-trip-price" value="">
+                                    <input type="hidden" name="selected_back_trip_id" id="selected-back-trip-id">
+                                    <input type="hidden" id="selected-back-trip-price" value="">
+
+                                    {{-- أسعار الرحلات --}}
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <p class="m-0 text-black">
-                                                سعر التذكرة
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <p id="selected-trip-price-p" class="m-0 text-black">
-                                            </p>
-                                        </div>
+                                        <p class="m-0 text-black">سعر تذكرة الذهاب</p>
+                                        <p id="selected-go-trip-price-p" class="m-0 text-black">--</p>
                                     </div>
                                     <div class="d-flex justify-content-between align-items-center">
+                                        <p class="m-0 text-black">سعر تذكرة العودة</p>
+                                        <p id="selected-back-trip-price-p" class="m-0 text-black">--</p>
+                                    </div>
 
-
-
-                                        <div>
-                                            <p class="m-0 text-black">
-                                                عدد المسافرين
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <p class="m-0 text-black">
-                                                {{ request()->seats }} تذاكر
-                                            </p>
-
-
-                                        </div>
+                                    {{-- عدد التذاكر --}}
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <p class="m-0 text-black">عدد المسافرين</p>
+                                        <p class="m-0 text-black">{{ request()->seats }} تذاكر</p>
                                     </div>
 
                                     <hr>
 
+                                    {{-- الإجمالي --}}
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <p class="m-0 text-black">
-                                                الاجمالي
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <p id="total-p" class="m-0 text-black">
-                                                جنية
-                                            </p>
-                                        </div>
+                                        <p class="m-0 text-black">الاجمالي</p>
+                                        <p id="total-p" class="m-0 text-black">-- جنيه</p>
                                     </div>
 
+                                    {{-- زر الحجز --}}
                                     <div class="mt-4 pb-4 d-flex justify-content-center">
-                                        <button class="reserve-btn">
-                                            احجز {{ request()->seats }} مقاعد
-                                        </button>
+                                        <button class="reserve-btn">احجز {{ request()->seats }} مقاعد</button>
                                     </div>
                                 </form>
                             </div>
-                            <div id="no-selected-trip" style="text-align: center;">
-                                <i class="fas fa-ticket-alt" style="font-size: 50px;"></i>
-                                <br>
-                                <label>
-                                    إختار رحلتك من جدول الرحلات
-                                </label>
-
-                            </div>
-
 
                         </div>
                     </div>
 
+
                     <!-- center  -->
                     <div class="col-lg-7 col-md-12 VIP">
-                        @foreach ($trips as $trip)
+
+                        <div class="d-flex justify-content-center align-items-center gap-4 my-4">
+                            <div class="d-flex align-items-center gap-2 travel-direction">
+                                <div>
+                                    <i class="fa fa-bus text-black"></i>
+                                </div>
+                                <div class="d-flex flex-column align-items-center">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h6 class="m-0 text-black">{{ $fromCity->name }}</h6>
+                                        <i class="fa fa-arrow-left text-black"></i>
+                                    </div>
+                                    <div>
+                                        <p class="m-0">
+                                            {{ $fromStation->name }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column align-items-center travel-direction">
+                                <div class="d-flex align-items-center gap-2">
+                                    <h6 class="m-0 text-black">{{ $toCity->name }}</h6>
+                                </div>
+                                <div>
+                                    <p class="m-0">
+                                        {{ $toStation->name }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        @forelse ($goTrips as $trip)
                             <div class="border rounded-9 px-3 py-3 mb-3">
                                 <div class="row ">
                                     <div class="col-lg-8 col-md-12 ">
-                                        <div class="d-flex justify-content-start align-items-center gap-3  mo-view">
+                                        <div class="d-flex justify-content-start align-items-center gap-3 mo-view">
                                             <!-- bus icon  -->
                                             <div class="bus-box">
                                                 <i class="fa fa-bus text-main"></i>
@@ -261,9 +238,7 @@
                                         <div class="d-flex flex-column justify-content-center align-items-center gap-2 ">
                                             <input type="hidden" class="trip-id" value="{{ $trip->id }}" />
                                             <input type="hidden" class="trip-price" value="{{ $trip->price }}" />
-                                            <button class="trip-choose-btn">
-                                                اختر الرحلة
-                                            </button>
+                                            <button class="trip-choose-btn" data-trip-type="go">اختر رحلة الذهاب</button>
 
                                             <div class="d-flex flex-column">
                                                 <h6 class="text-black m-0">
@@ -282,7 +257,116 @@
                                     </div>
                                 </div>
                             </div>
-                        @endforeach
+                        @empty
+                            <p class="text-center text-danger">لا توجد رحلات للذهاب حالياً.</p>
+                        @endforelse
+
+
+
+                        <div class="d-flex justify-content-center align-items-center gap-4 my-4">
+                            <div class="d-flex align-items-center gap-2 travel-direction">
+                                <div>
+                                    <i class="fa fa-bus text-black"></i>
+                                </div>
+                                <div class="d-flex flex-column align-items-center">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h6 class="m-0 text-black">{{ $toCity->name }}</h6>
+                                        <i class="fa fa-arrow-left text-black"></i>
+                                    </div>
+                                    <div>
+                                        <p class="m-0">
+                                            {{ $toStation->name }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column align-items-center travel-direction">
+                                <div class="d-flex align-items-center gap-2">
+                                    <h6 class="m-0 text-black">{{ $fromCity->name }}</h6>
+                                </div>
+                                <div>
+                                    <p class="m-0">
+                                        {{ $fromStation->name }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        @forelse ($goTrips as $trip)
+                            <div class="border rounded-9 px-3 py-3 mb-3">
+                                <div class="row ">
+                                    <div class="col-lg-8 col-md-12 ">
+                                        <div class="d-flex justify-content-start align-items-center gap-3 mo-view">
+                                            <!-- bus icon  -->
+                                            <div class="bus-box">
+                                                <i class="fa fa-bus text-main"></i>
+                                            </div>
+
+                                            <!-- from -->
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <h6 class="m-0 text-black">{{ $trip->fromCity }}</h6>
+                                                </div>
+                                                <div>
+                                                    <p class="m-0">
+                                                        {{ $trip->fromStation }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <!-- circle -->
+                                            <div>
+                                                <div class="d-flex justify-content-center align-items-center ">
+                                                    <div class="green-circle"></div>
+                                                    <div class="line"></div>
+                                                    <div class="red-circle"></div>
+                                                </div>
+                                                <h6>{{ \Carbon\Carbon::parse($trip->tripTime)->format('h:i a ') }}</h6>
+                                            </div>
+                                            <!-- to  -->
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <h6 class="m-0 text-black">{{ $trip->toCity }}</h6>
+                                                </div>
+                                                <div>
+                                                    <p class="m-0">
+                                                        {{ $trip->toStation }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <!-- vip -->
+                                            <div>
+                                                <p class="m-0 text-white bg-main text-center vip">{{ $trip->degree }}</p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-12">
+                                        <div class="d-flex flex-column justify-content-center align-items-center gap-2 ">
+                                            <input type="hidden" class="trip-id" value="{{ $trip->id }}" />
+                                            <input type="hidden" class="trip-price" value="{{ $trip->price }}" />
+                                            <button class="trip-choose-btn" data-trip-type="return">اختر رحلة
+                                                الذهاب</button>
+
+                                            <div class="d-flex flex-column">
+                                                <h6 class="text-black m-0">
+                                                    {{ $trip->price }}
+                                                </h6>
+                                                <p class="text-black m-0">
+                                                    للمقعد
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <p class="text-success m-0">
+                                                    متبقي {{ $trip->available_seats }} مقعد
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @empty
+                            <p class="text-center text-danger">لا توجد رحلات للذهاب حالياً.</p>
+                        @endforelse
+
 
                     </div>
 
@@ -297,6 +381,10 @@
                             <input type="hidden" name="seats" value="{{ request()->seats }}" />
                             <input type="hidden" name="station_from_id" value="{{ request()->station_from_id }}" />
                             <input type="hidden" name="station_to_id" value="{{ request()->station_to_id }}" />
+                            <input type="hidden" id="num-of-seats" value="{{ request()->seats }}" />
+
+
+
 
                             <h2 class="text-black">الترتيب حسب</h2>
                             <h6 class="mt-4 mb-3 text-black">فئة الاتوبيسات</h6>
@@ -334,7 +422,7 @@
                                 </label>
                             </div>
                             <br>
-                            <button class="bg-main text-white btn w-100" type="submit">
+                            <button class=" btn-search" type="submit">
                                 بحث
                             </button>
                         </form>
@@ -437,29 +525,48 @@
 
             chooseButtons.forEach(button => {
                 button.addEventListener('click', function() {
-                    // 1. Remove border from all buttons
-                    chooseButtons.forEach(btn => btn.classList.remove('selected-trip-button'));
+                    const tripType = this.dataset.tripType;
 
-                    // 2. Add border to the clicked button
+                    // إزالة التحديد من نفس نوع الرحلة فقط
+                    chooseButtons.forEach(btn => {
+                        if (btn.dataset.tripType === tripType) {
+                            btn.classList.remove('selected-trip-button');
+                        }
+                    });
+
+                    // تحديد الرحلة المختارة
                     this.classList.add('selected-trip-button');
 
-                    // 3. Get the trip id from hidden input in the same container
+                    // جلب البيانات
                     const tripId = this.closest('.col-lg-4').querySelector('.trip-id').value;
                     const tripPrice = this.closest('.col-lg-4').querySelector('.trip-price').value;
 
-                    // 4. Show trip-details, hide no-selected-trip
+                    // عرض التفاصيل
                     document.getElementById('trip-details').style.display = 'block';
                     document.getElementById('no-selected-trip').style.display = 'none';
 
-                    // 5. Set selected trip id in hidden input
-                    document.getElementById('selected-trip-id').value = tripId;
-                    document.getElementById('selected-trip-price').value = tripPrice;
-                    document.getElementById('selected-trip-price-p').textContent = tripPrice + ' ' +
-                        ' جنيه';
-                    var numOfSeats = document.getElementById('num-of-seats').value;
-                    document.getElementById('total-p').textContent = (numOfSeats * tripPrice) +
-                        ' ' + ' جنيه';
+                    // تخزين القيم حسب نوع الرحلة
+                    if (tripType === 'go') {
+                        document.getElementById('selected-go-trip-id').value = tripId;
+                        document.getElementById('selected-go-trip-price').value = tripPrice;
+                        document.getElementById('selected-go-trip-price-p').textContent =
+                            tripPrice + ' جنيه';
+                    } else {
+                        document.getElementById('selected-back-trip-id').value = tripId;
+                        document.getElementById('selected-back-trip-price').value = tripPrice;
+                        document.getElementById('selected-back-trip-price-p').textContent =
+                            tripPrice + ' جنيه';
+                    }
 
+                    // حساب السعر الكلي
+                    const numOfSeats = document.getElementById('num-of-seats').value || 1;
+                    const goPrice = parseFloat(document.getElementById('selected-go-trip-price')
+                        .value || 0);
+                    const backPrice = parseFloat(document.getElementById('selected-back-trip-price')
+                        .value || 0);
+                    const total = (goPrice + backPrice) * numOfSeats;
+
+                    document.getElementById('total-p').textContent = total + ' جنيه';
                 });
             });
         });

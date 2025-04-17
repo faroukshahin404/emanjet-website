@@ -9,15 +9,19 @@ use Spatie\Translatable\HasTranslations;
 
 class Station extends Model
 {
-    use HasFactory , SoftDeletes;
+    use HasFactory, SoftDeletes;
     use HasTranslations;
 
     public $translatable = ['name'];
 
-    protected $fillable = ['id','name', 'city_id', 'admin_id', 'active'];
+    protected $fillable = ['id', 'name', 'city_id', 'admin_id', 'active'];
 
 
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
 
-    
+
 
 } //end of class

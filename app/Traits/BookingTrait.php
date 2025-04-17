@@ -104,15 +104,15 @@ trait BookingTrait
         return $query->get();
     }
 
-   
-    public function getBusSeat($runTrip_id, $stationFrom_id , $stationTo_id)
+
+    public function getBusSeat($runTrip_id, $stationFrom_id, $stationTo_id)
     {
         $runTrip = RunTrip::find($runTrip_id);
         $seats = TripSeat::where('tripData_id', $runTrip->tripData_id)->get();
         $line = Line::where([
-            'from_id'=> $stationFrom_id,
-            'to_id'=> $stationTo_id,
-            'tripData_id'=> $runTrip->tripData_id
+            'from_id' => $stationFrom_id,
+            'to_id' => $stationTo_id,
+            'tripData_id' => $runTrip->tripData_id
         ])->first();
         $list = [];
         foreach ($seats as $key => $seat) {
@@ -121,8 +121,8 @@ trait BookingTrait
                 'seat_id' => $seat->seat_id,
                 'type' => $seat->seat->type,
                 'name' => @$seat->seat->name ?? $seat->name,
-                'price'=> @$line->priceGo,
-                'round_price'=> @$line->priceBack,
+                'price' => @$line->priceGo,
+                'round_price' => @$line->priceBack,
                 'available' => BookingSeat::where([
                     'seat_id' => $seat->id
                 ])->first() == null,
@@ -130,13 +130,14 @@ trait BookingTrait
         }
         return $list;
     }
-    public function getTripTime($runTrip_id , $stationFrom_id){
+    public function getTripTime($runTrip_id, $stationFrom_id)
+    {
         $runTrip = RunTrip::find($runTrip_id);
         $tripStation = TripStation::where([
-            'station_id'=> $stationFrom_id,
-            'tripData_id'=> $runTrip->tripData_id,
+            'station_id' => $stationFrom_id,
+            'tripData_id' => $runTrip->tripData_id,
         ])->first();
 
-        return Carbon::createFromFormat('Y-m-d H:i:s', $runTrip->startDate . ' ' . $runTrip->startTime)->addMinutes(@$tripStation->timeInMinutes??0);
+        return Carbon::createFromFormat('Y-m-d H:i:s', $runTrip->startDate . ' ' . $runTrip->startTime)->addMinutes(@$tripStation->timeInMinutes ?? 0);
     }
 }

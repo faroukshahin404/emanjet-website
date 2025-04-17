@@ -4,8 +4,8 @@
         <nav class="navbar navbar-white navbar-expand-lg navbar-light">
 @endif
 <div class="container">
-    <a class="navbar-brand mx-4" href="index.html">
-        <img src="{{asset('/images/logo.png')}}" alt="logo">
+    <a class="navbar-brand mx-4" href="{{ route('home') }}">
+        <img src="{{ asset('/images/logo.png') }}" alt="logo">
     </a>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
@@ -22,7 +22,8 @@
         <div class="offcanvas-body">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="index.html" data-lang='{"en": "Home", "ar": "الرئيسية"}'>الرئيسية</a>
+                    <a class="nav-link" href="{{ route('home') }}"
+                        data-lang='{"en": "Home", "ar": "الرئيسية"}'>الرئيسية</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="destinations.html"

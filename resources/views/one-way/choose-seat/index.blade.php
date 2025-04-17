@@ -48,8 +48,8 @@
                                 <table id="selectedSeatsTable" class="table">
                                     <tbody></tbody>
                                 </table>
-                                
-                                
+
+
                             </div>
 
                             <div class="total-price rounded-8 px-3 py-3">

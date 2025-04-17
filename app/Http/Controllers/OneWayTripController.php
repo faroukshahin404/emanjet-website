@@ -13,13 +13,12 @@ class OneWayTripController extends Controller
     use BookingTrait;
     public function trips(Request $request)
     {
-
         $request->validate([
             'tripType' => 'required|in:oneway,round',
             'city_from_id' => 'required|exists:cities,id',
             'city_to_id' => 'required|exists:cities,id',
-            // 'station_from_id'=>'required|exists:stations,id',
-            // 'station_to_id'=>'required|exists:stations,id',
+            'station_from_id' => 'required|exists:stations,id',
+            'station_to_id' => 'required|exists:stations,id',
             'seats' => 'required',
             'back_date' => 'nullable|date|after_or_equal:today',
             'go_date' => 'required|date|after_or_equal:today'
@@ -42,6 +41,8 @@ class OneWayTripController extends Controller
             'trips' => $trips,
             'fromCity' => City::find(request()->city_from_id),
             'toCity' => City::find(request()->city_to_id),
+            'fromStation' => Station::find(request()->station_from_id),
+            'toStation' => Station::find(request()->station_to_id),
             'cities' => $cities,
             'degrees' => $degrees
         ]);
