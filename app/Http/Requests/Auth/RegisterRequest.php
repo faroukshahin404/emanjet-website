@@ -22,8 +22,8 @@ class RegisterRequest extends FormRequest
                 'regex:/^(01)[0-9]{9}$/',  // التأكد من رقم الهاتف
                 'unique:users,mobile',
             ],
-            "password" => "required|string|min:8|confirmed",
-            "password_confirmation" => "required|string|min:8",
+            "password" => "required|string|confirmed",
+            "password_confirmation" => "required|string",
         ];
     }
 }

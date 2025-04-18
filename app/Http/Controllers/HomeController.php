@@ -29,7 +29,7 @@ class HomeController extends Controller
     }
     public function getStations(City $city)
     {
-        $stations = $city->stations()->select('id', 'name')->get();
+        $stations = $city->stations()->where('available_online', 1)->select('id', 'name')->get();
         $stations->transform(function ($station) {
             return [
                 'id' => $station->id,

@@ -21,6 +21,7 @@
                         <input type="checkbox"
                             data-price="{{ $seat['price'] }}"
                             data-name="{{ $seat['name'] }}"
+                            data-seat-id="{{$seat['tripSeat_id']}}"
                             id="chair{{ $seat['tripSeat_id'] }}"
                             class="chair-checkbox"
                             {{ $seat['available'] ? '' : 'disabled' }}>

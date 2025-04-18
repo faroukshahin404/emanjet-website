@@ -109,7 +109,7 @@ class AuthController extends Controller
         $result = $this->authService->verifyOtp($otpNumber, $phone);
 
         if (!$result['success']) {
-            dd($result['message']);
+
             return redirect()->back()->withErrors(['otp' => $result['message']]);
         }
 

@@ -2,15 +2,28 @@
 
 namespace App\Http\Controllers;
 
+
+use App\Http\Requests\OnewayConfirmBooking;
+use App\Http\Requests\OnewayConfirmBookingRequest;
 use App\Models\City;
 use App\Models\Degree;
 use App\Models\Station;
+use App\Services\ConfirmBookingService;
 use App\Traits\BookingTrait;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Traits\FawryIntegration;
 
 class OneWayTripController extends Controller
 {
-    use BookingTrait;
+    protected $confirmBookingService;
+    use BookingTrait, FawryIntegration;
+
+    public function __construct(ConfirmBookingService $confirmBookingService)
+    {
+        $this->confirmBookingService = $confirmBookingService;
+    }
     public function trips(Request $request)
     {
         $request->validate([
@@ -71,5 +84,25 @@ class OneWayTripController extends Controller
             'toStation' => Station::find(request()->station_to_id),
             'tripTime' => $tripTime
         ]);
+    }
+
+    public function confirmBooking(OnewayConfirmBookingRequest $request)
+    {
+        try {
+            DB::beginTransaction();
+            $ticket = $this->confirmBookingService->one_way_confirm_booking($request);
+            if ($request->payment_method == 'fawry') {
+                $payment_link = $this->getPaymentLink($ticket->id, $ticket->total, $ticket->user_id, 1, asset('/'));
+                DB::commit();
+                return redirect()->to($payment_link);
+            } else {
+
+                return redirect()->back()->with('error', __('Incorrect payment method!'));
+            }
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 }

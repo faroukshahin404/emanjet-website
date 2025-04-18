@@ -15,11 +15,16 @@ Route::get('/get-stations/{city}', [HomeController::class, 'getStations']);
 
 Route::group(['as' => 'one-way.', 'prefix' => 'one-way'], function () {
     Route::get('/trips', [OneWayTripController::class, 'trips'])->name('trips');
-    Route::get('/choose-seat', [OneWayTripController::class, 'chooseSeats'])->name('choose-seat');
+    Route::group(['middleware' => 'checkUserVerified'], function () {
+        Route::get('/choose-seat', [OneWayTripController::class, 'chooseSeats'])->name('choose-seat');
+        Route::post('/confirm-booking', [OneWayTripController::class, 'confirmBooking'])->name('confirm-booking');
+    });
 });
 Route::group(['as' => 'round.', 'prefix' => 'round'], function () {
     Route::get('/trips', [RoundTripController::class, 'trips'])->name('trips');
-    Route::get('/choose-seat', [RoundTripController::class, 'chooseSeats'])->name('choose-seat');
+    Route::group(['middleware' => 'checkUserVerified'], function () {
+        Route::get('/choose-seat', [RoundTripController::class, 'chooseSeats'])->name('choose-seat');
+    });
 });
 Route::group([], function () {
     Route::get('contact-us', [HomeController::class, 'contact_us'])->name('contact-us');
@@ -57,4 +62,3 @@ Route::prefix('auth')->name('auth.')->group(function () {
         });
     });
 });
-

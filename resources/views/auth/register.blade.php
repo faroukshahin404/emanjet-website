@@ -10,13 +10,13 @@
                         @csrf
                         <div class="position-relative mb-3">
                             <i class="fa fa-user position-absolute top-50 translate-middle-y px-2"></i>
-                            <input class="phoneInput" type="text" name="name" id="name" placeholder="الاسم"
+                            <input class="phoneInput" type="text" name="name" id="name" placeholder="الاسم" value="{{old('name')}}"
                                 required>
                         </div>
 
                         <div class="position-relative mb-3">
                             <i class="fa fa-phone position-absolute top-50 translate-middle-y px-2"></i>
-                            <input class="phoneInput" type="text" name="phone" id="phone" placeholder="رقم الهاتف"
+                            <input class="phoneInput" type="text" name="phone" id="phone" placeholder="رقم الهاتف" value="{{old('phone')}}"
                                 required>
                         </div>
 

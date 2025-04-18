@@ -140,4 +140,5 @@ trait BookingTrait
 
         return Carbon::createFromFormat('Y-m-d H:i:s', $runTrip->startDate . ' ' . $runTrip->startTime)->addMinutes(@$tripStation->timeInMinutes ?? 0);
     }
+    
 }
