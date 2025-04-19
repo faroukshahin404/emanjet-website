@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 trait ConfirmBookingTrait
 {
     
-    public function store_ticket($seats = [], $payment_key = null, $stationFrom_id, $stationTo_id, $runTrip_id, $payment_method , $trip_type)
+    public function store_ticket($seats = [], $payment_key = null, $stationFrom_id, $stationTo_id, $runTrip_id, $payment_method , $trip_type , $round_trip_id = null)
     {
 
         $runTrip = RunTrip::find($runTrip_id);
@@ -24,8 +24,22 @@ trait ConfirmBookingTrait
             'to_id' => $stationTo_id,
             'tripData_id' => $runTrip->tripData_id,
         ])->first();
-        $total = $line->priceGo * count($seats);
-        $subTotal = $line->priceGo * count($seats);
+        if($trip_type == 1){
+            $total = $line->priceGo * count($seats);
+            $subTotal = $line->priceGo * count($seats);
+        }else{
+            $roundtrip = RunTrip::find($round_trip_id);
+            $roundLine = Line::where([
+                'from_id' => $stationTo_id,
+                'to_id' => $stationFrom_id,
+                'tripData_id' => $roundtrip->tripData_id,
+            ])->first();
+            $total = ($roundLine->priceBack - $roundLine->priceGo) * count($seats);
+            $subTotal = ($roundLine->priceBack - $roundLine->priceGo) * count($seats);
+            $total += $line->priceGo * count($seats);
+            $subTotal += $line->priceGo * count($seats);
+        }
+        
 
 
         $ticket = ReservationBookingRequest::create([

@@ -24,6 +24,8 @@ Route::group(['as' => 'round.', 'prefix' => 'round'], function () {
     Route::get('/trips', [RoundTripController::class, 'trips'])->name('trips');
     Route::group(['middleware' => 'checkUserVerified'], function () {
         Route::get('/choose-seat', [RoundTripController::class, 'chooseSeats'])->name('choose-seat');
+        Route::post('/confirm-booking', [RoundTripController::class, 'confirmBooking'])->name('confirm-booking');
+
     });
 });
 Route::group([], function () {

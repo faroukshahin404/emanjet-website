@@ -58,7 +58,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <!-- left  -->
-                    <div class="col-lg-3 col-md-12 mb-3 trip-details">
+                    <div class="col-lg-3 col-md-12 mb-3 trip-details" style="position: sticky; top: 120px; height: fit-content; z-index: 100;">
                         <div class="border rounded-9 px-3">
 
                             {{-- المدن والمحطات --}}
@@ -342,13 +342,13 @@
                                     <div class="col-lg-4 col-md-12">
                                         <div class="d-flex flex-column justify-content-center align-items-center gap-2 ">
                                             <input type="hidden" class="trip-id" value="{{ $trip->id }}" />
-                                            <input type="hidden" class="trip-price" value="{{ $trip->price }}" />
+                                            <input type="hidden" class="trip-price" value="{{ $trip->round_price - $trip->price }}" />
                                             <button class="trip-choose-btn" data-trip-type="return">اختر رحلة
                                                 الذهاب</button>
 
                                             <div class="d-flex flex-column">
                                                 <h6 class="text-black m-0">
-                                                    {{ $trip->price }}
+                                                    {{ $trip->round_price - $trip->price }}
                                                 </h6>
                                                 <p class="text-black m-0">
                                                     للمقعد
@@ -371,7 +371,7 @@
                     </div>
 
                     <!-- right -->
-                    <div class="col-md-2">
+                    <div class="col-md-2"  style="position: sticky; top: 120px; height: fit-content; z-index: 100;">
                         <form>
                             <input type="hidden" name="tripType" value="{{ request()->tripType }}" />
                             <input type="hidden" name="city_from_id" value="{{ request()->city_from_id }}" />

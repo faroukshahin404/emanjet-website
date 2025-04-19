@@ -68,6 +68,7 @@ trait BookingTrait
             'run_trips.id',
             'degrees.id as degree_id',
             'lines.priceGo as price',
+            'lines.priceBack as round_price',
             DB::raw("JSON_UNQUOTE(JSON_EXTRACT(degrees.name, '$.ar')) as degree"),
             DB::raw("JSON_UNQUOTE(JSON_EXTRACT(fromCity.name, '$.ar')) as fromCity"),
             DB::raw("JSON_UNQUOTE(JSON_EXTRACT(toCity.name, '$.ar')) as toCity"),

@@ -2,16 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RoundConfirmBookingRequest;
 use App\Models\City;
 use App\Models\Degree;
 use App\Models\RunTrip;
 use App\Models\Station;
+use App\Services\ConfirmBookingService;
 use App\Traits\BookingTrait;
+use App\Traits\FawryIntegration;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RoundTripController extends Controller
 {
-    use BookingTrait;
+    use BookingTrait, FawryIntegration;
+    public function __construct(private ConfirmBookingService $confirmBookingService)
+    {
+    }
+    
     public function trips(Request $request)
     {
 
@@ -112,6 +121,26 @@ class RoundTripController extends Controller
             'goTrip' => $goTrip,
             'backTrip' => $backTrip,
         ]);
+    }
+
+    public function confirmBooking(RoundConfirmBookingRequest $request){
+
+        try {
+            DB::beginTransaction();
+            $ticket = $this->confirmBookingService->round_confirm_booking($request);
+            if ($request->payment_method == 'fawry') {
+                $payment_link = $this->getPaymentLink($ticket->id, $ticket->total, $ticket->user_id, 1, asset('/'));
+                DB::commit();
+                return redirect()->to($payment_link);
+            } else {
+
+                return redirect()->back()->with('error', __('Incorrect payment method!'));
+            }
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
 }

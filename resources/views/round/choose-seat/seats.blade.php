@@ -20,10 +20,11 @@
             @foreach ($goSeats as $seat)
                 @if ($seat['type'] == 1)
                     <div class="chair-number">
-                        <input type="checkbox" data-price="{{ $seat['price'] }}" data-name="{{ $seat['name'] }}"
-                            id="chair-go-{{ $seat['tripSeat_id'] }}" class="chair-checkbox go"
+                        <input type="checkbox" data-price="{{ $seat['price'] }}"
+                            data-seat-id="{{ $seat['tripSeat_id'] }}" data-name="{{ $seat['name'] }}"
+                            id="{{ $seat['tripSeat_id'] }}" class="chair-checkbox go"
                             {{ $seat['available'] ? '' : 'disabled' }}>
-                        <label for="chair-go-{{ $seat['tripSeat_id'] }}">{{ $seat['name'] }}</label>
+                        <label for="{{ $seat['tripSeat_id'] }}">{{ $seat['name'] }}</label>
                     </div>
                 @else
                     <div style="width: 50px;"></div>
@@ -31,10 +32,7 @@
             @endforeach
         </div>
     </div>
-</div>
-
-<!-- مقاعد العودة -->
-<div class="col-md-6 mb-4">
+    <hr>
     <h5 class="text-center text-black">مقاعد العودة</h5>
     <div class="d-flex justify-content-center align-items-center gap-3 mb-2">
         <div class="d-flex align-items-center gap-2">
@@ -56,10 +54,11 @@
                 @if ($seat['type'] == 1)
                     <div class="chair-number">
 
-                        <input type="checkbox" data-price="{{ $seat['price'] }}" data-name="{{ $seat['name'] }}"
-                            id="chair-return-{{ $seat['tripSeat_id'] }}" class="chair-checkbox return"
+                        <input type="checkbox" data-price="{{ $seat['round_price'] - $seat['price'] }}"
+                            data-seat-id="{{ $seat['tripSeat_id'] }}" data-name="{{ $seat['name'] }}"
+                            id="{{ $seat['tripSeat_id'] }}" class="chair-checkbox return"
                             {{ $seat['available'] ? '' : 'disabled' }}>
-                        <label for="chair-return-{{ $seat['tripSeat_id'] }}">{{ $seat['name'] }}</label>
+                        <label for="{{ $seat['tripSeat_id'] }}">{{ $seat['name'] }}</label>
                     </div>
                 @else
                     <div style="width: 50px;"></div>
