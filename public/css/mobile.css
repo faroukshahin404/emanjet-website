@@ -1,0 +1,129 @@
+.bottom-sheet {
+    position: fixed;
+    bottom: -100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    z-index: 1000;
+    transition: bottom 0.3s ease-in-out;
+    max-height: 80vh;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.bottom-sheet.show {
+    bottom: 0;
+}
+
+.bottom-sheet-content {
+    padding: 0;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.sheet-header {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 2;
+    border-bottom: 1px solid #eee;
+}
+
+.btn-back {
+    background: none;
+    border: none;
+    padding: 8px;
+    margin-left: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s;
+}
+
+.btn-back.d-none {
+    display: none !important;
+}
+
+.search-container {
+    position: relative;
+}
+
+#locationSearch {
+    border-radius: 10px;
+    padding: 12px;
+    border: 1px solid #eee;
+    width: 100%;
+}
+
+/* Location List Styles */
+.location-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.location-item {
+    border-bottom: 1px solid #eee;
+}
+
+.city-header {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.city-header:hover {
+    background-color: #f8f9fa;
+}
+
+/* Sub-stations Styles */
+.sub-stations {
+    display: none;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    background: #f8f9fa;
+}
+
+.sub-stations.show {
+    display: block;
+}
+
+.station-item {
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+    padding-right: 20px;
+    transition: background-color 0.2s;
+}
+
+.station-item:hover {
+    background-color: #f0f0f0;
+}
+
+.station-item:last-child {
+    border-bottom: none;
+}
+
+/* From previous styles */
+#from-container, #to-container {
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+}
+
+#from-container:hover, #to-container:hover {
+    background-color: #f8f9fa;
+}
+
+.selected-location {
+    margin-right: 8px;
+    color: #333;
+    font-weight: 500;
+}
+
+label {
+    margin-bottom: 0;
+    color: #666;
+} 

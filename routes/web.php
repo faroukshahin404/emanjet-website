@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OnewayMobileController;
 use App\Http\Controllers\OneWayTripController;
 use App\Http\Controllers\RoundTripController;
 use Illuminate\Support\Facades\Route;
@@ -13,6 +14,7 @@ Route::get('/home', [HomeController::class, 'home']);
 Route::get('/get-cities', [HomeController::class, 'getCities']);
 Route::get('/get-stations/{city}', [HomeController::class, 'getStations']);
 
+// Desktop Routes
 Route::group(['as' => 'one-way.', 'prefix' => 'one-way'], function () {
     Route::get('/trips', [OneWayTripController::class, 'trips'])->name('trips');
     Route::group(['middleware' => 'checkUserVerified'], function () {
@@ -28,6 +30,15 @@ Route::group(['as' => 'round.', 'prefix' => 'round'], function () {
 
     });
 });
+
+// Mobile Routes
+Route::group(['as' => 'mobile.', 'prefix' => 'mobile'], function () {
+    Route::group(['as' => 'one-way.', 'prefix' => 'one-way'], function () {
+        Route::get('/trips', [OnewayMobileController::class, 'trips'])->name('trips');
+    });
+});
+
+
 Route::group([], function () {
     Route::get('contact-us', [HomeController::class, 'contact_us'])->name('contact-us');
     Route::post('contact-us', [HomeController::class, 'submit_contact_form'])->name('submit-contact-form');

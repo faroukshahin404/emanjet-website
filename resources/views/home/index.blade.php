@@ -36,7 +36,7 @@
                                             <i class="fas fa-location-dot from-icon"></i>
                                             <input type="text" class="border-0 from-input desktop-from-input"
                                                 placeholder="من" readonly data-bs-toggle="dropdown" aria-expanded="false"
-                                                id="fromInput">
+                                                value="{{ $stations[0]->name }}" id="fromInput">
                                             <ul class="dropdown-menu p-0 main-stations" id="from-stations"></ul>
                                             <ul class="dropdown-menu p-0 sub-stations-dropdown" id="from-sub-stations"></ul>
                                         </div>
@@ -48,17 +48,21 @@
                                             <i class="fas fa-circle-dot to-icon"></i>
                                             <input type="text" class="border-0 to-input desktop-from-input"
                                                 placeholder="إلى" readonly data-bs-toggle="dropdown" aria-expanded="false"
-                                                id="toInput">
+                                                id="toInput" value="{{ @$stations[1]->name }}">
                                             <ul class="dropdown-menu p-0 main-stations" id="to-stations"></ul>
                                             <ul class="dropdown-menu p-0 sub-stations-dropdown" id="to-sub-stations"></ul>
                                         </div>
                                     </div>
 
                                     <!-- Hidden inputs for IDs -->
-                                    <input type="hidden" name="city_from_id" id="cityFrom_id">
-                                    <input type="hidden" name="city_to_id" id="cityTo_id">
-                                    <input type="hidden" name="station_from_id" id="stationFrom_id">
-                                    <input type="hidden" name="station_to_id" id="stationTo_id">
+                                    <input type="hidden" name="city_from_id" id="cityFrom_id"
+                                        value="{{ $stations[0]->city_id }}">
+                                    <input type="hidden" name="city_to_id" id="cityTo_id"
+                                        value="{{ $stations[1]->city_id }}">
+                                    <input type="hidden" name="station_from_id" id="stationFrom_id"
+                                        value="{{ $stations[0]->id }}">
+                                    <input type="hidden" name="station_to_id" id="stationTo_id"
+                                        value="{{ $stations[1]->id }}">
 
                                 </div>
 
@@ -91,8 +95,8 @@
 
                                                 <input type="date" class="form-control datepicker-real"
                                                     min="{{ date('Y-m-d') }}" max="2027-04-07"
-                                                    value="{{ request()->back_date ?? date('Y-m-d') }}" id="dateRealInput2"
-                                                    name="back_date">
+                                                    value="{{ request()->back_date ?? date('Y-m-d') }}"
+                                                    id="dateRealInput2" name="back_date">
                                             </div>
                                         </div>
                                     </div>
@@ -706,11 +710,13 @@
             </div>
         </div>
     </div>
+
     <!-- End blogs  -->
 
+    
     <!-- start footer  -->
 @endsection
-
+@include('mobile.home')
 @push('scripts')
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -907,32 +913,38 @@
     <script>
         let passengerCount = 1;
         const countElement = document.getElementById('passengerCount');
+        const countElementInput = document.getElementById('passenger-count');
 
         function incrementPassengers() {
             passengerCount++;
             countElement.textContent = passengerCount;
+            countElementInput.value = passengerCount;
         }
 
         function decrementPassengers() {
             if (passengerCount > 1) {
                 passengerCount--;
                 countElement.textContent = passengerCount;
+                countElementInput.value = passengerCount;
             }
         }
     </script>
     <script>
         let passengerCount2 = 1;
         const countElement2 = document.getElementById('passengerCount2');
+        const countElement2Input = document.getElementById('passenger-count');
 
         function incrementPassengers2() {
             passengerCount2++;
             countElement2.textContent = passengerCount2;
+            countElement2Input.value = passengerCount2;
         }
 
         function decrementPassengers2() {
             if (passengerCount2 > 1) {
                 passengerCount2--;
                 countElement2.textContent = passengerCount2;
+                countElement2Input.value = passengerCount2;
             }
         }
     </script>

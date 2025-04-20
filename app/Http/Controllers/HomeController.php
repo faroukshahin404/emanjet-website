@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\City;
 use App\Models\Contact;
+use App\Models\Station;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -11,9 +12,15 @@ class HomeController extends Controller
 {
     public function home()
     {
-        return view('home.index');
+        $stations = Station::where('available_online', 1)->get();
+        $cities = City::available()->orderBy('rank')->get();
+        return view('home.index', [
+            'stations' => $stations,
+            'cities'=> $cities,
+        ]);
     }
 
+    
     public function getCities()
     {
         $cities = City::available()->orderBy('rank')->get();
