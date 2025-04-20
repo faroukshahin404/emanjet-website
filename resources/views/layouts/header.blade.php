@@ -77,35 +77,7 @@
                         </li>
                     </ul>
                 </div>
-
             @endauth
-            <!-- Modal -->
-            <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true"
-                data-bs-backdrop="false">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header d-flex align-items-center">
-                            <h5 class="modal-title mx-auto">تسجيل الدخول</h5>
-                            <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                        </div>
-
-                        <div class="modal-body">
-                            <form class="login-form">
-                                <div class="position-relative">
-                                    <input type="text" class="phoneInput" placeholder="رقم الهاتف">
-                                    <i class="fas fa-phone phone-icon"></i>
-                                </div>
-                                <p>سنقوم بإرسال رمز تحقق إلى رقم هاتفك للتأكد من أنك صاحب الحساب وإتمام عملية
-                                    التأكيد بنجاح</p>
-                                <div class="d-flex justify-content-center">
-                                    <button type="submit" class="submitBtn mt-3">ارسال</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>
