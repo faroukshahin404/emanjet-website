@@ -1,6 +1,10 @@
   <!-- start header  -->
   <div class="mobileHeader d-flex justify-content-between">
-    <p class="m-0 text-black">مرحبا بك يا احمد</p>
+    @if(auth()->check())
+    <p class="m-0 text-black">مرحبا بك يا {{auth()->user()->name}}</p>
+    @else
+    <p class="m-0 text-black">مرحبا بك عميلنا العزيز</p>
+    @endif
     <div class="mo-bell-box position-relative">
         <div class="bell-icon">
             <p class="notification-count position-absolute m-0">1</p>

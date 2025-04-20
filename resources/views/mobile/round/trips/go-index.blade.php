@@ -5,7 +5,7 @@
         <a href="/">
             <i class="fas fa-arrow-right fs-25 text-black"></i>
         </a>
-        <p class="m-0 fs-25 text-black">الحافلات المتاحة</p>
+        <p class="m-0 fs-25 text-black">رحلات الذهاب</p>
         <div></div>
     </div>
 
@@ -76,7 +76,7 @@
                 </div>
 
                 @foreach ($trips as $trip)
-                    <a href="{{ route('mobile.one-way.choose-seat', array_merge(request()->all(), ['selected_trip_id' => $trip->id])) }}">
+                    <a href="{{ route('mobile.round.back-trips', array_merge(request()->all(), ['go_trip_id' => $trip->id])) }}">
                         <div class="mt-3 border rounded-7 py-3 px-3 bus-card mb-3">
                             <div class="d-flex justify-content-between">
 

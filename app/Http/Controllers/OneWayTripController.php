@@ -88,6 +88,7 @@ class OneWayTripController extends Controller
 
     public function confirmBooking(OnewayConfirmBookingRequest $request)
     {
+        
         try {
             DB::beginTransaction();
             $ticket = $this->confirmBookingService->one_way_confirm_booking($request);
