@@ -22,24 +22,26 @@
         <div class="offcanvas-body">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('home') }}"
+                    <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}"
                         data-lang='{"en": "Home", "ar": "الرئيسية"}'>الرئيسية</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="destinations.html"
-                        data-lang='{"en": "Destinations", "ar": "وجهات السفر"}'>وجهات
+                    <a class="nav-link {{ request()->routeIs('destinations') ? 'active' : '' }}"
+                        href="{{ route('destinations') }}" data-lang='{"en": "Destinations", "ar": "وجهات السفر"}'>وجهات
                         السفر</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="blogs.html" data-lang='{"en": "Bus Blogs", "ar": "حكايات الباص"}'>حكايات
+                    <a class="nav-link {{ request()->routeIs('blogs') ? 'active' : '' }}" href="{{ route('blogs') }}"
+                        data-lang='{"en": "Bus Blogs", "ar": "حكايات الباص"}'>حكايات
                         الباص</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="about-us.html" data-lang='{"en": "About Us", "ar": "عنا"}'>عنا</a>
+                    <a class="nav-link {{ request()->routeIs('about-us') ? 'active' : '' }}"
+                        href="{{ route('about-us') }}" data-lang='{"en": "About Us", "ar": "عنا"}'>عنا</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="contact-us.html"
-                        data-lang='{"en": "Contact Us", "ar": "تواصل معنا"}'>تواصل
+                    <a class="nav-link {{ request()->routeIs('contact-us') ? 'active' : '' }}"
+                        href="{{ route('contact-us') }}" data-lang='{"en": "Contact Us", "ar": "تواصل معنا"}'>تواصل
                         معنا</a>
                 </li>
             </ul>
@@ -108,3 +110,21 @@
     </div>
 </div>
 </nav>
+
+<style>
+    .nav-link.active {
+        color: #000 !important;
+        font-weight: bold;
+        position: relative;
+    }
+
+    .nav-link.active::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: #000;
+    }
+</style>

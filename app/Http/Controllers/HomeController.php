@@ -43,8 +43,25 @@ class HomeController extends Controller
 
     public function contact_us()
     {
-        return view('other.contact-us');
+        return view('other.contact-us.index');
     }
+
+    public function about_us()
+    {
+        return view('other.about-us.index');
+    }
+
+    public function blogs()
+    {
+        return view('other.blogs.index');
+    }
+
+    public function destinations()
+    {
+        $cities = City::available()->orderBy('rank')->get();
+        return view('other.destinations.index', compact('cities'));
+    }
+
     public function submit_contact_form(Request $request)
     {
         $request->validate([
