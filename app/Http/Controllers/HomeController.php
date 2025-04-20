@@ -20,7 +20,6 @@ class HomeController extends Controller
         ]);
     }
 
-    
     public function getCities()
     {
         $cities = City::available()->orderBy('rank')->get();
