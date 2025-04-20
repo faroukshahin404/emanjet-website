@@ -1,10 +1,14 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PageController;
+use App\Http\Controllers\Admin\PageSeoController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OnewayMobileController;
 use App\Http\Controllers\OneWayTripController;
 use App\Http\Controllers\RoundTripController;
+use App\Http\Controllers\RoundTripMobileController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,7 +36,6 @@ Route::group(['as' => 'round.', 'prefix' => 'round'], function () {
     Route::group(['middleware' => 'checkUserVerified'], function () {
         Route::get('/choose-seat', [RoundTripController::class, 'chooseSeats'])->name('choose-seat');
         Route::post('/confirm-booking', [RoundTripController::class, 'confirmBooking'])->name('confirm-booking');
-
     });
 });
 
@@ -40,6 +43,18 @@ Route::group(['as' => 'round.', 'prefix' => 'round'], function () {
 Route::group(['as' => 'mobile.', 'prefix' => 'mobile'], function () {
     Route::group(['as' => 'one-way.', 'prefix' => 'one-way'], function () {
         Route::get('/trips', [OnewayMobileController::class, 'trips'])->name('trips');
+        Route::group(['middleware' => 'checkUserVerified'], function () {
+            Route::get('/choose-seat', [OnewayMobileController::class, 'chooseSeats'])->name('choose-seat');
+            Route::get('booking-summary', [OnewayMobileController::class, 'bookingSummary'])->name('booking-summary');
+        });
+    });
+    Route::group(['as' => 'round.', 'prefix' => 'round'], function () {
+        Route::get('/trips', [RoundTripMobileController::class, 'trips'])->name('trips');
+        Route::get('/back-trips', [RoundTripMobileController::class, 'backTrips'])->name('back-trips');
+        Route::group(['middleware' => 'checkUserVerified'], function () {
+            Route::get('/choose-seat', [RoundTripMobileController::class, 'chooseSeats'])->name('choose-seat');
+            Route::get('booking-summary', [RoundTripMobileController::class, 'bookingSummary'])->name('booking-summary');
+        });
     });
 });
 
@@ -47,6 +62,12 @@ Route::group(['as' => 'mobile.', 'prefix' => 'mobile'], function () {
 Route::group([], function () {
     Route::get('contact-us', [HomeController::class, 'contact_us'])->name('contact-us');
     Route::post('contact-us', [HomeController::class, 'submit_contact_form'])->name('submit-contact-form');
+
+
+    Route::get('about-us', [HomeController::class, 'about_us'])->name('about-us');
+    Route::get('blogs', [HomeController::class, 'blogs'])->name('blogs');
+    Route::get('destinations', [HomeController::class, 'destinations'])->name('destinations');
+    Route::get('faqs', [HomeController::class, 'faqs'])->name('faqs');
 });
 
 Route::prefix('auth')->name('auth.')->group(function () {
@@ -93,4 +114,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+});
+
+
+Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::resource('/pages', PageController::class)->names('pages');
+    Route::get('/pages-seo/{pageId}', [PageSeoController::class, 'index'])->name('pages-seo.index');
+    Route::get('/pages-seo/{id}/edit', [PageSeoController::class, 'edit'])->name('pages-seo.edit');
+    Route::put('/pages-seo/{id}', [PageSeoController::class, 'update'])->name('pages-seo.update');
 });

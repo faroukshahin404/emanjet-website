@@ -11,7 +11,8 @@
                         <div class="nav w-100 flex-column nav-pills" id="v-pills-tab" role="tablist"
                             aria-orientation="vertical">
                             <p>أهلا, أحمد</p>
-                            <button class="nav-link w-100 active d-flex justify-content-between align-items-center"
+                            <button
+                                class="nav-link w-100  @if (request()->has('tap')) {{ request()->tap == 'trips' ? 'active' : '' }} @else active @endif d-flex justify-content-between align-items-center"
                                 id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button"
                                 role="tab" aria-controls="v-pills-home" aria-selected="true">
                                 <div>
@@ -22,7 +23,8 @@
                                     <i class="fas fa-angle-left"></i>
                                 </div>
                             </button>
-                            <button class="nav-link d-flex justify-content-between align-items-center"
+                            <button
+                                class="nav-link @if (request()->has('tap')) {{ request()->tap == 'profile' ? 'active' : '' }} @endif d-flex justify-content-between align-items-center"
                                 id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile"
                                 type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">
                                 <div>

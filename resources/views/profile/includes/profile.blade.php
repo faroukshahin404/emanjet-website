@@ -1,4 +1,5 @@
-<div class="tab-pane fade mt-4" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+<div class="tab-pane fade mt-4 @if (request()->has('tap') && request()->tap == 'profile') show active @endif" id="v-pills-profile" role="tabpanel"
+    aria-labelledby="v-pills-profile-tab">
     <h6 class="my-data mb-3">بياناتي</h6>
 
     <form action="{{ route('auth.update-profile') }}" method="POST">
@@ -75,7 +76,7 @@
                 </div>
 
                 <div class="d-flex justify-content-center mt-4">
-                    <button type="submit" class="btn btn-primary px-5 py-2 rounded-5">حفظ التغييرات</button>
+                    <button type="submit" class="btn search-trip-btn fw-bold py-2">حفظ التغييرات</button>
                 </div>
             </div>
         </div>

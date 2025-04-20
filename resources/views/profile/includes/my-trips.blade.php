@@ -1,4 +1,4 @@
-<div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+<div class="tab-pane fade show @if (request()->has('tap')) {{ request()->tap == 'trips' ? 'active' : '' }} @else active @endif" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
     <h2>رحلاتي</h2>
     <h6>رحلاتي القادمة</h6>
 

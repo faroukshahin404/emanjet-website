@@ -115,7 +115,10 @@ trait BookingTrait
             'to_id' => $stationTo_id,
             'tripData_id' => $runTrip->tripData_id
         ])->first();
+     
+        
         $list = [];
+
         foreach ($seats as $key => $seat) {
             $list[] = [
                 'tripSeat_id' => $seat->id,
@@ -140,6 +143,14 @@ trait BookingTrait
         ])->first();
 
         return Carbon::createFromFormat('Y-m-d H:i:s', $runTrip->startDate . ' ' . $runTrip->startTime)->addMinutes(@$tripStation->timeInMinutes ?? 0);
+    }
+
+    public function getNextWeekDays(){
+        $days = [];
+        for ($i = 0; $i < 7; $i++) {
+            $days[] = Carbon::now()->addDays($i)->format('Y-m-d');
+        }
+        return $days;
     }
     
 }

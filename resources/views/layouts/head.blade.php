@@ -17,13 +17,25 @@
     <!-- MDB CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css" rel="stylesheet">
     <!-- Favicon -->
-    <link rel="shortcut icon" href="{{asset('/images/logo.png')}}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('/images/logo.png') }}" type="image/x-icon">
     <!-- apple-touch-icon -->
-    <link rel="apple-touch-icon" href="{{asset('/images/logo.png')}}">
+    <link rel="apple-touch-icon" href="{{ asset('/images/logo.png') }}">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{asset('/css/style.css')}}">
-    <link rel="stylesheet" href="{{asset('/css/mobile.css')}}">
+    <link rel="stylesheet" href="{{ asset('/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('/css/mobile.css') }}">
     <link rel="stylesheet" href="{{ asset('css/custom-toastr.css') }}">
 
+    {{-- Start Seo --}}
+    @if (isset($seo) && !empty($seo))
+        <title>{{ $seo['meta_title'] }}</title>
+        <meta name="description" content="{{ $seo['meta_description'] }}">
+        <meta name="keywords" content="{{ $seo['meta_keywords'] }}">
+        <meta property="og:title" content="{{ $seo['og_title'] }}">
+        <meta property="og:description" content="{{ $seo['og_description'] }}">
+        <meta property="og:image" content="{{ $seo['og_image'] }}">
+    @endif
+
+    {{-- end Seo --}}
+    @stack('styles')
     <title>Super Jet</title>
 </head>

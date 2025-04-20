@@ -22,24 +22,26 @@
         <div class="offcanvas-body">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('home') }}"
+                    <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}"
                         data-lang='{"en": "Home", "ar": "الرئيسية"}'>الرئيسية</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="destinations.html"
-                        data-lang='{"en": "Destinations", "ar": "وجهات السفر"}'>وجهات
+                    <a class="nav-link {{ request()->routeIs('destinations') ? 'active' : '' }}"
+                        href="{{ route('destinations') }}" data-lang='{"en": "Destinations", "ar": "وجهات السفر"}'>وجهات
                         السفر</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="blogs.html" data-lang='{"en": "Bus Blogs", "ar": "حكايات الباص"}'>حكايات
+                    <a class="nav-link {{ request()->routeIs('blogs') ? 'active' : '' }}" href="{{ route('blogs') }}"
+                        data-lang='{"en": "Bus Blogs", "ar": "حكايات الباص"}'>حكايات
                         الباص</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="about-us.html" data-lang='{"en": "About Us", "ar": "عنا"}'>عنا</a>
+                    <a class="nav-link {{ request()->routeIs('about-us') ? 'active' : '' }}"
+                        href="{{ route('about-us') }}" data-lang='{"en": "About Us", "ar": "عنا"}'>عنا</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="contact-us.html"
-                        data-lang='{"en": "Contact Us", "ar": "تواصل معنا"}'>تواصل
+                    <a class="nav-link {{ request()->routeIs('contact-us') ? 'active' : '' }}"
+                        href="{{ route('contact-us') }}" data-lang='{"en": "Contact Us", "ar": "تواصل معنا"}'>تواصل
                         معنا</a>
                 </li>
             </ul>
@@ -65,8 +67,9 @@
                         مرحبًا, {{ implode(' ', array_slice(explode(' ', Auth::user()->name), 0, 2)) }}
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <li><a class="dropdown-item" href="profile.html">رحلاتي</a></li>
-                        <li><a class="dropdown-item" href="{{ route('auth.profile') }}">بياناتي</a></li>
+                        <li><a class="dropdown-item" href="{{ route('auth.profile', ['tap' => 'trips']) }}">رحلاتي</a></li>
+                        <li><a class="dropdown-item" href="{{ route('auth.profile', ['tap' => 'profile']) }}">بياناتي</a>
+                        </li>
                         <li>
                             <button class="dropdown-item" type="button" data-bs-toggle="modal"
                                 data-bs-target="#logoutModal">
@@ -75,36 +78,26 @@
                         </li>
                     </ul>
                 </div>
-
             @endauth
-            <!-- Modal -->
-            <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true"
-                data-bs-backdrop="false">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header d-flex align-items-center">
-                            <h5 class="modal-title mx-auto">تسجيل الدخول</h5>
-                            <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                        </div>
-
-                        <div class="modal-body">
-                            <form class="login-form">
-                                <div class="position-relative">
-                                    <input type="text" class="phoneInput" placeholder="رقم الهاتف">
-                                    <i class="fas fa-phone phone-icon"></i>
-                                </div>
-                                <p>سنقوم بإرسال رمز تحقق إلى رقم هاتفك للتأكد من أنك صاحب الحساب وإتمام عملية
-                                    التأكيد بنجاح</p>
-                                <div class="d-flex justify-content-center">
-                                    <button type="submit" class="submitBtn mt-3">ارسال</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>
 </nav>
+
+<style>
+    .nav-link.active {
+        color: #000 !important;
+        font-weight: bold;
+        position: relative;
+    }
+
+    .nav-link.active::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: #000;
+    }
+</style>
