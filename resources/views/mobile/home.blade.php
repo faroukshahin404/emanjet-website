@@ -1,8 +1,8 @@
-
-
 @section('mobile-content')
+@include('mobile.layouts.header')
+
     <div class="search-trip">
-        <form action="{{ route('mobile.one-way.trips') }}" method="get">
+        <form action="{{ route('mobile.one-way.trips') }}" method="get" id="search-form">
             <!-- start trip type -->
             <div class="trip-type bg-white  mt-3 d-flex justify-content-between align-items-center p-3">
                 <div class="form-check">
@@ -47,7 +47,7 @@
                             </span>
                         </div>
                     </div>
-                    <button type="button" class="swap-btn bg-transparent border-0" aria-label="تبديل الوجهات">
+                    <button type="button" class="swap-btn bg-transparent border-0" aria-label="تبديل الوجهات" id="swap-btn">
                         <img src="{{ asset('images/mobile/swap.png') }}" alt="swap">
                     </button>
                 </div>
@@ -98,7 +98,7 @@
                                 <span>تاريخ العودة</span>
                                 <i class="fa fa-calendar mx-1"></i>
                             </label>
-                            <input class="form-control rounded-6" type="date" name="return_date" id="returnDate"
+                            <input class="form-control rounded-6" type="date" name="back_date" id="returnDate"
                                 value="{{ $return_date }}">
                         </div>
                     </div>
@@ -121,6 +121,7 @@
                             </div>
                         </div>
                     </div>
+                    
                 </div>
             </div>
             <!-- End date and passenger numer -->
@@ -272,6 +273,10 @@
             const locationSearch = document.getElementById('locationSearch');
             const cityHeaders = bottomSheet.querySelectorAll('.city-header');
             const subStations = bottomSheet.querySelectorAll('.sub-stations');
+            const swapBtn = document.getElementById('swap-btn');
+            const searchForm = document.getElementById('search-form');
+            const oneWayRadio = document.getElementById('oneWayRadio');
+            const roundTripRadio = document.getElementById('roundTripRadio');
             let activeInput = null;
             let activeLocationSpan = null;
             let currentSubStations = null;
@@ -282,6 +287,45 @@
             const toCityInput = document.getElementById('to-city');
             const fromStationInput = document.getElementById('from-station');
             const toStationInput = document.getElementById('to-station');
+            const fromLocationSpan = document.getElementById('from-location');
+            const toLocationSpan = document.getElementById('to-location');
+
+            // Function to update form action based on trip type
+            function updateFormAction() {
+                if (oneWayRadio.checked) {
+                    searchForm.action = "{{ route('mobile.one-way.trips') }}";
+                } else if (roundTripRadio.checked) {
+                    searchForm.action = "{{ route('mobile.round.trips') }}";
+                }
+            }
+
+            // Add event listeners for trip type radio buttons
+            oneWayRadio.addEventListener('change', updateFormAction);
+            roundTripRadio.addEventListener('change', updateFormAction);
+
+            // Function to swap locations
+            function swapLocations() {
+                // Swap city IDs
+                const tempCityId = fromCityInput.value;
+                fromCityInput.value = toCityInput.value;
+                toCityInput.value = tempCityId;
+
+                // Swap station IDs
+                const tempStationId = fromStationInput.value;
+                fromStationInput.value = toStationInput.value;
+                toStationInput.value = tempStationId;
+
+                // Swap location display text
+                const tempLocation = fromLocationSpan.textContent;
+                fromLocationSpan.textContent = toLocationSpan.textContent;
+                toLocationSpan.textContent = tempLocation;
+            }
+
+            // Add click event listener to swap button
+            swapBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                swapLocations();
+            });
 
             function showBottomSheet() {
                 bottomSheet.classList.add('show');

@@ -5,7 +5,7 @@
         <a href="/">
             <i class="fas fa-arrow-right fs-25 text-black"></i>
         </a>
-        <p class="m-0 fs-25 text-black">الحافلات المتاحة</p>
+        <p class="m-0 fs-25 text-black">رحلات العودة</p>
         <div></div>
     </div>
 
@@ -19,7 +19,8 @@
                             <input type="hidden" name="tripType" value="{{ request()->tripType }}" />
                             <input type="hidden" name="city_from_id" value="{{ request()->city_from_id }}" />
                             <input type="hidden" name="city_to_id" value="{{ request()->city_to_id }}" />
-                            <input type="hidden" name="back_date" value="{{ request()->back_date }}" />
+
+                            <input type="hidden" name="go_date" value="{{ request()->back_date }}" />
                             <input type="hidden" name="seats" value="{{ request()->seats }}" />
                             <input type="hidden" name="station_from_id" value="{{ request()->station_from_id }}" />
                             <input type="hidden" name="station_to_id" value="{{ request()->station_to_id }}" />
@@ -29,8 +30,8 @@
                             <li class="nav-item" role="presentation">
 
                                 <button class="nav-link" id="{{ $date }}-tab" data-bs-toggle="tab"
-                                    style="background-color: {{ request()->go_date == $date ? 'var(--main-color)' : 'white' }};"
-                                    data-bs-target="#{{ $date }}" type="submit" role="tab" name="go_date"
+                                    style="background-color: {{ request()->back_date == $date ? 'var(--main-color)' : 'white' }};"
+                                    data-bs-target="#{{ $date }}" type="submit" role="tab" name="back_date"
                                     value="{{ $date }}" aria-controls="{{ $date }}"
                                     aria-selected="false">{{ $date }}</button>
                             </li>
@@ -76,7 +77,7 @@
                 </div>
 
                 @foreach ($trips as $trip)
-                    <a href="{{ route('mobile.one-way.choose-seat', array_merge(request()->all(), ['selected_trip_id' => $trip->id])) }}">
+                    <a href="{{ route('mobile.round.choose-seat', array_merge(request()->all(), ['back_trip_id' => $trip->id])) }}">
                         <div class="mt-3 border rounded-7 py-3 px-3 bus-card mb-3">
                             <div class="d-flex justify-content-between">
 

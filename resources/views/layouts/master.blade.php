@@ -19,7 +19,6 @@
     <div class="mobile d-lg-none d-block">
         <div class="container mo-view mb-5 mt-3 px-4">
             <div class="row">
-                @include('mobile.layouts.header')
                 @yield('mobile-content')
             </div>
         </div>

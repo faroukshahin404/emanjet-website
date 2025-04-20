@@ -8,6 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OnewayMobileController;
 use App\Http\Controllers\OneWayTripController;
 use App\Http\Controllers\RoundTripController;
+use App\Http\Controllers\RoundTripMobileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
@@ -30,7 +31,6 @@ Route::group(['as' => 'round.', 'prefix' => 'round'], function () {
     Route::group(['middleware' => 'checkUserVerified'], function () {
         Route::get('/choose-seat', [RoundTripController::class, 'chooseSeats'])->name('choose-seat');
         Route::post('/confirm-booking', [RoundTripController::class, 'confirmBooking'])->name('confirm-booking');
-
     });
 });
 
@@ -38,6 +38,18 @@ Route::group(['as' => 'round.', 'prefix' => 'round'], function () {
 Route::group(['as' => 'mobile.', 'prefix' => 'mobile'], function () {
     Route::group(['as' => 'one-way.', 'prefix' => 'one-way'], function () {
         Route::get('/trips', [OnewayMobileController::class, 'trips'])->name('trips');
+        Route::group(['middleware' => 'checkUserVerified'], function () {
+            Route::get('/choose-seat', [OnewayMobileController::class, 'chooseSeats'])->name('choose-seat');
+            Route::get('booking-summary', [OnewayMobileController::class, 'bookingSummary'])->name('booking-summary');
+        });
+    });
+    Route::group(['as' => 'round.', 'prefix' => 'round'], function () {
+        Route::get('/trips', [RoundTripMobileController::class, 'trips'])->name('trips');
+        Route::get('/back-trips', [RoundTripMobileController::class, 'backTrips'])->name('back-trips');
+        Route::group(['middleware' => 'checkUserVerified'], function () {
+            Route::get('/choose-seat', [RoundTripMobileController::class, 'chooseSeats'])->name('choose-seat');
+            Route::get('booking-summary', [RoundTripMobileController::class, 'bookingSummary'])->name('booking-summary');
+        });
     });
 });
 
