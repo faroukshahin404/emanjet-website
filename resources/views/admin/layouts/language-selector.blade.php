@@ -4,7 +4,7 @@
         data-bs-toggle="dropdown" title="Language">
         <i class="fa fa-globe"></i>
     </a>
-    <ul class="dropdown-menu animated bounceIn">
+    {{-- <ul class="dropdown-menu animated bounceIn">
         <li class="dropdown-item @if (app()->getLocale() == 'ar') active @endif">
             <a href="{{ route('change.lang', 'ar') }}">
                 {{ __('Arabic') }}
@@ -15,5 +15,5 @@
                 {{ __('English') }}
             </a>
         </li>
-    </ul>
+    </ul> --}}
 </li>

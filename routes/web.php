@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PageController;
+use App\Http\Controllers\Admin\PageSeoController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OnewayMobileController;
@@ -79,4 +82,13 @@ Route::prefix('auth')->name('auth.')->group(function () {
             Route::post('profile', [AuthController::class, 'updateProfile'])->name('update-profile');
         });
     });
+});
+
+
+Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::resource('/pages', PageController::class)->names('pages');
+    Route::get('/pages-seo/{pageId}', [PageSeoController::class, 'index'])->name('pages-seo.index');
+    Route::get('/pages-seo/{id}/edit', [PageSeoController::class, 'edit'])->name('pages-seo.edit');
+    Route::put('/pages-seo/{id}', [PageSeoController::class, 'update'])->name('pages-seo.update');
 });

@@ -1,9 +1,9 @@
 <li class="user-menu">
     <div class="waves-effect  user-info">
         <i class="fa fa-arrow-down"></i>
-        {{ auth()->user()->name }}
+        {{-- {{ auth()->user()->name }} --}}
     </div>
-    <ul class="dropdown-menu animated bounceIn">
+    {{-- <ul class="dropdown-menu animated bounceIn">
         @can('show role')
             <li><a href="{{ route('roles.index') }}">
                     <i class="fa fa-shield" style="margin: 0px"></i>
@@ -27,7 +27,7 @@
                     {{ __('Logout') }}</button>
             </form>
         </li>
-    </ul>
+    </ul> --}}
 </li>
 
 
