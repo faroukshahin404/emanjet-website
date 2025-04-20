@@ -23,4 +23,6 @@ class PageSeo extends Model
     {
         return $this->belongsTo(Page::class);
     }
+    protected $table = 'page_seos';
+    protected $guarded = [];
 }

@@ -78,3 +78,24 @@ if (!function_exists('getSeoData')) {
         return $seoData;
     }
 }
+
+function getSeatInfo($seat_id, $from_id, $to_id, $runTrip_id, $type)
+{
+
+    $seat = \App\Models\TripSeat::find($seat_id);
+    $runTrip = \App\Models\RunTrip::find($runTrip_id);
+    $line = \App\Models\Line::where([
+        'from_id' => $from_id,
+        'to_id' => $to_id,
+        'tripData_id' => $runTrip->tripData_id
+    ])->first();
+
+
+    return [
+        'tripSeat_id' => $seat_id,
+        'name' => $seat->seat->name,
+        'price' => $type == 'back' ? $line->priceBack - $line->priceGo : $line->priceGo,
+        'round_price' => $line->priceBack,
+
+    ];
+}

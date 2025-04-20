@@ -22,7 +22,6 @@ class Page extends Model
         'meta_tags' => 'array',
     ];
 
-    // public $translatable = ['title', 'meta_title', 'meta_description'];
 
     public function scopeActive($query)
     {
