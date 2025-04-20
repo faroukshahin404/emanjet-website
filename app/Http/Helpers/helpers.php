@@ -24,7 +24,7 @@ function isSeatAvailable($seat_id, $runTrip_id, $tripData_id, $line_id)
     foreach ($bookingSeats as $key => $bookingSeat) {
         $bookedFrom = \App\Models\TripStation::find($bookingSeat->tripStationFrom_id)->rank;
         $bookedTo = \App\Models\TripStation::find($bookingSeat->tripStationTo_id)->rank;
-        // 
+        //
         $line = \App\Models\Line::find($line_id);
         $searchFrom = \App\Models\TripStation::where([
             'station_id' => $line->from_id,
@@ -34,7 +34,7 @@ function isSeatAvailable($seat_id, $runTrip_id, $tripData_id, $line_id)
             'station_id' => $line->to_id,
             'tripData_id' => $tripData_id,
         ])->first()->rank;
-        // 
+        //
 
         if (
             ($bookedFrom <= $searchFrom && $searchFrom < $bookedTo)
@@ -48,7 +48,39 @@ function isSeatAvailable($seat_id, $runTrip_id, $tripData_id, $line_id)
     return null;
 }
 
-function getSeatInfo($seat_id, $from_id , $to_id  , $runTrip_id, $type){
+
+
+
+
+if (!function_exists('getSeoData')) {
+    /**
+     * Get SEO data for a given page.
+     *
+     * @param   $pageData
+     * @return array
+     */
+    function getSeoData($pageData)
+    {
+        // التأكد من أن meta_tags موجودة وإذا كانت كائن أو مصفوفة
+        $metaTags = $pageData['meta_tags'] ?? [];
+
+        // التأكد من وجود meta_tags في حالة كونها كائنًا أو مصفوفة فارغة
+        $seoData = [
+            'meta_title' => $pageData['meta_title'] ?? 'Default Meta Title',
+            'meta_description' => $pageData['meta_description'] ?? 'Default Meta Description',
+            'meta_keywords' => $metaTags['keywords'] ?? 'default, keywords',
+            'meta_image' => $metaTags['image'] ?? 'default-image.jpg',
+            'og_title' => $metaTags['og_title'] ?? $pageData['meta_title'],
+            'og_description' => $metaTags['og_description'] ?? $pageData['meta_description'],
+            'og_image' => $metaTags['og_image'] ?? $metaTags['image'] ?? 'default-og-image.jpg', // افتراض صورة افتراضية في حال غياب `og_image`
+        ];
+
+        return $seoData;
+    }
+}
+
+function getSeatInfo($seat_id, $from_id, $to_id, $runTrip_id, $type)
+{
 
     $seat = \App\Models\TripSeat::find($seat_id);
     $runTrip = \App\Models\RunTrip::find($runTrip_id);
@@ -57,12 +89,12 @@ function getSeatInfo($seat_id, $from_id , $to_id  , $runTrip_id, $type){
         'to_id' => $to_id,
         'tripData_id' => $runTrip->tripData_id
     ])->first();
-    
-    
+
+
     return [
         'tripSeat_id' => $seat_id,
-        'name'=> $seat->seat->name,
-        'price' => $type=='back' ? $line->priceBack - $line->priceGo : $line->priceGo,
+        'name' => $seat->seat->name,
+        'price' => $type == 'back' ? $line->priceBack - $line->priceGo : $line->priceGo,
         'round_price' => $line->priceBack,
 
     ];
