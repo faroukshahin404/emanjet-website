@@ -68,10 +68,10 @@ class PageSeosSeeder extends Seeder
                 'page_slug' => 'home',
                 'section_type' => 'hero-section',
                 'content_json' => json_encode([
-                    'card-title' => 'مرحبا بكم في موقعنا',
-                    'image' => 'https://placehold.co/400',
+                    'card-title' => 'احجز رحلتك دلوقتي!',
+                    'image' => 'https://placehold.co/1675x700',
                     'caption-title' => 'نحن هنا لمساعدتك',
-                    'caption-description' => 'تصفح موقعنا واكتشف المزيد',
+                    'caption-description' => 'احجز رحلتك مع السوبر جيت وادفع بالبطاقة الائتمانية في لحظة!',
                 ]),
                 'order' => 1,
                 'status' => true,
@@ -82,9 +82,11 @@ class PageSeosSeeder extends Seeder
                 'page_slug' => 'home',
                 'section_type' => 'any-where',
                 'content_json' => json_encode([
-                    'title' => 'تصفح من أي مكان',
-                    'description' => 'يمكنك الوصول إلى موقعنا من أي مكان في العالم',
-                    'image' => 'https://placehold.co/400',
+                    'title' => 'سوبر جيت معك في آي مكان',
+                    'description' => 'لكن لا بد أن أوضح لك أن كل هذه الأفكار المغلوطة حول استنكار النشوة وتمجيد الألم نشأت بالفعل، وسأعرض لك التفاصيل لتكتشف حقيقة وأساس تلك السعادة البشرية، فلا أحد يرفض أو يكره أو يتجنب الشعور بالسعادة، ولكن بفضل هؤلاء الأشخاص الذين لا يدركون بأن السعادة لا بد أن نستشعرها بصورة أكثر عقلانية ومنطقية فيعرضهم هذا لمواجهة الظروف الأليمة، وأكرر بأنه لا يوجد من يرغب في الحب ونيل المنال ويتلذذ بالآلام، الألم هو الألم ولكن نتيجة لظروف ما قد تكمن السعاده فيما نتحمله من كد وأسي.
+
+                    و سأعرض مثال حي لهذا، من منا لم يتحمل جهد بدني شاق إلا من أجل الحصول على ميزة أو فائدة؟ ولكن من لديه الحق أن ينتقد شخص ما أراد أن يشعر بالسعادة التي لا تشوبها عواقب أليمة أو آخر أراد أن يتجنب الألم الذي ربما تنجم عنه بعض المتعة ؟',
+                    'image' => 'https://placehold.co/745x677',
                 ]),
                 'order' => 2,
                 'status' => true,
@@ -95,14 +97,14 @@ class PageSeosSeeder extends Seeder
                 'page_slug' => 'home',
                 'section_type' => 'payment-methods',
                 'content_json' => json_encode([
-                    'title' => 'طرق الدفع',
+                    'title' => 'اختر طريقة الدفع اللي تناسبك',
                     'images' => [
-                        'https://placehold.co/400',
-                        'https://placehold.co/400',
-                        'https://placehold.co/400',
-                        'https://placehold.co/400',
-                        'https://placehold.co/400',
-                        'https://placehold.co/400',
+                        'https://placehold.co/170x60',
+                        'https://placehold.co/170x60',
+                        'https://placehold.co/170x60',
+                        'https://placehold.co/170x60',
+                        'https://placehold.co/170x60',
+                        'https://placehold.co/170x60',
                     ],
                 ]),
                 'order' => 3,
@@ -114,9 +116,9 @@ class PageSeosSeeder extends Seeder
                 'page_slug' => 'home',
                 'section_type' => 'reservation',
                 'content_json' => json_encode([
-                    'title' => 'احجز الآن',
-                    'description' => 'احجز موعدك الآن واستمتع بخدماتنا',
-                    'image' => 'https://placehold.co/400',
+                    'title' => 'انطلق إلى سحر شواطئ مصر الخلابة واستمتع بالمياه الفيروزية والأجواء المنعشة!',
+                    'description' => 'لكن لا بد أن أوضح لك أن كل هذه الأفكار المغلوطة حول استنكار النشوة وتمجيد الألم نشأت بالفعل، وسأعرض لك التفاصيل لتكتشف حقيقة وأساس تلك السعادة البشرية، فلا أحد يرفض أو يكره أو يتجنب الشعور بالسعادة، ولكن بفضل هؤلاء الأشخاص الذين لا يدركون بأن السعادة لا بد أن نستشعرها بصورة أكثر عقلانية ومنطقية فيعرضهم هذا لمواجهة الظروف الأليمة، وأكرر بأنه لا يوجد من يرغب في الحب ونيل المنال ويتلذذ بالآلام، الألم هو الألم ولكن نتيجة لظروف ما قد تكمن السعاده فيما نتحمله من كد وأسي.',
+                    'image' => 'https://placehold.co/1657x550',
                 ]),
                 'order' => 4,
                 'status' => true,
@@ -128,11 +130,23 @@ class PageSeosSeeder extends Seeder
         $destinationSeos = [
             [
                 'page_slug' => 'destinations',
+                'section_type' => 'hero-section',
+                'content_json' => json_encode([
+                    'search-title' => 'مسافر علي فين؟',
+                    'image' => 'https://placehold.co/1657x600',
+                ]),
+                'order' => 1,
+                'status' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'page_slug' => 'destinations',
                 'section_type' => 'try',
                 'content_json' => json_encode([
                     'title' => 'جربه الآن',
                     'description' => 'احجز الآن واستمتع بتجربة فريدة',
-                    'image' => 'https://placehold.co/400',
+                    'image' => 'https://placehold.co/805x475',
                 ]),
                 'order' => 1,
                 'status' => true,
@@ -145,7 +159,7 @@ class PageSeosSeeder extends Seeder
                 'content_json' => json_encode([
                     'title' => 'تطبيقنا',
                     'description' => 'قم بتنزيل تطبيقنا الآن واستمتع بتجربة فريدة',
-                    'image' => 'https://placehold.co/400',
+                    'image' => 'https://placehold.co/450x577',
                 ]),
                 'order' => 2,
                 'status' => true,
@@ -160,8 +174,8 @@ class PageSeosSeeder extends Seeder
                 'section_type' => 'hero-section',
                 'content_json' => json_encode([
                     'title' => 'وجهاتنا',
-                    'description' => 'استكشف وجهاتنا المتنوعة',
-                    'image' => 'https://placehold.co/400',
+                    'description' => 'استكشف مجموعة متنوعة من الوجهات المميزة التي نوفرها عبر خطوطنا المنتشرة في جميع أنحاء الجمهورية. سواء كنت تبحث عن رحلة عمل سريعة أو عطلة للاسترخاء، فإننا نقدم لك خيارات متعددة تناسب جميع احتياجاتك. نضمن لك تجربة سفر مريحة وآمنة، مع الالتزام بأعلى معايير الجودة والاحترافية. اكتشف الآن وجهتك القادمة مع سوبر جيت!',
+                    'image' => 'https://placehold.co/805x668',
                 ]),
                 'order' => 1,
                 'status' => true,
@@ -172,12 +186,15 @@ class PageSeosSeeder extends Seeder
                 'section_type' => 'trip-start',
                 'content_json' => json_encode([
                     'title' => 'ابدأ رحلتك',
-                    'description' => 'احجز الآن واستمتع بتجربة فريدة',
+                    'description' => 'ابدأ مغامرتك مع سوبر جيت! احجز رحلتك بسهولة واستمتع بتجربة مريحة وآمنة عبر منصتنا الإلكترونية. اختر وجهتك المفضلة واستعد لاكتشاف عالم جديد من التنقل العصري.',
+
                     'button-text' => 'احجز الآن',
                     'images' => [
-                        'https://placehold.co/400',
-                        'https://placehold.co/400',
-                        'https://placehold.co/400',
+                        'https://placehold.co/208x292',
+                        'https://placehold.co/208x196',
+                        'https://placehold.co/209x127',
+                        'https://placehold.co/209x292',
+                        'https://placehold.co/209x127',
                     ]
                 ]),
                 'order' => 2,
@@ -193,8 +210,8 @@ class PageSeosSeeder extends Seeder
                 'section_type' => 'hero-section',
                 'content_json' => json_encode([
                     'title' => 'من نحن',
-                    'description' => 'نحن هنا لمساعدتك',
-                    'image' => 'https://placehold.co/400',
+                    'description' => 'نحن في سوبرجيت نؤمن بأهمية الراحة والأمان لعملائنا، ونسعى دائمًا لتقديم تجربة سفر متميزة تجمع بين الاحترافية والجودة. بفضل سنوات من الخبرة في مجال النقل والسفر، نعمل جاهدين على تحسين خدماتنا باستمرار لتلبي توقعات عملائنا وتفوقها. فريقنا ملتزم بتوفير أفضل وسائل الراحة، ودعم العملاء على مدار الساعة، وتقديم حلول مبتكرة تسهّل عليك رحلتك من البداية حتى النهاية.',
+                    'image' => 'https://placehold.co/805x668',
                 ]),
                 'order' => 1,
                 'status' => true,
@@ -225,7 +242,7 @@ class PageSeosSeeder extends Seeder
                 'content_json' => json_encode([
                     'title' => 'نموذج الاتصال',
                     'description' => 'يرجى ملء النموذج أدناه وسنقوم بالرد عليك في أقرب وقت ممكن.',
-                    'image' => 'https://placehold.co/400',
+                    'image' => 'https://placehold.co/805x668',
                     'button-text' => 'إرسال',
                 ]),
                 'order' => 1,
@@ -240,9 +257,10 @@ class PageSeosSeeder extends Seeder
                 'section_type' => 'hero-section',
                 'content_json' => json_encode([
                     'title' => 'الأسئلة الشائعة',
-                    'description' => 'إذا كان لديك أي استفسارات، يرجى مراجعة الأسئلة الشائعة أدناه.',
-                    'image' => 'https://placehold.co/400',
+                    'description' => 'في هذا القسم، جمعنا لك أبرز الأسئلة التي قد تدور في ذهنك حول خدماتنا، الحجز، وسائل الراحة، وسياسات السفر المختلفة. هدفنا هو تقديم تجربة سهلة وواضحة لجميع عملائنا، لذلك نحرص دائمًا على الإجابة على كل استفسار بدقة ووضوح. إذا لم تجد إجابتك هنا، لا تتردد في التواصل معنا وسنكون سعداء بمساعدتك.',
+                    'image' => 'https://placehold.co/805x668',
                 ]),
+
                 'order' => 1,
                 'status' => true,
                 'created_at' => now(),

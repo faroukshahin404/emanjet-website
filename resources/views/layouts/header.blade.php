@@ -67,8 +67,9 @@
                         مرحبًا, {{ implode(' ', array_slice(explode(' ', Auth::user()->name), 0, 2)) }}
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <li><a class="dropdown-item" href="profile.html">رحلاتي</a></li>
-                        <li><a class="dropdown-item" href="{{ route('auth.profile') }}">بياناتي</a></li>
+                        <li><a class="dropdown-item" href="{{ route('auth.profile', ['tap' => 'trips']) }}">رحلاتي</a></li>
+                        <li><a class="dropdown-item" href="{{ route('auth.profile', ['tap' => 'profile']) }}">بياناتي</a>
+                        </li>
                         <li>
                             <button class="dropdown-item" type="button" data-bs-toggle="modal"
                                 data-bs-target="#logoutModal">

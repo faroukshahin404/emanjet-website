@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Page;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +20,23 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        view()->composer('*', function ($view) {
+            $generalPage = Page::where('slug', 'general')->first();
+            $generalPageSeos = $generalPage->pageSeos;
+            $contactUs = $generalPageSeos->where('section_type', 'contact-us')->first();
+            $socialMedia = $generalPageSeos->where('section_type', 'social-media')->first();
+            $apps = $generalPageSeos->where('section_type', 'apps')->first();
+            $pageSeo = $view->getData()['seo'] ?? null;
+            $generalSeo = getSeoData($generalPage->first());
+            $seo = isset($pageSeo) ? $pageSeo : $generalSeo;
+            $view->with([
+                'contactUs' => $contactUs->content_json,
+                'socialMedia' => $socialMedia->content_json,
+                'apps' => $apps->content_json,
+                'seo' => $seo,
+            ]);
+        });
     }
+
+
 }

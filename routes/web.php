@@ -47,6 +47,7 @@ Route::group([], function () {
     Route::get('about-us', [HomeController::class, 'about_us'])->name('about-us');
     Route::get('blogs', [HomeController::class, 'blogs'])->name('blogs');
     Route::get('destinations', [HomeController::class, 'destinations'])->name('destinations');
+    Route::get('faqs', [HomeController::class, 'faqs'])->name('faqs');
 });
 
 Route::prefix('auth')->name('auth.')->group(function () {
