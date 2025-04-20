@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OnewayMobileController;
 use App\Http\Controllers\OneWayTripController;
 use App\Http\Controllers\RoundTripController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
@@ -13,6 +14,10 @@ Route::get('/home', [HomeController::class, 'home']);
 // web.php
 Route::get('/get-cities', [HomeController::class, 'getCities']);
 Route::get('/get-stations/{city}', [HomeController::class, 'getStations']);
+
+// Tickets and Settings routes
+Route::get('/tickets', [HomeController::class, 'tickets'])->name('tickets');
+Route::get('/settings', [HomeController::class, 'settings'])->name('settings');
 
 // Desktop Routes
 Route::group(['as' => 'one-way.', 'prefix' => 'one-way'], function () {
@@ -47,9 +52,10 @@ Route::group([], function () {
 Route::prefix('auth')->name('auth.')->group(function () {
 
     // راوتات OTP والتوثيق - مفتوحة للمستخدم إذا لم يتم التحقق
+    Route::get('phone', [AuthController::class, 'phone'])->name('phone');
     Route::get('otp', [AuthController::class, 'otp'])->name('otp');
     Route::post('otp', [AuthController::class, 'postOtp'])->name('postOtp');
-    Route::post('resend-otp', [AuthController::class, 'resendOtp'])->name('resendOtp');
+    Route::get('resend-otp', [AuthController::class, 'resendOtp'])->name('resendOtp');
 
     // راوتات الضيف (غير مسجل الدخول)
     Route::middleware('guest')->group(function () {
@@ -57,6 +63,13 @@ Route::prefix('auth')->name('auth.')->group(function () {
         Route::post('login', [AuthController::class, 'postLogin'])->name('postLogin');
         Route::get('register', [AuthController::class, 'register'])->name('register');
         Route::post('register', [AuthController::class, 'postRegister'])->name('postRegister');
+
+        // راوتات نسيت كلمة المرور
+        Route::get('forgot-password', [AuthController::class, 'forgotPassword'])->name('forgotPassword');
+        Route::get('reset-password', [AuthController::class, 'showResetPassword'])->name('resetPassword');
+        Route::post('reset-password', [AuthController::class, 'resetPassword'])->name('postResetPassword');
+        Route::get('show-reset-password', [AuthController::class, 'showResetPassword'])->name('showResetPassword');
+        Route::post('update-password', [AuthController::class, 'updatePassword'])->name('updatePassword');
     });
 
     // راوتات للمستخدم المسجل فقط
@@ -74,4 +87,10 @@ Route::prefix('auth')->name('auth.')->group(function () {
             Route::post('profile', [AuthController::class, 'updateProfile'])->name('update-profile');
         });
     });
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 });

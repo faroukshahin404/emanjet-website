@@ -112,4 +112,9 @@ return [
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
 
+    'otp_expiry_minutes' => env('OTP_EXPIRY_MINUTES', 5),
+    'otp_max_attempts' => env('OTP_MAX_ATTEMPTS', 6),
+    'otp_block_duration_minutes' => env('OTP_BLOCK_DURATION_MINUTES', 30),
+    'otp_attempt_wait_minutes' => env('OTP_ATTEMPT_WAIT_MINUTES', '0.5,2,5,10,15,30'),
+
 ];

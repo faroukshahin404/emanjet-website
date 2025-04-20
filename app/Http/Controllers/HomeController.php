@@ -20,7 +20,7 @@ class HomeController extends Controller
         ]);
     }
 
-    
+
     public function getCities()
     {
         $cities = City::available()->orderBy('rank')->get();
@@ -47,6 +47,15 @@ class HomeController extends Controller
         return response()->json($stations);
     }
 
+    public function tickets()
+    {
+        return view('mobile.tickets');
+    }
+
+    public function settings()
+    {
+        return view('mobile.settings');
+    }
 
     public function contact_us()
     {

@@ -6,9 +6,11 @@ use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\ProfileRequest;
 use App\Models\User;
 use App\Services\AuthService;
-use Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
+use App\Models\Otp;
 
 class AuthController extends Controller
 {
@@ -47,31 +49,145 @@ class AuthController extends Controller
     public function postLogin(Request $request)
     {
         $request->validate([
-            'phone' => 'required|numeric',
+            'mobile' => 'required|string',
             'password' => 'required|string',
         ]);
 
-        $user = User::where('mobile', $request->phone)->first();
+        $user = User::where('mobile', $request->mobile)->first();
 
         if (!$user) {
-            return redirect()->back()->with([
-                'error' => 'بيانات الدخول غير صحيحة.',
-            ]);
-        }
-        $credentials = $request->only('phone', 'password');
-        $credentials['mobile'] = $credentials['phone'];
-        unset($credentials['phone']);
-        if (!Auth::attempt($credentials)) {
-            return redirect()->back()->with([
-                'error' => 'بيانات الدخول غير صحيحة.',
-            ]);
-        }
-        auth()->login($user);
-        if (!$user->verified) {
-            return redirect()->route('auth.otp')->with('success', 'تم إرسال OTP إلى رقم الهاتف الخاص بك.');
+            return redirect()->back()->with('error', 'لم يتم العثور على المستخدم.');
         }
 
-        return redirect()->route('home')->with('success', 'تم تسجيل الدخول بنجاح.');
+        if (!Hash::check($request->password, $user->password)) {
+            return redirect()->back()->with('error', 'كلمة المرور غير صحيحة.');
+        }
+
+        Auth::login($user);
+
+        if (!$user->is_verified) {
+            return redirect()->route('auth.verify');
+        }
+
+        return redirect()->route('home');
+    }
+
+    // عرض صفحة إعادة تعيين كلمة المرور
+    public function forgotPassword()
+    {
+        return view('auth.forgot-password');
+    }
+
+    // معالجة طلب إعادة تعيين كلمة المرور
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'phone' => 'required|string'
+        ]);
+
+        // إذا كان الطلب لإعادة إرسال OTP
+        if ($request->ajax()) {
+            // Check if we need to wait before sending new OTP
+            $lastOtp = Otp::where('phone', $request->phone)
+                ->where('created_at', '>=', now()->subMinutes(30))
+                ->latest()
+                ->first();
+
+            if ($lastOtp) {
+                $waitTime = 30; // 30 seconds wait time
+                $timeSinceLastOtp = now()->diffInSeconds($lastOtp->created_at);
+
+                if ($timeSinceLastOtp < $waitTime) {
+                    $remainingTime = $waitTime - $timeSinceLastOtp;
+                    return response()->json([
+                        'success' => false,
+                        'message' => "يرجى المحاولة بعد {$remainingTime} ثانية.",
+                        'remainingTime' => $remainingTime
+                    ], 429);
+                }
+            }
+
+            $message = $this->authService->sendOtp($request->phone);
+
+            if ($message === 'تم إرسال رمز التحقق بنجاح.') {
+                session([
+                    'reset_password_phone' => $request->phone
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => $message,
+                    'remainingTime' => 30
+                ]);
+            }
+
+            return response()->json([
+                'success' => false,
+                'message' => $message
+            ], 400);
+        }
+
+        // إذا كان الطلب للتحقق من OTP
+        if ($request->has('otp')) {
+            $otpNumber = implode('', $request->otp);
+            $message = $this->authService->verifyOtp($otpNumber, $request->phone);
+
+            if ($message === 'تم التحقق بنجاح.') {
+                // تسجيل دخول المستخدم
+                $user = User::where('mobile', $request->phone)->first();
+                if ($user) {
+                    Auth::login($user);
+                }
+                return redirect()->route('home')->with('success', 'تم التحقق بنجاح');
+            }
+
+            return redirect()->back()->withErrors(['otp' => $message]);
+        }
+
+        // إذا كان الطلب لعرض صفحة إعادة تعيين كلمة المرور
+        $phone = session('reset_password_phone');
+
+        // إذا كان الطلب لإدخال رقم الهاتف لأول مرة
+        if ($request->has('phone') && !$phone) {
+            // التحقق من وجود المستخدم
+            $user = User::where('mobile', $request->phone)->first();
+            if (!$user) {
+                return redirect()->back()->withErrors(['phone' => 'لم يتم العثور على مستخدم بهذا الرقم.']);
+            }
+
+            // إرسال OTP
+            $message = $this->authService->sendOtp($request->phone);
+
+            if ($message === 'تم إرسال رمز التحقق بنجاح.') {
+                session([
+                    'reset_password_phone' => $request->phone
+                ]);
+
+                return redirect()->route('auth.showResetPassword');
+            }
+
+            return redirect()->back()->withErrors(['phone' => $message]);
+        }
+
+        if (!$phone) {
+            return redirect()->route('auth.login')->with('error', 'غير مسموح بالوصول المباشر إلى صفحة إعادة تعيين كلمة المرور.');
+        }
+
+        // Get latest OTP for this phone
+        $latestOtp = Otp::where('phone', $phone)
+            ->where('created_at', '>=', now()->subMinutes(30))
+            ->latest()
+            ->first();
+
+        $remainingTime = 0;
+        if ($latestOtp) {
+            $expiryTime = $latestOtp->created_at->addSeconds(30);
+            if ($expiryTime->isFuture()) {
+                $remainingTime = now()->diffInSeconds($expiryTime);
+            }
+        }
+
+        return view('mobile.auth.show-reset-password', compact('phone', 'remainingTime'));
     }
 
     // عرض صفحة OTP
@@ -82,7 +198,7 @@ class AuthController extends Controller
         if (Auth::check() && !Auth::user()->verified) {
             $user = Auth::user();
             $phone = $user->mobile;
-            $this->authService->sendOtp($phone, $user->id);  // إرسال OTP جديد
+            $this->authService->sendOtp($phone, $user->id);
         }
 
         if (!$phone) {
@@ -106,37 +222,141 @@ class AuthController extends Controller
             $phone = $user->mobile;
         }
 
-        $result = $this->authService->verifyOtp($otpNumber, $phone);
+        $message = $this->authService->verifyOtp($otpNumber, $phone);
 
-        if (!$result['success']) {
-
-            return redirect()->back()->withErrors(['otp' => $result['message']]);
+        if ($message !== 'تم التحقق بنجاح.') {
+            return redirect()->back()->withErrors(['otp' => $message]);
+        }
+        if (session('reset_password_phone')) {
+            session()->forget('otp_phone');
+            return redirect()->route('auth.showResetPassword');
         }
 
         session()->forget('otp_phone');
-        auth()->login(User::where('mobile', $phone)->first());
+        Auth::login(User::where('mobile', $phone)->first());
 
         return redirect()->route('home')->with('success', 'تم التحقق من رقم الهاتف بنجاح.');
     }
 
+    // عرض صفحة إعادة تعيين كلمة المرور
+    public function showResetPassword()
+    {
+        $phone = session('reset_password_phone');
+
+        if (!$phone) {
+            return redirect()->route('auth.login')->with('error', 'غير مسموح بالوصول المباشر إلى صفحة إعادة تعيين كلمة المرور.');
+        }
+
+        // Get latest OTP for this phone
+        $latestOtp = Otp::where('phone', $phone)
+            ->where('created_at', '>=', now()->subMinutes(30))
+            ->latest()
+            ->first();
+
+        $remainingTime = 0;
+        if ($latestOtp) {
+            $expiryTime = $latestOtp->created_at->addSeconds(30);
+            if ($expiryTime->isFuture()) {
+                $remainingTime = now()->diffInSeconds($expiryTime);
+            }
+        }
+        return view('auth.show-reset-password', compact('phone', 'remainingTime'));
+    }
+
+    // معالجة إعادة تعيين كلمة المرور
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|string|min:8|confirmed',
+            'otp' => 'required|array|size:4',
+        ]);
+
+        $phone = session('reset_password_phone');
+
+        if (!$phone) {
+            return redirect()->route('auth.login')->with('error', 'غير مسموح بالوصول المباشر إلى صفحة إعادة تعيين كلمة المرور.');
+        }
+
+        $otpNumber = implode('', $request->otp);
+        $message = $this->authService->verifyOtp($otpNumber, $phone);
+
+        if ($message !== 'تم التحقق بنجاح.') {
+            return redirect()->back()->withErrors(['otp' => $message]);
+        }
+
+        $user = User::where('mobile', $phone)->first();
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        session()->forget('reset_password_phone');
+        Auth::login($user);
+
+        return redirect()->route('home')->with('success', 'تم تحديث كلمة المرور بنجاح.');
+    }
 
     // إعادة إرسال OTP
     public function resendOtp(Request $request)
     {
-        $phone = session('otp_phone');
+        // التحقق من وجود رقم الهاتف في الطلب أو في الجلسة
+        $phone = $request->phone ?? session('otp_phone');
 
         if (!$phone) {
-            return response()->json(['error' => 'Unauthorized access.'], 403);
+            return response()->json([
+                'success' => false,
+                'message' => 'غير مسموح بالوصول المباشر إلى صفحة إعادة إرسال الرمز.'
+            ], 403);
         }
-        $this->authService->resendOtp($phone);  // إرسال OTP جديد
-        return response()->json(['success' => 'تم إرسال OTP جديد.']);
+
+        $user = User::where('mobile', $phone)->first();
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'لم يتم العثور على المستخدم.'
+            ], 404);
+        }
+
+        // التحقق من وقت آخر OTP
+        $lastOtp = Otp::where('phone', $phone)
+            ->where('created_at', '>=', now()->subMinutes(30))
+            ->latest()
+            ->first();
+
+        if ($lastOtp) {
+            $waitTime = 30; // 30 seconds wait time
+            $timeSinceLastOtp = now()->diffInSeconds($lastOtp->created_at);
+
+            if ($timeSinceLastOtp < $waitTime) {
+                $remainingTime = $waitTime - $timeSinceLastOtp;
+                return response()->json([
+                    'success' => false,
+                    'message' => "يرجى المحاولة بعد {$remainingTime} ثانية.",
+                    'remainingTime' => $remainingTime
+                ], 429);
+            }
+        }
+
+        $message = $this->authService->sendOtp($phone);
+
+        if ($message === 'تم إرسال رمز التحقق بنجاح.') {
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'remainingTime' => 30
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => $message
+        ], 400);
     }
 
     // تسجيل الخروج
     public function logout()
     {
-        auth()->logout();
-        return redirect()->route('home')->with('success', 'تم تسجيل الخروج بنجاح.');
+        Auth::logout();
+        Session::flush();
+        return redirect()->route('auth.login');
     }
 
     // عرض صفحة التحقق
