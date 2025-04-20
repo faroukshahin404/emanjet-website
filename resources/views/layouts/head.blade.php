@@ -22,6 +22,7 @@
     <link rel="apple-touch-icon" href="{{asset('/images/logo.png')}}">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{asset('/css/style.css')}}">
+    <link rel="stylesheet" href="{{asset('/css/mobile.css')}}">
     <link rel="stylesheet" href="{{ asset('css/custom-toastr.css') }}">
 
     <title>Super Jet</title>
