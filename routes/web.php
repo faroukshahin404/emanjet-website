@@ -54,6 +54,11 @@ Route::group(['as' => 'mobile.', 'prefix' => 'mobile'], function () {
 Route::group([], function () {
     Route::get('contact-us', [HomeController::class, 'contact_us'])->name('contact-us');
     Route::post('contact-us', [HomeController::class, 'submit_contact_form'])->name('submit-contact-form');
+
+
+    Route::get('about-us', [HomeController::class, 'about_us'])->name('about-us');
+    Route::get('blogs', [HomeController::class, 'blogs'])->name('blogs');
+    Route::get('destinations', [HomeController::class, 'destinations'])->name('destinations');
 });
 
 Route::prefix('auth')->name('auth.')->group(function () {
