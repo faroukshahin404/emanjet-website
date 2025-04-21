@@ -14,6 +14,11 @@ class BookingSeat extends Model
 
 
 
+    public function tripSeat(){
+        return $this->belongsTo(TripSeat::class, 'seat_id');
+    }
+
+
    
     
 } //end of class

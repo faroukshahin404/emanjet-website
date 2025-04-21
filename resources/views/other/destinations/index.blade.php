@@ -31,36 +31,39 @@
             <div class="row">
                 <div class="col-md-12 mb-4">
                     <h2 class="text-right text-black">
-                        استكشف الوجهات الأكثر شهرة
+                        {{-- استكشف الوجهات الأكثر شهرة --}}
+                        {{ __('Explore the Most Popular Destinations ') }}
                     </h2>
+
                 </div>
             </div>
 
             <div class="row" id="cards-container">
 
-                @for ($i = 0; $i < 9; $i++)
+                @foreach ($cities as $city)
                     <div class="col-md-4 mb-4 px-3">
                         <div class='cardSection card text-center rounded-bottom-4 pb-3'>
-                            <img class="img-fluid rounded-top-4" src="./images/blogs.jpeg" alt="blogs" />
+                            <img class="img-fluid rounded-top-4" src="{{ $city->image }}" alt="blogs" />
                             <div class="cardbody card-body py-2">
                                 <div class='cardBody mb-3 d-flex justify-content-between align-items-center'>
-                                    <p class="m-0 popular-title">الاسكندريه</p>
-                                    <button class="heart-btn">
+                                    <p class="m-0 popular-title">{{ $city->getTranslation('name', app()->getLocale()) }}</p>
+                                    {{-- <button class="heart-btn">
                                         <i class="fa-regular fa-heart"></i>
-                                    </button>
+                                    </button> --}}
                                 </div>
 
                                 <div class='cardBody d-flex justify-content-between align-items-center'>
-                                    <button class="reserve"> احجز الان </button>
+                                    <a href="{{ route('home', ['city_to_id' => $city->id]) }}#heroSection" class="reserve">
+                                        {{ __('Book Now') }} </a>
                                     <div class="d-flex flex-column align-items-end">
-                                        <h6 class="m-0">350 egp</h6>
-                                        <p class="m-0">per seat</p>
+                                        {{-- <h6 class="m-0">350 egp</h6>
+                                        <p class="m-0">per seat</p> --}}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                @endfor
+                @endforeach
 
             </div>
 

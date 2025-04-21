@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" dir="rtl">
+<html lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}">
 
 @include('layouts.head')
 
-<body>
+<body
+    style="direction: {{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}; text-align: {{ app()->getLocale() === 'ar' ? 'right' : 'left' }}">
     <div class="custom-toastr-container"></div>
 
     <!-- Desktop View -->

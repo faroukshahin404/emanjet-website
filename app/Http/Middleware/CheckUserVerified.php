@@ -18,12 +18,12 @@ class CheckUserVerified
     public function handle(Request $request, Closure $next)
     {
         if (!Auth::check()) {
-            return redirect()->route('auth.login')->with('error', 'الرجاء تسجيل الدخول أولاً.');
+            return redirect()->route('auth.login')->with('error', __('Please Login First.'));
         }
-        $user = Auth::user();
-        if (!$user->verified || !$user->phone_verified_at) {
-            return redirect()->route('auth.verify')->with('error', 'يجب التحقق من بريدك الإلكتروني ورقم هاتفك أولاً.');
-        }
+        // $user = Auth::user();
+        // if (!$user->verified || !$user->phone_verified_at) {
+        //     return redirect()->route('auth.verify');
+        // }
 
         return $next($request);
     }

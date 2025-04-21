@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\ProfileRequest;
+use App\Http\Resources\TicketResource;
 use App\Models\User;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
@@ -11,7 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use App\Models\Otp;
-use Illuminate\Support\Carbon;
+use App\Models\ReservationBookingRequest;
+use App\ViewModels\TicketViewModel;
 
 class AuthController extends Controller
 {
@@ -344,7 +346,8 @@ class AuthController extends Controller
     {
         // التحقق من المدخلات
         $request->validate([
-            'password' => 'required|string|min:8|confirmed',
+            'password' => 'required|string|confirmed',
+            'otp' => 'required|array|size:4',
         ]);
 
         // استرجاع الهاتف من الجلسة
@@ -456,7 +459,12 @@ class AuthController extends Controller
     {
 
         $user = Auth::user();
-        return view('profile.index', compact('user'));
+        $requests = ReservationBookingRequest::where('user_id', $user->id)->whereHas('bookingSeats')->get();
+        $tickets = $requests->map(fn($res) => (new TicketViewModel($res))->toArray());
+
+
+
+        return view('profile.index', compact('user', 'tickets'));
     }
 
 
@@ -468,7 +476,4 @@ class AuthController extends Controller
         }
         return redirect()->back()->with('success', $response['message']);
     }
-
-
-
 }

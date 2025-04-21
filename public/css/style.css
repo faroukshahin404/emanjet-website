@@ -1019,7 +1019,8 @@ html[dir="rtl"] .swiper-button-prev {
 
 }
 
-.reservation button {
+.reservation button,
+.reservation a {
     width: 190px;
     height: 80px;
     background-color: #F3B12B;
@@ -1028,7 +1029,16 @@ html[dir="rtl"] .swiper-button-prev {
     border-radius: 27px;
     font-weight: 400;
     font-size: 35px;
+    display: flex;
+    /* علشان نقدر نوسّط العناصر */
+    justify-content: center;
+    /* توسيط أفقي */
+    align-items: center;
+    /* توسيط عمودي */
+    text-align: center;
+    /* لو النص سطرين */
 }
+
 
 /* End reservation  */
 
@@ -1809,6 +1819,7 @@ footer .footer-links-top {
     height: 4px;
     background-color: #818181;
 }
+
 .green-circle-mobile {
     width: 13px;
     height: 13px;
@@ -1846,6 +1857,7 @@ footer .footer-links-top {
     justify-content: center;
     align-items: center;
 }
+
 .bus-box-mobile {
     background-color: #FBECDE;
     width: 50px;
@@ -2948,6 +2960,7 @@ footer .footer-links-top {
     .mobile {
         display: none !important;
     }
+
     .desktop {
         display: block !important;
     }
@@ -2958,6 +2971,7 @@ footer .footer-links-top {
     .desktop {
         display: none !important;
     }
+
     .mobile {
         display: block !important;
     }
@@ -2994,7 +3008,7 @@ body {
         padding-left: 15px;
         padding-right: 15px;
     }
-    
+
     .container {
         padding-left: 15px;
         padding-right: 15px;

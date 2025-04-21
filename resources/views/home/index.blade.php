@@ -12,7 +12,7 @@
 @endpush
 @section('content')
     <!-- start hero section  -->
-    <div class="hero-section">
+    <div class="hero-section"id="heroSection">
         <div class="container-fluid px-5 box">
             <div class="row">
                 <div class="col-lg-5 col-md-12 m-auto">
@@ -25,16 +25,16 @@
                                     <div class="form-check">
                                         <input class="form-check-input form-check-input-pay" type="radio" name="tripType"
                                             id="oneWayRadioDes" value="oneway" checked>
-                                        <label class="form-check-label fw-bold text-black" for="oneWayRadioDes">ذهاب
-                                            فقط</label>
+                                        <label class="form-check-label fw-bold text-black"
+                                            for="oneWayRadioDes">{{ __('One Way Trip') }}</label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input form-check-input-pay" type="radio" value="round"
                                             name="tripType" id="roundTripRadioDes">
-                                        <label class="form-check-label fw-bold text-black" for="roundTripRadioDes">ذهاب
-                                            وعودة</label>
+                                        <label class="form-check-label fw-bold text-black"
+                                            for="roundTripRadioDes">{{ __('Round Trip') }}</label>
                                     </div>
-                                    <span class="badge bg-warning text-white">خصم خاص</span>
+                                    <span class="badge bg-warning text-white">{{ __('Special Discount') }}</span>
                                 </div>
 
                                 <!-- start from to  -->
@@ -57,7 +57,8 @@
                                             <i class="fas fa-circle-dot to-icon"></i>
                                             <input type="text" class="border-0 to-input desktop-from-input"
                                                 placeholder="إلى" readonly data-bs-toggle="dropdown" aria-expanded="false"
-                                                id="toInput" value="{{ @$stations[1]->name }}">
+                                                id="toInput"
+                                                value=" {{ request()->city_to_id ? $stations->where('city_id', request()->city_to_id)->first()->name : $stations[1]->name }}">
                                             <ul class="dropdown-menu p-0 main-stations" id="to-stations"></ul>
                                             <ul class="dropdown-menu p-0 sub-stations-dropdown" id="to-sub-stations"></ul>
                                         </div>
@@ -67,11 +68,11 @@
                                     <input type="hidden" name="city_from_id" id="cityFrom_id"
                                         value="{{ $stations[0]->city_id }}">
                                     <input type="hidden" name="city_to_id" id="cityTo_id"
-                                        value="{{ $stations[1]->city_id }}">
+                                        value="{{ request()->city_to_id ? request()->city_to_id : $stations[1]->city_id }}">
                                     <input type="hidden" name="station_from_id" id="stationFrom_id"
                                         value="{{ $stations[0]->id }}">
                                     <input type="hidden" name="station_to_id" id="stationTo_id"
-                                        value="{{ $stations[1]->id }}">
+                                        value="{{ request()->city_to_id ? $stations->where('city_id', request()->city_to_id)->first()->id : $stations[1]->id }}">
 
                                 </div>
 
@@ -79,7 +80,7 @@
                                     <div class="mb-2 col-md-6">
                                         <label class="form-label fw-bold text-black">
                                             <i class="fas fa-calendar-alt mx-1"></i>
-                                            تاريخ السفر
+                                            {{ __('Travel Date') }}
                                         </label>
 
                                         <div class="position-relative">
@@ -95,7 +96,7 @@
                                         <div class="d-flex flex-column">
                                             <label class="form-label fw-bold text-black">
                                                 <i class="fas fa-calendar-alt mx-1"></i>
-                                                تاريخ العودة
+                                                {{ __('Back Date') }}
                                             </label>
 
                                             <div class="position-relative">
@@ -111,10 +112,13 @@
                                     </div>
                                     <div class="mb-2 col-md-6 mt-4">
                                         <i class="fas fa-calendar-alt mx-1 text-main"></i>
-                                        <a href="#" class="text-warning fw-bold  arrival-time">"راجع امتي؟
-                                            احجز
-                                            مكانك" <span class="badge bg-warning text-white fs-10">خصم
-                                                خاص</span></a>
+                                        <a href="#" class="text-warning fw-bold arrival-time">
+                                            {{ __('When are you coming back? Book your seat') }}
+                                            <span class="badge bg-warning text-white fs-10">
+                                                {{ __('Special Discount') }}
+                                            </span>
+                                        </a>
+
                                     </div>
                                 </div>
 
@@ -122,7 +126,7 @@
                                 <div class="d-flex flex-column align-items-start gap-2 mb-3">
                                     <label class="fw-bold text-black">
                                         <i class="fas fa-user mx-1"></i>
-                                        عدد المسافرين</label>
+                                        {{ __('Number of travelers') }}</label>
                                     <div class="d-flex align-items-center rounded px-3 py-1 trip-input">
                                         <button type="button" class="plus-btn" onclick="incrementPassengersdesktop()">
                                             <i class="fas fa-plus"></i>
@@ -138,9 +142,8 @@
 
                                 <!-- زر البحث -->
                                 <div class="d-flex justify-content-center">
-                                    <button type="submit" class="btn search-trip-btn fw-bold py-2">ابحث
-                                        عن
-                                        رحلتك</button>
+                                    <button type="submit"
+                                        class="btn search-trip-btn fw-bold py-2">{{ __('Search For Your Trip') }}</button>
                                 </div>
                             </form>
                         </div>
@@ -199,7 +202,7 @@
 
                 </div>
                 <div class="col-md-6 position-relative map">
-                    <img class="" src="./images/map.png" alt="map">
+                    <img class="" src="{{ asset('images/map.png') }}" alt="map">
                     {{-- <img class="" src="{{ $anyWhereSection['image'] }}" alt="map"> --}}
                     <div>
                         <div class="circle-alex"></div>
@@ -235,38 +238,34 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
-                    <h2 class="text-center mb-5">أنواع الحافلات</h2>
+                    <h2 class="text-center mb-5">{{ __('Bus Types') }}</h2>
                 </div>
                 <div class="swiper mySwiper">
                     <div class="swiper-wrapper">
 
-                        @for ($i = 0; $i < 10; $i++)
+                        @foreach ($busTypesSection as $busType)
                             <div class="swiper-slide">
                                 <div class='cardSection card'>
 
                                     <div class="cardbody card-body py-2">
-                                        <h5 class='cardTitle'>VIP Business</h5>
+                                        <h5 class='cardTitle'>{{ $busType['name'] }}</h5>
                                         <p class='cardBody text-gray'>
-                                            39 - 57 راكب
+                                            {{ $busType['passengers'] }} {{ __('Passenger') }}
                                         </p>
                                         <div class='cardRate'>
                                             <div>
-                                                <i class="fas fa-star text-secondary"></i>
-                                                <i class="fas fa-star text-warning"></i>
-                                                <i class="fas fa-star text-warning"></i>
-                                                <i class="fas fa-star text-warning"></i>
-                                                <i class="fas fa-star text-warning"></i>
+                                                {!! render_stars($busType['rate']) !!}
                                             </div>
                                         </div>
                                     </div>
                                     <div class="position-relative bus-bg-box mt-3">
                                         <div class="bus-bg position-absolute">
                                         </div>
-                                        <img src="./images/bus.png" alt="bus" />
+                                        <img src="{{ $busType['image'] }}" alt="bus" />
                                     </div>
                                 </div>
                             </div>
-                        @endfor
+                        @endforeach
 
 
                     </div>
@@ -282,12 +281,12 @@
     <!-- End bus type  -->
 
     <!-- start testimonials  -->
-    <div class="testimonials py-5 px-3 ">
+    <div class="testimonials py-5 px-3 " id="testimonials">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
                     <h2 class="text-center text-black">
-                        آراء عملائنا
+                        {{ __('Testimonials') }}
                     </h2>
                 </div>
 
@@ -299,12 +298,13 @@
                                     <i class="fas fa-quote-left fs-25"></i>
                                 </div>
                                 <p class='text-gray'>
-                                    {{ $testimonial->name }}
+                                    {{ $testimonial->translated_name }}
                                 </p>
                                 <div class='d-flex justify-content-end align-items-center gap-2'>
-                                    <p class="m-0">{{ $testimonial->content }}</p>
+                                    <p class="m-0">{{ $testimonial->translated_content }}</p>
                                     <div>
-                                        <img src="{{ $testimonial->image }}" alt="صورة {{ $testimonial->name }}">
+                                        <img src="{{ $testimonial->image }}"
+                                            alt="صورة {{ $testimonial->translated_name }}">
                                     </div>
                                 </div>
                             </div>
@@ -328,9 +328,9 @@
             <p>
                 {{ $reservationSection['description'] }}
             </p>
-            <button>
-                احجز الان
-            </button>
+            <a href="#heroSection">
+                {{ __('Book Now') }}
+            </a>
         </div>
     </div>
 
@@ -341,7 +341,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <h2 class="text-center">حكاياتنا</h2>
+                    <h2 class="text-center">{{ __('Our Story') }}</h2>
                 </div>
                 <div class="row">
                     @foreach ($blogs as $blog)
@@ -349,7 +349,7 @@
                             <div class="cardSection card text-center rounded-bottom-4">
                                 <img class="img-fluid rounded-top-4" src="{{ $blog->image }}" alt="blogs" />
                                 <div class="cardbody card-body py-2">
-                                    <h5>{{ $blog->title }}</h5>
+                                    <h5>{{ $blog->translated_title }}</h5>
                                     <div class='cardBody'>
                                         <p>
                                             {{ $blog->created_at->format('F d, Y') }} -
@@ -358,7 +358,7 @@
                                             <i class="fa fa-thumbs-up"></i> {{ $blog->likes }}
                                         </p>
                                         <h6>
-                                            {{ \Str::limit(strip_tags($blog->content), 100) }}
+                                            {{ \Str::limit(strip_tags($blog->translated_content), 90) }}
                                         </h6>
                                     </div>
                                 </div>
@@ -535,7 +535,7 @@
                 dateRealInput2.showPicker();
             });
 
-            dateRealInput2.addEventListener('change', function() {
+            dateRealInput.addEventListener('change', function() {
                 const selectedDate = new Date(this.value);
                 const options = {
                     weekday: 'long',
@@ -543,8 +543,15 @@
                     month: 'long',
                     day: 'numeric'
                 };
-                dateTextInput2.value = selectedDate.toLocaleDateString('ar-EG', options);
+                dateTextInput.value = selectedDate.toLocaleDateString('ar-EG', options);
+
+                const dateTextInput2 = document.getElementById('dateTextInput2');
+                dateTextInput2.value = dateTextInput.value;
+
+                const dateRealInput2 = document.getElementById('dateRealInput2');
+                dateRealInput2.value = selectedDate.toISOString().split('T')[0];
             });
+
         });
     </script>
 

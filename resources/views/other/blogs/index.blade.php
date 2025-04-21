@@ -25,14 +25,14 @@
     <div class="blogs-taps pt-5 px-5">
         <div class="container-fluid">
             <div class="row">
-                <h2 class="text-center">حكايتنا</h2>
+                <h2 class="text-center">{{ __('Our Story') }}</h2>
 
                 <ul class="nav nav-pills d-flex justify-content-center flex-wrap align-items-center mb-3" id="blogTabs">
                     @foreach ($blogsCategories as $index => $category)
                         <li class="nav-item">
                             <a class="nav-link {{ $index == 0 ? 'active' : '' }}" id="tab{{ $index + 1 }}"
                                 data-bs-toggle="tab" href="#content{{ $index + 1 }}">
-                                {{ $category->name }}
+                                {{ $category->translated_name }}
                             </a>
                         </li>
                     @endforeach
@@ -45,9 +45,10 @@
                                 @forelse ($category->blogs as $blog)
                                     <div class="col-md-4 mb-4 px-3 px-1">
                                         <div class="cardSection card text-center rounded-bottom-4">
-                                            <img class="img-fluid rounded-top-4" src="{{ $blog->image }}" alt="blogs" />
+                                            <img class="img-fluid rounded-top-4" src="{{ $blog->image }}"
+                                                alt="blogs" />
                                             <div class="cardbody card-body py-2">
-                                                <h5>{{ $blog->title }}</h5>
+                                                <h5>{{ $blog->translated_title }}</h5>
                                                 <div class="cardBody">
                                                     <p>
 
@@ -58,7 +59,7 @@
                                                     </p>
 
                                                     <h6>
-                                                        {{ \Str::limit(strip_tags($blog->content), 100) }}
+                                                        {{ \Str::limit(strip_tags($blog->translated_content), 100) }}
                                                     </h6>
                                                 </div>
                                             </div>
@@ -66,7 +67,8 @@
                                     </div>
                                 @empty
                                     <div class="text-center py-3">
-                                        <p>لا توجد مقالات في هذا التصنيف.</p>
+                                        <p>{{ __('No blogs available in this category yet. Please check back later.') }}
+                                        </p>
                                     </div>
                                 @endforelse
                             </div>

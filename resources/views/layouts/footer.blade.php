@@ -2,24 +2,24 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-2 d-flex flex-column mx-auto align-items-lg-start align-items-center">
-                <a href="{{ route('home') }}" class="footer-links-top footer-links">الرئيسية</a>
-                <a href="#" class="footer-links">حجز رحلة</a>
-                <a href="{{ route('destinations') }}" class="footer-links">الوجهات</a>
-                <a href="{{ route('blogs') }}" class="footer-links">حكايات الباص</a>
-                <a href="{{ route('faqs') }}" class="footer-links">الاسئلة الشائعة</a>
+                <a href="{{ route('home') }}" class="footer-links-top footer-links">{{ __('Home') }}</a>
+                <a href="{{ route('home') }}#heroSection" class="footer-links">{{ __('Book A Trip') }}</a>
+                <a href="{{ route('destinations') }}" class="footer-links">{{ __('Destinations') }}</a>
+                <a href="{{ route('blogs') }}" class="footer-links">{{ __('Bus Blogs') }}</a>
+                <a href="{{ route('faqs') }}" class="footer-links">{{ __('Faqs') }}</a>
             </div>
 
             <div class="col-md-2 d-flex flex-column mx-auto align-items-lg-start align-items-center">
-                <p class="footer-links-top">روابط قد تهمك</p>
-                <a href="services.html" class="footer-links">خدماتنا</a>
-                <a href="#" class="footer-links">آراء العملاء</a>
-                <a href="{{ route('about-us') }}" class="footer-links">عن سوبر جيت</a>
-                <a href="{{ route('contact-us') }}" class="footer-links">تواصل معنا</a>
+                <p class="footer-links-top">{{ __('Useful Links') }}</p>
+                <a href="services.html" class="footer-links">{{ __('Services') }}</a>
+                <a href="{{ route('home') }}#testimonials" class="footer-links">{{ __('Testimonials') }}</a>
+                <a href="{{ route('about-us') }}" class="footer-links">{{ __('About Us') }}</a>
+                <a href="{{ route('contact-us') }}" class="footer-links">{{ __('Contact Us') }}</a>
             </div>
 
             @if (!empty($contactUs))
                 <div class="col-md-2 d-flex flex-column mx-auto align-items-lg-start align-items-center">
-                    <p class="footer-links-top">تواصل معنا</p>
+                    <p class="footer-links-top">{{ __('Contact Us') }}</p>
                     @if (!empty($contactUs['phone']))
                         <a href="tel:{{ $contactUs['phone'] }}" class="footer-links">
                             <i class="fa-solid fa-phone"></i>
@@ -45,11 +45,11 @@
             @endif
 
             <div class="col-md-4">
-                <h2 class="text-right mt-lg-0 mt-2">تواصل معنا</h2>
+                <h2 class="text-right mt-lg-0 mt-2">{{ __('Contact Us') }}</h2>
                 <form action="" class="footer-input">
                     <div>
-                        <input type="email" placeholder="اكتب بريدك الالكتروني هنا">
-                        <button type="submit">انضمام</button>
+                        <input type="email" placeholder="{{ __('Enter Your Email Here') }}">
+                        <button type="submit">{{ __('Join') }}</button>
                     </div>
                 </form>
 
@@ -61,8 +61,8 @@
                                 class="google-play-box-footer rounded-5 text-decoration-none">
                                 <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-2">
                                     <div class="google-play-footer">
-                                        <p>Download On The</p>
-                                        <h6>App Store</h6>
+                                        <p>{{ __('Download On The') }}</p>
+                                        <h6>{{ __('App Store') }}</h6>
                                     </div>
                                     <i class="fa-brands fa-apple"></i>
                                 </div>
@@ -74,8 +74,8 @@
                                 class="google-play-box-footer rounded-5 text-decoration-none">
                                 <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-2">
                                     <div class="google-play-footer">
-                                        <p>Get It On</p>
-                                        <h6>Google Play</h6>
+                                        <p>{{ __('Get It On') }}</p>
+                                        <h6>{{ __('Google Play') }}</h6>
                                     </div>
                                     <img src="{{ asset('images/google-play-icon.png') }}" alt="google-play">
                                 </div>

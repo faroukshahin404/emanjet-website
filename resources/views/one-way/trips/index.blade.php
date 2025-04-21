@@ -12,7 +12,7 @@
                         <div class="d-flex flex-column justify-content-between align-items-center">
                             <div>
                                 <i class="fas fa-location-dot text-black"></i>
-                                <span class="text-black">السفر من</span>
+                                <span class="text-black">{{ __('Travel From') }}</span>
                             </div>
                             <div>
                                 {{ $fromCity->name }}
@@ -22,7 +22,7 @@
                         <div class="d-flex flex-column justify-content-between align-items-center">
                             <div>
                                 <i class="fas fa-location-dot text-black"></i>
-                                <span class="text-black">الوصول الي</span>
+                                <span class="text-black">{{ __('Travel To') }}</span>
                             </div>
                             <div>
                                 {{ $toCity->name }}
@@ -32,7 +32,7 @@
                         <div class="d-flex flex-column justify-content-between align-items-center">
                             <div>
                                 <i class="fas fa-calendar text-black"></i>
-                                <span class="text-black">تاريخ السفر</span>
+                                <span class="text-black">{{ __('Travel Date') }}</span>
                             </div>
                             <div>
                                 {{ request()->go_date }}
@@ -42,7 +42,7 @@
                         <div class="d-flex flex-column justify-content-between align-items-center">
                             <div>
                                 <i class="fas fa-user text-black"></i>
-                                <span class="text-black">عدد المسافرين</span>
+                                <span class="text-black">{{ __('Number Of Passengers') }}</span>
                             </div>
                             <div>
                                 {{ request()->seats }}
@@ -50,7 +50,7 @@
                         </div>
                     </div>
                     <button class="search-edit-btn" data-bs-toggle="modal" data-bs-target="#searchModal">
-                        تعديل البحث
+                        {{ __('Edit Search') }}
                     </button>
                 </div>
 
@@ -146,7 +146,7 @@
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
                                             <p class="m-0 text-black">
-                                                سعر التذكرة
+                                                {{ __('Ticket Price') }}
                                             </p>
                                         </div>
                                         <div>
@@ -160,12 +160,12 @@
 
                                         <div>
                                             <p class="m-0 text-black">
-                                                عدد المسافرين
+                                                {{ __('Number Of Passengers') }}
                                             </p>
                                         </div>
                                         <div>
                                             <p class="m-0 text-black">
-                                                {{ request()->seats }} تذاكر
+                                                {{ request()->seats }} {{ __('Tickets') }}
                                             </p>
 
 
@@ -177,19 +177,19 @@
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
                                             <p class="m-0 text-black">
-                                                الاجمالي
+                                                {{ __('Total') }}
                                             </p>
                                         </div>
                                         <div>
                                             <p id="total-p" class="m-0 text-black">
-                                                جنية
+                                                {{ __('EGP') }}
                                             </p>
                                         </div>
                                     </div>
 
                                     <div class="mt-4 pb-4 d-flex justify-content-center">
                                         <button class="reserve-btn">
-                                            احجز {{ request()->seats }} مقاعد
+                                            {{ __('Book') }} {{ request()->seats }} {{ __('Seats') }}
                                         </button>
                                     </div>
                                 </form>
@@ -198,7 +198,7 @@
                                 <i class="fas fa-ticket-alt" style="font-size: 50px;"></i>
                                 <br>
                                 <label>
-                                    إختار رحلتك من جدول الرحلات
+                                    {{ __('Choose Your Trip From the Trip Table') }}
                                 </label>
 
                             </div>
@@ -262,7 +262,7 @@
                                             <input type="hidden" class="trip-id" value="{{ $trip->id }}" />
                                             <input type="hidden" class="trip-price" value="{{ $trip->price }}" />
                                             <button class="trip-choose-btn">
-                                                اختر الرحلة
+                                                {{ __('Choose The Trip') }}
                                             </button>
 
                                             <div class="d-flex flex-column">
@@ -270,12 +270,13 @@
                                                     {{ $trip->price }}
                                                 </h6>
                                                 <p class="text-black m-0">
-                                                    للمقعد
+                                                    {{ __('For Seat') }}
                                                 </p>
                                             </div>
                                             <div>
                                                 <p class="text-success m-0">
-                                                    متبقي {{ $trip->available_seats }} مقعد
+                                                    {{ __('Remaining') }} {{ $trip->available_seats }}
+                                                    {{ __('Seat') }}
                                                 </p>
                                             </div>
                                         </div>
@@ -298,8 +299,8 @@
                             <input type="hidden" name="station_from_id" value="{{ request()->station_from_id }}" />
                             <input type="hidden" name="station_to_id" value="{{ request()->station_to_id }}" />
 
-                            <h2 class="text-black">الترتيب حسب</h2>
-                            <h6 class="mt-4 mb-3 text-black">فئة الاتوبيسات</h6>
+                            <h2 class="text-black">{{ __('Arrange By') }}</h2>
+                            <h6 class="mt-4 mb-3 text-black">{{ __('Bus Degree') }}</h6>
 
                             @foreach ($degrees as $degree)
                                 <div class="form-check d-flex align-items-center mb-3">
@@ -316,26 +317,26 @@
 
 
                             <h6 class="mt-5 mb-3 text-black">
-                                موعد الخروج من {{ $fromCity->name }}
+                                {{ __('Departure Time From') }} {{ $fromCity->name }}
                             </h6>
 
                             <div class="form-check d-flex align-items-center mb-3">
                                 <input class="form-check-input ms-2" type="checkbox" value="am" name="times[]"
                                     id="flexCheckDefault" {{ in_array('am', request()->times ?? []) ? 'checked' : '' }}>
                                 <label class="form-check-label" for="flexCheckDefault">
-                                    صباحا
+                                    {{ __('Morning') }}
                                 </label>
                             </div>
                             <div class="form-check d-flex align-items-center mb-3">
                                 <input class="form-check-input ms-2" type="checkbox" value="pm" name="times[]"
                                     id="flexCheckDefault" {{ in_array('pm', request()->times ?? []) ? 'checked' : '' }}>
                                 <label class="form-check-label" for="flexCheckDefault">
-                                    مساءا
+                                    {{ __('Evening') }}
                                 </label>
                             </div>
                             <br>
                             <button class="bg-main text-white btn w-100" type="submit">
-                                بحث
+                                {{ __('Search') }}
                             </button>
                         </form>
                     </div>
@@ -359,13 +360,17 @@
                         <input type="hidden" value="{{ request()->tripType ?? 'oneway' }}" name="tripType" />
                         <div class="container-fluid">
                             <div class="row gy-3">
+                                <input type="hidden" id="selected_station_from"
+                                    value="{{ request()->station_from_id }}">
+                                <input type="hidden" id="selected_station_to" value="{{ request()->station_to_id }}">
+
                                 <div class="col-lg-3 col-md-12 travel-box">
                                     <div class="d-flex flex-column align-items-start">
                                         <div>
                                             <i class="fas fa-location-dot text-black"></i>
-                                            <span class="text-black">السفر من</span>
+                                            <span class="text-black">{{ __('Travel From') }}</span>
                                         </div>
-                                        <select class="form-select" name="city_from_id">
+                                        <select class="form-select" name="city_from_id" id="city_from_id">
                                             @foreach ($cities as $city)
                                                 <option value="{{ $city->id }}"
                                                     {{ request()->city_from_id == $city->id ? 'selected' : '' }}>
@@ -374,14 +379,25 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="col-lg-3 col-md-12 travel-box">
+                                    <div class="d-flex flex-column align-items-start">
+                                        <div>
+                                            <i class="fas fa-location-dot text-black"></i>
+                                            <span class="text-black">{{ __('From Station') }}</span>
+                                        </div>
+                                        <select class="form-select" name="station_from_id" id="station_from_id">
+
+                                        </select>
+                                    </div>
+                                </div>
 
                                 <div class="col-lg-3 col-md-12 travel-box">
                                     <div class="d-flex flex-column align-items-start">
                                         <div>
                                             <i class="fas fa-location-dot text-black"></i>
-                                            <span class="text-black">السفر إلى</span>
+                                            <span class="text-black">{{ __('Travel From') }}</span>
                                         </div>
-                                        <select class="form-select" name="city_to_id">
+                                        <select class="form-select" name="city_to_id" id="city_to_id">
                                             @foreach ($cities as $city)
                                                 <option value="{{ $city->id }}"
                                                     {{ request()->city_to_id == $city->id ? 'selected' : '' }}>
@@ -391,12 +407,24 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="col-lg-3 col-md-12 travel-box">
+                                    <div class="d-flex flex-column align-items-start">
+                                        <div>
+                                            <i class="fas fa-location-dot text-black"></i>
+                                            <span class="text-black">{{ __('To Station') }}</span>
+                                        </div>
+                                        <select class="form-select" name="station_to_id" id="station_to_id">
+
+                                        </select>
+                                    </div>
+                                </div>
+
 
                                 <div class="col-lg-3 col-md-12 travel-box">
                                     <div class="d-flex flex-column align-items-start">
                                         <div>
                                             <i class="fas fa-calendar-alt text-black"></i>
-                                            <span class="text-black">التاريخ</span>
+                                            <span class="text-black">{{ __('Date') }}</span>
                                         </div>
                                         <input type="date" class="form-control" value="{{ request()->go_date }}"
                                             name="go_date">
@@ -407,7 +435,7 @@
                                     <div class="d-flex flex-column align-items-start">
                                         <label class="fw-bold text-black">
                                             <i class="fas fa-user mx-1"></i>
-                                            عدد المسافرين
+                                            {{ __('Number Of Passengers') }}
                                         </label>
                                         <div class="d-flex align-items-center rounded px-3 border bg-white py-1">
                                             <input type="number" value="{{ request()->seats }}" min="1"
@@ -419,7 +447,7 @@
                                 </div>
 
                                 <div class="col-12 text-center">
-                                    <button class="bg-main text-white btn">بحث</button>
+                                    <button class="bg-main text-white btn">{{ __('Search') }}</button>
                                 </div>
 
                             </div>
@@ -462,6 +490,57 @@
 
                 });
             });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cityFromSelect = document.getElementById('city_from_id');
+            const stationFromSelect = document.getElementById('station_from_id');
+
+            const cityToSelect = document.getElementById('city_to_id');
+            const stationToSelect = document.getElementById('station_to_id');
+
+            const selectedStationFrom = document.getElementById('selected_station_from')?.value;
+            const selectedStationTo = document.getElementById('selected_station_to')?.value;
+
+            function fetchStations(cityId, stationSelect, selectedStationId = null) {
+                if (!cityId) {
+                    stationSelect.innerHTML = '<option value="">اختر محطة</option>';
+                    return;
+                }
+
+                fetch(`/get-stations/${cityId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        let options = '<option value="">اختر محطة</option>';
+                        data.forEach(station => {
+                            const selected = station.id == selectedStationId ? 'selected' : '';
+                            options +=
+                                `<option value="${station.id}" ${selected}>${station.name}</option>`;
+                        });
+                        stationSelect.innerHTML = options;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching stations:', error);
+                    });
+            }
+
+            cityFromSelect.addEventListener('change', function() {
+                fetchStations(this.value, stationFromSelect);
+            });
+
+            cityToSelect.addEventListener('change', function() {
+                fetchStations(this.value, stationToSelect);
+            });
+
+            if (cityFromSelect.value) {
+                fetchStations(cityFromSelect.value, stationFromSelect, selectedStationFrom);
+            }
+
+            if (cityToSelect.value) {
+                fetchStations(cityToSelect.value, stationToSelect, selectedStationTo);
+            }
         });
     </script>
 @endpush
