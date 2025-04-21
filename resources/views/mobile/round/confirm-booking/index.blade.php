@@ -160,7 +160,7 @@
             <div class="mt-4">
                 @csrf
                 <input type="hidden" name="tripType" value="{{ request()->tripType }}" />
-                <input type="hidden" name="city_from_id" value="{{ request()->city_from_id }}" />
+                <input type="hidden" name="city_from_id" value="{{ request()->city_fro
                 <input type="hidden" name="city_to_id" value="{{ request()->city_to_id }}" />
                 <input type="hidden" name="go_date" value="{{ request()->go_date }}" />
                 <input type="hidden" name="back_date" value="{{ request()->back_date }}" />

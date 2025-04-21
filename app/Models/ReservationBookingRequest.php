@@ -12,6 +12,22 @@ class ReservationBookingRequest extends Model
 
     protected $guarded=[];
 
+    public function stationFrom()  {
+        return $this->belongsTo(Station::class, 'stationFrom_id');
+    }
+    public function stationTo()  {
+        return $this->belongsTo(Station::class, 'stationTo_id');
+    }
 
+    public function runTrip()  {
+        return $this->belongsTo(RunTrip::class, 'runTrip_id');
+    }
     
+    public function bookingSeats()  {
+        return $this->hasMany(BookingSeat::class, 'booking_id');
+    }
+
+    public function user()  {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 } 

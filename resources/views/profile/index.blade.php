@@ -38,9 +38,9 @@
                             <button class="logout" data-bs-toggle="modal" data-bs-target="#logoutModal">
                                 تسجيل الخروج
                             </button>
-                            <button class="logout" data-bs-toggle="modal" data-bs-target="#cancelModal">
+                            {{-- <button class="logout" data-bs-toggle="modal" data-bs-target="#cancelModal">
                                 مودال الغاء الحجز
-                            </button>
+                            </button> --}}
                         </div>
 
                     </div>
@@ -57,5 +57,9 @@
         </div>
     </div>
 
-    @include('profile.includes.cancel-trip-modal')
+
+    {{-- @include('profile.includes.cancel-trip-modal') --}}
+@endsection
+@section('mobile-content')
+    @include('profile.includes.my-trips-mobile')
 @endsection
