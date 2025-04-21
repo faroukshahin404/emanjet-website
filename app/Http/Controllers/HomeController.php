@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Blog;
+use App\Models\BlogCategory;
 use App\Models\City;
 use App\Models\Contact;
+use App\Models\Page;
+use App\Models\PageSeo;
 use App\Models\Station;
+use App\Models\Testimonial;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -14,13 +19,29 @@ class HomeController extends Controller
     {
         $stations = Station::where('available_online', 1)->get();
         $cities = City::available()->orderBy('rank')->get();
+        $page = Page::where('slug', 'home')->first();
+        $homePageSeos = $page->pageSeos()->get();
+        $heroSection = $homePageSeos->where('section_type', 'hero-section')->first()->content_json;
+        $anyWhereSection = $homePageSeos->where('section_type', 'any-where')->first()->content_json;
+        $paymentMethodsSection = $homePageSeos->where('section_type', 'payment-methods')->first()->content_json;
+        $reservationSection = $homePageSeos->where('section_type', 'reservation')->first()->content_json;
+        $seo = getSeoData($page);
+        $testimonials = Testimonial::inRandomOrder()->limit(3)->get();
+        $blogs = Blog::inRandomOrder()->limit(6)->get();
         return view('home.index', [
             'stations' => $stations,
-            'cities'=> $cities,
+            'cities' => $cities,
+            'heroSection' => $heroSection,
+            'anyWhereSection' => $anyWhereSection,
+            'paymentMethodsSection' => $paymentMethodsSection,
+            'reservationSection' => $reservationSection,
+            'seo' => $seo,
+            'testimonials' => $testimonials,
+            'blogs' => $blogs,
         ]);
     }
 
-    
+
     public function getCities()
     {
         $cities = City::available()->orderBy('rank')->get();
@@ -47,26 +68,26 @@ class HomeController extends Controller
         return response()->json($stations);
     }
 
+    public function tickets()
+    {
+        return view('mobile.tickets');
+    }
+
+    public function settings()
+    {
+        return view('mobile.settings');
+    }
 
     public function contact_us()
     {
-        return view('other.contact-us.index');
-    }
-
-    public function about_us()
-    {
-        return view('other.about-us.index');
-    }
-
-    public function blogs()
-    {
-        return view('other.blogs.index');
-    }
-
-    public function destinations()
-    {
-        $cities = City::available()->orderBy('rank')->get();
-        return view('other.destinations.index', compact('cities'));
+        $page = Page::where('slug', 'contact-us')->first();
+        $contactPageSeos = $page->pageSeos()->get();
+        $contactForm = $contactPageSeos->where('section_type', 'contact-form')->first()->content_json;
+        $seo = getSeoData($page);
+        return view('other.contact-us.index')->with([
+            'contactForm' => $contactForm,
+            'seo' => $seo
+        ]);
     }
 
     public function submit_contact_form(Request $request)
@@ -83,4 +104,71 @@ class HomeController extends Controller
         ]);
         return redirect()->back()->with('success', __('Submitted Successfully!'));
     }
+
+    public function about_us()
+    {
+        $page = Page::where('slug', 'about-us')->first();
+        $aboutPageSeos = $page->pageSeos()->get();
+        $heroSection = $aboutPageSeos->where('section_type', 'hero-section')->first()->content_json;
+        $serviceSection = $aboutPageSeos->where('section_type', 'services')->first()->content_json;
+        $seo = getSeoData($page);
+        return view('other.about-us.index')->with([
+            'heroSection' => $heroSection,
+            'serviceSection' => $serviceSection,
+            'seo' => $seo
+        ]);
+    }
+
+    public function blogs()
+    {
+        $page = Page::where('slug', 'blogs')->first();
+        $blogsPageSeos = $page->pageSeos()->get();
+        $heroSection = $blogsPageSeos->where('section_type', 'hero-section')->first()->content_json;
+        $tripStartSection = $blogsPageSeos->where('section_type', 'trip-start')->first()->content_json;
+        $seo = getSeoData($page);
+        $blogsCategories = BlogCategory::with('blogs')->get();
+        return view('other.blogs.index')->with([
+            'heroSection' => $heroSection,
+            'tripStartSection' => $tripStartSection,
+            'seo' => $seo,
+            'blogsCategories' => $blogsCategories
+        ]);
+    }
+
+    public function destinations()
+    {
+        $cities = City::available()->orderBy('rank')->get();
+        $page = Page::where('slug', 'destinations')->first();
+        $destinationsPageSeos = $page->pageSeos()->get();
+        $heroSection = $destinationsPageSeos->where('section_type', 'hero-section')->first()->content_json;
+        $trySection = $destinationsPageSeos->where('section_type', 'try')->first()->content_json;
+        $appSection = $destinationsPageSeos->where('section_type', 'app')->first()->content_json;
+        $seo = getSeoData($page);
+
+        return view('other.destinations.index')->with([
+            'cities' => $cities,
+            'heroSection' => $heroSection,
+            'trySection' => $trySection,
+            'appSection' => $appSection,
+            'seo' => $seo
+        ]);
+    }
+
+    public function faqs()
+    {
+        $page = Page::where('slug', 'faqs')->first();
+        $faqsPageSeos = $page->pageSeos()->get();
+        $heroSection = $faqsPageSeos->where('section_type', 'hero-section')->first()->content_json;
+        $faqsList = $faqsPageSeos->where('section_type', 'faq-list')->first()->content_json;
+        $seo = getSeoData($page);
+        return view('other.faqs.index', )->with([
+            'heroSection' => $heroSection,
+            'faqsList' => $faqsList,
+            'seo' => $seo
+        ]);
+    }
+
+
+
+
 }

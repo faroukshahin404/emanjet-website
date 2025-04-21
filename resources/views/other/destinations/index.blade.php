@@ -1,5 +1,14 @@
 @extends('layouts.master')
 
+@push('styles')
+    <style>
+        .hero-section-destination::before {
+            background: linear-gradient(to right, #00000040, #00000040), url({{ $heroSection['image'] }});
+            transform: scale(1);
+        }
+    </style>
+@endpush
+
 @section('content')
     <!-- start hero section  -->
     <div class="hero-section-destination">
@@ -7,7 +16,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <form action="">
-                        <input type="search" name="" id="" placeholder="مسافر علي فين؟">
+                        <input type="search" name="" id="" placeholder="{{ $heroSection['search-title'] }}">
                         <i class="fa fa-search search-icon"></i>
                     </form>
                 </div>
@@ -65,15 +74,14 @@
             <div class="row">
                 <div class="col-md-6 try-caption">
                     <h6>
-                        جرب الفخامة من مستوى أعلى
+                        {{ $trySection['title'] }}
                     </h6>
                     <p class="m-0">
-                        سوبر جيت دلوقتي بباصات دورين لأول مرة في مصر! راحة أكتر، مساحة أوسع، وتجربة سفر ولا أروع. احجز
-                        مقعدك واستمتع بالرحلة
+                        {{ $trySection['description'] }}
                     </p>
                 </div>
                 <div class="col-md-6">
-                    <img class="try-img" src="./images/bus-2.png" alt="bus">
+                    <img class="try-img" src="{{ $trySection['image'] }}" alt="bus">
                 </div>
             </div>
         </div>
@@ -85,37 +93,39 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6 box">
-                    <img class="" src="./images/phone.png" alt="">
+                    <img class="" src="{{ $appSection['image'] }}" alt="">
                 </div>
                 <div class="col-md-6 try-caption text-black">
                     <h4>
-                        خطط سفرك بضغطة زر!
+                        {{ $appSection['title'] }}
                     </h4>
                     <h5>
-                        سوبر جيت دلوقتي بباصات دورين لأول مرة في مصر! راحة أكتر، مساحة أوسع، وتجربة سفر
+                        {{ $appSection['description'] }}
                     </h5>
 
                     <div
                         class="text-white d-flex flex-lg-row flex-column justify-content-start align-items-center gap-lg-3 gap-1">
+                        <a href="{{ $apps['android'] }}" target="_blank"
+                            class="google-play-box rounded-5 text-decoration-none">
+                            <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-2">
+                                <div class="google-play">
+                                    <p>Get It On</p>
+                                    <h6>Google Play</h6>
+                                </div>
+                                <img src="{{ asset('images/google-play-icon.png') }}" alt="google-play">
+                            </div>
+                        </a>
 
-                        <button class="google-play-box rounded-5">
-                            <div class=" d-flex justify-content-center align-items-center gap-3 py-2 px-2">
+                        <a href="{{ $apps['ios'] }}" target="_blank"
+                            class="google-play-box rounded-5 text-decoration-none">
+                            <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-2">
                                 <div class="google-play">
                                     <p>Download On The</p>
                                     <h6>App Store</h6>
                                 </div>
                                 <i class="fa-brands fa-apple"></i>
                             </div>
-                        </button>
-                        <button class="google-play-box rounded-5">
-                            <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-2">
-                                <div class="google-play">
-                                    <p>Get It On</p>
-                                    <h6>Google Play</h6>
-                                </div>
-                                <img src="./images/google-play-icon.png" alt="">
-                            </div>
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>

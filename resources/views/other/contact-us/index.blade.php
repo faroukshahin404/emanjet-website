@@ -6,12 +6,11 @@
             <div class="row rounded-bottom-4 box-shadow">
                 <div class="col-md-6 text-center pt-3 d-flex flex-column justify-content-center align-items-center">
                     <h2>
-                        تواصل معنا!
-                    </h2>
+                        {{ $contactForm['title'] }} </h2>
                     <p>
-                        نحن هنا لمساعدتك! أرسل استفسارك عبر النموذج أدناه لأي مشكلة تواجهها.
+                        {{ $contactForm['description'] }}
                     </p>
-                    <form action="{{route('submit-contact-form')}}" method="POST" class="w-100">
+                    <form action="{{ route('submit-contact-form') }}" method="POST" class="w-100">
                         @csrf
                         <div class="input-box">
                             <input type="text" name="name" id="" placeholder="الاسم" required>
@@ -34,32 +33,45 @@
                     </form>
                 </div>
                 <div class="col-md-6">
-                    <img class="img-fluid" src="./images/about-bg.png" alt="about-page">
+                    <img class="img-fluid" src="{{ $contactForm['image'] }}" alt="about-page">
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-12 need-help mt-5">
-                    <h2>
-                        تحتاج الي المزيد من المساعدة:
-                    </h2>
-                    <div>
-                        <span>اتصل بنا علي: </span>
-                        <a href="tel:0100000">010000000</a>
-                    </div>
-                    <div>
-                        <span>للتواصل على طريق الواتس اب: </span>
-                        <a href="whatsapp:0110000">01000000</a>
-                    </div>
-                    <div>
-                        <span>او أرسل رسالة إلكترونية علي</span>
-                        <a href="mailto:Info@superje">Info@superje</a>
-                    </div>
-                    <div>
-                        <span>وللشكاوي برجاء التواصل علي</span>
-                        <a href="www.customer-complaints@superjet-eg.com">customer-complaints@superjet-eg.com</a>
-                    </div>
+                    <h2>تحتاج الي المزيد من المساعدة:</h2>
+
+                    @if (!empty($contactUs['phone']))
+                        <div>
+                            <span>اتصل بنا علي: </span>
+                            <a href="tel:{{ $contactUs['phone'] }}">{{ $contactUs['phone'] }}</a>
+                        </div>
+                    @endif
+
+                    @if (!empty($contactUs['whatsapp']))
+                        <div>
+                            <span>للتواصل على طريق الواتس اب: </span>
+                            <a href="https://api.whatsapp.com/send?phone={{ $contactUs['whatsapp'] }}" target="_blank">
+                                {{ $contactUs['whatsapp'] }}
+                            </a>
+                        </div>
+                    @endif
+
+                    @if (!empty($contactUs['email']))
+                        <div>
+                            <span>او أرسل رسالة إلكترونية علي</span>
+                            <a href="mailto:{{ $contactUs['email'] }}">{{ $contactUs['email'] }}</a>
+                        </div>
+                    @endif
+
+                    @if (!empty($contactUs['complaints_email']))
+                        <div>
+                            <span>وللشكاوي برجاء التواصل علي</span>
+                            <a href="mailto:{{ $contactUs['complaints_email'] }}">{{ $contactUs['complaints_email'] }}</a>
+                        </div>
+                    @endif
                 </div>
+
             </div>
         </div>
     </div>

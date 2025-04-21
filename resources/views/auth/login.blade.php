@@ -14,8 +14,8 @@
                         {{-- رقم الهاتف --}}
                         <div class="position-relative mb-3">
                             <i class="fa fa-phone position-absolute top-50 translate-middle-y px-2"></i>
-                            <input class="phoneInput" type="text" name="phone" id="phone" placeholder="رقم الهاتف"
-                                required>
+                            <input class="phoneInput" type="text" name="mobile" id="mobile" placeholder="رقم الهاتف"
+                                value="{{ old('mobile') }}" required>
                         </div>
 
                         {{-- كلمة المرور --}}
@@ -25,13 +25,16 @@
                                 placeholder="كلمة المرور" required>
                         </div>
 
+                        {{-- رابط نسيت كلمة المرور --}}
+                        <div class="text-end mb-3">
+                            <a href="{{ route('auth.forgotPassword') }}" class="text-primary">نسيت كلمة المرور؟</a>
+                        </div>
+
                         {{-- رسالة توضيحية --}}
                         <p class="text-center text-muted">أدخل رقم الهاتف وكلمة المرور لتسجيل الدخول إلى حسابك.</p>
                         <p class="text-center text-muted">إذا كنت لا تمتلك حسابًا، يمكنك التسجيل من خلال الضغط على
                             <a href="{{ route('auth.register') }}" class="text-primary">تسجيل جديد</a>
                         </p>
-
-
 
                         <div class="d-flex justify-content-center">
                             <button type="submit" class="submitBtn mt-3">دخول</button>
@@ -46,4 +49,8 @@
         </div>
     </div>
     <!-- end login -->
+@endsection
+
+@section('mobile-content')
+    @include('mobile.auth.login')
 @endsection

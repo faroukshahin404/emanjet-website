@@ -1,6 +1,15 @@
 @extends('layouts.master', [
     'isHome' => true,
 ])
+
+@push('styles')
+    <style>
+        .hero-section::before {
+            background: linear-gradient(to right, #00000040, #00000040), url({{ $heroSection['image'] }});
+            transform: scaleX(1);
+        }
+    </style>
+@endpush
 @section('content')
     <!-- start hero section  -->
     <div class="hero-section">
@@ -9,7 +18,7 @@
                 <div class="col-lg-5 col-md-12 m-auto">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title text-center fw-bold mb-3">احجز رحلتك دلوقتي!</h5>
+                            <h5 class="card-title text-center fw-bold mb-3">{{ $heroSection['card-title'] }}</h5>
                             <form id="tripForm" action="{{ route('one-way.trips') }}" method="GET">
                                 <!-- اختيار نوع الرحلة -->
                                 <div class="d-flex justify-content-center gap-3 mb-3 trip-type py-3">
@@ -141,33 +150,35 @@
                 <div class="col-lg-6 mx-auto col-md-12 hero-caption-box">
                     <div class="hero-caption-title">
                         <p class="text-white m-0">
-                            خلصها بسرعة!
+                            {{ $heroSection['caption-title'] }}
                         </p>
                         <h6 class="text-white">
-                            احجز رحلتك مع السوبر جيت وادفع بالبطاقة الائتمانية في لحظة!
-
+                            {{ $heroSection['caption-description'] }}
                         </h6>
                     </div>
                     <div class="text-white d-flex flex-lg-row flex-column justify-content-start align-items-center gap-3">
 
-                        <button class="google-play-box rounded-5">
-                            <div class=" d-flex justify-content-center align-items-center gap-3 py-2 px-2">
+                        <a href="{{ $apps['android'] }}" target="_blank"
+                            class="google-play-box rounded-5 text-decoration-none">
+                            <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-2">
+                                <div class="google-play">
+                                    <p>Get It On</p>
+                                    <h6>Google Play</h6>
+                                </div>
+                                <img src="{{ asset('images/google-play-icon.png') }}" alt="google-play">
+                            </div>
+                        </a>
+
+                        <a href="{{ $apps['ios'] }}" target="_blank"
+                            class="google-play-box rounded-5 text-decoration-none">
+                            <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-2">
                                 <div class="google-play">
                                     <p>Download On The</p>
                                     <h6>App Store</h6>
                                 </div>
                                 <i class="fa-brands fa-apple"></i>
                             </div>
-                        </button>
-                        <button class="google-play-box rounded-5">
-                            <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-2">
-                                <div class="google-play">
-                                    <p>Get It On</p>
-                                    <h6>Google Play</h6>
-                                </div>
-                                <img src="./images/google-play-icon.png" alt="">
-                            </div>
-                        </button>
+                        </a>
                     </div>
 
                 </div>
@@ -181,26 +192,15 @@
         <div class="container-fluid px-5">
             <div class="row">
                 <div class="col-md-6 any-where-caption d-flex flex-column align-items-start justify-content-center">
-                    <h2>سوبر جيت معك في آي مكان</h2>
+                    <h2>{{ $anyWhereSection['title'] }}</h2>
                     <p class="mt-5">
-                        لكن لا بد أن أوضح لك أن كل هذه الأفكار المغلوطة حول استنكار النشوة وتمجيد الألم نشأت بالفعل،
-                        وسأعرض لك التفاصيل لتكتشف حقيقة وأساس تلك السعادة البشرية، فلا أحد يرفض أو يكره أو يتجنب
-                        الشعور
-                        بالسعادة، ولكن بفضل هؤلاء الأشخاص الذين لا يدركون بأن السعادة لا بد أن نستشعرها بصورة أكثر
-                        عقلانية ومنطقية فيعرضهم هذا لمواجهة الظروف الأليمة، وأكرر بأنه لا يوجد من يرغب في الحب ونيل
-                        المنال ويتلذذ بالآلام، الألم هو الألم ولكن نتيجة لظروف ما قد تكمن السعاده فيما نتحمله من كد
-                        وأسي.
+                        {{ $anyWhereSection['description'] }}
                     </p>
-                    <h6>
-                        و سأعرض مثال حي لهذا، من منا لم يتحمل جهد بدني شاق إلا من أجل الحصول على ميزة أو فائدة؟ ولكن
-                        من
-                        لديه الحق أن ينتقد شخص ما أراد أن يشعر بالسعادة التي لا تشوبها عواقب أليمة أو آخر أراد أن
-                        يتجنب
-                        الألم الذي ربما تنجم عنه بعض المتعة ؟
-                    </h6>
+
                 </div>
                 <div class="col-md-6 position-relative map">
                     <img class="" src="./images/map.png" alt="map">
+                    {{-- <img class="" src="{{ $anyWhereSection['image'] }}" alt="map"> --}}
                     <div>
                         <div class="circle-alex"></div>
                         <div class="title-alex">الاسكندرية</div>
@@ -220,14 +220,11 @@
     <!-- start pay  -->
     <div class="pay py-3 mt-5">
         <div class="container">
-            <h2 class="text-center">اختر طريقة الدفع اللي تناسبك</h2>
+            <h2 class="text-center">{{ $paymentMethodsSection['title'] }}</h2>
             <div class="d-flex flex-lg-row flex-column justify-content-between align-items-center mt-4">
-                <img src="./images/pay/visa.png" alt="pay">
-                <img src="./images/pay/master.png" alt="pay">
-                <img src="./images/pay/meeza.png" alt="pay">
-                <img src="./images/pay/qnp.png" alt="pay">
-                <img src="./images/pay/ahly.png" alt="pay">
-                <img src="./images/pay/fawry.png" alt="pay">
+                @foreach ($paymentMethodsSection['images'] as $image)
+                    <img src="{{ $image }}" alt="pay">
+                @endforeach
             </div>
         </div>
     </div>
@@ -243,239 +240,34 @@
                 <div class="swiper mySwiper">
                     <div class="swiper-wrapper">
 
-                        <div class="swiper-slide">
-                            <div class='cardSection card'>
+                        @for ($i = 0; $i < 10; $i++)
+                            <div class="swiper-slide">
+                                <div class='cardSection card'>
 
-                                <div class="cardbody card-body py-2">
-                                    <h5 class='cardTitle'>VIP Business</h5>
-                                    <p class='cardBody text-gray'>
-                                        39 - 57 راكب
-                                    </p>
-                                    <div class='cardRate'>
-                                        <div>
-                                            <i class="fas fa-star text-secondary"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                            <i class="fas fa-star text-warning"></i>
+                                    <div class="cardbody card-body py-2">
+                                        <h5 class='cardTitle'>VIP Business</h5>
+                                        <p class='cardBody text-gray'>
+                                            39 - 57 راكب
+                                        </p>
+                                        <div class='cardRate'>
+                                            <div>
+                                                <i class="fas fa-star text-secondary"></i>
+                                                <i class="fas fa-star text-warning"></i>
+                                                <i class="fas fa-star text-warning"></i>
+                                                <i class="fas fa-star text-warning"></i>
+                                                <i class="fas fa-star text-warning"></i>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="position-relative bus-bg-box mt-3">
-                                    <div class="bus-bg position-absolute">
-                                    </div>
-                                    <img src="./images/bus.png" alt="bus" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="swiper-slide">
-                            <div class='cardSection card'>
-
-                                <div class="cardbody card-body py-2">
-                                    <h5 class='cardTitle'>VIP Business</h5>
-                                    <p class='cardBody text-gray'>
-                                        39 - 57 راكب
-                                    </p>
-                                    <div class='cardRate'>
-                                        <div>
-                                            <i class="fas fa-star text-secondary"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                            <i class="fas fa-star text-warning"></i>
+                                    <div class="position-relative bus-bg-box mt-3">
+                                        <div class="bus-bg position-absolute">
                                         </div>
+                                        <img src="./images/bus.png" alt="bus" />
                                     </div>
-                                </div>
-                                <div class="position-relative bus-bg-box mt-3">
-                                    <div class="bus-bg position-absolute">
-                                    </div>
-                                    <img src="./images/bus.png" alt="bus" />
                                 </div>
                             </div>
-                        </div>
+                        @endfor
 
-                        <div class="swiper-slide">
-                            <div class='cardSection card'>
-
-                                <div class="cardbody card-body py-2">
-                                    <h5 class='cardTitle'>VIP Business</h5>
-                                    <p class='cardBody text-gray'>
-                                        39 - 57 راكب
-                                    </p>
-                                    <div class='cardRate'>
-                                        <div>
-                                            <i class="fas fa-star text-secondary"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="position-relative bus-bg-box mt-3">
-                                    <div class="bus-bg position-absolute">
-                                    </div>
-                                    <img src="./images/bus.png" alt="bus" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="swiper-slide">
-                            <div class='cardSection card'>
-
-                                <div class="cardbody card-body py-2">
-                                    <h5 class='cardTitle'>VIP Business</h5>
-                                    <p class='cardBody text-gray'>
-                                        39 - 57 راكب
-                                    </p>
-                                    <div class='cardRate'>
-                                        <div>
-                                            <i class="fas fa-star text-secondary"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="position-relative bus-bg-box mt-3">
-                                    <div class="bus-bg position-absolute">
-                                    </div>
-                                    <img src="./images/bus.png" alt="bus" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="swiper-slide">
-                            <div class='cardSection card'>
-
-                                <div class="cardbody card-body py-2">
-                                    <h5 class='cardTitle'>VIP Business</h5>
-                                    <p class='cardBody text-gray'>
-                                        39 - 57 راكب
-                                    </p>
-                                    <div class='cardRate'>
-                                        <div>
-                                            <i class="fas fa-star text-secondary"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="position-relative bus-bg-box mt-3">
-                                    <div class="bus-bg position-absolute">
-                                    </div>
-                                    <img src="./images/bus.png" alt="bus" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="swiper-slide">
-                            <div class='cardSection card'>
-
-                                <div class="cardbody card-body py-2">
-                                    <h5 class='cardTitle'>VIP Business</h5>
-                                    <p class='cardBody text-gray'>
-                                        39 - 57 راكب
-                                    </p>
-                                    <div class='cardRate'>
-                                        <div>
-                                            <i class="fas fa-star text-secondary"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="position-relative bus-bg-box mt-3">
-                                    <div class="bus-bg position-absolute">
-                                    </div>
-                                    <img src="./images/bus.png" alt="bus" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="swiper-slide">
-                            <div class='cardSection card'>
-
-                                <div class="cardbody card-body py-2">
-                                    <h5 class='cardTitle'>VIP Business</h5>
-                                    <p class='cardBody text-gray'>
-                                        39 - 57 راكب
-                                    </p>
-                                    <div class='cardRate'>
-                                        <div>
-                                            <i class="fas fa-star text-secondary"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="position-relative bus-bg-box mt-3">
-                                    <div class="bus-bg position-absolute">
-                                    </div>
-                                    <img src="./images/bus.png" alt="bus" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="swiper-slide">
-                            <div class='cardSection card'>
-
-                                <div class="cardbody card-body py-2">
-                                    <h5 class='cardTitle'>VIP Business</h5>
-                                    <p class='cardBody text-gray'>
-                                        39 - 57 راكب
-                                    </p>
-                                    <div class='cardRate'>
-                                        <div>
-                                            <i class="fas fa-star text-secondary"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="position-relative bus-bg-box mt-3">
-                                    <div class="bus-bg position-absolute">
-                                    </div>
-                                    <img src="./images/bus.png" alt="bus" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="swiper-slide">
-                            <div class='cardSection card'>
-
-                                <div class="cardbody card-body py-2">
-                                    <h5 class='cardTitle'>VIP Business</h5>
-                                    <p class='cardBody text-gray'>
-                                        39 - 57 راكب
-                                    </p>
-                                    <div class='cardRate'>
-                                        <div>
-                                            <i class="fas fa-star text-secondary"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                            <i class="fas fa-star text-warning"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="position-relative bus-bg-box mt-3">
-                                    <div class="bus-bg position-absolute">
-                                    </div>
-                                    <img src="./images/bus.png" alt="bus" />
-                                </div>
-                            </div>
-                        </div>
 
                     </div>
                     <div class="swiper-buttons">
@@ -499,74 +291,28 @@
                     </h2>
                 </div>
 
-                <div class="col-md-4 mb-3">
-                    <div class='cardSection card p-3'>
-
-                        <div class="cardbody card-body py-2">
-                            <div class="d-flex justify-content-end">
-                                <i class="fas fa-quote-left fs-25"></i>
-                            </div>
-                            <p class='cardBody text-gray'>
-                                "مكان يليق بالمناسبات الخاصة."
-                                الأطباق مُبتكرة لكنها تحافظ على الروح التقليدية، والديكور يضفي شعورًا بالفخامة.
-                                المندي
-                                والدجاج المشوي مذهلان.
-                            </p>
-                            <div class='d-flex justify-content-end align-items-center gap-2'>
-                                <p class="m-0">سامر النوري</p>
-                                <div>
-                                    <img src="./images/user.png" alt="user">
+                @foreach ($testimonials as $testimonial)
+                    <div class="col-md-4 mb-3">
+                        <div class='cardSection card p-3'>
+                            <div class="card-body py-2">
+                                <div class="d-flex justify-content-end">
+                                    <i class="fas fa-quote-left fs-25"></i>
+                                </div>
+                                <p class='text-gray'>
+                                    {{ $testimonial->name }}
+                                </p>
+                                <div class='d-flex justify-content-end align-items-center gap-2'>
+                                    <p class="m-0">{{ $testimonial->content }}</p>
+                                    <div>
+                                        <img src="{{ $testimonial->image }}" alt="صورة {{ $testimonial->name }}">
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                @endforeach
 
-                <div class="col-md-4 mb-3">
-                    <div class='cardSection card p-3'>
 
-                        <div class="cardbody card-body py-2">
-                            <div class="d-flex justify-content-end">
-                                <i class="fas fa-quote-left fs-25"></i>
-                            </div>
-                            <p class='cardBody text-gray'>
-                                "مكان يليق بالمناسبات الخاصة."
-                                الأطباق مُبتكرة لكنها تحافظ على الروح التقليدية، والديكور يضفي شعورًا بالفخامة.
-                                المندي
-                                والدجاج المشوي مذهلان.
-                            </p>
-                            <div class='d-flex justify-content-end align-items-center gap-2'>
-                                <p class="m-0">سامر النوري</p>
-                                <div>
-                                    <img src="./images/user.png" alt="user">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4 mb-3">
-                    <div class='cardSection card p-3'>
-
-                        <div class="cardbody card-body py-2">
-                            <div class="d-flex justify-content-end">
-                                <i class="fas fa-quote-left fs-25"></i>
-                            </div>
-                            <p class='cardBody text-gray'>
-                                "مكان يليق بالمناسبات الخاصة."
-                                الأطباق مُبتكرة لكنها تحافظ على الروح التقليدية، والديكور يضفي شعورًا بالفخامة.
-                                المندي
-                                والدجاج المشوي مذهلان.
-                            </p>
-                            <div class='d-flex justify-content-end align-items-center gap-2'>
-                                <p class="m-0">سامر النوري</p>
-                                <div>
-                                    <img src="./images/user.png" alt="user">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
             </div>
         </div>
@@ -577,18 +323,10 @@
     <div class="">
         <div class="reservation">
             <h2>
-                انطلق إلى سحر شواطئ مصر الخلابة واستمتع بالمياه الفيروزية والأجواء المنعشة!
+                {{ $reservationSection['title'] }}
             </h2>
             <p>
-                لكن لا بد أن أوضح لك أن كل هذه الأفكار المغلوطة حول استنكار النشوة وتمجيد الألم نشأت بالفعل، وسأعرض
-                لك
-                التفاصيل لتكتشف حقيقة وأساس تلك السعادة البشرية، فلا أحد يرفض أو يكره أو يتجنب الشعور بالسعادة، ولكن
-                بفضل
-                هؤلاء الأشخاص الذين لا يدركون بأن السعادة لا بد أن نستشعرها بصورة أكثر عقلانية ومنطقية فيعرضهم هذا
-                لمواجهة
-                الظروف الأليمة، وأكرر بأنه لا يوجد من يرغب في الحب ونيل المنال ويتلذذ بالآلام، الألم هو الألم ولكن
-                نتيجة
-                لظروف ما قد تكمن السعاده فيما نتحمله من كد وأسي.
+                {{ $reservationSection['description'] }}
             </p>
             <button>
                 احجز الان
@@ -605,107 +343,28 @@
                 <div class="col-md-12">
                     <h2 class="text-center">حكاياتنا</h2>
                 </div>
-                <div class="col-md-4 mb-4 px-3">
-                    <div class='cardSection card text-center rounded-bottom-4'>
-                        <img class="img-fluid rounded-top-4" src="./images/blogs.jpeg" alt="blogs" />
-                        <div class="cardbody card-body py-2">
-                            <h5>Lorem ipsum dolor </h5>
-                            <div class='cardBody'>
-                                <p>
-                                    March 12, 2022 - 6 min read
-                                </p>
-                                <h6>
-                                    Nunc non posuere consectetur, justo erat semper enim, non hendrerit dui odio id
-                                    enim.
-                                </h6>
+                <div class="row">
+                    @foreach ($blogs as $blog)
+                        <div class="col-md-4 mb-4 px-3">
+                            <div class="cardSection card text-center rounded-bottom-4">
+                                <img class="img-fluid rounded-top-4" src="{{ $blog->image }}" alt="blogs" />
+                                <div class="cardbody card-body py-2">
+                                    <h5>{{ $blog->title }}</h5>
+                                    <div class='cardBody'>
+                                        <p>
+                                            {{ $blog->created_at->format('F d, Y') }} -
+                                            <i class="fa fa-clock"></i> {{ $blog->reading_time }} min read -
+                                            <i class="fa fa-eye"></i> {{ $blog->views }} -
+                                            <i class="fa fa-thumbs-up"></i> {{ $blog->likes }}
+                                        </p>
+                                        <h6>
+                                            {{ \Str::limit(strip_tags($blog->content), 100) }}
+                                        </h6>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4 px-3">
-                    <div class='cardSection card text-center rounded-bottom-4'>
-                        <img class="img-fluid rounded-top-4" src="./images/blogs.jpeg" alt="blogs" />
-                        <div class="cardbody card-body py-2">
-                            <h5>Lorem ipsum dolor </h5>
-                            <div class='cardBody'>
-                                <p>
-                                    March 12, 2022 - 6 min read
-                                </p>
-                                <h6>
-                                    Nunc non posuere consectetur, justo erat semper enim, non hendrerit dui odio id
-                                    enim.
-                                </h6>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4 px-3">
-                    <div class='cardSection card text-center rounded-bottom-4'>
-                        <img class="img-fluid rounded-top-4" src="./images/blogs.jpeg" alt="blogs" />
-                        <div class="cardbody card-body py-2">
-                            <h5>Lorem ipsum dolor </h5>
-                            <div class='cardBody'>
-                                <p>
-                                    March 12, 2022 - 6 min read
-                                </p>
-                                <h6>
-                                    Nunc non posuere consectetur, justo erat semper enim, non hendrerit dui odio id
-                                    enim.
-                                </h6>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4 px-3">
-                    <div class='cardSection card text-center rounded-bottom-4'>
-                        <img class="img-fluid rounded-top-4" src="./images/blogs.jpeg" alt="blogs" />
-                        <div class="cardbody card-body py-2">
-                            <h5>Lorem ipsum dolor </h5>
-                            <div class='cardBody'>
-                                <p>
-                                    March 12, 2022 - 6 min read
-                                </p>
-                                <h6>
-                                    Nunc non posuere consectetur, justo erat semper enim, non hendrerit dui odio id
-                                    enim.
-                                </h6>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4 px-3">
-                    <div class='cardSection card text-center rounded-bottom-4'>
-                        <img class="img-fluid rounded-top-4" src="./images/blogs.jpeg" alt="blogs" />
-                        <div class="cardbody card-body py-2">
-                            <h5>Lorem ipsum dolor </h5>
-                            <div class='cardBody'>
-                                <p>
-                                    March 12, 2022 - 6 min read
-                                </p>
-                                <h6>
-                                    Nunc non posuere consectetur, justo erat semper enim, non hendrerit dui odio id
-                                    enim.
-                                </h6>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4 px-3">
-                    <div class='cardSection card text-center rounded-bottom-4'>
-                        <img class="img-fluid rounded-top-4" src="./images/blogs.jpeg" alt="blogs" />
-                        <div class="cardbody card-body py-2">
-                            <h5>Lorem ipsum dolor </h5>
-                            <div class='cardBody'>
-                                <p>
-                                    March 12, 2022 - 6 min read
-                                </p>
-                                <h6>
-                                    Nunc non posuere consectetur, justo erat semper enim, non hendrerit dui odio id
-                                    enim.
-                                </h6>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -713,7 +372,7 @@
 
     <!-- End blogs  -->
 
-    
+
     <!-- start footer  -->
 @endsection
 @include('mobile.home')

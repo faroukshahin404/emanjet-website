@@ -56,6 +56,10 @@
     <!-- end register  -->
 @endsection
 
+@section('mobile-content')
+    @include('mobile.auth.register')
+@endsection
+
 @push('scripts')
     <script>
         function changeLanguage(lang) {
