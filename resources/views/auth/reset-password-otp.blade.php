@@ -1,19 +1,7 @@
 @extends('layouts.master')
 
-<style>
-    input[type=text]::-webkit-inner-spin-button,
-    input[type=text]::-webkit-outer-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-
-    input[type=text] {
-        -moz-appearance: textfield;
-    }
-</style>
-
 @section('content')
-    <!-- start otp verification -->
+    <!-- start reset password verification -->
     <div class="otp-desktop">
         <div class="container-fluid">
             <div class="row rounded-bottom-4 box-shadow">
@@ -21,9 +9,9 @@
                     <div class="mb-4">
                         <div class="d-flex justify-content-center gap-5 align-items-center">
                             <div></div><div></div><div></div><div></div><div></div>
-                            <p class="m-0 fs-25 text-black">تأكيد رقم الهاتف</p>
+                            <p class="m-0 fs-25 text-black">تأكيد رمز إعادة تعيين كلمة المرور</p>
                             <div></div><div></div><div></div>
-                            <a href="register-Page.html">
+                            <a href="javascript:history.back()">
                                 <i class="fas fa-arrow-left fs-25 text-black"></i>
                             </a>
                         </div>
@@ -32,9 +20,9 @@
                         </p>
                     </div>
 
-                    <!-- Update Form -->
-                    <form action="{{ route('auth.postOtp') }}" method="POST">
+                    <form action="{{ route('auth.verifyResetOtp') }}" method="POST">
                         @csrf
+                        <input type="hidden" name="phone" value="{{ $phone }}">
 
                         <div class="d-flex justify-content-center align-items-center gap-3" dir="ltr">
                             @for ($i = 0; $i < 4; $i++)
@@ -46,30 +34,27 @@
 
                         <p class="mt-3 text-center text-main" id="timer"></p>
 
-                        {{-- <div class="mt-4 d-flex justify-content-center">
+                        <div class="mt-4 d-flex justify-content-center">
                             <p>
                                 لم يصلك الرمز؟
                                 <a class="text-main" href="javascript:void(0);" id="resendOtpLink">هل تريد إعادة
                                     إرساله؟</a>
                             </p>
-                        </div> --}}
+                        </div>
 
                         <div class="col-md-12 d-flex justify-content-center align-items-center mt-5">
-                            <button type="submit" class="submitBtn" id="submitOtpBtn">ارسال</button>
+                            <button type="submit" class="submitBtn" id="submitOtpBtn">تأكيد</button>
                         </div>
                     </form>
                 </div>
+
                 <div class="col-md-6">
-                    <img class="img-fluid" src="../images/hero-section.png" alt="register">
+                    <img class="img-fluid" src="../images/hero-section.png" alt="verify reset code">
                 </div>
             </div>
         </div>
     </div>
-    <!-- end otp verification -->
-@endsection
-
-@section('mobile-content')
-    @include('mobile.auth.otp')
+    <!-- end reset password verification -->
 @endsection
 
 @push('scripts')
@@ -78,35 +63,34 @@
             const timerElement = document.getElementById('timer');
             const resendOtpLink = document.getElementById('resendOtpLink');
 
-            const otpExpiresAt = {{ $otp->expires_at->timestamp }} * 1000;
+            const initialTime = 30;
+            let timeLeft = initialTime;
 
-            const interval = setInterval(() => {
-                const now = Date.now();
-                const remaining = Math.floor((otpExpiresAt - now) / 1000);
+            const startTimer = () => {
+                const interval = setInterval(() => {
+                    if (timeLeft > 0) {
+                        const minutes = Math.floor(timeLeft / 60);
+                        const seconds = timeLeft % 60;
+                        timerElement.textContent =
+                            `يرجى الانتظار ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} قبل إعادة الإرسال`;
 
-                if (remaining > 0) {
-                    const minutes = Math.floor(remaining / 60);
-                    const seconds = remaining % 60;
-                    timerElement.textContent =
-                        `يرجى الانتظار ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} قبل إعادة الإرسال`;
-
-                    if (resendOtpLink) {
                         resendOtpLink.style.pointerEvents = 'none';
                         resendOtpLink.style.color = '#aaa';
                         resendOtpLink.textContent = 'جاري الانتظار...';
-                    }
-                } else {
-                    clearInterval(interval);
-                    timerElement.textContent = '';
-                    if (resendOtpLink) {
+
+                        timeLeft--;
+                    } else {
+                        clearInterval(interval);
+                        timerElement.textContent = '';
                         resendOtpLink.style.pointerEvents = 'auto';
                         resendOtpLink.style.color = '';
                         resendOtpLink.textContent = 'هل تريد إعادة إرساله؟';
                     }
-                }
-            }, 1000);
+                }, 1000);
+            };
 
-            // Auto move to next input
+            startTimer();
+
             const inputs = document.querySelectorAll('.otp-box');
             inputs.forEach((input, index) => {
                 input.addEventListener('input', () => {
@@ -120,35 +104,54 @@
                         inputs[index - 1].focus();
                     }
                 });
+
+                // paste event
+                input.addEventListener('paste', function(e) {
+                    e.preventDefault();
+                    const pastedData = (e.clipboardData || window.clipboardData)
+                        .getData('text')
+                        .replace(/[^0-9]/g, '')
+                        .substring(0, 4)
+                        .split('');
+
+                    inputs.forEach((inp, idx) => {
+                        inp.value = pastedData[idx] ?? '';
+                    });
+
+                    const filled = pastedData.length;
+                    if (filled < 4) {
+                        inputs[filled].focus();
+                    } else {
+                        inputs[3].focus();
+                    }
+                });
             });
 
-            // Resend OTP AJAX
-            if (resendOtpLink) {
-                resendOtpLink.addEventListener('click', function () {
-                    fetch("{{ route('auth.resendOtp') }}", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                        },
-                        body: JSON.stringify({
-                            phone: "{{ $phone }}"
-                        })
+            resendOtpLink.addEventListener('click', function () {
+                fetch("{{ route('auth.resendOtp') }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    },
+                    body: JSON.stringify({
+                        phone: "{{ $phone }}"
                     })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                alert(data.message);
-                                location.reload();
-                            } else {
-                                alert(data.message);
-                            }
-                        })
-                        .catch(() => {
-                            alert("حدث خطأ. يرجى المحاولة مرة أخرى.");
-                        });
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        timeLeft = initialTime;
+                        startTimer();
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(() => {
+                    alert("حدث خطأ. يرجى المحاولة مرة أخرى.");
                 });
-            }
+            });
         });
     </script>
 @endpush

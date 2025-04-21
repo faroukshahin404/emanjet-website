@@ -31,10 +31,11 @@ class Otp extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function isExpired(): bool
+    public function isExpired()
     {
-        return $this->expires_at->isPast();
+        return $this->expires_at && $this->expires_at->isPast();
     }
+
 
     public function isBlocked(): bool
     {

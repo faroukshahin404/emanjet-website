@@ -14,7 +14,7 @@
 
                 <div class="mt-3 text-center">
                     <p class="m-0">
-                        أدخل الرمز الذي أرسلناه إلى رقمك{{ $phone }}
+                        أدخل الرمز الذي أرسلناه إلى رقمك {{ $phone }}
                     </p>
                 </div>
 
@@ -22,7 +22,7 @@
                     <img src="{{ asset('images/mobile/phone-chat.png') }}" alt="phone">
                 </div>
 
-                <form action="{{ route('auth.resetPassword') }}" method="POST" class="login-form">
+                <form action="{{ route('auth.verifyResetOtp') }}" method="POST" class="login-form">
                     @csrf
                     <input type="hidden" name="phone" value="{{ $phone }}">
                     <input type="hidden" id="initial-time" value="{{ $remainingTime ?? 0 }}">
@@ -63,31 +63,9 @@
                         </div>
                     </div>
 
-                    <div class="form-group mt-3">
-                        <label for="password" class="form-label">كلمة المرور الجديدة</label>
-                        <input type="password"
-                               class="form-control rounded-6 @error('password') is-invalid @enderror"
-                               id="password"
-                               name="password"
-                               placeholder="أدخل كلمة المرور الجديدة">
-                        @error('password')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="form-group mt-3">
-                        <label for="password_confirmation" class="form-label">تأكيد كلمة المرور</label>
-                        <input type="password"
-                               class="form-control rounded-6"
-                               id="password_confirmation"
-                               name="password_confirmation"
-                               placeholder="أدخل كلمة المرور مرة أخرى">
-                    </div>
-
                     <div class="form-group mt-4">
-                        <button type="submit" class="btn btn-main w-100 rounded-6">إعادة تعيين كلمة المرور</button>
+                        <button type="submit" class="btn btn-main w-100 rounded-6">تحقق</button>
                     </div>
-
                 </form>
             </div>
         </div>
@@ -179,7 +157,7 @@
             });
 
             function resendOtp() {
-                fetch('{{ route('auth.resetPassword') }}', {
+                fetch('{{ route('auth.resendOtp') }}', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -192,7 +170,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        startTimer(data.remainingTime);
+                        startTimer(30);
                         alert(data.message);
                     } else {
                         if (data.remainingTime) {

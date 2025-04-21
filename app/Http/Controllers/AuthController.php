@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use App\Models\Otp;
+use Illuminate\Support\Carbon;
 
 class AuthController extends Controller
 {
@@ -21,18 +22,19 @@ class AuthController extends Controller
         $this->authService = $authService;
     }
 
-
+    //done
     public function login()
     {
         return view('auth.login');
     }
 
-    // عرض صفحة التسجيل
+    // عرض صفحة
+    //done
     public function register()
     {
         return view('auth.register');
     }
-
+    //done
     // معالجة التسجيل
     public function postRegister(RegisterRequest $request)
     {
@@ -205,38 +207,89 @@ class AuthController extends Controller
             return redirect()->route('auth.register')->withErrors(['error' => 'غير مسموح بالوصول المباشر إلى صفحة التحقق.']);
         }
 
-        return view('auth.otp', compact('phone'));
+        $otp = Otp::where('phone', $phone)->latest()->first();
+
+        return view('auth.otp', compact('phone', 'otp'));
     }
+
 
     // معالجة OTP
     public function postOtp(Request $request)
     {
+        // التحقق من الـ OTP المدخل
         $request->validate([
             'otp' => 'required|array|size:4',
         ]);
 
+        // تحويل الـ OTP إلى سلسلة من الأرقام
         $otpNumber = implode('', $request->otp);
         $phone = session('otp_phone');
-        if (Auth::check() && !Auth::user()->verified) {
-            $user = Auth::user();
-            $phone = $user->mobile;
+
+        // التحقق من صحة الـ OTP عبر الخدمة
+        $result = $this->authService->verifyOtp($otpNumber, $phone);
+
+        if (!$result['success']) {
+            return redirect()->back()->withErrors(['otp' => $result['message']]);
         }
 
-        $message = $this->authService->verifyOtp($otpNumber, $phone);
-
-        if ($message !== 'تم التحقق بنجاح.') {
-            return redirect()->back()->withErrors(['otp' => $message]);
-        }
-        if (session('reset_password_phone')) {
-            session()->forget('otp_phone');
-            return redirect()->route('auth.showResetPassword');
+        // التحقق إذا كان المستخدم مسجل دخوله بالفعل
+        if (Auth::check()) {
+            return redirect()->route('home')->with('success', 'تم التحقق من رقم الهاتف بنجاح.');
         }
 
+        // في حالة عدم تسجيل الدخول، نقوم بتسجيل المستخدم مباشرة
+        $user = User::where('mobile', $phone)->first();
+        Auth::login($user);
+
+        // مسح الـ OTP من الجلسة
         session()->forget('otp_phone');
-        Auth::login(User::where('mobile', $phone)->first());
 
         return redirect()->route('home')->with('success', 'تم التحقق من رقم الهاتف بنجاح.');
     }
+
+
+    public function postOtpForPasswordReset(Request $request)
+    {
+        // التحقق من الـ OTP المدخل
+        $request->validate([
+            'otp' => 'required|array|size:4',
+        ]);
+
+        // تحويل الـ OTP إلى سلسلة من الأرقام
+        $otpNumber = implode('', $request->otp);
+        $phone = session('reset_password_phone');
+
+        // التأكد من وجود الرقم في الجلسة
+        if (!$phone) {
+            return redirect()->route('auth.login')->with('error', 'حدث خطأ أثناء إعادة تعيين كلمة المرور.');
+        }
+
+        // التحقق من صحة الـ OTP
+        $result = $this->authService->verifyOtp($otpNumber, $phone);
+
+        if (!$result['success']) {
+            return redirect()->back()->withErrors(['otp' => $result['message']]);
+        }
+
+        // تخزين الـ OTP لإعادة تعيين كلمة المرور
+        session()->put('reset_password_otp', $otpNumber);
+
+        // إعادة التوجيه إلى صفحة تغيير كلمة المرور
+        return redirect()->route('auth.showNewPasswordForm');
+    }
+
+
+
+
+    public function showNewPasswordForm()
+    {
+        if (!session()->has('reset_password_phone') || !session()->has('reset_password_otp')) {
+            return redirect()->route('auth.login')->with('error', 'انتهت صلاحية الرابط أو تم الوصول إليه بشكل غير صحيح.');
+        }
+
+        return view('auth.new-password');
+    }
+
 
     // عرض صفحة إعادة تعيين كلمة المرور
     public function showResetPassword()
@@ -246,53 +299,83 @@ class AuthController extends Controller
         if (!$phone) {
             return redirect()->route('auth.login')->with('error', 'غير مسموح بالوصول المباشر إلى صفحة إعادة تعيين كلمة المرور.');
         }
-
-        // Get latest OTP for this phone
-        $latestOtp = Otp::where('phone', $phone)
-            ->where('created_at', '>=', now()->subMinutes(30))
-            ->latest()
-            ->first();
-
-        $remainingTime = 0;
-        if ($latestOtp) {
-            $expiryTime = $latestOtp->created_at->addSeconds(30);
-            if ($expiryTime->isFuture()) {
-                $remainingTime = now()->diffInSeconds($expiryTime);
-            }
-        }
-        return view('auth.show-reset-password', compact('phone', 'remainingTime'));
+        $remainingTime = 60;
+        return view('auth.show-reset-password', compact('phone','remainingTime'));
     }
 
-    // معالجة إعادة تعيين كلمة المرور
-    public function updatePassword(Request $request)
+    // التحقق من OTP لإعادة تعيين كلمة المرور
+    public function verifyResetOtp(Request $request)
     {
         $request->validate([
-            'password' => 'required|string|min:8|confirmed',
             'otp' => 'required|array|size:4',
         ]);
-
+        // dd($request->otp);
+        $otpNumber = implode('', $request->otp);
         $phone = session('reset_password_phone');
+        // dd($phone);
+        $result = $this->authService->verifyOtp($otpNumber, $phone);
 
-        if (!$phone) {
+        // إذا لم يكن التحقق ناجحًا
+        if (!$result['success']) {
+            return redirect()->back()->withErrors(['otp' => $result['message']]);
+        }
+        // dd($phone);
+        // تخزين OTP في الجلسة للخطوة التالية
+        session(['reset_password_otp' => $otpNumber]);
+
+        return redirect()->route('auth.resetPasswordNew');
+    }
+
+    // عرض صفحة إدخال كلمة المرور الجديدة
+    public function resetPasswordNew()
+    {
+        $phone = session('reset_password_phone');
+        $otp = session('reset_password_otp');
+
+        if (!$phone || !$otp) {
             return redirect()->route('auth.login')->with('error', 'غير مسموح بالوصول المباشر إلى صفحة إعادة تعيين كلمة المرور.');
         }
 
-        $otpNumber = implode('', $request->otp);
-        $message = $this->authService->verifyOtp($otpNumber, $phone);
+        return view('auth.new-password', compact('phone', 'otp'));
+    }
 
-        if ($message !== 'تم التحقق بنجاح.') {
-            return redirect()->back()->withErrors(['otp' => $message]);
+    // تحديث كلمة المرور
+    public function updatePassword(Request $request)
+    {
+        // التحقق من المدخلات
+        $request->validate([
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        // استرجاع الهاتف من الجلسة
+        $phone = session('reset_password_phone');
+
+        // التأكد أن الهاتف موجود في الجلسة
+        if (!$phone) {
+            return redirect()->route('auth.login')->with('error', 'حدث خطأ أثناء إعادة تعيين كلمة المرور.');
         }
 
+        // البحث عن المستخدم بناءً على الهاتف
         $user = User::where('mobile', $phone)->first();
+        if (!$user) {
+            return redirect()->route('auth.login')->with('error', 'لم يتم العثور على المستخدم.');
+        }
+
+        // تحديث كلمة المرور
         $user->password = Hash::make($request->password);
         $user->save();
 
-        session()->forget('reset_password_phone');
+        // تسجيل الدخول للمستخدم بعد تحديث كلمة المرور
         Auth::login($user);
 
-        return redirect()->route('home')->with('success', 'تم تحديث كلمة المرور بنجاح.');
+        // مسح بيانات الجلسة
+        session()->forget(['reset_password_phone']);
+
+        // إعادة التوجيه مع رسالة نجاح
+        return redirect()->route('home')->with('success', 'تم إعادة تعيين كلمة المرور بنجاح وتسجيل الدخول.');
     }
+
+
 
     // إعادة إرسال OTP
     public function resendOtp(Request $request)
@@ -300,6 +383,7 @@ class AuthController extends Controller
         // التحقق من وجود رقم الهاتف في الطلب أو في الجلسة
         $phone = $request->phone ?? session('otp_phone');
 
+        // dd($phone);
         if (!$phone) {
             return response()->json([
                 'success' => false,
@@ -321,19 +405,19 @@ class AuthController extends Controller
             ->latest()
             ->first();
 
-        if ($lastOtp) {
-            $waitTime = 30; // 30 seconds wait time
-            $timeSinceLastOtp = now()->diffInSeconds($lastOtp->created_at);
+        // if ($lastOtp) {
+        //     $waitTime = 120; // 120 seconds wait time
+        //     $timeSinceLastOtp = now()->diffInSeconds($lastOtp->created_at);
 
-            if ($timeSinceLastOtp < $waitTime) {
-                $remainingTime = $waitTime - $timeSinceLastOtp;
-                return response()->json([
-                    'success' => false,
-                    'message' => "يرجى المحاولة بعد {$remainingTime} ثانية.",
-                    'remainingTime' => $remainingTime
-                ], 429);
-            }
-        }
+        //     if ($timeSinceLastOtp < $waitTime) {
+        //         $remainingTime = $waitTime - $timeSinceLastOtp;
+        //         return response()->json([
+        //             'success' => false,
+        //             'message' => "يرجى المحاولة بعد {$remainingTime} ثانية.",
+        //             'remainingTime' => $remainingTime
+        //         ], 429);
+        //     }
+        // }
 
         $message = $this->authService->sendOtp($phone);
 

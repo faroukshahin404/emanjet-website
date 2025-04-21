@@ -71,13 +71,7 @@ class AuthService
             return "تم حظر إرسال رمز التحقق مؤقتاً. يرجى المحاولة بعد {$remainingMinutes} دقيقة.";
         }
 
-        // البحث عن OTP غير مستخدم
-        $existingOtp = Otp::where('phone', $phone)
-            ->where('is_used', false)
-            ->where('expires_at', '>', now())
-            ->first();
-
-        // التحقق من عدد المحاولات في آخر 30 دقيقة
+        // التحقق من المحاولات المفرطة في آخر 30 دقيقة
         $recentAttempts = Otp::where('phone', $phone)
             ->where('created_at', '>=', now()->subMinutes(30))
             ->sum('attempts');
@@ -91,7 +85,7 @@ class AuthService
             return "تم تجاوز الحد الأقصى للمحاولات. يرجى المحاولة بعد " . $this->getBlockDurationMinutes() . " دقيقة.";
         }
 
-        // التحقق من وقت الانتظار بين المحاولات
+        // التحقق من الوقت بين المحاولات
         $lastAttempt = Otp::where('phone', $phone)
             ->where('created_at', '>=', now()->subMinutes(5))
             ->first();
@@ -104,15 +98,23 @@ class AuthService
             }
         }
 
-        // إرسال OTP
+        // إنشاء أو تحديث رمز OTP
         $otp = rand(1000, 9999);
-        // TODO: إضافة كود إرسال OTP الفعلي هنا
+
+        // TODO: إضافة كود إرسال OTP الفعلي هنا (مثل إرسال رسالة نصية عبر خدمة SMS)
+
+        // إذا كان هناك OTP غير مستخدم
+        $existingOtp = Otp::where('phone', $phone)
+            ->where('is_used', false)
+            ->where('expires_at', '>', now())
+            ->first();
 
         if ($existingOtp) {
             // تحديث OTP الموجود
             $existingOtp->update([
                 'otp' => $otp,
-                'expires_at' => now()->addMinutes($this->getWaitMinutes($recentAttempts)),
+               'expires_at' => now()->addMinutes($this->getOtpExpiryMinutes()),
+
                 'attempts' => 0
             ]);
         } else {
@@ -121,7 +123,8 @@ class AuthService
                 'user_id' => $user->id,
                 'phone' => $phone,
                 'otp' => $otp,
-                'expires_at' => now()->addMinutes($this->getWaitMinutes($recentAttempts)),
+                'expires_at' => now()->addMinutes($this->getOtpExpiryMinutes()),
+
                 'is_used' => false,
                 'attempts' => 0
             ]);
@@ -130,42 +133,40 @@ class AuthService
         return 'تم إرسال رمز التحقق بنجاح.';
     }
 
+
     // التحقق من OTP
-    public function verifyOtp($otp, $phone)
+    public function verifyOtp($otpNumber, $phone)
     {
-        $otpRecord = Otp::where('otp', $otp)
+        $otp = Otp::where('otp', $otpNumber)
             ->where('phone', $phone)
-            ->where('is_used', false)
             ->first();
-
-        if (!$otpRecord) {
-            return 'رمز التحقق غير صحيح.';
+        // dd($otp);
+        if (!$otp) {
+            return ['success' => false, 'message' => 'الرمز غير صحيح.'];
         }
 
-        if ($otpRecord->isExpired()) {
-            return 'انتهت صلاحية رمز التحقق.';
+        if ($otp->isExpired()) {
+            // dd($otp);
+            return ['success' => false, 'message' => 'الرمز قد انتهت صلاحيته.'];
+        }
+        // dd('here');
+        if ($otp->isUsed()) {
+            return ['success' => false, 'message' => 'الرمز قد تم استخدامه مسبقًا.'];
         }
 
-        if ($otpRecord->isBlocked()) {
-            $remainingMinutes = $otpRecord->blocked_until->diffInMinutes(now());
-            return "تم حظر التحقق مؤقتاً. يرجى المحاولة بعد {$remainingMinutes} دقيقة.";
-        }
+        $user = User::where('mobile', $phone)->first();
+        // dd($user);
+        $user->update([
+            'verified' => true,
+            'phone_verified_at' => Carbon::now(),
+        ]);
 
-        // زيادة عدد المحاولات
-        $otpRecord->incrementAttempts();
+        // مباشرة بعد التحقق: حذف الـ OTP
+        $otp->delete();
 
-        // التحقق من تجاوز الحد الأقصى للمحاولات
-        if ($otpRecord->attempts >= $this->getMaxOtpAttempts()) {
-            $otpRecord->blocked_until = now()->addMinutes($this->getBlockDurationMinutes());
-            $otpRecord->save();
-            return 'تم تجاوز الحد الأقصى للمحاولات. تم حظر الحساب مؤقتاً.';
-        }
-
-        // حذف سجل OTP بعد نجاح التحقق
-        $otpRecord->delete();
-
-        return 'تم التحقق بنجاح.';
+        return ['success' => true, 'message' => 'تم التحقق بنجاح.'];
     }
+
 
     // إعادة إرسال OTP
     public function resendOtp($phone)

@@ -76,7 +76,7 @@ Route::prefix('auth')->name('auth.')->group(function () {
     Route::get('phone', [AuthController::class, 'phone'])->name('phone');
     Route::get('otp', [AuthController::class, 'otp'])->name('otp');
     Route::post('otp', [AuthController::class, 'postOtp'])->name('postOtp');
-    Route::get('resend-otp', [AuthController::class, 'resendOtp'])->name('resendOtp');
+    Route::post('resend-otp', [AuthController::class, 'resendOtp'])->name('resendOtp');
 
     // راوتات الضيف (غير مسجل الدخول)
     Route::middleware('guest')->group(function () {
@@ -87,9 +87,12 @@ Route::prefix('auth')->name('auth.')->group(function () {
 
         // راوتات نسيت كلمة المرور
         Route::get('forgot-password', [AuthController::class, 'forgotPassword'])->name('forgotPassword');
-        Route::get('reset-password', [AuthController::class, 'showResetPassword'])->name('resetPassword');
-        Route::post('reset-password', [AuthController::class, 'resetPassword'])->name('postResetPassword');
-        Route::get('show-reset-password', [AuthController::class, 'showResetPassword'])->name('showResetPassword');
+        Route::get('reset-password', [AuthController::class, 'showResetPassword'])->name('showResetPassword');
+        Route::get('/reset-password/new', [AuthController::class, 'showNewPasswordForm'])->name('showNewPasswordForm');
+
+        Route::post('reset-password', [AuthController::class, 'resetPassword'])->name('resetPassword');
+        Route::post('verify-reset-otp', [AuthController::class, 'verifyResetOtp'])->name('verifyResetOtp');
+        Route::get('reset-password-new', [AuthController::class, 'resetPasswordNew'])->name('resetPasswordNew');
         Route::post('update-password', [AuthController::class, 'updatePassword'])->name('updatePassword');
     });
 
