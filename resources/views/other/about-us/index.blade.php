@@ -27,13 +27,13 @@
         <div class="container">
             @php
                 $sections = [
-                    'vision' => 'رؤيتنا',
-                    'mission' => 'مهمتنا',
-                    'values' => 'قيمنا',
-                    'branches' => 'فروع سوبر جيت',
-                    'routes' => 'خطوط سوبر جيت',
-                    'payment_methods' => 'طرق الدفع',
-                    'safety_and_comfort' => 'رفاهية وأمان',
+                    'vision' => __('Our Vision'),
+                    'mission' => __('Our Mission'),
+                    'values' => __('Our Values'),
+                    'branches' => __('Super Jet branches'),
+                    'routes' => __('Superjet Airlines'),
+                    'payment_methods' => __('Payment Methods'),
+                    'safety_and_comfort' => __('Safety and Comfort'),
                 ];
             @endphp
 

@@ -1,9 +1,9 @@
 <?php
-
 namespace Database\Seeders;
 
 use App\Models\Page;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\PageSeo;
+use DB;
 use Illuminate\Database\Seeder;
 
 class PagesSeeder extends Seeder
@@ -13,115 +13,182 @@ class PagesSeeder extends Seeder
      */
     public function run(): void
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');  // تعطيل التحقق من القيود
+        Page::truncate();  // حذف جميع السجلات من جدول الشهادات
+        PageSeo::truncate();  // حذف جميع السجلات من جدول الشهادات
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');  // تفعيل التحقق من القيود
+
         $pages = [
             [
-                'title' => 'general',
+                'title' => ['ar' => 'عام', 'en' => 'General'],
                 'slug' => 'general',
-                'meta_title' => 'General',
-                'meta_description' => 'General information about the website.',
+                'meta_title' => ['ar' => 'عام', 'en' => 'General'],
+                'meta_description' => ['ar' => 'معلومات عامة عن الموقع.', 'en' => 'General information about the website.'],
                 'meta_tags' => [
-                    'keywords' => 'general, information',
-                    'image' => 'general-page-image.jpg',
-                    'og_title' => 'General Information',
-                    'og_description' => 'General information about the website.',
-                    'og_image' => 'general-page-og-image.jpg',
+                    'ar' => [
+                        'keywords' => 'عام, معلومات',
+                        'image' => 'general-page-image.jpg',
+                        'og_title' => 'معلومات عامة',
+                        'og_description' => 'معلومات عامة عن الموقع.',
+                        'og_image' => 'general-page-og-image.jpg',
+                    ],
+                    'en' => [
+                        'keywords' => 'general, information',
+                        'image' => 'general-page-image.jpg',
+                        'og_title' => 'General Information',
+                        'og_description' => 'General information about the website.',
+                        'og_image' => 'general-page-og-image.jpg',
+                    ]
                 ],
                 'status' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'title' => 'Home',
+                'title' => ['ar' => 'الصفحة الرئيسية', 'en' => 'Home'],
                 'slug' => 'home',
-                'meta_title' => 'Welcome to Our Website',
-                'meta_description' => 'This is the homepage of our website.',
+                'meta_title' => ['ar' => 'مرحبًا بكم في موقعنا', 'en' => 'Welcome to Our Website'],
+                'meta_description' => ['ar' => 'هذه الصفحة الرئيسية لموقعنا.', 'en' => 'This is the homepage of our website.'],
                 'meta_tags' => [
-                    'keywords' => 'home, welcome, website',
-                    'image' => 'home-page-image.jpg',
-                    'og_title' => 'Welcome to Our Website',
-                    'og_description' => 'This is the homepage of our website.',
-                    'og_image' => 'home-page-og-image.jpg',
+                    'ar' => [
+                        'keywords' => 'الرئيسية, مرحبا, الموقع',
+                        'image' => 'home-page-image.jpg',
+                        'og_title' => 'مرحبًا بكم في موقعنا',
+                        'og_description' => 'هذه الصفحة الرئيسية لموقعنا.',
+                        'og_image' => 'home-page-og-image.jpg',
+                    ],
+                    'en' => [
+                        'keywords' => 'home, welcome, website',
+                        'image' => 'home-page-image.jpg',
+                        'og_title' => 'Welcome to Our Website',
+                        'og_description' => 'This is the homepage of our website.',
+                        'og_image' => 'home-page-og-image.jpg',
+                    ]
                 ],
                 'status' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'title' => 'About Us',
+                'title' => ['ar' => 'من نحن', 'en' => 'About Us'],
                 'slug' => 'about-us',
-                'meta_title' => 'Learn About Us',
-                'meta_description' => 'Information about our company and team.',
+                'meta_title' => ['ar' => 'تعرف علينا', 'en' => 'Learn About Us'],
+                'meta_description' => ['ar' => 'معلومات عن شركتنا وفريقنا.', 'en' => 'Information about our company and team.'],
                 'meta_tags' => [
-                    'keywords' => 'about, company, team',
-                    'image' => 'about-page-image.jpg',
-                    'og_title' => 'Learn About Us',
-                    'og_description' => 'Information about our company and team.',
-                    'og_image' => 'about-page-og-image.jpg',
+                    'ar' => [
+                        'keywords' => 'عن, الشركة, الفريق',
+                        'image' => 'about-page-image.jpg',
+                        'og_title' => 'تعرف علينا',
+                        'og_description' => 'معلومات عن شركتنا وفريقنا.',
+                        'og_image' => 'about-page-og-image.jpg',
+                    ],
+                    'en' => [
+                        'keywords' => 'about, company, team',
+                        'image' => 'about-page-image.jpg',
+                        'og_title' => 'Learn About Us',
+                        'og_description' => 'Information about our company and team.',
+                        'og_image' => 'about-page-og-image.jpg',
+                    ]
                 ],
                 'status' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'title' => 'Contact Us',
+                'title' => ['ar' => 'اتصل بنا', 'en' => 'Contact Us'],
                 'slug' => 'contact-us',
-                'meta_title' => 'Get in Touch',
-                'meta_description' => 'Contact information and form to reach us.',
+                'meta_title' => ['ar' => 'اتصل بنا', 'en' => 'Get in Touch'],
+                'meta_description' => ['ar' => 'معلومات الاتصال ونموذج للوصول إلينا.', 'en' => 'Contact information and form to reach us.'],
                 'meta_tags' => [
-                    'keywords' => 'contact, reach us, support',
-                    'image' => 'contact-page-image.jpg',
-                    'og_title' => 'Get in Touch',
-                    'og_description' => 'Contact information and form to reach us.',
-                    'og_image' => 'contact-page-og-image.jpg',
+                    'ar' => [
+                        'keywords' => 'اتصال, دعم, تواصل',
+                        'image' => 'contact-page-image.jpg',
+                        'og_title' => 'اتصل بنا',
+                        'og_description' => 'معلومات الاتصال ونموذج للوصول إلينا.',
+                        'og_image' => 'contact-page-og-image.jpg',
+                    ],
+                    'en' => [
+                        'keywords' => 'contact, reach us, support',
+                        'image' => 'contact-page-image.jpg',
+                        'og_title' => 'Get in Touch',
+                        'og_description' => 'Contact information and form to reach us.',
+                        'og_image' => 'contact-page-og-image.jpg',
+                    ]
                 ],
                 'status' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'title' => 'Destinations',
+                'title' => ['ar' => 'الوجهات', 'en' => 'Destinations'],
                 'slug' => 'destinations',
-                'meta_title' => 'Explore Our Destinations',
-                'meta_description' => 'Discover the best places to visit.',
+                'meta_title' => ['ar' => 'استكشف وجهاتنا', 'en' => 'Explore Our Destinations'],
+                'meta_description' => ['ar' => 'اكتشف أفضل الأماكن للزيارة.', 'en' => 'Discover the best places to visit.'],
                 'meta_tags' => [
-                    'keywords' => 'destinations, travel, explore',
-                    'image' => 'destinations-page-image.jpg',
-                    'og_title' => 'Explore Our Destinations',
-                    'og_description' => 'Discover the best places to visit.',
-                    'og_image' => 'destinations-page-og-image.jpg',
+                    'ar' => [
+                        'keywords' => 'وجهات, سفر, استكشاف',
+                        'image' => 'destinations-page-image.jpg',
+                        'og_title' => 'استكشف وجهاتنا',
+                        'og_description' => 'اكتشف أفضل الأماكن للزيارة.',
+                        'og_image' => 'destinations-page-og-image.jpg',
+                    ],
+                    'en' => [
+                        'keywords' => 'destinations, travel, explore',
+                        'image' => 'destinations-page-image.jpg',
+                        'og_title' => 'Explore Our Destinations',
+                        'og_description' => 'Discover the best places to visit.',
+                        'og_image' => 'destinations-page-og-image.jpg',
+                    ]
                 ],
                 'status' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            // blogs
             [
-                'title' => 'Blogs',
+                'title' => ['ar' => 'المدونات', 'en' => 'Blogs'],
                 'slug' => 'blogs',
-                'meta_title' => 'Latest Blogs',
-                'meta_description' => 'Read our latest blogs and articles.',
+                'meta_title' => ['ar' => 'أحدث المدونات', 'en' => 'Latest Blogs'],
+                'meta_description' => ['ar' => 'اقرأ أحدث المدونات والمقالات.', 'en' => 'Read our latest blogs and articles.'],
                 'meta_tags' => [
-                    'keywords' => 'blogs, articles, news',
-                    'image' => 'blogs-page-image.jpg',
-                    'og_title' => 'Latest Blogs',
-                    'og_description' => 'Read our latest blogs and articles.',
-                    'og_image' => 'blogs-page-og-image.jpg',
+                    'ar' => [
+                        'keywords' => 'مدونات, مقالات, أخبار',
+                        'image' => 'blogs-page-image.jpg',
+                        'og_title' => 'أحدث المدونات',
+                        'og_description' => 'اقرأ أحدث المدونات والمقالات.',
+                        'og_image' => 'blogs-page-og-image.jpg',
+                    ],
+                    'en' => [
+                        'keywords' => 'blogs, articles, news',
+                        'image' => 'blogs-page-image.jpg',
+                        'og_title' => 'Latest Blogs',
+                        'og_description' => 'Read our latest blogs and articles.',
+                        'og_image' => 'blogs-page-og-image.jpg',
+                    ]
                 ],
                 'status' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'title' => 'faqs',
+                'title' => ['ar' => 'الأسئلة الشائعة', 'en' => 'FAQs'],
                 'slug' => 'faqs',
-                'meta_title' => 'Frequently Asked Questions',
-                'meta_description' => 'Find answers to common questions.',
+                'meta_title' => ['ar' => 'الأسئلة الشائعة', 'en' => 'Frequently Asked Questions'],
+                'meta_description' => ['ar' => 'ابحث عن إجابات للأسئلة الشائعة.', 'en' => 'Find answers to common questions.'],
                 'meta_tags' => [
-                    'keywords' => 'faqs, questions, answers',
-                    'image' => 'faqs-page-image.jpg',
-                    'og_title' => 'Frequently Asked Questions',
-                    'og_description' => 'Find answers to common questions.',
-                    'og_image' => 'faqs-page-og-image.jpg',
+                    'ar' => [
+                        'keywords' => 'أسئلة, إجابات, دعم',
+                        'image' => 'faqs-page-image.jpg',
+                        'og_title' => 'الأسئلة الشائعة',
+                        'og_description' => 'ابحث عن إجابات للأسئلة الشائعة.',
+                        'og_image' => 'faqs-page-og-image.jpg',
+                    ],
+                    'en' => [
+                        'keywords' => 'faqs, questions, answers',
+                        'image' => 'faqs-page-image.jpg',
+                        'og_title' => 'Frequently Asked Questions',
+                        'og_description' => 'Find answers to common questions.',
+                        'og_image' => 'faqs-page-og-image.jpg',
+                    ]
                 ],
                 'status' => true,
                 'created_at' => now(),
@@ -129,12 +196,8 @@ class PagesSeeder extends Seeder
             ]
         ];
 
-        $pages = collect($pages)->map(function ($page) {
-            $page['meta_tags'] = json_encode($page['meta_tags']);
-            return $page;
-        })->toArray();
         foreach ($pages as $page) {
-            Page::updateOrInsert(
+            Page::updateOrCreate(
                 ['slug' => $page['slug']],
                 [
                     'title' => $page['title'],
@@ -147,6 +210,5 @@ class PagesSeeder extends Seeder
                 ]
             );
         }
-
     }
 }

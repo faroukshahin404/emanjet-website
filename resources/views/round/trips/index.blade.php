@@ -58,7 +58,8 @@
             <div class="container-fluid">
                 <div class="row">
                     <!-- left  -->
-                    <div class="col-lg-3 col-md-12 mb-3 trip-details" style="position: sticky; top: 120px; height: fit-content; z-index: 100;">
+                    <div class="col-lg-3 col-md-12 mb-3 trip-details"
+                        style="position: sticky; top: 120px; height: fit-content; z-index: 100;">
                         <div class="border rounded-9 px-3">
 
                             {{-- المدن والمحطات --}}
@@ -342,7 +343,8 @@
                                     <div class="col-lg-4 col-md-12">
                                         <div class="d-flex flex-column justify-content-center align-items-center gap-2 ">
                                             <input type="hidden" class="trip-id" value="{{ $trip->id }}" />
-                                            <input type="hidden" class="trip-price" value="{{ $trip->round_price - $trip->price }}" />
+                                            <input type="hidden" class="trip-price"
+                                                value="{{ $trip->round_price - $trip->price }}" />
                                             <button class="trip-choose-btn" data-trip-type="return">اختر رحلة
                                                 الذهاب</button>
 
@@ -371,7 +373,7 @@
                     </div>
 
                     <!-- right -->
-                    <div class="col-md-2"  style="position: sticky; top: 120px; height: fit-content; z-index: 100;">
+                    <div class="col-md-2" style="position: sticky; top: 120px; height: fit-content; z-index: 100;">
                         <form>
                             <input type="hidden" name="tripType" value="{{ request()->tripType }}" />
                             <input type="hidden" name="city_from_id" value="{{ request()->city_from_id }}" />
@@ -447,18 +449,33 @@
                         <input type="hidden" value="{{ request()->tripType ?? 'oneway' }}" name="tripType" />
                         <div class="container-fluid">
                             <div class="row gy-3">
+                                <input type="hidden" id="selected_station_from"
+                                    value="{{ request()->station_from_id }}">
+                                <input type="hidden" id="selected_station_to" value="{{ request()->station_to_id }}">
+
                                 <div class="col-lg-3 col-md-12 travel-box">
                                     <div class="d-flex flex-column align-items-start">
                                         <div>
                                             <i class="fas fa-location-dot text-black"></i>
                                             <span class="text-black">السفر من</span>
                                         </div>
-                                        <select class="form-select" name="city_from_id">
+                                        <select class="form-select" name="city_from_id" id="city_from_id">
                                             @foreach ($cities as $city)
                                                 <option value="{{ $city->id }}"
                                                     {{ request()->city_from_id == $city->id ? 'selected' : '' }}>
                                                     {{ $city->name }}</option>
                                             @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-12 travel-box">
+                                    <div class="d-flex flex-column align-items-start">
+                                        <div>
+                                            <i class="fas fa-location-dot text-black"></i>
+                                            <span class="text-black">من محطة</span>
+                                        </div>
+                                        <select class="form-select" name="station_from_id" id="station_from_id">
+
                                         </select>
                                     </div>
                                 </div>
@@ -469,12 +486,23 @@
                                             <i class="fas fa-location-dot text-black"></i>
                                             <span class="text-black">السفر إلى</span>
                                         </div>
-                                        <select class="form-select" name="city_to_id">
+                                        <select class="form-select" name="city_to_id" id="city_to_id">
                                             @foreach ($cities as $city)
                                                 <option value="{{ $city->id }}"
                                                     {{ request()->city_to_id == $city->id ? 'selected' : '' }}>
                                                     {{ $city->name }}</option>
                                             @endforeach
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-12 travel-box">
+                                    <div class="d-flex flex-column align-items-start">
+                                        <div>
+                                            <i class="fas fa-location-dot text-black"></i>
+                                            <span class="text-black">السفر إلى</span>
+                                        </div>
+                                        <select class="form-select" name="station_to_id" id="station_to_id">
 
                                         </select>
                                     </div>
@@ -569,6 +597,57 @@
                     document.getElementById('total-p').textContent = total + ' جنيه';
                 });
             });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cityFromSelect = document.getElementById('city_from_id');
+            const stationFromSelect = document.getElementById('station_from_id');
+
+            const cityToSelect = document.getElementById('city_to_id');
+            const stationToSelect = document.getElementById('station_to_id');
+
+            const selectedStationFrom = document.getElementById('selected_station_from')?.value;
+            const selectedStationTo = document.getElementById('selected_station_to')?.value;
+
+            function fetchStations(cityId, stationSelect, selectedStationId = null) {
+                if (!cityId) {
+                    stationSelect.innerHTML = '<option value="">اختر محطة</option>';
+                    return;
+                }
+
+                fetch(`/get-stations/${cityId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        let options = '<option value="">اختر محطة</option>';
+                        data.forEach(station => {
+                            const selected = station.id == selectedStationId ? 'selected' : '';
+                            options +=
+                                `<option value="${station.id}" ${selected}>${station.name}</option>`;
+                        });
+                        stationSelect.innerHTML = options;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching stations:', error);
+                    });
+            }
+
+            cityFromSelect.addEventListener('change', function() {
+                fetchStations(this.value, stationFromSelect);
+            });
+
+            cityToSelect.addEventListener('change', function() {
+                fetchStations(this.value, stationToSelect);
+            });
+
+            if (cityFromSelect.value) {
+                fetchStations(cityFromSelect.value, stationFromSelect, selectedStationFrom);
+            }
+
+            if (cityToSelect.value) {
+                fetchStations(cityToSelect.value, stationToSelect, selectedStationTo);
+            }
         });
     </script>
 @endpush

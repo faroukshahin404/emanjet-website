@@ -30,9 +30,9 @@ class AppServiceProvider extends ServiceProvider
             $generalSeo = getSeoData($generalPage->first());
             $seo = isset($pageSeo) ? $pageSeo : $generalSeo;
             $view->with([
-                'contactUs' => $contactUs->content_json,
-                'socialMedia' => $socialMedia->content_json,
-                'apps' => $apps->content_json,
+                'contactUs' => $contactUs->translated_content_json,
+                'socialMedia' => $socialMedia->translated_content_json,
+                'apps' => $apps->translated_content_json,
                 'seo' => $seo,
             ]);
         });

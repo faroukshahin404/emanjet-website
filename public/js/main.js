@@ -1,23 +1,4 @@
 
-// language
-function changeLanguage(lang) {
-    document.documentElement.lang = lang;
-    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
-    localStorage.setItem("selectedLang", lang);
-    document.getElementById("languageSelect").value = lang;
-
-    document.querySelectorAll("[data-lang]").forEach(element => {
-        const translations = JSON.parse(element.getAttribute("data-lang"));
-        element.textContent = translations[lang];
-    });
-}
-window.onload = function () {
-    let savedLang = localStorage.getItem("selectedLang") || "ar";
-    changeLanguage(savedLang);
-};
-document.getElementById("languageSelect").addEventListener("change", function () {
-    changeLanguage(this.value);
-});
 
 //navbar scroll
 window.addEventListener("scroll", function () {

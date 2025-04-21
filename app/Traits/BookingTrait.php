@@ -46,6 +46,27 @@ trait BookingTrait
             $query->where('toStation.city_id', $cityTo_id);
         }
 
+
+        if ($degrees) {
+            $query->whereIn('trip_degrees.degree_id', $degrees);
+        }
+
+        if ($times) {
+            if (in_array('am', $times) && !in_array('pm', $times)) {
+                $query->whereRaw("TIME(run_trips.startTime) BETWEEN '05:00:00' AND '17:59:59'");
+            }
+            if (in_array('pm', $times) && !in_array('am', $times)) {
+                $query->whereRaw("TIME(run_trips.startTime) BETWEEN '18:00:00' AND '23:59:59'")
+                    ->orWhereRaw("TIME(run_trips.startTime) BETWEEN '00:00:00' AND '04:59:59'");
+            }
+            if (in_array('am', $times) && in_array('pm', $times)) {
+                $query->whereRaw("TIME(run_trips.startTime) BETWEEN '05:00:00' AND '17:59:59'")
+                    ->orWhereRaw("TIME(run_trips.startTime) BETWEEN '18:00:00' AND '23:59:59'")
+                    ->orWhereRaw("TIME(run_trips.startTime) BETWEEN '00:00:00' AND '04:59:59'");
+            }
+        }
+
+
         $query->join('cities as fromCity', 'fromCity.id', '=', 'fromStation.city_id')
             ->join('cities as toCity', 'toCity.id', '=', 'toStation.city_id')
             ->join('trip_stations', function ($q) {
@@ -115,8 +136,8 @@ trait BookingTrait
             'to_id' => $stationTo_id,
             'tripData_id' => $runTrip->tripData_id
         ])->first();
-     
-        
+
+
         $list = [];
 
         foreach ($seats as $key => $seat) {
@@ -145,12 +166,13 @@ trait BookingTrait
         return Carbon::createFromFormat('Y-m-d H:i:s', $runTrip->startDate . ' ' . $runTrip->startTime)->addMinutes(@$tripStation->timeInMinutes ?? 0);
     }
 
-    public function getNextWeekDays(){
+    public function getNextWeekDays()
+    {
         $days = [];
         for ($i = 0; $i < 7; $i++) {
             $days[] = Carbon::now()->addDays($i)->format('Y-m-d');
         }
         return $days;
     }
-    
+
 }

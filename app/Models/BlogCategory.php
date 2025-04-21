@@ -10,6 +10,16 @@ class BlogCategory extends Model
         'name',
         'slug',
     ];
+    protected $casts = [
+        'name' => 'array',
+    ];
+
+
+    public function getTranslatedNameAttribute()
+    {
+        return $this->name[app()->getLocale()] ?? $this->name['en'] ?? '';
+    }
+
     public function blogs()
     {
         return $this->hasMany(Blog::class, 'category_id');

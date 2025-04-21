@@ -61,22 +61,27 @@ if (!function_exists('getSeoData')) {
      */
     function getSeoData($pageData)
     {
-        // التأكد من أن meta_tags موجودة وإذا كانت كائن أو مصفوفة
+        $locale = app()->getLocale();
         $metaTags = $pageData['meta_tags'] ?? [];
 
-        // التأكد من وجود meta_tags في حالة كونها كائنًا أو مصفوفة فارغة
         $seoData = [
-            'meta_title' => $pageData['meta_title'] ?? 'Default Meta Title',
-            'meta_description' => $pageData['meta_description'] ?? 'Default Meta Description',
+            'meta_title' => is_array($pageData['meta_title'] ?? null) ? ($pageData['meta_title'][$locale] ?? reset($pageData['meta_title'])) : ($pageData['meta_title'] ?? 'Default Meta Title'),
+
+            'meta_description' => is_array($pageData['meta_description'] ?? null) ? ($pageData['meta_description'][$locale] ?? reset($pageData['meta_description'])) : ($pageData['meta_description'] ?? 'Default Meta Description'),
+
             'meta_keywords' => $metaTags['keywords'] ?? 'default, keywords',
             'meta_image' => $metaTags['image'] ?? 'default-image.jpg',
-            'og_title' => $metaTags['og_title'] ?? $pageData['meta_title'],
-            'og_description' => $metaTags['og_description'] ?? $pageData['meta_description'],
-            'og_image' => $metaTags['og_image'] ?? $metaTags['image'] ?? 'default-og-image.jpg', // افتراض صورة افتراضية في حال غياب `og_image`
+
+            'og_title' => is_array($metaTags['og_title'] ?? null) ? ($metaTags['og_title'][$locale] ?? reset($metaTags['og_title'])) : ($metaTags['og_title'] ?? ($pageData['meta_title'][$locale] ?? 'Default OG Title')),
+
+            'og_description' => is_array($metaTags['og_description'] ?? null) ? ($metaTags['og_description'][$locale] ?? reset($metaTags['og_description'])) : ($metaTags['og_description'] ?? ($pageData['meta_description'][$locale] ?? 'Default OG Description')),
+
+            'og_image' => $metaTags['og_image'] ?? $metaTags['image'] ?? 'default-og-image.jpg',
         ];
 
         return $seoData;
     }
+
 }
 
 function getSeatInfo($seat_id, $from_id, $to_id, $runTrip_id, $type)
@@ -98,4 +103,70 @@ function getSeatInfo($seat_id, $from_id, $to_id, $runTrip_id, $type)
         'round_price' => $line->priceBack,
 
     ];
+}
+
+
+
+use Illuminate\Support\Facades\File;
+
+function extractTranslations()
+{
+    // مسارات الملفات
+    $viewTranslations = resource_path('views');
+    $requestTranslations = app_path('Http/Requests');
+    $controllerTranslations = app_path('Http/Controllers');
+    $paths = [$viewTranslations, $requestTranslations, $controllerTranslations];
+    $translations = [];
+
+    $files = File::allFiles($paths);
+
+    // تحميل الترجمة الحالية من ملف ar.json
+    $langPath = resource_path('lang/ar.json');
+    $existingTranslations = File::exists($langPath) ? json_decode(File::get($langPath), true) : [];
+
+    // البحث في كل الملفات
+    foreach ($files as $file) {
+        $content = File::get($file->getRealPath());
+
+        // البحث عن جميع النصوص داخل __('...') أو trans('...')
+        preg_match_all("/__\(['\"](.*?)['\"]\)/", $content, $matches1);
+        preg_match_all("/trans\(['\"](.*?)['\"]\)/", $content, $matches2);
+
+        // دمج جميع النصوص المستخرجة بدون تكرار
+        $matches = array_merge($matches1[1], $matches2[1]);
+
+        foreach ($matches as $key) {
+            // إضافة المفتاح إذا لم يكن موجودًا مسبقًا
+            if (!array_key_exists($key, $existingTranslations)) {
+                $translations[$key] = $key; // يمكن تخصيص القيمة هنا لتكون الترجمة الفارغة أو أي قيمة أخرى
+            }
+        }
+    }
+    return $translations;
+}
+
+
+if (!function_exists('render_stars')) {
+    function render_stars($rate)
+    {
+        $fullStars = floor($rate);
+        $halfStar = ($rate - $fullStars) >= 0.5;
+        $emptyStars = 5 - $fullStars - ($halfStar ? 1 : 0);
+
+        $starsHtml = '';
+
+        for ($i = 0; $i < $fullStars; $i++) {
+            $starsHtml .= '<i class="fas fa-star text-warning"></i>';
+        }
+
+        if ($halfStar) {
+            $starsHtml .= '<i class="fas fa-star-half-alt text-warning"></i>';
+        }
+
+        for ($i = 0; $i < $emptyStars; $i++) {
+            $starsHtml .= '<i class="fas fa-star text-secondary"></i>';
+        }
+
+        return $starsHtml;
+    }
 }

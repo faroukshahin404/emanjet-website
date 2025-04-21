@@ -6,12 +6,14 @@
         <div class="container-fluid">
             <div class="row rounded-bottom-4 ">
                 <div class="col-md-12 text-center">
-                    <h2 class="text-black mb-4">حسابك غير مفعل</h2>
+                    <h2 class="text-black mb-4">{{ __('Your account is not verified') }}</h2>
                     <p class="text-gray">
-                        لم تقم بتفعيل حسابك بعد. يجب عليك التحقق من بريدك الإلكتروني ورقم هاتفك قبل متابعة استخدام الموقع.
+                        {{ __('You have not verified your account yet. Please verify your phone number to continue using the site.') }}
                     </p>
                     <div class="d-flex justify-content-center mt-4">
-                        <a href="{{ route('auth.otp') }}" class="btn-search">إعادة إرسال رمز التحقق</a>
+                        <a href="{{ route('auth.otp') }}" class="btn-search">
+                            {{ __('Resend verification code') }}
+                        </a>
                     </div>
                 </div>
             </div>

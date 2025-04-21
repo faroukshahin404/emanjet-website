@@ -19,8 +19,28 @@ class Page extends Model
         'status',
     ];
     protected $casts = [
+        'title' => 'array',
+        'meta_title' => 'array',
+        'meta_description' => 'array',
         'meta_tags' => 'array',
     ];
+
+    public function getTranslatedTitleAttribute()
+    {
+        return $this->getTranslation('title', app()->getLocale());
+    }
+    public function getTranslatedMetaTitleAttribute()
+    {
+        return $this->getTranslation('meta_title', app()->getLocale());
+    }
+    public function getTranslatedMetaDescriptionAttribute()
+    {
+        return $this->getTranslation('meta_description', app()->getLocale());
+    }
+    public function getTranslatedMetaTagsAttribute()
+    {
+        return $this->getTranslation('meta_tags', app()->getLocale());
+    }
 
 
     public function scopeActive($query)

@@ -164,7 +164,7 @@
                             <span>{{ $ticket['price'] }} جنية</span>
                         </div>
                     </div>
-                    {{-- 
+                    {{--
                 <div class="d-flex justify-content-center gap-3 align-items-center mt-4">
                     <div>
                         <span class="text-black">تعديل والغاء الحجز يتطلب رسوم 10 جنيه</span>

@@ -20,10 +20,9 @@ class RoundTripController extends Controller
     public function __construct(private ConfirmBookingService $confirmBookingService)
     {
     }
-    
+
     public function trips(Request $request)
     {
-
         $request->validate([
             'tripType' => 'required|in:oneway,round',
             'city_from_id' => 'required|exists:cities,id',
@@ -34,7 +33,6 @@ class RoundTripController extends Controller
             'back_date' => 'nullable|date|after_or_equal:today',
             'go_date' => 'required|date|after_or_equal:today'
         ]);
-
         $goTrips = $this->getTrips(
             date: $request->go_date,
             stationFrom_id: $request->station_from_id,
@@ -123,7 +121,8 @@ class RoundTripController extends Controller
         ]);
     }
 
-    public function confirmBooking(RoundConfirmBookingRequest $request){
+    public function confirmBooking(RoundConfirmBookingRequest $request)
+    {
 
         try {
             DB::beginTransaction();
