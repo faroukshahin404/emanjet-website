@@ -198,13 +198,42 @@
             width: 1rem;
             height: 1rem;
         }
+
+        /* Image Preview */
+        .image-preview {
+            margin-top: 0.5rem;
+        }
+
+        .image-preview img {
+            max-width: 100px;
+            max-height: 100px;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.25rem;
+            padding: 0.25rem;
+        }
+
+        .current-file-name {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
     </style>
 @endpush
 
 @section('content')
     <div class="edit-page-container">
         <div class="form-card">
-            <form action="{{ route('admin.pages.update', $page->id) }}" method="POST">
+            @if ($errors->any())
+                <div class="error-container">
+                    <ul class="error-list">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <form action="{{ route('admin.pages.update', $page->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
@@ -248,9 +277,13 @@
 
                             <div class="form-group">
                                 <label for="meta_tags_image_en" class="form-label">Image</label>
-                                <input type="text" name="meta_tags[en][image]" id="meta_tags_image_en"
-                                    value="{{ old('meta_tags.en.image', isset($page->meta_tags['en']) ? $page->meta_tags['en']['image'] : '') }}"
-                                    class="form-input">
+                                <input type="file" name="meta_tags_image_en" id="meta_tags_image_en" class="form-input">
+                                @if(isset($page->meta_tags['en']) && $page->meta_tags['en']['image'])
+                                    <div class="image-preview">
+                                        <img src="{{ asset($page->meta_tags['en']['image']) }}" alt="Current image">
+                                        <p class="current-file-name">Current: {{ basename($page->meta_tags['en']['image']) }}</p>
+                                    </div>
+                                @endif
                             </div>
 
                             <div class="form-group">
@@ -262,9 +295,13 @@
 
                             <div class="form-group">
                                 <label for="meta_tags_og_image_en" class="form-label">OG Image</label>
-                                <input type="text" name="meta_tags[en][og_image]" id="meta_tags_og_image_en"
-                                    value="{{ old('meta_tags.en.og_image', isset($page->meta_tags['en']) ? $page->meta_tags['en']['og_image'] : '') }}"
-                                    class="form-input">
+                                <input type="file" name="meta_tags_og_image_en" id="meta_tags_og_image_en" class="form-input">
+                                @if(isset($page->meta_tags['en']) && $page->meta_tags['en']['og_image'])
+                                    <div class="image-preview">
+                                        <img src="{{ asset($page->meta_tags['en']['og_image']) }}" alt="Current OG image">
+                                        <p class="current-file-name">Current: {{ basename($page->meta_tags['en']['og_image']) }}</p>
+                                    </div>
+                                @endif
                             </div>
 
                             <div class="form-group">
@@ -307,9 +344,13 @@
 
                             <div class="form-group">
                                 <label for="meta_tags_image_ar" class="form-label">Image</label>
-                                <input type="text" name="meta_tags[ar][image]" id="meta_tags_image_ar"
-                                    value="{{ old('meta_tags.ar.image', isset($page->meta_tags['ar']) ? $page->meta_tags['ar']['image'] : '') }}"
-                                    class="form-input">
+                                <input type="file" name="meta_tags_image_ar" id="meta_tags_image_ar" class="form-input">
+                                @if(isset($page->meta_tags['ar']) && $page->meta_tags['ar']['image'])
+                                    <div class="image-preview">
+                                        <img src="{{ asset($page->meta_tags['ar']['image']) }}" alt="Current image">
+                                        <p class="current-file-name">Current: {{ basename($page->meta_tags['ar']['image']) }}</p>
+                                    </div>
+                                @endif
                             </div>
 
                             <div class="form-group">
@@ -321,9 +362,13 @@
 
                             <div class="form-group">
                                 <label for="meta_tags_og_image_ar" class="form-label">OG Image</label>
-                                <input type="text" name="meta_tags[ar][og_image]" id="meta_tags_og_image_ar"
-                                    value="{{ old('meta_tags.ar.og_image', isset($page->meta_tags['ar']) ? $page->meta_tags['ar']['og_image'] : '') }}"
-                                    class="form-input">
+                                <input type="file" name="meta_tags_og_image_ar" id="meta_tags_og_image_ar" class="form-input">
+                                @if(isset($page->meta_tags['ar']) && $page->meta_tags['ar']['og_image'])
+                                    <div class="image-preview">
+                                        <img src="{{ asset($page->meta_tags['ar']['og_image']) }}" alt="Current OG image">
+                                        <p class="current-file-name">Current: {{ basename($page->meta_tags['ar']['og_image']) }}</p>
+                                    </div>
+                                @endif
                             </div>
 
                             <div class="form-group">
@@ -375,6 +420,24 @@
                     // Update active content
                     contents.forEach(content => content.classList.remove('active'));
                     document.getElementById(`${lang}-content`).classList.add('active');
+                });
+            });
+
+            // File input preview
+            const fileInputs = document.querySelectorAll('input[type="file"]');
+            fileInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    const fileName = this.value.split('\\').pop();
+                    if (fileName) {
+                        // Find closest preview element if it exists
+                        const previewContainer = this.nextElementSibling;
+                        if (previewContainer && previewContainer.classList.contains('image-preview')) {
+                            const fileNameElement = previewContainer.querySelector('.current-file-name');
+                            if (fileNameElement) {
+                                fileNameElement.textContent = 'Selected: ' + fileName;
+                            }
+                        }
+                    }
                 });
             });
         });

@@ -9,6 +9,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="{{ asset('assets/css/customize_erp.css') }}">
     @stack('css')
+    <title>Dashboard</title>
 </head>
 
 <body class="hold-transition light-skin sidebar-mini theme-primary fixed">
