@@ -11,7 +11,7 @@ class StationController extends Controller
     public function index()
     {
         $results = Station::paginate();
-        return view('admin.stations.index', compact('results'));
+        return view('admin.pages.stations.index', compact('results'));
     }
 
     public function toggleAvailableOnline(Request $request, Station $station)

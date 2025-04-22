@@ -13,7 +13,13 @@
                         </a>
                         <ul class="treeview-menu">
                             <li><a href="{{ route('admin.pages.index') }}"><i class="icon-Commit"><span
-                                            class="path1"></span><span class="path2"></span></i>Pages</a></li>
+                                            class="path1"></span><span class="path2"></span></i>{{ __('Pages') }}</a></li>
+                            <li><a href="{{ route('admin.cities.index') }}"><i class="icon-Commit"><span
+                                            class="path1"></span><span class="path2"></span></i>{{ __('Cities') }}</a></li>
+                            <li><a href="{{ route('admin.stations.index') }}"><i class="icon-Commit"><span
+                                            class="path1"></span><span class="path2"></span></i>{{ __('Stations') }}</a></li>
+                            <li><a href="{{ route('admin.blog-categories.index') }}"><i class="icon-Commit"><span
+                                            class="path1"></span><span class="path2"></span></i>{{ __('Blog Categories') }}</a></li>
                         </ul>
                     </li>
                 </ul>

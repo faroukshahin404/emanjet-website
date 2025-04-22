@@ -11,7 +11,7 @@ class CityController extends Controller
     public function index()
     {
         $cities = City::paginate();
-        return view('admin.cities.index', compact('cities'));
+        return view('admin.pages.cities.index', compact('cities'));
     }
 
     public function toggleAvailableOnline(Request $request, City $city)
