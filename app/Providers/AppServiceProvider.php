@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Page;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -20,6 +21,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Paginator::useBootstrap();
+
         view()->composer('*', function ($view) {
             $generalPage = Page::where('slug', 'general')->first();
             $generalPageSeos = $generalPage->pageSeos;
@@ -37,6 +40,4 @@ class AppServiceProvider extends ServiceProvider
             ]);
         });
     }
-
-
 }

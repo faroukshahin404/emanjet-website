@@ -22,6 +22,7 @@ class Station extends Model
         return $this->belongsTo(City::class);
     }
 
+    
 
 
 } //end of class
