@@ -101,16 +101,16 @@ Route::group([
             Route::get('register', [AuthController::class, 'register'])->name('register');
             Route::post('register', [AuthController::class, 'postRegister'])->name('postRegister');
 
-        // راوتات نسيت كلمة المرور
-        Route::get('forgot-password', [AuthController::class, 'forgotPassword'])->name('forgotPassword');
-        Route::get('reset-password', [AuthController::class, 'showResetPassword'])->name('showResetPassword');
-        Route::get('/reset-password/new', [AuthController::class, 'showNewPasswordForm'])->name('showNewPasswordForm');
+            // راوتات نسيت كلمة المرور
+            Route::get('forgot-password', [AuthController::class, 'forgotPassword'])->name('forgotPassword');
+            Route::get('reset-password', [AuthController::class, 'showResetPassword'])->name('showResetPassword');
+            Route::get('/reset-password/new', [AuthController::class, 'showNewPasswordForm'])->name('showNewPasswordForm');
 
-        Route::post('reset-password', [AuthController::class, 'resetPassword'])->name('resetPassword');
-        Route::post('verify-reset-otp', [AuthController::class, 'verifyResetOtp'])->name('verifyResetOtp');
-        Route::get('reset-password-new', [AuthController::class, 'resetPasswordNew'])->name('resetPasswordNew');
-        Route::post('update-password', [AuthController::class, 'updatePassword'])->name('updatePassword');
-    });
+            Route::post('reset-password', [AuthController::class, 'resetPassword'])->name('resetPassword');
+            Route::post('verify-reset-otp', [AuthController::class, 'verifyResetOtp'])->name('verifyResetOtp');
+            Route::get('reset-password-new', [AuthController::class, 'resetPasswordNew'])->name('resetPasswordNew');
+            Route::post('update-password', [AuthController::class, 'updatePassword'])->name('updatePassword');
+        });
 
         // راوتات للمستخدم المسجل فقط
         Route::middleware('auth')->group(function () {

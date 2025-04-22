@@ -14,51 +14,43 @@ class PageSeoController extends Controller
     public function index($pageId)
     {
         $page = Page::with('pageSeos')->findOrFail($pageId);
+        // return response()->json($page);
         return view('admin.pages.pages-seo.index', compact('page'));
     }
 
     public function edit($id)
     {
         $pageSeo = PageSeo::findOrFail($id);
+        // return response()->json($pageSeo);
         return view('admin.pages.pages-seo.edit', compact('pageSeo'));
     }
     public function update(Request $request, $id)
     {
         $pageSeo = PageSeo::findOrFail($id);
-
+    
         $validator = Validator::make($request->all(), [
             'section_type' => 'required|string|max:255',
             'order' => 'required|integer',
             'status' => 'required|boolean',
+            'content_json' => 'required|array',
         ]);
-
+    
         if ($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
         }
-
-        $contentJson = json_decode($pageSeo->content_json, true);
-
-        foreach ($request->except(['_token', '_method', 'section_type', 'order', 'status']) as $key => $value) {
-            if (is_array($value)) {
-                foreach ($value as $nestedKey => $nestedValue) {
-                    if (isset($contentJson[$key]) && is_array($contentJson[$key])) {
-                        $contentJson[$key][$nestedKey] = $nestedValue;
-                    }
-                }
-            } else {
-                $contentJson[$key] = $value;
-            }
-        }
-
+        
+        // Process content_json data
+        $contentJson = $request->content_json;
+    
         $pageSeo->update([
             'section_type' => $request->section_type,
-            'content_json' => json_encode($contentJson),
+            'content_json' => $contentJson,
             'order' => $request->order,
             'status' => $request->status,
         ]);
-
+    
         return redirect()->route('admin.pages-seo.index', $pageSeo->page_id)
             ->with('success', 'SEO section updated successfully');
     }
