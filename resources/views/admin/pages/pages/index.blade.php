@@ -1,260 +1,308 @@
+
 @extends('admin.layouts.master')
 @push('css')
     <style>
-        /* Main layout */
-        .container {
+        /* Enhanced styling for better visual hierarchy and modern design */
+        .page-container {
             width: 100%;
             max-width: 1280px;
-            margin-left: auto;
-            margin-right: auto;
-            padding-left: 1rem;
-            padding-right: 1rem;
-            padding-top: 1.5rem;
-            padding-bottom: 1.5rem;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
         }
 
-        /* Header area */
-        .flex {
+        .page-header {
             display: flex;
-        }
-
-        .justify-between {
             justify-content: space-between;
-        }
-
-        .items-center {
             align-items: center;
+            margin-bottom: 2rem;
         }
 
-        .mb-6 {
-            margin-bottom: 1.5rem;
-        }
-
-        .mb-4 {
-            margin-bottom: 1rem;
-        }
-
-        .mb-2 {
-            margin-bottom: 0.5rem;
-        }
-
-        .mr-2 {
-            margin-right: 0.5rem;
-        }
-
-        /* Typography */
-        .text-2xl {
-            font-size: 1.5rem;
-        }
-
-        .text-xl {
-            font-size: 1.25rem;
-        }
-
-        .text-sm {
-            font-size: 0.875rem;
-        }
-
-        .font-bold {
+        .page-title {
+            font-size: 1.75rem;
             font-weight: 700;
+            color: #1f2937;
         }
 
-        .font-semibold {
-            font-weight: 600;
-        }
-
-        .text-gray-600 {
-            color: #4b5563;
-        }
-
-        .text-gray-700 {
-            color: #374151;
-        }
-
-        .text-gray-500 {
-            color: #6b7280;
-        }
-
-        .text-green-700 {
-            color: #047857;
-        }
-
-        .text-red-700 {
-            color: #b91c1c;
-        }
-
-        .text-white {
+        .create-button {
+            background-color: #10b981;
             color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        /* Cards and grid */
-        .grid {
+        .create-button:hover {
+            background-color: #059669;
+            transform: translateY(-1px);
+        }
+
+        .page-grid {
             display: grid;
-        }
-
-        .grid-cols-1 {
-            grid-template-columns: repeat(1, minmax(0, 1fr));
-        }
-
-        .gap-6 {
+            grid-template-columns: repeat(1, 1fr);
             gap: 1.5rem;
         }
 
-        .bg-white {
+        .page-card {
             background-color: white;
-        }
-
-        .rounded-lg {
-            border-radius: 0.5rem;
-        }
-
-        .shadow-md {
+            border-radius: 0.75rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
-
-        .overflow-hidden {
             overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid #f3f4f6;
         }
 
-        .p-6 {
+        .page-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .card-language {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .language-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            background-color: #e5e7eb;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .language-badge svg {
+            width: 16px;
+            height: 16px;
+            margin-right: 4px;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+    
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background-color: #d1fae5;
+            color: #047857;
+        }
+
+        .status-inactive {
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .card-body {
             padding: 1.5rem;
         }
 
-        /* Notification */
-        .bg-green-100 {
-            background-color: #d1fae5;
+        .card-description {
+            color: #6b7280;
+            margin-bottom: 1.25rem;
+            font-size: 0.875rem;
+            line-height: 1.5;
         }
 
-        .border {
-            border-width: 1px;
+        .card-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+            color: #6b7280;
         }
 
-        .border-green-400 {
-            border-color: #34d399;
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
         }
 
-        .rounded {
-            border-radius: 0.25rem;
+        .meta-item svg {
+            width: 16px;
+            height: 16px;
+            color: #9ca3af;
         }
 
-        .px-4 {
-            padding-left: 1rem;
-            padding-right: 1rem;
+        .card-actions {
+            display: flex;
+            gap: 0.75rem;
         }
 
-        .py-3 {
-            padding-top: 0.75rem;
-            padding-bottom: 0.75rem;
+        .action-button {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            flex: 1;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
 
-        .py-2 {
-            padding-top: 0.5rem;
-            padding-bottom: 0.5rem;
-        }
-
-        .py-1 {
-            padding-top: 0.25rem;
-            padding-bottom: 0.25rem;
-        }
-
-        .px-3 {
-            padding-left: 0.75rem;
-            padding-right: 0.75rem;
-        }
-
-        /* Status tags */
-        .inline-block {
-            display: inline-block;
-        }
-
-        .bg-gray-200 {
-            background-color: #e5e7eb;
-        }
-
-        .bg-green-200 {
-            background-color: #a7f3d0;
-        }
-
-        .bg-red-200 {
-            background-color: #fecaca;
-        }
-
-        .rounded-full {
-            border-radius: 9999px;
-        }
-
-        /* Buttons */
-        .flex.space-x-3>*+* {
-            margin-left: 0.75rem;
-        }
-
-        .bg-blue-500 {
+        .edit-button {
             background-color: #3b82f6;
+            color: white;
         }
 
-        .bg-purple-500 {
-            background-color: #8b5cf6;
-        }
-
-        .hover\:bg-blue-600:hover {
+        .edit-button:hover {
             background-color: #2563eb;
         }
 
-        .hover\:bg-purple-600:hover {
+        .seo-button {
+            background-color: #8b5cf6;
+            color: white;
+        }
+
+        .seo-button:hover {
             background-color: #7c3aed;
         }
 
-        @media (min-width: 768px) {
-            .md\:grid-cols-2 {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
+        .preview-button {
+            background-color: #f3f4f6;
+            color: #374151;
+        }
+
+        .preview-button:hover {
+            background-color: #e5e7eb;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            background-color: #f9fafb;
+            border-radius: 0.75rem;
+            border: 2px dashed #e5e7eb;
+        }
+
+        .empty-state-icon {
+            margin-bottom: 1.5rem;
+            color: #9ca3af;
+            font-size: 3rem;
+        }
+
+        .empty-state-text {
+            font-size: 1.125rem;
+            color: #6b7280;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Responsive design */
+        @media (min-width: 640px) {
+            .page-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
         @media (min-width: 1024px) {
-            .lg\:grid-cols-3 {
-                grid-template-columns: repeat(3, minmax(0, 1fr));
+            .page-grid {
+                grid-template-columns: repeat(3, 1fr);
             }
         }
     </style>
 @endpush
+
 @section('content')
-    <div class="container mx-auto px-4 py-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            @foreach ($pages as $page)
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div class="p-6">
-                        <h2 class="text-xl font-semibold mb-2">{{ $page->title }}</h2>
-                        <p class="text-gray-600 mb-4">{{ $page->meta_description }}</p>
-
-                        <div class="mb-4">
-                            <span
-                                class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
-                                {{ $page->slug }}
-                            </span>
-                            <span
-                                class="inline-block bg-{{ $page->status ? 'green' : 'red' }}-200 rounded-full px-3 py-1 text-sm font-semibold text-{{ $page->status ? 'green' : 'red' }}-700">
-                                {{ $page->status ? 'Active' : 'Inactive' }}
-                            </span>
+    <div class="page-container">
+        @if(session('success'))
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6" role="alert">
+                <strong class="font-bold">Success!</strong>
+                <span class="block sm:inline">{{ session('success') }}</span>
+            </div>
+        @endif
+        @if(count($pages) > 0)
+            <div class="page-grid">
+                @foreach($pages as $page)
+                    <div class="page-card">
+                        <div class="card-header">
+                            <div class="card-language">
+                               
+                            </div>
+                            <div class="card-title">
+                                <span>{{ is_array($page->title) ? $page->title['en'] : $page->title }}</span>
+                            </div>
+                          
                         </div>
-
-                        <div class="text-sm text-gray-500 mb-4">
-                            <p>SEO Sections: {{ $page->pageSeos->count() }}</p>
-                            <p>Last Updated: {{ $page->updated_at->format('M d, Y') }}</p>
-                        </div>
-
-                        <div class="flex space-x-3">
-                            <a href="{{ route('admin.pages.edit', $page->id) }}"
-                                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-                                Edit Page
-                            </a>
-                            <a href="{{ route('admin.pages-seo.index', ['pageId' => $page->id]) }}"
-                                class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded">
-                                Edit SEO
-                            </a>
+                        <div class="card-body">
+                            <p class="card-description">
+                                {{ is_array($page->meta_description) ? ($page->meta_description['en'] ?? '') : $page->meta_description }}
+                            </p>
+                            <div class="card-meta">
+                                <div class="meta-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                                    </svg>
+                                    <span>SEO Sections: {{ $page->pageSeos->count() }}</span>
+                                </div>
+                                <div class="meta-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span>Updated: {{ \Carbon\Carbon::parse($page->updated_at)->format('M d, Y') }}</span>
+                                </div>
+                            </div>
+                            <div class="card-actions">
+                                <a href="{{ route('admin.pages.edit', $page->id) }}" class="action-button edit-button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                                    </svg>
+                                    Edit Page
+                                </a>
+                                <a href="{{ route('admin.pages-seo.index', ['pageId' => $page->id]) }}" class="action-button seo-button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+                                    </svg>
+                                    SEO Settings
+                                </a>
+                            </div>
                         </div>
                     </div>
+                @endforeach
+            </div>
+        @else
+            <div class="empty-state">
+                <div class="empty-state-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 mx-auto">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m6.75 12H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                    </svg>
                 </div>
-            @endforeach
-        </div>
+                <p class="empty-state-text">No pages found. Create your first page to get started.</p>
+                <a href="{{ route('admin.pages.create') }}" class="create-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                    Create Page
+                </a>
+            </div>
+        @endif
     </div>
 @endsection

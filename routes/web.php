@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\Admin\BlogCategoryController;
+use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\PageSeoController;
+use App\Http\Controllers\Admin\StationController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OnewayMobileController;
@@ -98,16 +101,16 @@ Route::group([
             Route::get('register', [AuthController::class, 'register'])->name('register');
             Route::post('register', [AuthController::class, 'postRegister'])->name('postRegister');
 
-        // راوتات نسيت كلمة المرور
-        Route::get('forgot-password', [AuthController::class, 'forgotPassword'])->name('forgotPassword');
-        Route::get('reset-password', [AuthController::class, 'showResetPassword'])->name('showResetPassword');
-        Route::get('/reset-password/new', [AuthController::class, 'showNewPasswordForm'])->name('showNewPasswordForm');
+            // راوتات نسيت كلمة المرور
+            Route::get('forgot-password', [AuthController::class, 'forgotPassword'])->name('forgotPassword');
+            Route::get('reset-password', [AuthController::class, 'showResetPassword'])->name('showResetPassword');
+            Route::get('/reset-password/new', [AuthController::class, 'showNewPasswordForm'])->name('showNewPasswordForm');
 
-        Route::post('reset-password', [AuthController::class, 'resetPassword'])->name('resetPassword');
-        Route::post('verify-reset-otp', [AuthController::class, 'verifyResetOtp'])->name('verifyResetOtp');
-        Route::get('reset-password-new', [AuthController::class, 'resetPasswordNew'])->name('resetPasswordNew');
-        Route::post('update-password', [AuthController::class, 'updatePassword'])->name('updatePassword');
-    });
+            Route::post('reset-password', [AuthController::class, 'resetPassword'])->name('resetPassword');
+            Route::post('verify-reset-otp', [AuthController::class, 'verifyResetOtp'])->name('verifyResetOtp');
+            Route::get('reset-password-new', [AuthController::class, 'resetPasswordNew'])->name('resetPasswordNew');
+            Route::post('update-password', [AuthController::class, 'updatePassword'])->name('updatePassword');
+        });
 
         // راوتات للمستخدم المسجل فقط
         Route::middleware('auth')->group(function () {
@@ -139,15 +142,15 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
     Route::get('/pages-seo/{pageId}', [PageSeoController::class, 'index'])->name('pages-seo.index');
     Route::get('/pages-seo/{id}/edit', [PageSeoController::class, 'edit'])->name('pages-seo.edit');
     Route::put('/pages-seo/{id}', [PageSeoController::class, 'update'])->name('pages-seo.update');
+    //cities
+    Route::get('/cities', [CityController::class, 'index'])->name('cities.index');
+    Route::post('/cities/{city}/toggle-available', [CityController::class, 'toggleAvailableOnline'])->name('cities.toggle-available');
+    //stations
+    Route::get('/stations', [StationController::class, 'index'])->name('stations.index');
+    Route::post('/stations/{station}/toggle-available', [StationController::class, 'toggleAvailableOnline'])->name('stations.toggle-available');
+    //blog-categories
+    Route::resource('/blog-categories', BlogCategoryController::class);
 });
-
-    Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
-        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
-        Route::resource('/pages', PageController::class)->names('pages');
-        Route::get('/pages-seo/{pageId}', [PageSeoController::class, 'index'])->name('pages-seo.index');
-        Route::get('/pages-seo/{id}/edit', [PageSeoController::class, 'edit'])->name('pages-seo.edit');
-        Route::put('/pages-seo/{id}', [PageSeoController::class, 'update'])->name('pages-seo.update');
-    });
 
 
 
