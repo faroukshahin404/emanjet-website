@@ -6,24 +6,26 @@
         <div class="container-fluid">
             <div class="row rounded-bottom-4 box-shadow pb-3">
                 <div class="col-md-6">
-                    <h2 class="text-center text-black mb-3">نسيت كلمة المرور</h2>
+                    <h2 class="text-center text-black mb-3">{{ __('Forgot Password') }}</h2>
 
                     <form action="{{ route('auth.resetPassword') }}" method="POST" class="w-75 m-auto d-flex flex-column">
                         @csrf
 
-                        {{-- رقم الهاتف --}}
+                        {{-- Phone Number --}}
                         <div class="position-relative mb-3">
                             <i class="fa fa-phone position-absolute top-50 translate-middle-y px-2"></i>
-                            <input class="phoneInput" type="text" name="phone" id="phone" placeholder="رقم الهاتف"
-                                required>
+                            <input class="phoneInput" type="text" name="phone" id="phone"
+                                placeholder="{{ __('Phone Number') }}" required>
                         </div>
 
-                        {{-- رسالة توضيحية --}}
-                        <p class="text-center text-muted">أدخل رقم الهاتف المسجل لديك لإعادة تعيين كلمة المرور.</p>
-                        <p class="text-center text-muted">سيتم إرسال رمز التحقق إلى رقم هاتفك.</p>
+                        {{-- Instructional Message --}}
+                        <p class="text-center text-muted">
+                            {{ __('Enter the registered phone number to reset your password.') }}</p>
+                        <p class="text-center text-muted">{{ __('A verification code will be sent to your phone number.') }}
+                        </p>
 
                         <div class="d-flex justify-content-center">
-                            <button type="submit" class="submitBtn mt-3">إرسال رمز التحقق</button>
+                            <button type="submit" class="submitBtn mt-3">{{ __('Send Verification Code') }}</button>
                         </div>
                     </form>
                 </div>
@@ -39,5 +41,3 @@
 @section('mobile-content')
     @include('mobile.auth.forgot-password')
 @endsection
-
-

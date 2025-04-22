@@ -55,6 +55,9 @@ class AuthController extends Controller
         $request->validate([
             'mobile' => 'required|string',
             'password' => 'required|string',
+        ], [
+            'mobile.required' => __("Mobile number is required."),
+            'password.required' => __("Password is required."),
         ]);
 
         $user = User::where('mobile', $request->mobile)->first();
@@ -69,7 +72,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        if (!$user->is_verified) {
+        if (!$user->verified) {
             return redirect()->route('auth.verify');
         }
 
@@ -302,7 +305,7 @@ class AuthController extends Controller
             return redirect()->route('auth.login')->with('error', 'غير مسموح بالوصول المباشر إلى صفحة إعادة تعيين كلمة المرور.');
         }
         $remainingTime = 60;
-        return view('auth.show-reset-password', compact('phone','remainingTime'));
+        return view('auth.show-reset-password', compact('phone', 'remainingTime'));
     }
 
     // التحقق من OTP لإعادة تعيين كلمة المرور
@@ -310,7 +313,12 @@ class AuthController extends Controller
     {
         $request->validate([
             'otp' => 'required|array|size:4',
+        ], [
+            'otp.required' => __("OTP is required. Please enter the code sent to your phone."),
+            'otp.size' => __("OTP must be 4 digits. Please enter exactly 4 digits."),
+            'otp.array' => __("OTP must be an array. Please ensure the code is entered in the correct format."),
         ]);
+
         // dd($request->otp);
         $otpNumber = implode('', $request->otp);
         $phone = session('reset_password_phone');
@@ -337,7 +345,6 @@ class AuthController extends Controller
         if (!$phone || !$otp) {
             return redirect()->route('auth.login')->with('error', 'غير مسموح بالوصول المباشر إلى صفحة إعادة تعيين كلمة المرور.');
         }
-
         return view('auth.new-password', compact('phone', 'otp'));
     }
 
@@ -347,7 +354,7 @@ class AuthController extends Controller
         // التحقق من المدخلات
         $request->validate([
             'password' => 'required|string|confirmed',
-            'otp' => 'required|array|size:4',
+            'otp' => 'required|numeric|digits:4',
         ]);
 
         // استرجاع الهاتف من الجلسة

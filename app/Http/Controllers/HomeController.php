@@ -99,6 +99,10 @@ class HomeController extends Controller
             'phone' => 'required',
             'name' => 'required',
             'message' => 'required'
+        ], [
+            'phone.required' => __('Phone is required'),
+            'name.required' => __('Name is required'),
+            'message.required' => __('Message is required')
         ]);
         Contact::create([
             'name' => $request->name,

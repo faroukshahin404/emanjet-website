@@ -45,25 +45,20 @@ trait BookingTrait
         if ($cityTo_id) {
             $query->where('toStation.city_id', $cityTo_id);
         }
+        if ($times && is_array($times)) {
+            $query->where(function ($q) use ($times) {
+                $hasAm = in_array('am', $times);
+                $hasPm = in_array('pm', $times);
 
-
-        if ($degrees) {
-            $query->whereIn('trip_degrees.degree_id', $degrees);
-        }
-
-        if ($times) {
-            if (in_array('am', $times) && !in_array('pm', $times)) {
-                $query->whereRaw("TIME(run_trips.startTime) BETWEEN '05:00:00' AND '17:59:59'");
-            }
-            if (in_array('pm', $times) && !in_array('am', $times)) {
-                $query->whereRaw("TIME(run_trips.startTime) BETWEEN '18:00:00' AND '23:59:59'")
-                    ->orWhereRaw("TIME(run_trips.startTime) BETWEEN '00:00:00' AND '04:59:59'");
-            }
-            if (in_array('am', $times) && in_array('pm', $times)) {
-                $query->whereRaw("TIME(run_trips.startTime) BETWEEN '05:00:00' AND '17:59:59'")
-                    ->orWhereRaw("TIME(run_trips.startTime) BETWEEN '18:00:00' AND '23:59:59'")
-                    ->orWhereRaw("TIME(run_trips.startTime) BETWEEN '00:00:00' AND '04:59:59'");
-            }
+                if ($hasAm && !$hasPm) {
+                    $q->whereRaw("TIME(run_trips.startTime) BETWEEN '05:00:00' AND '11:59:59'");
+                } elseif ($hasPm && !$hasAm) {
+                    $q->where(function ($q) {
+                        $q->whereRaw("TIME(run_trips.startTime) BETWEEN '12:00:00' AND '23:59:59'")
+                            ->orWhereRaw("TIME(run_trips.startTime) BETWEEN '00:00:00' AND '04:59:59'");
+                    });
+                }
+            });
         }
 
 
@@ -101,28 +96,6 @@ trait BookingTrait
             DB::raw("DATE_ADD(CONCAT(run_trips.startDate, ' ', run_trips.startTime), INTERVAL trip_stations.timeInMinutes MINUTE) as tripTime")
         ])
             ->having('tripTime', '>', Carbon::now()->addHours(4)->toDateTimeString());
-        // if (@$times && is_array($times) && count($times) > 0) {
-
-        //     $query->having(function ($q) use ($times) {
-        //         $hasOr = false;
-
-        //         if (in_array('am', $times??[])) {
-        //             $q->whereRaw("TIME(tripTime) BETWEEN '05:00:00' AND '17:59:59'");
-        //             $hasOr = true;
-        //         }
-
-        //         if (in_array('pm', $times??[])) {
-        //             if ($hasOr) {
-        //                 $q->orWhereRaw("TIME(tripTime) BETWEEN '18:00:00' AND '23:59:59'")
-        //                     ->orWhereRaw("TIME(tripTime) BETWEEN '00:00:00' AND '04:59:59'");
-        //             } else {
-        //                 $q->whereRaw("TIME(tripTime) BETWEEN '18:00:00' AND '23:59:59'")
-        //                     ->orWhereRaw("TIME(tripTime) BETWEEN '00:00:00' AND '04:59:59'");
-        //             }
-        //         }
-        //     });
-        // }
-
         return $query->get();
     }
 

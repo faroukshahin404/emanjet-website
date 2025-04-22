@@ -43,49 +43,50 @@ class RoundConfirmBookingRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'tripType.required' => 'نوع الرحلة مطلوب',
-            'tripType.in' => 'نوع الرحلة غير صالح',
+            'tripType.required' => __('Trip type is required'),
+            'tripType.in' => __('Invalid trip type'),
 
-            'city_from_id.required' => 'مدينة المغادرة مطلوبة',
-            'city_from_id.exists' => 'مدينة المغادرة غير صالحة',
+            'city_from_id.required' => __('Departure city is required'),
+            'city_from_id.exists' => __('Invalid departure city'),
 
-            'city_to_id.required' => 'مدينة الوصول مطلوبة',
-            'city_to_id.exists' => 'مدينة الوصول غير صالحة',
+            'city_to_id.required' => __('Destination city is required'),
+            'city_to_id.exists' => __('Invalid destination city'),
 
-            'station_from_id.required' => 'محطة المغادرة مطلوبة',
-            'station_from_id.exists' => 'محطة المغادرة غير صالحة',
+            'station_from_id.required' => __('Departure station is required'),
+            'station_from_id.exists' => __('Invalid departure station'),
 
-            'station_to_id.required' => 'محطة الوصول مطلوبة',
-            'station_to_id.exists' => 'محطة الوصول غير صالحة',
+            'station_to_id.required' => __('Arrival station is required'),
+            'station_to_id.exists' => __('Invalid arrival station'),
 
-            'go_date.required' => 'تاريخ الذهاب مطلوب',
-            'go_date.date' => 'تاريخ الذهاب غير صالح',
-            'go_date.after_or_equal' => 'تاريخ الذهاب يجب أن يكون بعد أو يساوي تاريخ اليوم',
+            'go_date.required' => __('Departure date is required'),
+            'go_date.date' => __('Invalid departure date'),
+            'go_date.after_or_equal' => __('Departure date must be today or later'),
 
-            'back_date.required' => 'تاريخ العودة مطلوب',
-            'back_date.date' => 'تاريخ العودة غير صالح',
-            'back_date.after_or_equal' => 'تاريخ العودة يجب أن يكون بعد أو يساوي تاريخ الذهاب',
+            'back_date.required' => __('Return date is required'),
+            'back_date.date' => __('Invalid return date'),
+            'back_date.after_or_equal' => __('Return date must be today or later than departure date'),
 
-            'seats.required' => 'عدد المقاعد مطلوب',
-            'seats.integer' => 'عدد المقاعد يجب أن يكون رقماً',
-            'seats.min' => 'عدد المقاعد يجب أن يكون 1 على الأقل',
+            'seats.required' => __('Number of seats is required'),
+            'seats.integer' => __('Number of seats must be a number'),
+            'seats.min' => __('Number of seats must be at least 1'),
 
-            'go_trip_id.required' => 'رحلة الذهاب مطلوبة',
-            'go_trip_id.exists' => 'رحلة الذهاب غير صالحة',
+            'go_trip_id.required' => __('Outbound trip is required'),
+            'go_trip_id.exists' => __('Invalid outbound trip'),
 
-            'back_trip_id.required' => 'رحلة العودة مطلوبة',
-            'back_trip_id.exists' => 'رحلة العودة غير صالحة',
+            'back_trip_id.required' => __('Return trip is required'),
+            'back_trip_id.exists' => __('Invalid return trip'),
 
-            'go_seat_id.required' => 'مقاعد الذهاب مطلوبة',
-            'go_seat_id.array' => 'مقاعد الذهاب يجب أن تكون مصفوفة',
-            'go_seat_id.*.exists' => 'واحد أو أكثر من مقاعد الذهاب غير صالحة',
+            'go_seat_id.required' => __('Departure seat is required'),
+            'go_seat_id.array' => __('Departure seats must be an array'),
+            'go_seat_id.*.exists' => __('One or more departure seats are invalid'),
 
-            'round_seat_id.required' => 'مقاعد العودة مطلوبة',
-            'round_seat_id.array' => 'مقاعد العودة يجب أن تكون مصفوفة',
-            'round_seat_id.*.exists' => 'واحد أو أكثر من مقاعد العودة غير صالحة',
+            'round_seat_id.required' => __('Return seat is required'),
+            'round_seat_id.array' => __('Return seats must be an array'),
+            'round_seat_id.*.exists' => __('One or more return seats are invalid'),
 
-            'payment_method.required' => 'طريقة الدفع مطلوبة',
-            'payment_method.in' => 'طريقة الدفع غير صالحة'
+            'payment_method.required' => __('Payment method is required'),
+            'payment_method.in' => __('Invalid payment method')
         ];
     }
-} 
+
+}

@@ -31,6 +31,15 @@ class RoundTripMobileController extends Controller
             'seats' => 'required',
             'back_date' => 'required|date|after_or_equal:today',
             'go_date' => 'required|date|after_or_equal:today'
+        ], [
+            'city_from_id.exists' => __('City From is required'),
+            'city_to_id.exists' => __('City To is required'),
+            'station_from_id.exists' => __('Station From is required'),
+            'station_to_id.exists' => __('Station To is required'),
+            'seats.required' => __('Seats are required'),
+            'go_date.required' => __('Go Date is required'),
+            'go_date.date' => __('Go Date must be a valid date'),
+            'go_date.after_or_equal' => __('Go Date must be today or later')
         ]);
 
         $trips = $this->getTrips(
@@ -83,7 +92,7 @@ class RoundTripMobileController extends Controller
         $dates = $this->getNextWeekDays();
         return view('mobile.round.trips.back-index', [
             'trips' => $trips,
-            'fromCity' => City::find(request()->city_to_id  ),
+            'fromCity' => City::find(request()->city_to_id),
             'toCity' => City::find(request()->city_from_id),
             'fromStation' => Station::find(request()->station_to_id),
             'toStation' => Station::find(request()->station_from_id),
@@ -145,7 +154,8 @@ class RoundTripMobileController extends Controller
             'backTrip' => $backTrip,
         ]);
     }
-    public function bookingSummary(Request $request) {
+    public function bookingSummary(Request $request)
+    {
 
         $request->validate([
             'tripType' => 'required|in:oneway,round',

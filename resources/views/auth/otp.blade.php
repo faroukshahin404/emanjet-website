@@ -20,15 +20,22 @@
                 <div class="col-md-6">
                     <div class="mb-4">
                         <div class="d-flex justify-content-center gap-5 align-items-center">
-                            <div></div><div></div><div></div><div></div><div></div>
-                            <p class="m-0 fs-25 text-black">تأكيد رقم الهاتف</p>
-                            <div></div><div></div><div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <p class="m-0 fs-25 text-black">{{ __('Phone Number Verification') }}</p>
+                            <div></div>
+                            <div></div>
+                            <div></div>
                             <a href="register-Page.html">
                                 <i class="fas fa-arrow-left fs-25 text-black"></i>
                             </a>
                         </div>
                         <p class="text-black text-center fs-14 text-gray">
-                            لقد أرسلنا رمز التحقق إلى رقمك المنتهي بـ {{ substr($phone, -4) }}
+                            {{ __('We have sent the verification code to your number ending with') }}
+                            {{ substr($phone, -4) }}
                         </p>
                     </div>
 
@@ -48,14 +55,13 @@
 
                         {{-- <div class="mt-4 d-flex justify-content-center">
                             <p>
-                                لم يصلك الرمز؟
-                                <a class="text-main" href="javascript:void(0);" id="resendOtpLink">هل تريد إعادة
-                                    إرساله؟</a>
+                                {{ __('Didn't receive the code?') }}
+                                <a class="text-main" href="javascript:void(0);" id="resendOtpLink">{{ __('Do you want to resend it?') }}</a>
                             </p>
                         </div> --}}
 
                         <div class="col-md-12 d-flex justify-content-center align-items-center mt-5">
-                            <button type="submit" class="submitBtn" id="submitOtpBtn">ارسال</button>
+                            <button type="submit" class="submitBtn" id="submitOtpBtn">{{ __('Send') }}</button>
                         </div>
                     </form>
                 </div>
@@ -68,13 +74,14 @@
     <!-- end otp verification -->
 @endsection
 
+
 @section('mobile-content')
     @include('mobile.auth.otp')
 @endsection
 
 @push('scripts')
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const timerElement = document.getElementById('timer');
             const resendOtpLink = document.getElementById('resendOtpLink');
 
@@ -124,17 +131,17 @@
 
             // Resend OTP AJAX
             if (resendOtpLink) {
-                resendOtpLink.addEventListener('click', function () {
+                resendOtpLink.addEventListener('click', function() {
                     fetch("{{ route('auth.resendOtp') }}", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                        },
-                        body: JSON.stringify({
-                            phone: "{{ $phone }}"
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                            },
+                            body: JSON.stringify({
+                                phone: "{{ $phone }}"
+                            })
                         })
-                    })
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
