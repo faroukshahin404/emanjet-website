@@ -438,8 +438,8 @@
                                             {{ __('Number Of Passengers') }}
                                         </label>
                                         <div class="d-flex align-items-center rounded px-3 border bg-white py-1">
-                                            <input type="number" value="{{ request()->seats }}" min="1"
-                                                max="5" class="form-control" name="seats" required />
+                                            <input type="number" value="{{ request()->seats }}" class="form-control"
+                                                name="seats" required />
 
 
                                         </div>

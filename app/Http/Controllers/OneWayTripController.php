@@ -35,6 +35,15 @@ class OneWayTripController extends Controller
             'seats' => 'required',
             'back_date' => 'nullable|date|after_or_equal:today',
             'go_date' => 'required|date|after_or_equal:today'
+        ],[
+            'city_from_id.exists' => __('City From is required'),
+            'city_to_id.exists' => __('City To is required'),
+            'station_from_id.exists' => __('Station From is required'),
+            'station_to_id.exists' => __('Station To is required'),
+            'seats.required' => __('Seats are required'),
+            'go_date.required' => __('Go Date is required'),
+            'go_date.date' => __('Go Date must be a valid date'),
+            'go_date.after_or_equal' => __('Go Date must be today or later')
         ]);
 
         $trips = $this->getTrips(
@@ -88,7 +97,6 @@ class OneWayTripController extends Controller
 
     public function confirmBooking(OnewayConfirmBookingRequest $request)
     {
-        
         try {
             DB::beginTransaction();
             $ticket = $this->confirmBookingService->one_way_confirm_booking($request);
