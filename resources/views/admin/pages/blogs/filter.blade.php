@@ -1,7 +1,18 @@
-<form method="GET" action="{{ route('admin.blog-categories.index') }}">
+<form method="GET" action="{{ route('admin.blogs.index') }}">
     <div class="box">
         <div class="box-body">
             <div class="row align-items-end">
+                <div class="col-md-4">
+                    <label for="Blog">{{ __('Blog ') }}</label>
+                    <select id="blog" name="blog" class="form-control select2">
+                        <option value="">{{ __('Select Blog') }}</option>
+                        @foreach($blogs as $blog)
+                            <option value="{{ $blog->id }}" {{ request('blog') == $blog->id ? 'selected' : '' }}>
+                                {{ $blog->translated_title }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
                 <div class="col-md-4">
                     <label for="category">{{ __('Category') }}</label>
                     <select id="category" name="category" class="form-control select2">
@@ -14,13 +25,12 @@
                     </select>
                 </div>
 
-
                 <div class="col-md-4 d-flex">
                     <!-- إزالة align-items-end من هنا -->
                     <button type="submit" class="btn btn-default">
                         <i class="fa fa-search"></i> {{ __('Search') }}
                     </button>
-                    <a href="{{ route('admin.blog-categories.index') }}" class="btn btn-default mx-2">
+                    <a href="{{ route('admin.blogs.index') }}" class="btn btn-default mx-2">
                         <i class="fa fa-undo"></i> {{ __('Reset') }}
                     </a>
                 </div>
@@ -54,20 +64,12 @@
         width: 100% !important;
     }
     .btn-default {
-    background-color: #f4f4f4 !important;
-    border-color: #ddd !important;
-    color: #444 !important;
-    padding: 10px 20px !important;
-    border-radius: 5px !important;
-}
-.btn-default:hover {
-    background-color: #e0e0e0 !important;
-    border-color: #bbb !important;
-}
-.mx-2 {
-    margin-left: 10px !important;
-    margin-right: 10px !important;
-}
-
+        background-color: #f4f4f4;
+        border-color: #ddd;
+        color: #444;
+    }
+    .ml-2 {
+        margin-left: 0.5rem;
+    }
 </style>
 @endsection

@@ -1,6 +1,6 @@
 @extends('admin.layouts.master')
 
-@section('title', __('Blog Categories'))
+@section('title', __('Blogs'))
 
 @section('breadcrumb')
     <div class="row">
@@ -13,10 +13,10 @@
                             <li class="breadcrumb-item">
                                 <a href="{{ route('admin.dashboard.index') }}">{{ __('Dashboard') }}</a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ __('Blog Categories') }}</li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ __('Blogs') }}</li>
                         </ol>
                     </nav>
-                    <a class="btn btn-default" href="{{ route('admin.blog-categories.create') }}">
+                    <a class="btn btn-default" href="{{ route('admin.blogs.create') }}">
                         {{ __('Create') }}
                         <i class="fa fa-plus-circle ms-1"></i>
                     </a>
@@ -29,16 +29,13 @@
 @section('content')
     <div class="row">
         <div class="col-12">
-            <div class="row mb-3">
-                <div class="col-12">
-                    @include('admin.pages.blog-category.filter')
-                </div>
-            </div>
             <div class="row">
                 <div class="col-12">
                     <div class="box">
                         <div class="box-body">
-                            @include('admin.pages.blog-category.list')
+
+                            @include('admin.pages.blogs.filter')
+                            @include('admin.pages.blogs.list')
                         </div>
                         <div class="d-flex justify-content-center mt-3">
                             {{ $results->appends(request()->all())->links() }}
@@ -50,6 +47,19 @@
     </div>
 @endsection
 
+@push('css')
+    {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css"> --}}
+@endpush
+
 @push('scripts')
-    {{-- Custom scripts if needed --}}
+    {{-- <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script> --}}
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#example5').DataTable({
+                "paging": false,
+            });
+        });
+    </script>
 @endpush

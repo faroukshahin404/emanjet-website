@@ -20,6 +20,8 @@
     <link rel="shortcut icon" href="{{ asset('/images/logo.png') }}" type="image/x-icon">
     <!-- apple-touch-icon -->
     <link rel="apple-touch-icon" href="{{ asset('/images/logo.png') }}">
+    {{-- vendors styles  --}}
+    <link rel="stylesheet" href="{{asset('/css/vendors_css.css')  }}">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('/css/mobile.css') }}">

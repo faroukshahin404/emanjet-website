@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\BlogCategoryController;
+use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PageController;
@@ -150,6 +151,8 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
     Route::post('/stations/{station}/toggle-available', [StationController::class, 'toggleAvailableOnline'])->name('stations.toggle-available');
     //blog-categories
     Route::resource('/blog-categories', BlogCategoryController::class);
+    //blog
+    Route::resource('/blogs', BlogController::class);
 });
 
 

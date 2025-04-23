@@ -8,10 +8,18 @@ use Illuminate\Http\Request;
 
 class CityController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $cities = City::paginate();
-        return view('admin.pages.cities.index', compact('cities'));
+        $query = City::query();
+        if ($request->has('city') && $request->city != '') {
+            $query->where('id', $request->city);
+        }
+        if ($request->has('status') && $request->status != '') {
+            $query->where('available_online', $request->status);
+        }
+        $results = $query->paginate();
+        $cities = City::all();
+        return view('admin.pages.cities.index', compact('results', 'cities'));
     }
 
     public function toggleAvailableOnline(Request $request, City $city)

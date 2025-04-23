@@ -121,7 +121,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
             <!-- End date and passenger numer -->

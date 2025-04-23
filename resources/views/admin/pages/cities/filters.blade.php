@@ -1,26 +1,34 @@
-<form method="GET" action="{{ route('admin.blog-categories.index') }}">
+<form method="GET" action="{{ route('admin.cities.index') }}">
     <div class="box">
         <div class="box-body">
-            <div class="row align-items-end">
+            <div class="row align-items-end"> <!-- تغيير من align-items-center إلى align-items-end -->
                 <div class="col-md-4">
-                    <label for="category">{{ __('Category') }}</label>
-                    <select id="category" name="category" class="form-control select2">
-                        <option value="">{{ __('Select category') }}</option>
-                        @foreach($categories as $category)
-                            <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
-                                {{ $category->translated_name }}
+                    <label for="city">{{ __('Cities') }}</label>
+                    <select id="city" name="city" class="form-control select2">
+                        <option value="">{{ __('Select city') }}</option>
+                        @foreach($cities as $city)
+                            <option value="{{ $city->id }}" {{ request('city') == $city->id ? 'selected' : '' }}>
+                                {{ $city->name }}
                             </option>
                         @endforeach
                     </select>
                 </div>
 
+                <div class="col-md-4">
+                    <label for="status">{{ __('Status') }}</label>
+                    <select id="status" name="status" class="form-control select2">
+                        <option value="">{{ __('Select Status') }}</option>
+                        <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>{{ __('Available') }}</option>
+                        <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>{{ __('Unavailable') }}</option>
+                    </select>
+                </div>
 
                 <div class="col-md-4 d-flex">
                     <!-- إزالة align-items-end من هنا -->
                     <button type="submit" class="btn btn-default">
                         <i class="fa fa-search"></i> {{ __('Search') }}
                     </button>
-                    <a href="{{ route('admin.blog-categories.index') }}" class="btn btn-default mx-2">
+                    <a href="{{ route('admin.cities.index') }}" class="btn btn-default ml-2">
                         <i class="fa fa-undo"></i> {{ __('Reset') }}
                     </a>
                 </div>
@@ -53,21 +61,5 @@
     .select2-container {
         width: 100% !important;
     }
-    .btn-default {
-    background-color: #f4f4f4 !important;
-    border-color: #ddd !important;
-    color: #444 !important;
-    padding: 10px 20px !important;
-    border-radius: 5px !important;
-}
-.btn-default:hover {
-    background-color: #e0e0e0 !important;
-    border-color: #bbb !important;
-}
-.mx-2 {
-    margin-left: 10px !important;
-    margin-right: 10px !important;
-}
-
 </style>
 @endsection
