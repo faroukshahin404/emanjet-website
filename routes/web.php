@@ -154,27 +154,9 @@ Route::group([
         Route::post('/stations/{station}/toggle-available', [StationController::class, 'toggleAvailableOnline'])->name('stations.toggle-available');
         //blog-categories
         Route::resource('/blog-categories', BlogCategoryController::class);
-    });
-Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
-    Route::resource('/pages', PageController::class)->names('pages');
-    Route::get('/pages-seo/{pageId}', [PageSeoController::class, 'index'])->name('pages-seo.index');
-    Route::get('/pages-seo/{id}/edit', [PageSeoController::class, 'edit'])->name('pages-seo.edit');
-    Route::put('/pages-seo/{id}', [PageSeoController::class, 'update'])->name('pages-seo.update');
-    //cities
-    Route::get('/cities', [CityController::class, 'index'])->name('cities.index');
-    Route::post('/cities/{city}/toggle-available', [CityController::class, 'toggleAvailableOnline'])->name('cities.toggle-available');
-    //stations
-    Route::get('/stations', [StationController::class, 'index'])->name('stations.index');
-    Route::post('/stations/{station}/toggle-available', [StationController::class, 'toggleAvailableOnline'])->name('stations.toggle-available');
-    //blog-categories
-    Route::resource('/blog-categories', BlogCategoryController::class);
-    //blog
+         //blog
     Route::resource('/blogs', BlogController::class);
-});
-
-
-
+    });
 
     Route::get('translation', function () {
         $translations = extractTranslations();
