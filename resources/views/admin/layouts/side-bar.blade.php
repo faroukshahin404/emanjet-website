@@ -13,12 +13,20 @@
                         </a>
                         <ul class="treeview-menu">
                             <li><a href="{{ route('admin.pages.index') }}"><i class="icon-Commit"><span
-                                            class="path1"></span><span class="path2"></span></i>{{ __('Pages') }}</a></li>
+                                            class="path1"></span><span
+                                            class="path2"></span></i>{{ __('Pages') }}</a></li>
                             <li><a href="{{ route('admin.cities.index') }}"><i class="icon-Commit"><span
-                                            class="path1"></span><span class="path2"></span></i>{{ __('Cities') }}</a></li>
+                                            class="path1"></span><span
+                                            class="path2"></span></i>{{ __('Cities') }}</a></li>
                             <li><a href="{{ route('admin.stations.index') }}"><i class="icon-Commit"><span
-                                            class="path1"></span><span class="path2"></span></i>{{ __('Stations') }}</a></li>
+                                            class="path1"></span><span
+                                            class="path2"></span></i>{{ __('Stations') }}</a></li>
                             <li><a href="{{ route('admin.blog-categories.index') }}"><i class="icon-Commit"><span
+                                            class="path1"></span><span
+                                            class="path2"></span></i>{{ __('Blog Categories') }}</a></li>
+                            <li><a href="{{ route('admin.bus-categories.index') }}"><i class="icon-Commit"><span
+                                            class="path1"></span><span
+                                            class="path2"></span></i>{{ __('Bus Categories') }}</a></li>
                                             class="path1"></span><span class="path2"></span></i>{{ __('Blog Categories') }}</a></li>
                             <li><a href="{{ route('admin.blogs.index') }}"><i class="icon-Commit"><span
                                             class="path1"></span><span class="path2"></span></i>{{ __('Blog') }}</a></li>

@@ -160,90 +160,91 @@ class PageSeosSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            [
-                'page_slug' => 'home',
-                'section_type' => 'bus-types',
-                'content_json' => [
-                    'ar' => [
-                        [
-                            'name' => 'درجة أولى',
-                            'passengers' => 30,
-                            'image' => 'https://placehold.co/217x123',
-                            'rate' => 5,
-                        ],
-                        [
-                            'name' => 'درجة ثانية',
-                            'passengers' => 40,
-                            'image' => 'https://placehold.co/217x123',
-                            'rate' => 4.5,
-                        ],
-                        [
-                            'name' => 'درجة ثالثة',
-                            'passengers' => 50,
-                            'image' => 'https://placehold.co/217x123',
-                            'rate' => 3,
-                        ],
-                        [
-                            'name' => 'درجة رابعة',
-                            'passengers' => 60,
-                            'image' => 'https://placehold.co/217x123',
-                            'rate' => 2.5,
-                        ],
-                        [
-                            'name' => 'درجة خامسة',
-                            'passengers' => 70,
-                            'image' => 'https://placehold.co/217x123',
-                            'rate' => 2,
-                        ],
-                        [
-                            'name' => 'درجة سادسة',
-                            'passengers' => 80,
-                            'image' => 'https://placehold.co/217x123',
-                            'rate' => 1.5,
-                        ]
-                    ],
-                    'en' => [
-                        [
-                            'name' => 'First Class',
-                            'passengers' => 30,
-                            'image' => 'https://placehold.co/217x123',
-                            'rate' => 5,
-                        ],
-                        [
-                            'name' => 'Second Class',
-                            'passengers' => 40,
-                            'image' => 'https://placehold.co/217x123',
-                            'rate' => 4.5,
-                        ],
-                        [
-                            'name' => 'Third Class',
-                            'passengers' => 50,
-                            'image' => 'https://placehold.co/217x123',
-                            'rate' => 3,
-                        ],
-                        [
-                            'name' => 'Fourth Class',
-                            'passengers' => 60,
-                            'image' => 'https://placehold.co/217x123',
-                            'rate' => 2.5,
-                        ],
-                        [
-                            'name' => 'Fifth Class',
-                            'passengers' => 70,
-                            'image' => 'https://placehold.co/217x123',
-                            'rate' => 2,
-                        ],
-                        [
-                            'name' => 'Sixth Class',
-                            'passengers' => 80,
-                            'image' => 'https://placehold.co/217x123',
-                            'rate' => 1.5,
-                        ]
-                    ]
-                ],
-                'order' => 4,
-                'status' => true,
-            ],
+            //Make table for bus types (bus Categories)
+            // [
+            //     'page_slug' => 'home',
+            //     'section_type' => 'bus-types',
+            //     'content_json' => [
+            //         'ar' => [
+            //             [
+            //                 'name' => 'درجة أولى',
+            //                 'passengers' => 30,
+            //                 'image' => 'https://placehold.co/217x123',
+            //                 'rate' => 5,
+            //             ],
+            //             [
+            //                 'name' => 'درجة ثانية',
+            //                 'passengers' => 40,
+            //                 'image' => 'https://placehold.co/217x123',
+            //                 'rate' => 4.5,
+            //             ],
+            //             [
+            //                 'name' => 'درجة ثالثة',
+            //                 'passengers' => 50,
+            //                 'image' => 'https://placehold.co/217x123',
+            //                 'rate' => 3,
+            //             ],
+            //             [
+            //                 'name' => 'درجة رابعة',
+            //                 'passengers' => 60,
+            //                 'image' => 'https://placehold.co/217x123',
+            //                 'rate' => 2.5,
+            //             ],
+            //             [
+            //                 'name' => 'درجة خامسة',
+            //                 'passengers' => 70,
+            //                 'image' => 'https://placehold.co/217x123',
+            //                 'rate' => 2,
+            //             ],
+            //             [
+            //                 'name' => 'درجة سادسة',
+            //                 'passengers' => 80,
+            //                 'image' => 'https://placehold.co/217x123',
+            //                 'rate' => 1.5,
+            //             ]
+            //         ],
+            //         'en' => [
+            //             [
+            //                 'name' => 'First Class',
+            //                 'passengers' => 30,
+            //                 'image' => 'https://placehold.co/217x123',
+            //                 'rate' => 5,
+            //             ],
+            //             [
+            //                 'name' => 'Second Class',
+            //                 'passengers' => 40,
+            //                 'image' => 'https://placehold.co/217x123',
+            //                 'rate' => 4.5,
+            //             ],
+            //             [
+            //                 'name' => 'Third Class',
+            //                 'passengers' => 50,
+            //                 'image' => 'https://placehold.co/217x123',
+            //                 'rate' => 3,
+            //             ],
+            //             [
+            //                 'name' => 'Fourth Class',
+            //                 'passengers' => 60,
+            //                 'image' => 'https://placehold.co/217x123',
+            //                 'rate' => 2.5,
+            //             ],
+            //             [
+            //                 'name' => 'Fifth Class',
+            //                 'passengers' => 70,
+            //                 'image' => 'https://placehold.co/217x123',
+            //                 'rate' => 2,
+            //             ],
+            //             [
+            //                 'name' => 'Sixth Class',
+            //                 'passengers' => 80,
+            //                 'image' => 'https://placehold.co/217x123',
+            //                 'rate' => 1.5,
+            //             ]
+            //         ]
+            //     ],
+            //     'order' => 4,
+            //     'status' => true,
+            // ],
             [
                 'page_slug' => 'home',
                 'section_type' => 'reservation',
