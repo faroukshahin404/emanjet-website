@@ -1,153 +1,124 @@
 @extends('layouts.master')
 
 @section('content')
-    <div class="register-desktop py-5">
-        <div class="container">
-            <div class="row justify-content-center bg-white shadow rounded-4 overflow-hidden">
-                <div class="col-lg-6 col-md-8 p-5">
-                    <h3 class="text-center text-black mb-4">إعادة تعيين كلمة المرور</h3>
+    <div class="otp-desktop">
+        <div class="container-fluid">
+            <div class="row rounded-bottom-4 box-shadow bg-white">
+                <div class="col-md-6 p-4">
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-center gap-5 align-items-center">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <p class="m-0 fs-25 text-black">{{ __('Phone Number Verification') }}</p>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <a href="{{ route('auth.login') }}">
+                                <i class="fas fa-arrow-left fs-25 text-black"></i>
+                            </a>
+                        </div>
+                        <p class="text-black text-center fs-14 text-gray">
+                            {{ __('Enter the code we sent to your number') }} {{ $phone }}
+                        </p>
+                    </div>
 
-                    <form action="{{ route('auth.updatePassword') }}" method="POST" class="d-flex flex-column gap-3">
+                    <form class="login-form" action="{{ route('auth.verifyResetOtp') }}" method="POST">
                         @csrf
+                        <!-- Include the component here -->
+                        @include('auth.partials.otp-inputs')
 
-                        <div>
-                            <label class="form-label text-center w-100">رمز التحقق</label>
-                            <div class="d-flex justify-content-center gap-2">
-                                @for ($i = 0; $i < 4; $i++)
-                                    <input type="text" name="otp[]" class="form-control text-center otp-input"
-                                        maxlength="1" required>
-                                @endfor
-                            </div>
-                            <div class="text-center mt-2">
-                                <button type="button" id="resendOtp" class="btn btn-link" disabled>
-                                    إعادة إرسال الرمز (<span id="countdown">5:00</span>)
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="position-relative">
-                            <i class="fa fa-key position-absolute top-50 translate-middle-y px-2 text-muted"></i>
-                            <input type="password" name="password" class="form-control ps-5"
-                                placeholder="كلمة المرور الجديدة" required>
-                        </div>
-
-                        <div class="position-relative">
-                            <i class="fa fa-key position-absolute top-50 translate-middle-y px-2 text-muted"></i>
-                            <input type="password" name="password_confirmation" class="form-control ps-5"
-                                placeholder="تأكيد كلمة المرور" required>
-                        </div>
-
-                        @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul class="mb-0">
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
-
-                        <p class="text-center text-muted">
-                            تم إرسال رمز التحقق إلى رقم <strong>{{ $phone }}</strong>
+                        <p class="mt-3 text-center text-main">
+                            <span id="timer">00:30</span>
                         </p>
 
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-primary px-4 mt-3">إعادة تعيين كلمة المرور</button>
+                        <div class="mt-4 d-flex justify-content-center">
+                            <p>
+                                {{ __("Didn't receive the code?") }}
+                                <a class="text-main" href="javascript:void(0)" onclick="resendOtp()" id="resendOtp">
+                                    {{ __('Do you want to resend it?') }}
+                                </a>
+                            </p>
+                        </div>
+
+                        <div class="col-md-12 d-flex justify-content-center align-items-center mt-5">
+                            <button type="submit" class="submitBtn">{{ __('Verify') }}</button>
                         </div>
                     </form>
                 </div>
-
-                <div class="col-lg-6 d-none d-lg-block p-0">
-                    <img src="{{ asset('images/hero-section.png') }}" alt="reset"
-                         class="img-fluid h-100 w-100" style="object-fit: cover;">
+                <div class="col-md-6 p-0">
+                    <img class="img-fluid h-100 w-100" src="{{ asset('images/hero-section.png') }}" alt="otp verification"
+                        style="object-fit: cover;">
                 </div>
             </div>
         </div>
     </div>
 @endsection
 
-@push('styles')
-    <style>
-        .otp-input {
-            width: 55px;
-            height: 55px;
-            font-size: 22px;
-            direction: ltr;
-        }
-
-        @media (max-width: 576px) {
-            .otp-input {
-                width: 45px;
-                height: 45px;
-                font-size: 18px;
-            }
-        }
-    </style>
-@endpush
-
 @push('scripts')
     <script>
-        const otpInputs = document.querySelectorAll('input[name="otp[]"]');
+        // Timer functionality
+        let timeLeft = 30;
+        const timerElement = document.getElementById('timer');
+        const resendLink = document.getElementById('resendOtp');
 
-        otpInputs.forEach((input, idx) => {
-            input.addEventListener('input', () => {
-                if (input.value.length === 1 && idx < otpInputs.length - 1) {
-                    otpInputs[idx + 1].focus();
-                }
-            });
-
-            input.addEventListener('keydown', e => {
-                if (e.key === "Backspace" && input.value === '' && idx > 0) {
-                    otpInputs[idx - 1].focus();
-                }
-            });
-        });
-
-        let timeLeft = 300;
-        const countdownEl = document.getElementById('countdown');
-        const resendBtn = document.getElementById('resendOtp');
-
-        function updateCountdown() {
+        function updateTimer() {
             const minutes = Math.floor(timeLeft / 60);
             const seconds = timeLeft % 60;
-            countdownEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
-            if (timeLeft > 0) {
-                timeLeft--;
-                setTimeout(updateCountdown, 1000);
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                resendLink.style.pointerEvents = 'auto';
+                resendLink.style.opacity = '1';
             } else {
-                resendBtn.disabled = false;
-                resendBtn.textContent = 'إعادة إرسال الرمز';
+                timeLeft--;
             }
         }
 
-        updateCountdown();
+        let timerInterval = setInterval(updateTimer, 1000);
+        updateTimer();
 
-        resendBtn.addEventListener('click', () => {
-            resendBtn.disabled = true;
-            resendBtn.textContent = 'جاري الإرسال...';
-            timeLeft = 300;
-            updateCountdown();
+        // Disable resend link initially
+        resendLink.style.pointerEvents = 'none';
+        resendLink.style.opacity = '0.5';
 
+        // Resend OTP function
+        function resendOtp() {
             fetch('{{ route('auth.resendOtp') }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                }
-            })
-            .then(res => res.json())
-            .then(data => {
-                alert(data.message);
-                if (!data.success && data.remainingMinutes) {
-                    timeLeft = data.remainingMinutes * 60;
-                    updateCountdown();
-                }
-            })
-            .catch(err => {
-                alert("حدث خطأ أثناء إعادة الإرسال");
-                console.error(err);
-            });
-        });
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        phone: '{{ $phone }}'
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Reset timer
+                        ئtimeLeft = 30;
+                        clearInterval(timerInterval);
+                        timerInterval = setInterval(updateTimer, 1000);
+                        updateTimer();
+
+                        // Disable resend link
+                        resendLink.style.pointerEvents = 'none';
+                        resendLink.style.opacity = '0.5';
+
+                        alert(data.message);
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('حدث خطأ أثناء إعادة إرسال الرمز');
+                });
+        }
     </script>
 @endpush

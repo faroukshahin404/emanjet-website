@@ -23,39 +23,42 @@
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}"
-                        data-lang='{"en": "Home", "ar": "الرئيسية"}'>الرئيسية</a>
+                        data-lang='{"en": "Home", "ar": "الرئيسية"}'>{{ __('Home') }}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('destinations') ? 'active' : '' }}"
-                        href="{{ route('destinations') }}" data-lang='{"en": "Destinations", "ar": "وجهات السفر"}'>وجهات
-                        السفر</a>
+                        href="{{ route('destinations') }}"
+                        data-lang='{"en": "Destinations", "ar": "وجهات السفر"}'>{{ __('Destinations') }}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('blogs') ? 'active' : '' }}" href="{{ route('blogs') }}"
-                        data-lang='{"en": "Bus Blogs", "ar": "حكايات الباص"}'>حكايات
-                        الباص</a>
+                        data-lang='{"en": "Bus Blogs", "ar": "حكايات الباص"}'>{{ __('Bus Blogs') }}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('about-us') ? 'active' : '' }}"
-                        href="{{ route('about-us') }}" data-lang='{"en": "About Us", "ar": "عنا"}'>عنا</a>
+                        href="{{ route('about-us') }}"
+                        data-lang='{"en": "About Us", "ar": "عنا"}'>{{ __('About Us') }}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('contact-us') ? 'active' : '' }}"
-                        href="{{ route('contact-us') }}" data-lang='{"en": "Contact Us", "ar": "تواصل معنا"}'>تواصل
-                        معنا</a>
+                        href="{{ route('contact-us') }}"
+                        data-lang='{"en": "Contact Us", "ar": "تواصل معنا"}'>{{ __('Contact Us') }}</a>
                 </li>
             </ul>
 
-            <select id="languageSelect" class="form-select w-auto mx-3 select-lang">
-                <option value="ar">العربية</option>
-                <option value="en">English</option>
+            <select id="languageSelect" class="form-select w-auto mx-3 select-lang"
+                onchange="window.location.href=this.value">
+                <option value="{{ route('lang.switch', ['locale' => 'ar']) }}"
+                    @if (session('locale') == 'ar') selected @endif>العربية</option>
+                <option value="{{ route('lang.switch', ['locale' => 'en']) }}"
+                    @if (session('locale') == 'en') selected @endif>English</option>
             </select>
 
             @guest
                 <a class="loginBtn d-flex align-items-center" href="{{ route('auth.login') }}">
                     <div class="d-flex align-items-center gap-2">
                         <i class="fas fa-unlock"></i>
-                        <p class="m-0" data-lang='{"en": "Login", "ar": "تسجيل الدخول"}'>تسجيل الدخول</p>
+                        <p class="m-0" data-lang='{"en": "Login", "ar": "تسجيل الدخول"}'>{{ __('Login') }}</p>
                     </div>
                 </a>
             @endguest
@@ -64,16 +67,18 @@
                 <div class="dropdown mx-2 px-2 " style="width:fit-content;">
                     <button class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
                         aria-expanded="false">
-                        مرحبًا, {{ implode(' ', array_slice(explode(' ', Auth::user()->name), 0, 2)) }}
+                        {{ __('Welcome') }}, {{ implode(' ', array_slice(explode(' ', Auth::user()->name), 0, 2)) }}
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <li><a class="dropdown-item" href="{{ route('auth.profile', ['tap' => 'trips']) }}">رحلاتي</a></li>
-                        <li><a class="dropdown-item" href="{{ route('auth.profile', ['tap' => 'profile']) }}">بياناتي</a>
+                        <li><a class="dropdown-item"
+                                href="{{ route('auth.profile', ['tap' => 'trips']) }}">{{ __('My Trips') }}</a></li>
+                        <li><a class="dropdown-item"
+                                href="{{ route('auth.profile', ['tap' => 'profile']) }}">{{ __('Profile') }}</a>
                         </li>
                         <li>
                             <button class="dropdown-item" type="button" data-bs-toggle="modal"
                                 data-bs-target="#logoutModal">
-                                تسجيل الخروج
+                                {{ __('Logout') }}
                             </button>
                         </li>
                     </ul>

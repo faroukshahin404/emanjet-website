@@ -22,7 +22,7 @@
                     <img src="{{ asset('images/mobile/phone-chat.png') }}" alt="phone">
                 </div>
 
-                <form action="{{ route('auth.postResetPassword') }}" method="POST" class="login-form">
+                <form action="{{ route('auth.resetPassword') }}" method="POST" class="login-form">
                     @csrf
                     <input type="hidden" name="phone" value="{{ $phone }}">
                     <input type="hidden" id="initial-time" value="{{ $remainingTime ?? 0 }}">

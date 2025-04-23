@@ -8,15 +8,15 @@
                 </div>
 
                 <div class="modal-body">
-                    <h5 class="text-center mb-4 text-black">هل تريد تسجيل الخروج؟</h5>
+                    <h5 class="text-center mb-4 text-black">{{ __('Do you want to log out?') }}</h5>
                     <form action="{{ route('auth.logout') }}" method="POST">
                         <div class="d-flex gap-4 align-items-center justify-content-center">
                             @csrf
                             <button type="submit" class="yes-btn">
-                                نعم
+                                {{ __('Yes') }}
                             </button>
                             <button type="button" class="yes-btn no-btn" data-bs-dismiss="modal">
-                                لا
+                                {{ __('No') }}
                             </button>
                         </div>
                     </form>

@@ -4,13 +4,14 @@
         <div class="container mb-5">
             <div class="row">
                 <div class="col-md-12 my-3 text-center">
-                    <h2 class="text-black">اختر مقاعد الذهاب والعودة</h2>
+                    <h2 class="text-black">{{ __('Pick your seats for the round trip') }}</h2>
                 </div>
 
                 @include('round.choose-seat.seats')
 
                 <!-- تفاصيل الرحلة والدفع -->
-                <div class="col-md-12 col-lg-4 mx-auto" style="position: sticky; top: 120px; height: fit-content; z-index: 100;">
+                <div class="col-md-12 col-lg-4 mx-auto"
+                    style="position: sticky; top: 120px; height: fit-content; z-index: 100;">
 
                     <form action="{{ route('round.confirm-booking') }}" method="post">
                         @csrf
@@ -21,8 +22,8 @@
                         <input type="hidden" name="seats" value="{{ request()->seats }}" />
                         <input type="hidden" name="station_from_id" value="{{ request()->station_from_id }}" />
                         <input type="hidden" name="station_to_id" value="{{ request()->station_to_id }}" />
-                        <input type="hidden" name="go_trip_id" value="{{request()->selected_go_trip_id}}">
-                        <input type="hidden" name="back_trip_id"  value="{{request()->selected_back_trip_id}}">
+                        <input type="hidden" name="go_trip_id" value="{{ request()->selected_go_trip_id }}">
+                        <input type="hidden" name="back_trip_id" value="{{ request()->selected_back_trip_id }}">
                         <input type="hidden" name="tripType" value="round">
                         <div class="trip-desc rounded-8 px-3 py-3">
                             <div class="d-flex justify-content-center align-items-center gap-4 my-4">
@@ -43,7 +44,7 @@
                             </div>
 
                             <div class="d-flex gap-2 mt-2">
-                                <p class="m-0 text-black">موعد التحرك:</p>
+                                <p class="m-0 text-black">{{ __('Departure time') }}:</p>
                                 <p class="m-0">{{ $tripTime->format('Y-m-d h:i a') }}</p>
                             </div>
 
@@ -51,14 +52,14 @@
                             <input type="hidden" id="number-of-seats-return" value="{{ request()->seats }}">
 
                             <div class="go-seats-table mb-3">
-                                <h5 class="text-black mb-2">مقاعد الذهاب</h5>
+                                <h5 class="text-black mb-2">{{ __('Outbound Seats') }}</h5>
                                 <table id="selectedGoSeatsTable" class="table">
                                     <tbody></tbody>
                                 </table>
                             </div>
 
                             <div class="return-seats-table">
-                                <h5 class="text-black mb-2">مقاعد العودة</h5>
+                                <h5 class="text-black mb-2">{{ __('Return Seats') }}</h5>
                                 <table id="selectedReturnSeatsTable" class="table">
                                     <tbody></tbody>
                                 </table>
@@ -67,13 +68,13 @@
 
                         <div class="total-price rounded-8 px-3 py-3">
                             <div class="d-flex justify-content-between align-items-center mt-2">
-                                <span class="text-black">الاجمالي:</span>
-                                <p class="m-0" id="totalPrice">اختر المقاعد</p>
+                                <span class="text-black">{{ __('Total') }}:</span>
+                                <p class="m-0" id="totalPrice">{{ __('Choose Seats') }}</p>
                             </div>
                         </div>
 
                         <div class="border rounded-8 px-3 py-3 mt-2">
-                            <h4 class="text-black">أختر وسيلة الدفع</h4>
+                            <h4 class="text-black">{{ __('Choose Payment Method') }}</h4>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="payment_method" value="fawry" checked>
                                 <label class="form-check-label" for="fawry">
@@ -86,7 +87,8 @@
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" checked id="flexCheckDefault">
                                 <label class="form-check-label" for="flexCheckDefault">
-                                    أوافق على <a href="#">الشروط والاحكام</a>
+                                    {{ __('I Agree To The') }} <a href="#">{{ __('Terms And Conditions') }}</a>
+
                                 </label>
                             </div>
                         </div>
@@ -94,7 +96,7 @@
                         <div class="mt-4">
                             <button type="submit" class="btn-pay-disabled" id="btn-pay">
                                 <div class="d-flex justify-content-around align-items-center">
-                                    <p class="m-0">اختر المقاعد</p>
+                                    <p class="m-0">{{ __('Choose Seats') }}</p>
                                 </div>
                             </button>
                         </div>
@@ -146,7 +148,8 @@
                 total = [...selectedGoSeats, ...selectedReturnSeats].reduce((sum, seat) => sum + seat.price, 0);
 
                 // تحديث عرض السعر
-                if (total > 0 && selectedGoSeats.length === numOfSeats && selectedReturnSeats.length === numOfSeats) {
+                if (total > 0 && selectedGoSeats.length === numOfSeats && selectedReturnSeats.length ===
+                    numOfSeats) {
                     totalDisplay.textContent = total.toFixed(2) + ' جنيه';
                     btnPay.className = "btn-pay";
                     btnPay.innerHTML = `<div class="d-flex justify-content-around align-items-center">

@@ -14,7 +14,7 @@ class ProfileController extends Controller
     public function index()
     {
         $user = Auth::user();
-      
+
         return view('profile.index', compact('user', ));
     }
 
@@ -29,6 +29,10 @@ class ProfileController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'mobile' => 'required|string|max:20',
+        ],[
+            'name.required' => __('Name is required'),
+            'mobile.required' => __('Mobile is required'),
+            'mobile.max' => __('Mobile must be less than 20 characters'),
         ]);
 
         $user = User::find(Auth::id());

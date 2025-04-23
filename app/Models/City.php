@@ -32,4 +32,5 @@ class City extends Model
         return $this->hasMany(Station::class);
     }
 
+
 } //end of class

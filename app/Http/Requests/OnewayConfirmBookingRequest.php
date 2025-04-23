@@ -33,16 +33,22 @@ class OnewayConfirmBookingRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'selected_trip_id.required' => 'Please select a trip.',
-            'selected_trip_id.exists' => 'The selected trip does not exist.',
+            'selected_trip_id.required' => __('Please select a trip.'),
+            'selected_trip_id.exists' => __('The selected trip does not exist.'),
 
-            'station_from_id.required' => 'Please select a departure station.',
-            'station_from_id.exists' => 'The selected station is invalid.',
+            'station_from_id.required' => __('Please select a departure station.'),
+            'station_from_id.exists' => __('The selected station is invalid.'),
 
-            'seat_id.required' => 'Please select at least one seat.',
-            'seat_id.array' => 'Seat selection must be in array format.',
+            'station_to_id.required' => __('Please select a destination station.'),
+            'station_to_id.exists' => __('The selected destination station is invalid.'),
 
-            'seat_id.*.exists' => 'One or more selected seats are invalid.',
+            'seat_id.required' => __('Please select at least one seat.'),
+            'seat_id.array' => __('Seat selection must be in array format.'),
+
+            'seat_id.*.exists' => __('One or more selected seats are invalid.'),
+
+            'payment_method.required' => __('Please select a payment method.'),
+            'payment_method.in' => __('The selected payment method is invalid.'),
         ];
     }
 }
