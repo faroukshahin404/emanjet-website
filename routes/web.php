@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\PageSeoController;
 use App\Http\Controllers\Admin\StationController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BusCategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OnewayMobileController;
 use App\Http\Controllers\OneWayTripController;
@@ -136,21 +137,23 @@ Route::group([
     });
 
 
-Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
-    Route::resource('/pages', PageController::class)->names('pages');
-    Route::get('/pages-seo/{pageId}', [PageSeoController::class, 'index'])->name('pages-seo.index');
-    Route::get('/pages-seo/{id}/edit', [PageSeoController::class, 'edit'])->name('pages-seo.edit');
-    Route::put('/pages-seo/{id}', [PageSeoController::class, 'update'])->name('pages-seo.update');
-    //cities
-    Route::get('/cities', [CityController::class, 'index'])->name('cities.index');
-    Route::post('/cities/{city}/toggle-available', [CityController::class, 'toggleAvailableOnline'])->name('cities.toggle-available');
-    //stations
-    Route::get('/stations', [StationController::class, 'index'])->name('stations.index');
-    Route::post('/stations/{station}/toggle-available', [StationController::class, 'toggleAvailableOnline'])->name('stations.toggle-available');
-    //blog-categories
-    Route::resource('/blog-categories', BlogCategoryController::class);
-});
+    Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+        Route::resource('/pages', PageController::class)->names('pages');
+        Route::get('/pages-seo/{pageId}', [PageSeoController::class, 'index'])->name('pages-seo.index');
+        Route::get('/pages-seo/{id}/edit', [PageSeoController::class, 'edit'])->name('pages-seo.edit');
+        Route::put('/pages-seo/{id}', [PageSeoController::class, 'update'])->name('pages-seo.update');
+
+        Route::resource('bus-categories', BusCategoryController::class)->names('bus-categories');
+        //cities
+        Route::get('/cities', [CityController::class, 'index'])->name('cities.index');
+        Route::post('/cities/{city}/toggle-available', [CityController::class, 'toggleAvailableOnline'])->name('cities.toggle-available');
+        //stations
+        Route::get('/stations', [StationController::class, 'index'])->name('stations.index');
+        Route::post('/stations/{station}/toggle-available', [StationController::class, 'toggleAvailableOnline'])->name('stations.toggle-available');
+        //blog-categories
+        Route::resource('/blog-categories', BlogCategoryController::class);
+    });
 
 
 

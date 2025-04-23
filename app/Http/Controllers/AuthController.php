@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\ProfileRequest;
-use App\Http\Resources\TicketResource;
 use App\Models\User;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
@@ -92,8 +91,15 @@ class AuthController extends Controller
             'phone' => 'required|string'
         ]);
 
+        $user = User::where('mobile', $request->phone)->first();
+
+        if (!$user) {
+            return response()->json(['success' => false, 'message' => 'رقم الهاتف غير صحيح.'], 400);
+        }
+             
         // إذا كان الطلب لإعادة إرسال OTP
         if ($request->ajax()) {
+           
             // Check if we need to wait before sending new OTP
             $lastOtp = Otp::where('phone', $request->phone)
                 ->where('created_at', '>=', now()->subMinutes(30))
@@ -114,23 +120,23 @@ class AuthController extends Controller
                 }
             }
 
-            $message = $this->authService->sendOtp($request->phone);
-
-            if ($message === 'تم إرسال رمز التحقق بنجاح.') {
+            $otp = $this->authService->sendOtp($user);
+             
+            if ($otp['success']) {
                 session([
                     'reset_password_phone' => $request->phone
                 ]);
 
                 return response()->json([
                     'success' => true,
-                    'message' => $message,
+                    'message' => $otp['message'],
                     'remainingTime' => 30
                 ]);
             }
 
             return response()->json([
                 'success' => false,
-                'message' => $message
+                'message' => $otp['message']
             ], 400);
         }
 
@@ -163,9 +169,9 @@ class AuthController extends Controller
             }
 
             // إرسال OTP
-            $message = $this->authService->sendOtp($request->phone);
+            $otp = $this->authService->sendOtp($user);
 
-            if ($message === 'تم إرسال رمز التحقق بنجاح.') {
+         if ($otp['success']) {
                 session([
                     'reset_password_phone' => $request->phone
                 ]);
@@ -173,7 +179,7 @@ class AuthController extends Controller
                 return redirect()->route('auth.showResetPassword');
             }
 
-            return redirect()->back()->withErrors(['phone' => $message]);
+            return redirect()->back()->withErrors(['phone' => $otp['message']]);
         }
 
         if (!$phone) {
@@ -205,7 +211,7 @@ class AuthController extends Controller
         if (Auth::check() && !Auth::user()->verified) {
             $user = Auth::user();
             $phone = $user->mobile;
-            $this->authService->sendOtp($phone, $user->id);
+            $this->authService->sendOtp( $user);
         }
 
         if (!$phone) {
@@ -409,39 +415,23 @@ class AuthController extends Controller
             ], 404);
         }
 
-        // التحقق من وقت آخر OTP
-        $lastOtp = Otp::where('phone', $phone)
-            ->where('created_at', '>=', now()->subMinutes(30))
-            ->latest()
-            ->first();
 
-        // if ($lastOtp) {
-        //     $waitTime = 120; // 120 seconds wait time
-        //     $timeSinceLastOtp = now()->diffInSeconds($lastOtp->created_at);
 
-        //     if ($timeSinceLastOtp < $waitTime) {
-        //         $remainingTime = $waitTime - $timeSinceLastOtp;
-        //         return response()->json([
-        //             'success' => false,
-        //             'message' => "يرجى المحاولة بعد {$remainingTime} ثانية.",
-        //             'remainingTime' => $remainingTime
-        //         ], 429);
-        //     }
-        // }
 
-        $message = $this->authService->sendOtp($phone);
 
-        if ($message === 'تم إرسال رمز التحقق بنجاح.') {
+        $otp = $this->authService->sendOtp($user);
+
+        if ($otp['success']) {
             return response()->json([
                 'success' => true,
-                'message' => $message,
+                'message' => $otp['message'],
                 'remainingTime' => 30
             ]);
         }
 
         return response()->json([
             'success' => false,
-            'message' => $message
+            'message' => $otp['message']
         ], 400);
     }
 

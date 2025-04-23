@@ -24,7 +24,9 @@ class HomeController extends Controller
         $heroSection = $homePageSeos->where('section_type', 'hero-section')->first()->translated_content_json;
         $anyWhereSection = $homePageSeos->where('section_type', 'any-where')->first()->translated_content_json;
         $paymentMethodsSection = $homePageSeos->where('section_type', 'payment-methods')->first()->translated_content_json;
-        $busTypesSection = $homePageSeos->where('section_type', 'bus-types')->first()->translated_content_json;
+        //TODP :: get the bus types section from the bus categories table
+        // $busTypesSection = $homePageSeos->where('section_type', 'bus-types')->first()->translated_content_json;
+        $busTypesSection = [];
         $reservationSection = $homePageSeos->where('section_type', 'reservation')->first()->translated_content_json;
         $seo = getSeoData($page);
         $testimonials = Testimonial::inRandomOrder()->limit(3)->get();
