@@ -229,7 +229,7 @@
             <a href="{{ route('admin.pages-seo.index', $pageSeo->page_id) }}" class="seo-back-btn">Back</a>
         </div>
         <div class="seo-form-container">
-            <form action="{{ route('admin.pages-seo.update', $pageSeo->id) }}" method="POST">
+            <form action="{{ route('admin.pages-seo.update', $pageSeo->id) }}" method="POST" enctype="multipart/form-data"> 
                 @csrf
                 @method('PUT')
 
@@ -280,9 +280,45 @@
                         @if (isset($contentArray['en']))
                             @foreach ($contentArray['en'] as $key => $value)
                                 <div class="seo-form-group">
-                                    <label for="content_en_{{ $key }}"
-                                        class="seo-label">{{ ucfirst(str_replace(['_', '-'], ' ', $key)) }}</label>
-                                    @if (is_array($value))
+                                    <label for="content_en_{{ $key }}" class="seo-label">
+                                        {{ ucfirst(str_replace(['_', '-'], ' ', $key)) }}
+                                    </label>
+
+                                    @if ($key === 'image')
+                                        <!-- Single image upload field -->
+                                        <div class="image-upload-container">
+                                            @if (is_string($value) && !empty($value))
+                                                <div class="current-image">
+                                                    <img src="{{ asset($value) }}" alt="Current Image" class="img-thumbnail"
+                                                        style="max-height: 100px;">
+                                                    <input type="hidden" name="content_json[en][{{ $key }}]"
+                                                        value="{{ $value }}">
+                                                </div>
+                                            @endif
+                                            <input type="file" name="image_uploads[en][{{ $key }}]"
+                                                class="seo-input" accept="image/*">
+                                        </div>
+                                    @elseif ($key === 'images')
+                                        <!-- Multiple images upload field -->
+                                        <div class="multi-image-container" id="en_images_container">
+                                            @if (is_array($value))
+                                                @foreach ($value as $index => $imagePath)
+                                                    <div class="image-item">
+                                                        <img src="{{ asset($imagePath) }}" alt="Image {{ $index }}"
+                                                            class="img-thumbnail" style="max-height: 100px;">
+                                                        <input type="hidden" name="content_json[en][images][]"
+                                                            value="{{ $imagePath }}">
+                                                        <button type="button" class="remove-image-btn">Remove</button>
+                                                    </div>
+                                                @endforeach
+                                            @endif
+                                            <input type="file" name="image_uploads[en][images][]" class="seo-input"
+                                                accept="image/*" multiple>
+                                        </div>
+                                        <button type="button" class="add-image-btn" data-container="en_images_container">
+                                            Add More Images
+                                        </button>
+                                    @elseif (is_array($value))
                                         @if (isset($value[0]) && is_string($value[0]))
                                             <div id="en_{{ $key }}_items">
                                                 @foreach ($value as $index => $item)
@@ -300,46 +336,8 @@
                                                 data-container="en_{{ $key }}_items" data-type="string">
                                                 Add Item
                                             </button>
-                                        @elseif(isset($value[0]) && is_array($value[0]))
-                                            <!-- Array of objects -->
-                                            <div id="en_{{ $key }}_items">
-                                                @foreach ($value as $index => $item)
-                                                    <div class="seo-item-container">
-                                                        <div class="d-flex justify-content-between">
-                                                            <h4 class="seo-item-title">Item {{ $index + 1 }}</h4>
-                                                            <button type="button" class="remove-item-btn">Remove</button>
-                                                        </div>
-                                                        @foreach ($item as $itemKey => $itemValue)
-                                                            <div class="seo-form-group">
-                                                                <label
-                                                                    class="seo-label">{{ ucfirst(str_replace(['_', '-'], ' ', $itemKey)) }}</label>
-                                                                @if (is_string($itemValue) && strlen($itemValue) > 100)
-                                                                    <textarea name="content_json[en][{{ $key }}][{{ $index }}][{{ $itemKey }}]"
-                                                                        class="seo-textarea">{{ $itemValue }}</textarea>
-                                                                @else
-                                                                    <input type="text"
-                                                                        name="content_json[en][{{ $key }}][{{ $index }}][{{ $itemKey }}]"
-                                                                        value="{{ $itemValue }}" class="seo-input">
-                                                                @endif
-                                                            </div>
-                                                        @endforeach
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                            <button type="button" class="add-item-btn"
-                                                data-container="en_{{ $key }}_items" data-type="object"
-                                                data-template="{{ json_encode(reset($value)) }}">
-                                                Add Item
-                                            </button>
-                                        @else
-                                            <!-- Other complex arrays -->
-                                            <textarea name="content_json[en][{{ $key }}]" class="seo-textarea">{{ json_encode($value) }}</textarea>
-                                            <div class="seo-complex-notice mt-2">
-                                                This is a complex structure. Edit as JSON.
-                                            </div>
                                         @endif
                                     @else
-                                        <!-- Simple string/number values -->
                                         @if (is_string($value) && strlen($value) > 100)
                                             <textarea name="content_json[en][{{ $key }}]" class="seo-textarea">{{ $value }}</textarea>
                                         @else
@@ -349,8 +347,6 @@
                                     @endif
                                 </div>
                             @endforeach
-                        @else
-                            <p>No English content available</p>
                         @endif
                     </div>
 
@@ -359,12 +355,48 @@
                         @if (isset($contentArray['ar']))
                             @foreach ($contentArray['ar'] as $key => $value)
                                 <div class="seo-form-group">
-                                    <label for="content_ar_{{ $key }}"
-                                        class="seo-label">{{ ucfirst(str_replace(['_', '-'], ' ', $key)) }}</label>
+                                    <label for="content_ar_{{ $key }}" class="seo-label">
+                                        {{ ucfirst(str_replace(['_', '-'], ' ', $key)) }}
+                                    </label>
 
-                                    @if (is_array($value))
+                                    @if ($key === 'image')
+                                        <!-- Single image upload field -->
+                                        <div class="image-upload-container">
+                                            @if (is_string($value) && !empty($value))
+                                                <div class="current-image">
+                                                    <img src="{{ asset($value) }}" alt="Current Image"
+                                                        class="img-thumbnail" style="max-height: 100px;">
+                                                    <input type="hidden" name="content_json[ar][{{ $key }}]"
+                                                        value="{{ $value }}">
+                                                </div>
+                                            @endif
+                                            <input type="file" name="image_uploads[ar][{{ $key }}]"
+                                                class="seo-input" accept="image/*">
+                                        </div>
+                                    @elseif ($key === 'images')
+                                        <!-- Multiple images upload field -->
+                                        <div class="multi-image-container" id="ar_images_container">
+                                            @if (is_array($value))
+                                                @foreach ($value as $index => $imagePath)
+                                                    <div class="image-item">
+                                                        <img src="{{ asset($imagePath) }}"
+                                                            alt="Image {{ $index }}" class="img-thumbnail"
+                                                            style="max-height: 100px;">
+                                                        <input type="hidden" name="content_json[ar][images][]"
+                                                            value="{{ $imagePath }}">
+                                                        <button type="button" class="remove-image-btn">Remove</button>
+                                                    </div>
+                                                @endforeach
+                                            @endif
+                                            <input type="file" name="image_uploads[ar][images][]" class="seo-input"
+                                                accept="image/*" multiple>
+                                        </div>
+                                        <button type="button" class="add-image-btn"
+                                            data-container="ar_images_container">
+                                            Add More Images
+                                        </button>
+                                    @elseif (is_array($value))
                                         @if (isset($value[0]) && is_string($value[0]))
-                                            <!-- Array of strings (like images) -->
                                             <div id="ar_{{ $key }}_items">
                                                 @foreach ($value as $index => $item)
                                                     <div class="seo-item-container">
@@ -381,47 +413,8 @@
                                                 data-container="ar_{{ $key }}_items" data-type="string">
                                                 Add Item
                                             </button>
-                                        @elseif(isset($value[0]) && is_array($value[0]))
-                                            <!-- Array of objects -->
-                                            <div id="ar_{{ $key }}_items">
-                                                @foreach ($value as $index => $item)
-                                                    <div class="seo-item-container">
-                                                        <div class="d-flex justify-content-between">
-                                                            <h4 class="seo-item-title">Item {{ $index + 1 }}</h4>
-                                                            <button type="button" class="remove-item-btn">Remove</button>
-                                                        </div>
-                                                        @foreach ($item as $itemKey => $itemValue)
-                                                            <div class="seo-form-group">
-                                                                <label
-                                                                    class="seo-label">{{ ucfirst(str_replace(['_', '-'], ' ', $itemKey)) }}</label>
-                                                                @if (is_string($itemValue) && strlen($itemValue) > 100)
-                                                                    <textarea name="content_json[ar][{{ $key }}][{{ $index }}][{{ $itemKey }}]"
-                                                                        class="seo-textarea rtl-text">{{ $itemValue }}</textarea>
-                                                                @else
-                                                                    <input type="text"
-                                                                        name="content_json[ar][{{ $key }}][{{ $index }}][{{ $itemKey }}]"
-                                                                        value="{{ $itemValue }}"
-                                                                        class="seo-input rtl-text">
-                                                                @endif
-                                                            </div>
-                                                        @endforeach
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                            <button type="button" class="add-item-btn"
-                                                data-container="ar_{{ $key }}_items" data-type="object"
-                                                data-template="{{ json_encode(reset($value)) }}">
-                                                Add Item
-                                            </button>
-                                        @else
-                                            <!-- Other complex arrays -->
-                                            <textarea name="content_json[ar][{{ $key }}]" class="seo-textarea rtl-text">{{ json_encode($value) }}</textarea>
-                                            <div class="seo-complex-notice mt-2">
-                                                This is a complex structure. Edit as JSON.
-                                            </div>
                                         @endif
                                     @else
-                                        <!-- Simple string/number values -->
                                         @if (is_string($value) && strlen($value) > 100)
                                             <textarea name="content_json[ar][{{ $key }}]" class="seo-textarea rtl-text">{{ $value }}</textarea>
                                         @else
@@ -431,8 +424,6 @@
                                     @endif
                                 </div>
                             @endforeach
-                        @else
-                            <p class="rtl-text">لا يوجد محتوى باللغة العربية</p>
                         @endif
                     </div>
                 </div>
@@ -445,10 +436,10 @@
             </form>
         </div>
     </div>
-
+@endsection
+@push('js')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Language tabs functionality
             const tabs = document.querySelectorAll('.language-tab');
             tabs.forEach(tab => {
                 tab.addEventListener('click', () => {
@@ -466,7 +457,6 @@
                 });
             });
 
-            // Add item functionality
             document.querySelectorAll('.add-item-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const containerId = this.getAttribute('data-container');
@@ -474,58 +464,22 @@
                     const type = this.getAttribute('data-type');
 
                     if (type === 'string') {
+                        const parts = containerId.split('_');
+                        const lang = parts[0];
+                        const key = parts[1];
+
                         // Add new string item
                         const div = document.createElement('div');
                         div.className = 'seo-item-container';
                         div.innerHTML = `
-                        <div class="d-flex justify-content-between">
-                            <input type="text" name="content_json[${containerId.split('_')[0]}][${containerId.split('_')[1]}][]" 
-                                   class="seo-input${containerId.startsWith('ar') ? ' rtl-text' : ''}">
-                            <button type="button" class="remove-item-btn">Remove</button>
-                        </div>
-                    `;
+                    <div class="d-flex justify-content-between">
+                        <input type="text" name="content_json[${lang}][${key}][]" 
+                               class="seo-input${lang === 'ar' ? ' rtl-text' : ''}">
+                        <button type="button" class="remove-item-btn">Remove</button>
+                    </div>
+                `;
                         container.appendChild(div);
 
-                        // Add event listener to the new remove button
-                        div.querySelector('.remove-item-btn').addEventListener('click', function() {
-                            div.remove();
-                        });
-                    } else if (type === 'object') {
-                        // Add new object item
-                        const template = JSON.parse(this.getAttribute('data-template'));
-                        const itemCount = container.querySelectorAll('.seo-item-container').length;
-
-                        const div = document.createElement('div');
-                        div.className = 'seo-item-container';
-
-                        let html = `
-                        <div class="d-flex justify-content-between">
-                            <h4 class="seo-item-title">Item ${itemCount + 1}</h4>
-                            <button type="button" class="remove-item-btn">Remove</button>
-                        </div>
-                    `;
-
-                        // Create form fields for each property in the template
-                        Object.entries(template).forEach(([key, value]) => {
-                            const isLongText = typeof value === 'string' && value.length >
-                                100;
-                            html += `
-                            <div class="seo-form-group">
-                                <label class="seo-label">${key.charAt(0).toUpperCase() + key.slice(1).replace(/[_-]/g, ' ')}</label>
-                                ${isLongText ? 
-                                    `<textarea name="content_json[${containerId.split('_')[0]}][${containerId.split('_')[1]}][${itemCount}][${key}]" 
-                                                  class="seo-textarea${containerId.startsWith('ar') ? ' rtl-text' : ''}"></textarea>` : 
-                                    `<input type="text" name="content_json[${containerId.split('_')[0]}][${containerId.split('_')[1]}][${itemCount}][${key}]" 
-                                               value="" class="seo-input${containerId.startsWith('ar') ? ' rtl-text' : ''}">`
-                                }
-                            </div>
-                        `;
-                        });
-
-                        div.innerHTML = html;
-                        container.appendChild(div);
-
-                        // Add event listener to the new remove button
                         div.querySelector('.remove-item-btn').addEventListener('click', function() {
                             div.remove();
                         });
@@ -533,12 +487,34 @@
                 });
             });
 
-            // Remove item functionality
+            // Add image functionality
+            document.querySelectorAll('.add-image-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const containerId = this.getAttribute('data-container');
+                    const container = document.getElementById(containerId);
+
+                    const fileInput = document.createElement('input');
+                    fileInput.type = 'file';
+                    fileInput.name = `image_uploads[${containerId.split('_')[0]}][images][]`;
+                    fileInput.className = 'seo-input';
+                    fileInput.accept = 'image/*';
+                    fileInput.style.marginTop = '10px';
+
+                    container.appendChild(fileInput);
+                });
+            });
+
             document.querySelectorAll('.remove-item-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    this.closest('.seo-item-container').remove();
+                    this.closest('.seo-item-container, .image-item').remove();
+                });
+            });
+
+            document.querySelectorAll('.remove-image-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.closest('.image-item').remove();
                 });
             });
         });
     </script>
-@endsection
+@endpush

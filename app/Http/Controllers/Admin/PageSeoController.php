@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Page;
 use App\Models\PageSeo;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class PageSeoController extends Controller
 {
@@ -20,115 +19,99 @@ class PageSeoController extends Controller
     public function edit($id)
     {
         $pageSeo = PageSeo::findOrFail($id);
-        // return response()->json($pageSeo->content_json);
         return view('admin.pages.pages-seo.edit', compact('pageSeo'));
     }
     public function update(Request $request, $id)
     {
         $pageSeo = PageSeo::findOrFail($id);
 
-        $validator = Validator::make($request->all(), [
+        $validatedData = $request->validate([
             'section_type' => 'required|string|max:255',
             'order' => 'required|integer',
             'status' => 'required|boolean',
-            'content_json' => 'required|array',
+            'content_json.en.images.*' => 'sometimes|string', // Maintain existing images
+            'content_json.ar.images.*' => 'sometimes|string', // Maintain existing images
         ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
+        // Get the existing content
+        $contentJson = is_array($pageSeo->content_json)
+            ? $pageSeo->content_json
+            : json_decode($pageSeo->content_json, true) ?? [];
+
+        // Process both languages
+        foreach (['en', 'ar'] as $lang) {
+            if (!isset($contentJson[$lang])) {
+                $contentJson[$lang] = [];
+            }
+
+            // Handle single image upload
+            if ($request->hasFile("image_uploads.$lang.image")) {
+                $file = $request->file("image_uploads.$lang.image");
+
+                // Delete old image if exists
+                if (isset($contentJson[$lang]['image']) && !empty($contentJson[$lang]['image'])) {
+                    $oldImagePath = public_path($contentJson[$lang]['image']);
+                    if (file_exists($oldImagePath)) {
+                        unlink($oldImagePath);
+                    }
+                }
+
+                // Store new image
+                $filename = 'seo_' . $lang . '_' . $id . '_' . time() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('uploads/seo-images'), $filename);
+                $contentJson[$lang]['image'] = 'uploads/seo-images/' . $filename;
+            }
+
+            // Handle multiple images upload - only process if files are actually uploaded
+            if ($request->hasFile("image_uploads.$lang.images")) {
+                // First, delete all old images if they exist
+                if (isset($contentJson[$lang]['images']) && is_array($contentJson[$lang]['images'])) {
+                    foreach ($contentJson[$lang]['images'] as $oldImage) {
+                        $oldImagePath = public_path($oldImage);
+                        if (file_exists($oldImagePath)) {
+                            unlink($oldImagePath);
+                        }
+                    }
+                }
+
+                // Clear the old images array
+                $contentJson[$lang]['images'] = [];
+
+                // Store new images
+                foreach ($request->file("image_uploads.$lang.images") as $upload) {
+                    if ($upload) {
+                        $filename = 'seo_' . $lang . '_' . $id . '_' . time() . '_' . rand(1000, 9999) . '.' . $upload->getClientOriginalExtension();
+                        $upload->move(public_path('uploads/seo-images'), $filename);
+                        $contentJson[$lang]['images'][] = 'uploads/seo-images/' . $filename;
+                    }
+                }
+            } elseif ($request->has("content_json.$lang.images")) {
+                // Maintain existing images if no new files are uploaded
+                $contentJson[$lang]['images'] = $request->input("content_json.$lang.images", []);
+            }
+
+            // Merge other content fields
+            if ($request->has("content_json.$lang")) {
+                foreach ($request->input("content_json.$lang", []) as $key => $value) {
+                    // Skip image fields as they're handled above
+                    if ($key === 'image' || $key === 'images') {
+                        continue;
+                    }
+
+                    $contentJson[$lang][$key] = $value;
+                }
+            }
         }
 
-        // Process content_json data
-        $contentJson = $request->content_json;
-
         $pageSeo->update([
-            'section_type' => $request->section_type,
+            'section_type' => $validatedData['section_type'],
+            'order' => $validatedData['order'],
+            'status' => $validatedData['status'],
             'content_json' => $contentJson,
-            'order' => $request->order,
-            'status' => $request->status,
         ]);
 
-        return redirect()->route('admin.pages-seo.index', $pageSeo->page_id)
-            ->with('success', 'SEO section updated successfully');
+        return redirect()
+            ->route('admin.pages-seo.index', $pageSeo->page_id)
+            ->with('success', 'SEO section updated successfully.');
     }
-    //     public function update(Request $request, $id)
-// {
-//     $pageSeo = PageSeo::findOrFail($id);
-
-    //     $validator = Validator::make($request->all(), [
-//         'section_type' => 'required|string|max:255',
-//         'order' => 'required|integer',
-//         'status' => 'required|boolean',
-//         'content_json' => 'required|array',
-//     ]);
-
-    //     if ($validator->fails()) {
-//         return redirect()->back()
-//             ->withErrors($validator)
-//             ->withInput();
-//     }
-
-    //     // Get current content for reference when updating images
-//     $currentContent = is_array($pageSeo->content_json) ? $pageSeo->content_json : json_decode($pageSeo->content_json, true);
-
-    //     // Process content_json data
-//     $contentJson = $request->content_json;
-
-    //     // Process image uploads in content_json
-//     foreach ($contentJson as $lang => $content) {
-//         foreach ($content as $key => $value) {
-//             // Handle image field uploads
-//             if (stripos($key, 'image') !== false && $request->hasFile("file_{$lang}_{$key}")) {
-//                 // Delete old file if exists
-//                 if (isset($currentContent[$lang][$key]) && !empty($currentContent[$lang][$key])) {
-//                     $oldImagePath = public_path($currentContent[$lang][$key]);
-//                     if (file_exists($oldImagePath)) {
-//                         unlink($oldImagePath);
-//                     }
-//                 }
-
-    //                 $file = $request->file("file_{$lang}_{$key}");
-//                 $filename = 'seo_' . $pageSeo->id . '_' . $lang . '_' . $key . '_' . time() . '.' . $file->getClientOriginalExtension();
-//                 $file->move(public_path('uploads/pages/seo'), $filename);
-//                 $contentJson[$lang][$key] = 'uploads/pages/seo/' . $filename;
-//             }
-
-    //             // Handle arrays of objects that might contain images
-//             if (is_array($value)) {
-//                 foreach ($value as $index => $item) {
-//                     if (is_array($item)) {
-//                         foreach ($item as $itemKey => $itemValue) {
-//                             if (stripos($itemKey, 'image') !== false && $request->hasFile("file_{$lang}_{$key}_{$index}_{$itemKey}")) {
-//                                 // Delete old file if exists
-//                                 if (isset($currentContent[$lang][$key][$index][$itemKey]) && !empty($currentContent[$lang][$key][$index][$itemKey])) {
-//                                     $oldImagePath = public_path($currentContent[$lang][$key][$index][$itemKey]);
-//                                     if (file_exists($oldImagePath)) {
-//                                         unlink($oldImagePath);
-//                                     }
-//                                 }
-
-    //                                 $file = $request->file("file_{$lang}_{$key}_{$index}_{$itemKey}");
-//                                 $filename = 'seo_' . $pageSeo->id . '_' . $lang . '_' . $key . '_' . $index . '_' . $itemKey . '_' . time() . '.' . $file->getClientOriginalExtension();
-//                                 $file->move(public_path('uploads/pages/seo'), $filename);
-//                                 $contentJson[$lang][$key][$index][$itemKey] = 'uploads/pages/seo/' . $filename;
-//                             }
-//                         }
-//                     }
-//                 }
-//             }
-//         }
-//     }
-
-    //     $pageSeo->update([
-//         'section_type' => $request->section_type,
-//         'content_json' => $contentJson,
-//         'order' => $request->order,
-//         'status' => $request->status,
-//     ]);
-
-    //     return redirect()->route('admin.pages-seo.index', $pageSeo->page_id)
-//         ->with('success', 'SEO section updated successfully');
-// }
 }
