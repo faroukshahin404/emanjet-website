@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BusType;
 use App\Models\City;
 use App\Models\Degree;
+use App\Models\RunTrip;
 use App\Models\Station;
 use App\Services\ConfirmBookingService;
 use App\Traits\BookingTrait;
@@ -79,6 +81,9 @@ class OnewayMobileController extends Controller
             'go_date' => 'required|date|after_or_equal:today',
             'selected_trip_id' => 'required|exists:run_trips,id',
         ]);
+        $trip = RunTrip::find($request->selected_trip_id);
+        $busType = $trip->busType;
+
         $seats = $this->getBusSeat($request->selected_trip_id, $request->station_from_id, $request->station_to_id);
         $tripTime = $this->getTripTime($request->selected_trip_id, $request->station_from_id);
         return view('mobile.one-way.choose-seat.index', [
@@ -87,7 +92,8 @@ class OnewayMobileController extends Controller
             'toCity' => City::find(request()->city_to_id),
             'fromStation' => Station::find(request()->station_from_id),
             'toStation' => Station::find(request()->station_to_id),
-            'tripTime' => $tripTime
+            'tripTime' => $tripTime,
+            'busType' => $busType
         ]);
     }
 

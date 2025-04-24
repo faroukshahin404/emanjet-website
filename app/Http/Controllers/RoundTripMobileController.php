@@ -136,7 +136,8 @@ class RoundTripMobileController extends Controller
         $backTrip = RunTrip::findOrFail($validated['back_trip_id']);
         $backSeats = $this->getBusSeat($backTrip->id, $validated['station_to_id'], $validated['station_from_id']);
         $backTripTime = $this->getTripTime($backTrip->id, $validated['station_to_id']);
-
+        $busType = $goTrip->busType;
+    
         return view('mobile.round.choose-seat.index', [
             'goSeats' => $goSeats,
             'returnSeats' => $backSeats,
@@ -152,6 +153,7 @@ class RoundTripMobileController extends Controller
             'seatCount' => $validated['seats'],
             'goTrip' => $goTrip,
             'backTrip' => $backTrip,
+            'busType' => $busType
         ]);
     }
     public function bookingSummary(Request $request)

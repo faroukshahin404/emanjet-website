@@ -21,12 +21,29 @@
     <!-- apple-touch-icon -->
     <link rel="apple-touch-icon" href="{{ asset('/images/logo.png') }}">
     {{-- vendors styles  --}}
-    <link rel="stylesheet" href="{{asset('/css/vendors_css.css')  }}">
+    <link rel="stylesheet" href="{{ asset('/css/vendors_css.css') }}">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('/css/mobile.css') }}">
     <link rel="stylesheet" href="{{ asset('css/custom-toastr.css') }}">
-
+    <!-- Google Tag Manager -->
+    <script>
+        (function(w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({
+                'gtm.start': new Date().getTime(),
+                event: 'gtm.js'
+            });
+            var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s),
+                dl = l != 'dataLayer' ? '&l=' + l : '';
+            j.async = true;
+            j.src =
+                'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-N3NL6Z9H');
+    </script>
+    <!-- End Google Tag Manager -->
     {{-- Start Seo --}}
     @if (isset($seo) && !empty($seo))
         <title>{{ $seo['meta_title'] }}</title>

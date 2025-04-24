@@ -340,7 +340,6 @@
     "Trip Price": "سعر الرحلة",
     "Passenger Data": "بيانات الراكب",
     "My Past Trips": "رحلاتي السابقة",
-    "If you don’t have an account, you can register by clicking on": "في حالة عدم امتلاك حساب، يمكنك التسجيل من خلال الضغط على",
     "Didn’t receive the code? Resend": "ما استلمتش الكود؟ اعادة إرساله",
     "Blog created successfully.": "تم إنشاء المدونة بنجاح.",
     "Blog updated successfully.": "تم تحديث المدونة بنجاح.",
@@ -371,5 +370,7 @@
     "Email": "البريد الإلكتروني",
     "Otp Sent To your number": "تم ارسال رمز التحقق الى رقمك",
     "Error while sending OTP": "خطأ في ارسال رمز التحقق",
-    "You have used all available OTPS": "لقد تم استخدام كل الرموز المسموح بها"
+    "You have used all available OTPS": "لقد تم استخدام كل الرموز المسموح بها",
+    "If you don’t have an account, you can register by clicking on": "في حالة عدم امتلاك حساب، يمكنك التسجيل من خلال الضغط على",
+    "Payment may take up to 1 hour to process. Don't worry!": "قد يستغرق الدفع ساعة واحدة ليتم المعالجة. لا تقلق!"
 }

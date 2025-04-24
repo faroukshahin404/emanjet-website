@@ -16,7 +16,7 @@
         </div>
     </div>
     <div class="d-flex justify-content-center">
-        <div class="row mt-2 justify-content-center chairs" style="width: 250px;">
+        <div class="row mt-2 justify-content-center chairs" style="width: {{(@$busType->width??5) * 50}}px;">
             @foreach ($goSeats as $seat)
                 @if ($seat['type'] == 1)
                     <div class="chair-number">

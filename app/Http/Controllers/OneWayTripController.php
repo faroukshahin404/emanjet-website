@@ -7,6 +7,7 @@ use App\Http\Requests\OnewayConfirmBooking;
 use App\Http\Requests\OnewayConfirmBookingRequest;
 use App\Models\City;
 use App\Models\Degree;
+use App\Models\RunTrip;
 use App\Models\Station;
 use App\Services\ConfirmBookingService;
 use App\Traits\BookingTrait;
@@ -85,13 +86,17 @@ class OneWayTripController extends Controller
         ]);
         $seats = $this->getBusSeat($request->selected_trip_id, $request->station_from_id, $request->station_to_id);
         $tripTime = $this->getTripTime($request->selected_trip_id, $request->station_from_id);
+        $trip = RunTrip::find($request->selected_trip_id);
+        $busType = $trip->busType;
+
         return view('one-way.choose-seat.index', [
             'seats' => $seats,
             'fromCity' => City::find(request()->city_from_id),
             'toCity' => City::find(request()->city_to_id),
             'fromStation' => Station::find(request()->station_from_id),
             'toStation' => Station::find(request()->station_to_id),
-            'tripTime' => $tripTime
+            'tripTime' => $tripTime,
+            'busType' => $busType
         ]);
     }
 
