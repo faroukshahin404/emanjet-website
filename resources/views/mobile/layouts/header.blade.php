@@ -5,7 +5,7 @@
       @else
           <p class="m-0 text-black">مرحبا بك عميلنا العزيز</p>
       @endif
-      @if (auth()->check())
+      {{-- @if (auth()->check())
           <div class="mo-bell-box position-relative">
               <div class="bell-icon">
                   <p class="notification-count position-absolute m-0">1</p>
@@ -28,6 +28,6 @@
                   </div>
               </div>
           </div>
-      @endif
+      @endif --}}
 
   </div>

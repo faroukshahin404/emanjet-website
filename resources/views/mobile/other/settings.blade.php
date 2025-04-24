@@ -4,29 +4,29 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <i class="fas fa-arrow-right fs-18 text-black" onclick="window.history.back()"></i>
 
-        <p class="m-0 fs-25 text-black">الاعدادات</p>
+        <p class="m-0 fs-25 text-black">{{__('Settings')}}</p>
         <div></div>
     </div>
 
     <div class="mt-3">
-        <h2 class="text-black">الحساب</h2>
+        <h2 class="text-black">{{__('Account')}}</h2>
         <div class="bg-light px-2 py-3 rounded-5">
 
-            <a href="edit-profile.html" class="text-black">
+            <a href="{{ route('profile.edit') }}" class="text-black">
                 <div class="d-flex justify-content-start align-items-center gap-3 mb-2">
                     <i class="fa fa-user"></i>
                     <p class="m-0">{{ __('Edit Profile') }}</p>
                 </div>
             </a>
 
-            <a href="terms-page.html" class="text-black">
+            <a href="{{ route('usage-terms') }}" class="text-black">
                 <div class="d-flex justify-content-start align-items-center gap-3 mb-2">
                     <i class="fa-solid fa-shield"></i>
                     <p class="m-0">{{ __('Terms and Conditions') }}</p>
                 </div>
             </a>
 
-            <a href="privacy.html" class="text-black">
+            <a href="{{ route('privacy-policy') }}" class="text-black">
                 <div class="d-flex justify-content-start align-items-center gap-3 mb-2">
                     <i class="fas fa-lock"></i>
                     <p class="m-0">{{ __('Privacy Policy') }}</p>
@@ -53,7 +53,7 @@
         <div class="bg-light px-2 py-3 rounded-5">
             <a href="tel:{{ $contactUs['phone'] }}" class="text-black">
                 <div class="d-flex justify-content-start align-items-center gap-3 mb-2">
-                    <i class="fa fa-phone"></i>
+                    <i class="fa fa-headphones"></i>
                     <p class="m-0">{{ __('Hotline') }}</p>
                 </div>
             </a>
@@ -65,6 +65,23 @@
         <h2 class="text-black">
             {{ __('Actions') }}
         </h2>
+        {{-- Languageage --}}
+        <div class="bg-light px-2 py-3 rounded-5">
+            <a href="{{ route('lang.switch', ['locale' => session('locale') == 'en'?'ar':'en']) }}" class="text-black">
+            <div class="d-flex justify-content-start align-items-center gap-3 mb-2">
+                <i class="fa-solid fa-language"></i>
+                @if(session('locale') == 'en')
+                    <p class="m-0">{{ __('Arabic') }}</p>
+                @else
+                    <p class="m-0">{{ __('English') }}</p>
+                @endif
+              
+                
+            </div>
+            </a>
+            <!-- #region -->
+        </div>
+       
 
         <div class="bg-light px-2 py-3 rounded-5">
             <div class="d-flex justify-content-start align-items-center gap-3 mb-2">

@@ -2,9 +2,8 @@
 
 @section('mobile-content')
     <div class="d-flex justify-content-between align-items-center">
-        <a href="/">
-            <i class="fas fa-arrow-right fs-25 text-black"></i>
-        </a>
+        <i class="fas fa-arrow-right fs-25 text-black" onclick="window.history.back()"></i>
+
         <p class="m-0 fs-25 text-black">رحلات العودة</p>
         <div></div>
     </div>
@@ -75,9 +74,9 @@
                         </div>
                     </div>
                 </div>
-
+                @if($trips->count() > 0)
                 @foreach ($trips as $trip)
-                    <a href="{{ route('mobile.round.choose-seat', array_merge(request()->all(), ['back_trip_id' => $trip->id])) }}">
+                    <a href="{{ route('mobile.round.choose-seat', array_merge(request()->all(), ['back_trip_id' => $trip->id])) }}" style="color: black; text-decoration: none;">
                         <div class="mt-3 border rounded-7 py-3 px-3 bus-card mb-3">
                             <div class="d-flex justify-content-between">
 
@@ -118,7 +117,22 @@
                         </div>
                     </a>
                 @endforeach
-
+                @else 
+                {{-- NO TRIPS Design --}}
+                <div class="d-flex justify-content-center align-items-center">
+                    <div class="text-center">
+                        <i class="fa fa-bus text-main" style="font-size: 100px"></i>
+                        <p class="m-0 fs-20">{{ __('No Trips Available') }}</p>
+                        <p class="m-0 fs-15">{{ __('Please, choose another date or destination') }}</p>
+                        <hr>
+                        <a
+                         class="login" href="tel:{{ $contactUs['phone'] }}">
+                         <i class="fa fa-phone fs-15"></i>
+                            {{ __('Call Us') }}
+                        </a>
+                    </div>
+                </div>
+                @endif 
 
 
 

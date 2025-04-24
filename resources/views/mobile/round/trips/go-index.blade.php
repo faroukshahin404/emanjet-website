@@ -74,49 +74,65 @@
                         </div>
                     </div>
                 </div>
+                @if ($trips->count() > 0)
+                    @foreach ($trips as $trip)
+                        <a href="{{ route('mobile.round.back-trips', array_merge(request()->all(), ['go_trip_id' => $trip->id])) }}"
+                            class="text-black text-decoration-none">
+                            <div class="mt-3 border rounded-7 py-3 px-3 bus-card mb-3">
+                                <div class="d-flex justify-content-between">
 
-                @foreach ($trips as $trip)
-                    <a href="{{ route('mobile.round.back-trips', array_merge(request()->all(), ['go_trip_id' => $trip->id])) }}">
-                        <div class="mt-3 border rounded-7 py-3 px-3 bus-card mb-3">
-                            <div class="d-flex justify-content-between">
-
-                                <div class="d-flex justify-content-between gap-2">
-                                    <div class="bus-box-mobile m-auto">
-                                        <i class="fa fa-bus text-main fs-20"></i>
-                                    </div>
-                                    <div class="mt-1">
-                                        <div class="d-flex gap-2">
-                                            @php
-                                                $time = \Carbon\Carbon::parse($trip->tripTime)->format('h:i a');
-                                            @endphp
-                                            <p class="m-0 fs-12">{{ $time }}</p>
-                                            <p class="m-0 vip ">{{ $trip->degree }}</p>
+                                    <div class="d-flex justify-content-between gap-2">
+                                        <div class="bus-box-mobile m-auto">
+                                            <i class="fa fa-bus text-main fs-20"></i>
                                         </div>
-                                        <div class="d-flex align-items-center gap-2">
-                                            <div class="d-flex flex-column align-items-center ">
-                                                <div class="green-circle-mobile"></div>
-                                                <div class="line-mobile"></div>
-                                                <div class="red-circle-mobile"></div>
+                                        <div class="mt-1">
+                                            <div class="d-flex gap-2">
+                                                @php
+                                                    $time = \Carbon\Carbon::parse($trip->tripTime)->format('h:i a');
+                                                @endphp
+                                                <p class="m-0 fs-12">{{ $time }}</p>
+                                                <p class="m-0 vip ">{{ $trip->degree }}</p>
                                             </div>
-                                            <div class="d-flex flex-column justify-content-between">
-                                                <p class="m-0 fs-12">{{ $trip->fromStation }} </p>
-                                                <p class="m-0 fs-12">{{ $trip->toStation }}</p>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="d-flex flex-column align-items-center ">
+                                                    <div class="green-circle-mobile"></div>
+                                                    <div class="line-mobile"></div>
+                                                    <div class="red-circle-mobile"></div>
+                                                </div>
+                                                <div class="d-flex flex-column justify-content-between">
+                                                    <p class="m-0 fs-12">{{ $trip->fromStation }} </p>
+                                                    <p class="m-0 fs-12">{{ $trip->toStation }}</p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div>
-                                    <p class="m-0 fs-12">{{ $trip->price }} جنية مصري</p>
-                                    <p class="m-0 fs-12">لكل مقعد</p>
-                                    <p class="m-0 fs-12 text-success">متبقي {{ $trip->available_seats }} مقاعد</p>
-                                    <button class="btn btn-main mt-2 btn-sm rounded-5" type="button">
-                                        حجز
-                                    </button>
+                                    <div>
+                                        <p class="m-0 fs-12">{{ $trip->price }} جنية مصري</p>
+                                        <p class="m-0 fs-12">لكل مقعد</p>
+                                        <p class="m-0 fs-12 text-success">متبقي {{ $trip->available_seats }} مقاعد</p>
+                                        <button class="btn btn-main mt-2 btn-sm rounded-5" type="button">
+                                            حجز
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
+                        </a>
+                    @endforeach
+                @else
+                    {{-- NO TRIPS Design --}}
+                    <div class="d-flex justify-content-center align-items-center">
+                        <div class="text-center">
+                            <i class="fa fa-bus text-main" style="font-size: 100px"></i>
+                            <p class="m-0 fs-20">{{ __('No Trips Available') }}</p>
+                            <p class="m-0 fs-15">{{ __('Please, choose another date or destination') }}</p>
+                            <hr>
+                            <a class="login" href="tel:{{ $contactUs['phone'] }}">
+                                <i class="fa fa-phone fs-15"></i>
+                                {{ __('Call Us') }}
+                            </a>
                         </div>
-                    </a>
-                @endforeach
+                    </div>
+                @endif
 
 
 

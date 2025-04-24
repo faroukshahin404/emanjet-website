@@ -130,8 +130,30 @@ class HomeController extends Controller
 
     public function privacy_policy()
     {
-        $page = PageSeo::where('page_slug', 'privacy-policy')->first();
+        $page = Page::where('slug', 'privacy-policy')->first();
+        $privacePageSeos = $page->pageSeos()->get();
+        $heroSection = @$privacePageSeos->first()->translated_content_json;
+        $serviceSection = @$privacePageSeos->first()->translated_content_json;
+        $seo = getSeoData($page);
+
+
         return view('other.privacy-policy.index')->with([
+            'heroSection' => $heroSection,
+            'serviceSection' => $serviceSection,
+            'seo' => $seo
+        ]);
+    }
+
+    public function usage_terms()
+    {
+        $page = Page::where('slug', 'usage-terms')->first();
+        $privacePageSeos = $page->pageSeos()->get();
+        $heroSection = @$privacePageSeos->first()->translated_content_json;
+        $serviceSection = @$privacePageSeos->first()->translated_content_json;
+        $seo = getSeoData($page);
+
+
+        return view('other.usage-terms.index')->with([
             'heroSection' => $heroSection,
             'serviceSection' => $serviceSection,
             'seo' => $seo

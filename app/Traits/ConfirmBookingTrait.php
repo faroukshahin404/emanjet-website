@@ -66,8 +66,7 @@ trait ConfirmBookingTrait
             'passenger_type'=>1,
 
         ]);
-        if ($payment_key == null) {
-
+        if ($payment_key != null) {
             foreach ($seats as $key => $seat_id) {
                 $tripSeat = TripSeat::find($seat_id);
                 if(!isSeatAvailable($seat_id , $runTrip_id , $runTrip->tripData_id, $line->id)){

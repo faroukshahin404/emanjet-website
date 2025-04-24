@@ -2,9 +2,7 @@
 
 @section('mobile-content')
     <div class="d-flex justify-content-between align-items-center mb-2">
-        <a href="bus.html">
-            <i class="fas fa-arrow-right fs-25 text-black"></i>
-        </a>
+        <i class="fas fa-arrow-right fs-25 text-black" onclick="window.history.back()"></i>
         <p class="m-0 fs-25 text-black">اختر مقعدك</p>
         <div></div>
     </div>
