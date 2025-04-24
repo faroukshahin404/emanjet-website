@@ -106,7 +106,7 @@
 
             document.addEventListener('DOMContentLoaded', function() {
                 const inputs = document.querySelectorAll('input[name="otp[]"]');
-                const initialTime = document.getElementById('initial-time').value || 30;
+                const initialTime = document.getElementById('initial-time').value || 120;
 
                 // Start timer with initial value
                 startTimer(parseInt(initialTime));
@@ -170,7 +170,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        startTimer(30);
+                        startTimer(120);
                         alert(data.message);
                     } else {
                         if (data.remainingTime) {

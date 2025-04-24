@@ -162,7 +162,7 @@
                 .then(data => {
                     if (data.success) {
                         // Start timer with new value from backend response
-                        startTimer(30);
+                        startTimer(120);
                         alert(data.message);
                     } else {
                         alert(data.message);
