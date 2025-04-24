@@ -368,5 +368,8 @@
     "SEO Sections for:": "أقسام تحسين محركات البحث لـ:",
     "Privacy": "الخصوصية",
     "Usage Terms": "شروط الاستخدام",
-    "Email": "البريد الإلكتروني"
+    "Email": "البريد الإلكتروني",
+    "Otp Sent To your number": "تم ارسال رمز التحقق الى رقمك",
+    "Error while sending OTP": "خطأ في ارسال رمز التحقق",
+    "You have used all available OTPS": "لقد تم استخدام كل الرموز المسموح بها"
 }

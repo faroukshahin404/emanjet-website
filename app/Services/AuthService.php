@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\User;
 use App\Models\Otp;
 use Carbon\Carbon;
+use DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
@@ -34,41 +35,53 @@ class AuthService
         return array_map('floatval', explode(',', $waitMinutes));
     }
 
-    // تسجيل المستخدم
-    public function registerUser($data)
+    public function registerUser($request)
     {
-        $existingUser = User::where('mobile', $data->phone)->first();
-
-        if ($existingUser && $existingUser->password) {
-            return null;  // إذا كان الرقم موجودًا ومسجلًا مسبقًا
-        }
-
+        DB::beginTransaction();
         $user = User::create([
-            'name' => $data->name,
-            'mobile' => $data->phone,
-            'password' => Hash::make($data->password),
+            'name' => $request->name,
+            'mobile' => $request->phone,
+            'password' => Hash::make($request->password),
         ]);
-
-        $this->sendOtp($user);
-
-        return $user;
+        $result = $this->sendOtp($user);
+        if (!$result['success']) {
+            DB::rollBack();
+        }
+        DB::commit();
+        return $result;
     }
 
-   public function sendOtp($user)
+    public function sendOtp($user)
     {
-        $otp = rand(1000, 9999);
-   
-        $this->sendOtpUsingServiceProvider($user->mobile, $otp);
-        Otp::create([
-            'user_id' => $user->id,
-            'phone' => $user->mobile,
-            'otp' => $otp,
-            'expires_at' => now()->addMinutes($this->getOtpExpiryMinutes()),
-            'attempts' => 0
-        ]);
+        $otp = $this->generateOtp();
+        if (!$this->sendOtpUsingServiceProvider($user->mobile, $otp)) {
+            return [
+                'success' => false,
+                'message' => __('Error while sending OTP'),
+            ];
+        }
+        $userCanSendOtp = $this->checkIfUserCanSendOtp($user);
+        if (!$userCanSendOtp['success']) {
+            return $userCanSendOtp;
+        }
+        if (Otp::where('user_id', $user->id)->exists()) {
+            $existingOtp = Otp::where('user_id', $user->id)->first();
+            $existingOtp->update([
+                'otp' => $otp,
+                'expires_at' => now()->addMinutes($this->getOtpExpiryMinutes()),
+                'attempts' => $existingOtp->attempts + 1
+            ]);
+        } else {
+            Otp::create([
+                'user_id' => $user->id,
+                'phone' => $user->mobile,
+                'otp' => $otp,
+                'expires_at' => now()->addMinutes($this->getOtpExpiryMinutes()),
+                'attempts' => 1
+            ]);
+        }
         return [
             'success' => true,
-            'message' => 'تم إرسال رمز التحقق بنجاح.'
         ];
     }
 
@@ -151,8 +164,9 @@ class AuthService
         return number_format($minutes, 1) . ' دقيقة';
     }
 
- public function sendOtpUsingServiceProvider($receiver, $otp)
+    public function sendOtpUsingServiceProvider($receiver, $otp)
     {
+   
         $accountId = '550182041';
         $password = 'Vodafone.1';
         $secretKey = 'CA7FAB8B6A4146FFB66513E912D1DEF4';
@@ -172,7 +186,7 @@ class AuthService
         <SecureHash>' . $secureHash . '</SecureHash>
         <SMSList>
             <SenderName>' . $senderName . '</SenderName>
-            <ReceiverMSISDN>' .'2'.$receiver . '</ReceiverMSISDN>
+            <ReceiverMSISDN>' . '2' . $receiver . '</ReceiverMSISDN>
             <SMSText>' . $smsText . '</SMSText>
         </SMSList>
     </SubmitSMSRequest>';
@@ -206,5 +220,34 @@ class AuthService
 
         return false;
 
+    }
+
+
+    public function generateOtp()
+    {
+        $otp = rand(1000, 9999);
+        while (Otp::where('otp', $otp)->exists()) {
+            $otp = rand(1000, 9999);
+        }
+        return $otp;
+    }
+
+    public function checkIfUserCanSendOtp($user)
+    {
+        $lastOtp = Otp::where('user_id', $user->id)->latest()->first();
+        if (!$lastOtp) {
+            return [
+                'success' => true
+            ];
+        }
+        if ($lastOtp->attempts >= $this->getMaxOtpAttempts()) {
+            return [
+                'success' => false,
+                'message' => __('You have used all available OTPS')
+            ];
+        }
+        return [
+            'success' => true
+        ];
     }
 }
