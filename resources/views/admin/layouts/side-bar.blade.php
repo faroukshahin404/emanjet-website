@@ -24,6 +24,9 @@
                             <li><a href="{{ route('admin.blog-categories.index') }}"><i class="icon-Commit"><span
                                             class="path1"></span><span
                                             class="path2"></span></i>{{ __('Blog Categories') }}</a></li>
+                            <li><a href="{{ route('admin.blogs.index') }}"><i class="icon-Commit"><span
+                                            class="path1"></span><span
+                                            class="path2"></span></i>{{ __('Blogs') }}</a></li>
                             <li>
                                 <a href="{{ route('admin.bus-categories.index') }}"><i class="icon-Commit">
                                         <span class="path1"></span>
