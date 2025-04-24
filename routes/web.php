@@ -38,7 +38,7 @@ Route::group([
     Route::get('/get-stations/{city}', [HomeController::class, 'getStations']);
 
     // Tickets and Settings routes
-    Route::get('/tickets', [HomeController::class, 'tickets'])->name('tickets');
+    Route::get('/tickets', [HomeController::class, 'tickets'])->name('tickets')->middleware('checkUserVerified');
     Route::get('/settings', [HomeController::class, 'settings'])->name('settings');
 
     // Desktop Routes
@@ -73,6 +73,10 @@ Route::group([
                 Route::get('/choose-seat', [RoundTripMobileController::class, 'chooseSeats'])->name('choose-seat');
                 Route::get('booking-summary', [RoundTripMobileController::class, 'bookingSummary'])->name('booking-summary');
             });
+        });
+        Route::group(['middleware' => 'checkUserVerified'], function () {
+            Route::get('tickets', [ProfileController::class, 'index'])->name('tickets');
+            Route::get('settings', [ProfileController::class, 'settings'])->name('settings');
         });
     });
 

@@ -11,8 +11,9 @@
 
     <div class="mt-3">
         <div class="tabs-container">
-            <!-- <button class="scroll-btn left-btn" aria-label="Scroll left">&lt;</button> -->
-            <div class="tabs-wrapper">
+        
+            
+            <div class="tabs-wrapper" style="position: sticky; top: 0; z-index: 100; background: white;">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     @foreach ($dates as $date)
                         <form>
@@ -28,10 +29,9 @@
 
                             <li class="nav-item" role="presentation">
 
-                                <button class="nav-link" id="{{ $date }}-tab" data-bs-toggle="tab"
+                                <button class="nav-link" id="{{ $date }}-tab"
                                     style="background-color: {{ request()->go_date == $date ? 'var(--main-color)' : 'white' }};"
-                                    data-bs-target="#{{ $date }}" type="submit" role="tab" name="go_date"
-                                    value="{{ $date }}" aria-controls="{{ $date }}"
+                                    type="submit" role="tab" name="go_date" value="{{ $date }}"
                                     aria-selected="false">{{ $date }}</button>
                             </li>
                         </form>
@@ -74,41 +74,43 @@
                         </div>
                     </div>
                 </div>
-
+                @if($trips->count() > 0)
+                
                 @foreach ($trips as $trip)
-                    <a href="{{ route('mobile.one-way.choose-seat', array_merge(request()->all(), ['selected_trip_id' => $trip->id])) }}">
+                    <a
+                        href="{{ route('mobile.one-way.choose-seat', array_merge(request()->all(), ['selected_trip_id' => $trip->id])) }}">
                         <div class="mt-3 border rounded-7 py-3 px-3 bus-card mb-3">
-                            <div class="d-flex justify-content-between">
+                            <div class="d-flex justify-content-between" style="color: black;">
 
-                                <div class="d-flex justify-content-between gap-2">
-                                    <div class="bus-box-mobile m-auto">
+                                <div class="d-flex justify-content-between gap-2" style="color: black;">
+                                    <div class="bus-box-mobile m-auto" style="color: black;">
                                         <i class="fa fa-bus text-main fs-20"></i>
                                     </div>
-                                    <div class="mt-1">
-                                        <div class="d-flex gap-2">
+                                    <div class="mt-1" style="color: black;">
+                                        <div class="d-flex gap-2" style="color: black;">
                                             @php
                                                 $time = \Carbon\Carbon::parse($trip->tripTime)->format('h:i a');
                                             @endphp
-                                            <p class="m-0 fs-12">{{ $time }}</p>
-                                            <p class="m-0 vip ">{{ $trip->degree }}</p>
+                                            <p class="m-0 fs-12" style="color: black;">{{ $time }}</p>
+                                            <p class="m-0 vip" style="color: black;">{{ $trip->degree }}</p>
                                         </div>
-                                        <div class="d-flex align-items-center gap-2">
-                                            <div class="d-flex flex-column align-items-center ">
+                                        <div class="d-flex align-items-center gap-2" style="color: black;">
+                                            <div class="d-flex flex-column align-items-center" style="color: black;">
                                                 <div class="green-circle-mobile"></div>
                                                 <div class="line-mobile"></div>
                                                 <div class="red-circle-mobile"></div>
                                             </div>
-                                            <div class="d-flex flex-column justify-content-between">
-                                                <p class="m-0 fs-12">{{ $trip->fromStation }} </p>
-                                                <p class="m-0 fs-12">{{ $trip->toStation }}</p>
+                                            <div class="d-flex flex-column justify-content-between" style="color: black;">
+                                                <p class="m-0 fs-12" style="color: black;">{{ $trip->fromStation }} </p>
+                                                <p class="m-0 fs-12" style="color: black;">{{ $trip->toStation }}</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div>
-                                    <p class="m-0 fs-12">{{ $trip->price }} جنية مصري</p>
-                                    <p class="m-0 fs-12">لكل مقعد</p>
-                                    <p class="m-0 fs-12 text-success">متبقي {{ $trip->available_seats }} مقاعد</p>
+                                <div style="color: black;">
+                                    <p class="m-0 fs-12" style="color: black;">{{ $trip->price }} جنية مصري</p>
+                                    <p class="m-0 fs-12" style="color: black;">لكل مقعد</p>
+                                    <p class="m-0 fs-12 text-success" style="color: black;">متبقي {{ $trip->available_seats }} مقاعد</p>
                                     <button class="btn btn-main mt-2 btn-sm rounded-5" type="button">
                                         حجز
                                     </button>
@@ -117,88 +119,29 @@
                         </div>
                     </a>
                 @endforeach
-
-
-
-
-            </div>
-            <div class="tab-pane fade" id="tommorrow" role="tabpanel" aria-labelledby="tommorrow-tab">
-
-                <div class="d-flex justify-content-center align-items-center gap-4 my-4">
-                    <div class="d-flex align-items-center gap-2 travel-direction-box">
-                        <div>
-                            <i class="fa fa-bus text-black"></i>
-                        </div>
-                        <div class="d-flex flex-column align-items-center">
-                            <div class="d-flex align-items-center gap-2">
-                                <h6 class="m-0 text-black">القاهرة</h6>
-                            </div>
-                            <div>
-                                <p class="m-0">
-                                    التحرير
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <i class="fa fa-arrow-left text-black fs-20"></i>
-                    </div>
-                    <div class="d-flex flex-column align-items-center travel-direction-box">
-                        <div class="d-flex align-items-center gap-2">
-                            <h6 class="m-0 text-black">الاسكندرية</h6>
-                        </div>
-                        <div>
-                            <p class="m-0">
-                                ميامي
-                            </p>
-                        </div>
+                @else 
+                {{-- NO TRIPS Design --}}
+                <div class="d-flex justify-content-center align-items-center">
+                    <div class="text-center">
+                        <i class="fa fa-bus text-main" style="font-size: 100px"></i>
+                        <p class="m-0 fs-20">{{ __('No Trips Available') }}</p>
+                        <p class="m-0 fs-15">{{ __('Please, choose another date or destination') }}</p>
+                        <hr>
+                        <a
+                         class="login" href="tel:{{ $contactUs['phone'] }}">
+                         <i class="fa fa-phone fs-15"></i>
+                            {{ __('Call Us') }}
+                        </a>
                     </div>
                 </div>
+                @endif 
 
-                <div class="mt-3 border rounded-7 py-3 px-3 bus-card mb-3">
-                    <div class="d-flex justify-content-between">
 
-                        <div class="d-flex justify-content-between gap-2">
-                            <div class="bus-box m-auto">
-                                <i class="fa fa-bus text-main fs-20"></i>
-                            </div>
-                            <div class="mt-1">
-                                <div class="d-flex gap-2">
-                                    <p class="m-0 fs-12">13:30 صباحا</p>
-                                    <p class="m-0 vip ">vip</p>
-                                </div>
-                                <div class="d-flex align-items-center gap-2">
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="green-circle"></div>
-                                        <div class="line"></div>
-                                        <div class="red-circle"></div>
-                                    </div>
-                                    <div class="d-flex flex-column justify-content-between">
-                                        <p class="m-0 fs-12">القاهرة | التحرير</p>
-                                        <p class="m-0 fs-12">الإسكندرية</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <p class="m-0 fs-12">350 جنية مصري</p>
-                            <p class="m-0 fs-12">لكل مقعد</p>
-                            <p class="m-0 fs-12 text-success">متبقي 5 مقاعد</p>
-                            <a href="chairs-mobile.html">
-                                <button class="btn btn-main mt-2 btn-sm rounded-5">
-                                    حجز
-                                </button>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+
 
             </div>
-            <div class="tab-pane fade" id="dayafter" role="tabpanel" aria-labelledby="dayafter-tab">25</div>
-            <div class="tab-pane fade" id="dayafter2" role="tabpanel" aria-labelledby="dayafter-tab">26
-            </div>
-            <div class="tab-pane fade" id="dayafter3" role="tabpanel" aria-labelledby="dayafter-tab">27
-            </div>
+            
+            
         </div>
     </div>
 @endsection

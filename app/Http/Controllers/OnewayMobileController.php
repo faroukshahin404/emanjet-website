@@ -94,17 +94,30 @@ class OnewayMobileController extends Controller
     public function bookingSummary(Request $request)
     {
 
+        
         $request->validate([
             'tripType' => 'required|in:oneway,round',
             'city_from_id' => 'required|exists:cities,id',
             'city_to_id' => 'required|exists:cities,id',
-            'station_from_id' => 'required|exists:stations,id',
+            'station_from_id' => 'required|exists:stations,id', 
             'station_to_id' => 'required|exists:stations,id',
             'seats' => 'required',
             'back_date' => 'nullable|date|after_or_equal:today',
             'go_date' => 'required|date|after_or_equal:today',
             'selected_trip_id' => 'required|exists:run_trips,id',
             'selected_seats' => 'required'
+        ], [
+            'city_from_id.exists' => __('City From is required'),
+            'city_to_id.exists' => __('City To is required'), 
+            'station_from_id.exists' => __('Station From is required'),
+            'station_to_id.exists' => __('Station To is required'),
+            'seats.required' => __('Seats are required'),
+            'go_date.required' => __('Go Date is required'),
+            'go_date.date' => __('Go Date must be a valid date'),
+            'go_date.after_or_equal' => __('Go Date must be today or later'),
+            'selected_trip_id.required' => __('Trip is required'),
+            'selected_trip_id.exists' => __('Invalid trip selected'),
+            'selected_seats.required' => __('Please select seats')
         ]);
         $tripTime = $this->getTripTime($request->selected_trip_id, $request->station_from_id);
 

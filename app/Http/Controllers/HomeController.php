@@ -128,6 +128,16 @@ class HomeController extends Controller
         ]);
     }
 
+    public function privacy_policy()
+    {
+        $page = PageSeo::where('page_slug', 'privacy-policy')->first();
+        return view('other.privacy-policy.index')->with([
+            'heroSection' => $heroSection,
+            'serviceSection' => $serviceSection,
+            'seo' => $seo
+        ]);
+    }
+
     public function blogs()
     {
         $page = Page::where('slug', 'blogs')->first();

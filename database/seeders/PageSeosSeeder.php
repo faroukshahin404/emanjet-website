@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Page;
 use App\Models\PageSeo;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -457,6 +457,53 @@ class PageSeosSeeder extends Seeder
             ]
         ];
 
+        $privacySeos = [
+            [
+                'page_slug' => 'privacy-policy',
+                'section_type' => 'privacy-policy',
+                'content_json' => [
+                    'ar' => [
+                        'title' => 'سياسة الخصوصية',
+                        'description' => 'سياسة الخصوصية لشركة الاتحاد العربي للنقل البري سوبر جيت في شركة الاتحاد العربي للنقل البري سوبر جيت، نولي أهمية كبيرة لحماية خصوصيتك وبياناتك الشخصية. تهدف سياسة الخصوصية هذه إلى توضيح كيفية جمعنا للمعلومات، واستخدامها، ومشاركتها، وحمايتها عند استخدامك لخدماتنا. المعلومات التي نقوم بجمعها المعلومات الشخصية مثل الاسم، رقم الهاتف، البريد الإلكتروني، رقم الهوية، عند إنشاء حساب أو الحجز عبر الإنترنت بيانات الرحلات مثل مواعيد السفر، الوجهات، وأرقام التذاكر معلومات الموقع الجغرافي في حال تم تفعيلها البيانات التقنية مثل نوع الجهاز، نظام التشغيل، المتصفح، عنوان IP كيفية استخدام المعلومات لتأكيد الحجز ومعالجة المدفوعات للتواصل معك بخصوص الرحلات أو التحديثات أو العروض لتحسين جودة خدماتنا وتجربتك للامتثال للمتطلبات القانونية والتنظيمية مشاركة المعلومات لا نقوم بمشاركة بياناتك مع أي طرف ثالث إلا في الحالات التالية مع شركاء موثوقين لأغراض تشغيلية مثل شركات الدفع إذا طُلب منا ذلك بموجب القانون في حال وجود تهديد لأمن المستخدمين أو الخدمة حماية البيانات نستخدم أحدث تقنيات التشفير والتأمين لضمان حماية بياناتك يتم تخزين المعلومات على خوادم آمنة ويُسمح بالوصول إليها فقط للمصرح لهم ملفات تعريف الارتباط Cookies نستخدم ملفات تعريف الارتباط لتحسين تجربة المستخدم وتحليل استخدام الموقع. يمكنك تعطيلها من إعدادات المتصفح حقوق المستخدم يحق لك طلب نسخة من بياناتك أو تعديلها أو حذفها يمكنك سحب موافقتك على استخدام بياناتك في أي وقت التعديلات على سياسة الخصوصية قد نقوم بتحديث هذه السياسة من وقت لآخر، وسيتم نشر أي تغييرات على هذه الصفحة',
+                        'image' => 'https://placehold.co/805x668',
+                        'button-text' => 'موافق',
+                    ],
+                    'en' => [
+                        'title' => 'Privacy Policy',
+                        'description' => 'Privacy Policy of SuperJet At SuperJet, your privacy is important to us. This Privacy Policy outlines how we collect, use, share, and protect your information when you use our services. Information We Collect Personal information such as name, phone number, email, ID number, when creating an account or booking online Travel details such as trip schedules, destinations, and ticket numbers Geolocation data if enabled Technical data like device type, operating system, browser, and IP address How We Use the Information To confirm bookings and process payments To contact you about your trips, updates, or promotions To improve our services and user experience To comply with legal and regulatory requirements Information Sharing We do not share your personal data with third parties, except With trusted partners for operational purposes e.g., payment processors When required by law In case of a security threat to users or the service Data Security We use the latest encryption and security technologies to protect your information Data is stored on secure servers with restricted access Cookies We use cookies to enhance user experience and analyze website usage. You can disable cookies in your browser settings User Rights You have the right to request, modify, or delete your data You can withdraw your consent for data usage at any time Changes to the Privacy Policy We may update this policy occasionally. Any changes will be posted on this page',
+                        'image' => 'https://placehold.co/805x668',
+                        'button-text' => 'Agree',
+                    ]
+                ],
+                'order' => 1,
+                'status' => true,
+                'created_at' => now(),
+            ]
+        ];
+        $usageTermsSeos = [
+            [
+                'page_slug' => 'usage-terms',
+                'section_type' => 'usage-terms',
+                'content_json' => [
+                    'ar' => [
+                        'title' => 'سياسة الاستخدام',
+                        'description' => 'سياسة الاستخدام لشركة الاتحاد العربي للنقل البري سوبر جيت يرجى قراءة هذه الشروط بعناية قبل استخدام موقع أو تطبيق شركة الاتحاد العربي للنقل البري سوبر جيت. باستخدامك لأي من خدماتنا، فإنك توافق على الالتزام بسياسة الاستخدام التالية: 1. قبول الشروط باستخدام الموقع أو التطبيق، فإنك تقر بأنك قرأت وفهمت ووافقت على هذه السياسة، وفي حال عدم موافقتك، يُرجى عدم استخدام الخدمة. 2. استخدام الخدمة يجب أن تستخدم الخدمة فقط للأغراض المشروعة مثل الحجز أو الاستعلام عن الرحلات. يُحظر استخدام الخدمة لأي غرض تجاري غير مصرح به أو للتلاعب أو الاحتيال. 3. الحسابات والمعلومات تتحمل مسؤولية دقة المعلومات التي تقدمها. لا يجوز استخدام حسابك من قبل أي طرف ثالث دون إذن منك. يحق لنا تعليق أو إلغاء الحسابات التي تُستخدم بشكل مسيء أو مخالف للسياسات. 4. حقوق الملكية جميع المحتويات النصوص، الصور، الشعارات، العلامات التجارية مملوكة لشركة الاتحاد العربي للنقل البري أو للجهات المرخصة لها. لا يجوز إعادة استخدام أو نسخ أي جزء من الموقع أو التطبيق دون إذن كتابي مسبق. 5. حدود المسؤولية نسعى لتقديم معلومات دقيقة ولكن لا نضمن خلو الموقع من الأخطاء أو التوقفات المؤقتة. لسنا مسؤولين عن أي خسائر ناتجة عن استخدام الخدمة أو الاعتماد على المعلومات المعروضة. 6. التعديلات على السياسة نحتفظ بالحق في تعديل سياسة الاستخدام في أي وقت، وسيتم نشر التحديثات عبر الموقع. 7. القانون الواجب التطبيق تخضع هذه السياسة لقوانين جمهورية مصر العربية، ويكون لمحاكم القاهرة الاختصاص الحصري في حال نشوء أي نزاع.',
+                        'image' => 'https://placehold.co/805x668',
+                        'button-text' => 'موافق',
+                    ],
+                    'en' => [
+                        'title' => 'Usage Terms',
+                        'description' => 'Please read these terms carefully before using the website or app of SuperJet. By using any of our services, you agree to be bound by the following terms: 1. Acceptance of Terms By using our platform, you confirm that you have read, understood, and agreed to these terms. If you do not agree, please do not use the service. 2. Use of the Service The service must be used only for lawful purposes, such as booking or checking trips. Unauthorized commercial use, manipulation, or fraud is strictly prohibited. 3. Accounts and Information You are responsible for the accuracy of the information you provide. Your account must not be used by others without your permission. We reserve the right to suspend or terminate accounts used in violation of our policies. 4. Intellectual Property All content text, images, logos, trademarks is owned by Arab Union for Land Transport or its licensors. Reuse or reproduction of any part of the website/app without prior written consent is prohibited. 5. Limitation of Liability While we strive for accuracy, we do not guarantee that the site will be error-free or uninterrupted. We are not liable for any loss resulting from the use of the service or reliance on displayed information. 6. Changes to the Terms We reserve the right to update these terms at any time. Changes will be posted on the website. 7. Governing Law These terms are governed by the laws of the Arab Republic of Egypt. The courts of Cairo shall have exclusive jurisdiction over any disputes.',
+                        'image' => 'https://placehold.co/805x668',
+                        'button-text' => 'Agree',
+                    ]
+                ],
+                'order' => 1,
+                'status' => true,
+                'created_at' => now(),
+            ]
+        ];
+
         $faqsSeos = [
             [
                 'page_slug' => 'faqs',
@@ -555,7 +602,7 @@ class PageSeosSeeder extends Seeder
 
 
 
-        $seos = array_merge($generalSeos, $homeSeos, $aboutSeos, $contactSeos, $destinationSeos, $blogsSeos, $faqsSeos);
+        $seos = array_merge($generalSeos, $homeSeos, $aboutSeos, $contactSeos, $destinationSeos, $blogsSeos, $faqsSeos, $privacySeos, $usageTermsSeos);
 
         foreach ($seos as $seo) {
             $page = Page::where('slug', $seo['page_slug'])->first();
