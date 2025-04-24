@@ -22,25 +22,16 @@
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">
-                            {{ $isEdit ? __('Edit Bus Category') : __('Create New Bus Category') }}
+                            {{ isset($item) ? __('Edit Category') : __('Create New Category') }}
                         </h4>
                     </div>
                     <div class="card-body">
-                        @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul class="mb-0">
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
 
                         <form
-                            action="{{ $isEdit ? route('admin.bus-categories.update', $busCategory->id) : route('admin.bus-categories.store') }}"
+                            action="{{ isset($item) ? route('admin.bus-categories.update', $item->id) : route('admin.bus-categories.store') }}"
                             method="POST" enctype="multipart/form-data">
                             @csrf
-                            @if ($isEdit)
+                            @if (isset($item))
                                 @method('PUT')
                             @endif
 
@@ -51,7 +42,7 @@
                                                 class="text-danger">*</span></label>
                                         <input type="text" class="form-control @error('name_ar') is-invalid @enderror"
                                             id="name_ar" name="name_ar"
-                                            value="{{ old('name_ar', $busCategory->name_ar) }}" required>
+                                            value="{{ old('name_ar', isset($item) ? $item->name_ar : '') }}" required>
                                         @error('name_ar')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -63,7 +54,7 @@
                                                 class="text-danger">*</span></label>
                                         <input type="text" class="form-control @error('name_en') is-invalid @enderror"
                                             id="name_en" name="name_en"
-                                            value="{{ old('name_en', $busCategory->name_en) }}" required>
+                                            value="{{ old('name_en', isset($item) ? $item->name_en : '') }}" required>
                                         @error('name_en')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -77,8 +68,9 @@
                                         <label for="rate" class="form-label">{{ __('Rate') }} <span
                                                 class="text-danger">*</span></label>
                                         <input type="number" class="form-control @error('rate') is-invalid @enderror"
-                                            id="rate" name="rate" value="{{ old('rate', $busCategory->rate) }}"
-                                            min="0" max="5" step="0.1" required>
+                                            id="rate" name="rate"
+                                            value="{{ old('rate', isset($item) ? $item->rate : '') }}" min="0"
+                                            max="5" step="0.1" required>
                                         @error('rate')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -90,8 +82,8 @@
                                                 class="text-danger">*</span></label>
                                         <input type="number" class="form-control @error('passengers') is-invalid @enderror"
                                             id="passengers" name="passengers"
-                                            value="{{ old('passengers', $busCategory->passengers) }}" min="1"
-                                            required>
+                                            value="{{ old('passengers', isset($item) ? $item->passengers : '') }}"
+                                            min="1" required>
                                         @error('passengers')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -109,12 +101,11 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
 
-                                        @if ($busCategory->image)
+                                        @if (isset($item) && $item->image)
                                             <div class="mt-2">
                                                 <p>{{ __('Current Image:') }}</p>
-                                                <img src="{{ asset('storage/' . $busCategory->image) }}"
-                                                    alt="{{ $busCategory->name_en }}" class="preview-image"
-                                                    id="current-image">
+                                                <img src="{{ asset( $item->image) }}"
+                                                    alt="{{ $item->name_en }}" class="preview-image" id="current-image">
                                             </div>
                                         @endif
 
@@ -127,12 +118,9 @@
                             </div>
 
                             <div class="d-flex justify-content-between mt-4">
-                                <a href="{{ route('admin.bus-categories.index') }}" class="btn btn-secondary">
-                                    <i class="fas fa-arrow-left"></i> {{ __('Back to List') }}
-                                </a>
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fas fa-save"></i>
-                                    {{ $isEdit ? __('Update Category') : __('Create Category') }}
+                                    {{ isset($item) ? __('Update Category') : __('Create Category') }}
                                 </button>
                             </div>
                         </form>
@@ -148,7 +136,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         $(document).ready(function() {
-            // Image preview
             $('#image').change(function() {
                 const file = this.files[0];
                 if (file) {

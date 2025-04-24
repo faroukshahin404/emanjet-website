@@ -36,6 +36,7 @@ Route::group([
     Route::get('/', [HomeController::class, 'home'])->name('home');
 
     Route::get('/home', [HomeController::class, 'home']);
+
     // web.php
     Route::get('/get-cities', [HomeController::class, 'getCities']);
     Route::get('/get-stations/{city}', [HomeController::class, 'getStations']);

@@ -248,20 +248,21 @@
                                 <div class='cardSection card'>
 
                                     <div class="cardbody card-body py-2">
-                                        <h5 class='cardTitle'>{{ $busType['name'] }}</h5>
+                                        <h5 class='cardTitle'>
+                                            {{ app()->getLocale() == 'ar' ? $busType->name_ar : $busType->name_en }}</h5>
                                         <p class='cardBody text-gray'>
-                                            {{ $busType['passengers'] }} {{ __('Passenger') }}
+                                            {{ $busType->passengers }} {{ __('Passenger') }}
                                         </p>
                                         <div class='cardRate'>
                                             <div>
-                                                {!! render_stars($busType['rate']) !!}
+                                                {!! render_stars($busType->rate) !!}
                                             </div>
                                         </div>
                                     </div>
                                     <div class="position-relative bus-bg-box mt-3">
                                         <div class="bus-bg position-absolute">
                                         </div>
-                                        <img src="{{ $busType['image'] }}" alt="bus" />
+                                        <img src="{{ $busType->image }}" alt="bus" />
                                     </div>
                                 </div>
                             </div>

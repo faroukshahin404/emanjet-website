@@ -23,30 +23,23 @@ class AuthController extends Controller
         $this->authService = $authService;
     }
 
-    //done
     public function login()
     {
         return view('auth.login');
     }
 
-    // عرض صفحة
-    //done
     public function register()
     {
         return view('auth.register');
     }
-    //done
-    // معالجة التسجيل
     public function postRegister(RegisterRequest $request)
     {
-        $user = $this->authService->registerUser($request);
-
-        if (!$user) {
-            return redirect()->back()->withErrors(['phone' => 'رقم الهاتف مستخدم بالفعل.']);
+        $result = $this->authService->registerUser($request);
+        if (!$result['success']) {
+            return redirect()->back()->with('error', $result['message']);
         }
-
-        session(['otp_phone' => $request->phone]);  // تخزين رقم الهاتف مؤقتًا
-        return redirect()->route('auth.otp')->with('success', 'تم إرسال OTP إلى رقم الهاتف الخاص بك.');
+        session(['otp_phone' => $request->phone]);
+        return redirect()->route('auth.otp')->with('success', __('Otp Sent To your number'));
     }
 
     public function postLogin(Request $request)
@@ -96,10 +89,10 @@ class AuthController extends Controller
         if (!$user) {
             return response()->json(['success' => false, 'message' => 'رقم الهاتف غير صحيح.'], 400);
         }
-             
+
         // إذا كان الطلب لإعادة إرسال OTP
         if ($request->ajax()) {
-           
+
             // Check if we need to wait before sending new OTP
             $lastOtp = Otp::where('phone', $request->phone)
                 ->where('created_at', '>=', now()->subMinutes(30))
@@ -121,7 +114,7 @@ class AuthController extends Controller
             }
 
             $otp = $this->authService->sendOtp($user);
-             
+
             if ($otp['success']) {
                 session([
                     'reset_password_phone' => $request->phone
@@ -171,7 +164,7 @@ class AuthController extends Controller
             // إرسال OTP
             $otp = $this->authService->sendOtp($user);
 
-         if ($otp['success']) {
+            if ($otp['success']) {
                 session([
                     'reset_password_phone' => $request->phone
                 ]);
@@ -211,7 +204,7 @@ class AuthController extends Controller
         if (Auth::check() && !Auth::user()->verified) {
             $user = Auth::user();
             $phone = $user->mobile;
-            $this->authService->sendOtp( $user);
+            $this->authService->sendOtp($user);
         }
 
         if (!$phone) {
@@ -460,7 +453,7 @@ class AuthController extends Controller
         $tickets = $requests->map(fn($res) => (new TicketViewModel($res))->toArray());
 
 
-        
+
         return view('profile.index', compact('user', 'tickets'));
     }
 
