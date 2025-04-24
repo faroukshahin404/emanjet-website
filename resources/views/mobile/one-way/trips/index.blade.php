@@ -25,7 +25,7 @@
                             <input type="hidden" name="station_from_id" value="{{ request()->station_from_id }}" />
                             <input type="hidden" name="station_to_id" value="{{ request()->station_to_id }}" />
                             <input type="hidden" id="selected-trip-price" value="" />
-                            <input type="hidden" id="num-of-seats" value="{{ request()->seats }}" />
+                            <input type="hidden" id="num-of-seats" name="seats" value="{{ request()->seats }}" />
 
                             <li class="nav-item" role="presentation">
 

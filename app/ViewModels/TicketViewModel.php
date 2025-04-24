@@ -25,7 +25,7 @@ class TicketViewModel
             'city_to'=> $this->reservation->stationTo->city->name,
             'station_from'=> $this->reservation->stationFrom->name,
             'station_to'=> $this->reservation->stationTo->name,
-            'reserv_type'=> $this->reservation->reserv_type,
+            'reserv_type'=> @$this->reservation->payment->status??$this->reservation->reserv_type,
             'date'=> $tripTime->format('Y-m-d'),
             'time'=> $tripTime->format('h:i a'),
             'trip_time'=> $tripTime,
@@ -34,6 +34,7 @@ class TicketViewModel
             'user_name'=> $user->name,
             'user_phone'=> $user->mobile,
             'is_past'=> $tripTime->isPast(),
+            'created_at'=> $this->reservation->created_at,
 
 
         ];

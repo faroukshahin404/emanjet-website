@@ -63,7 +63,7 @@
                         <div class="border rounded-9 px-3">
 
                             {{-- المدن والمحطات --}}
-                            <div class="d-flex justify-content-center align-items-center gap-4 my-4">
+                            <div class="d-flex justify-content-center align-items-center gap-4 my-4" style="direction: rtl;">
                                 <div class="d-flex align-items-center gap-2 travel-direction-box">
                                     <div>
                                         <i class="fa fa-bus text-black"></i>

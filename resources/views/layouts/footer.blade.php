@@ -12,9 +12,10 @@
             <div class="col-md-2 d-flex flex-column mx-auto align-items-lg-start align-items-center">
                 <p class="footer-links-top">{{ __('Useful Links') }}</p>
                 <a href="services.html" class="footer-links">{{ __('Services') }}</a>
-                <a href="{{ route('home') }}#testimonials" class="footer-links">{{ __('Testimonials') }}</a>
                 <a href="{{ route('about-us') }}" class="footer-links">{{ __('About Us') }}</a>
                 <a href="{{ route('contact-us') }}" class="footer-links">{{ __('Contact Us') }}</a>
+                <a href="{{ route('privacy-policy') }}" class="footer-links">{{ __('Privacy') }}</a>
+                <a href="{{ route('usage-terms') }}" class="footer-links">{{ __('Usage Terms') }}</a>
             </div>
 
             @if (!empty($contactUs))

@@ -5,7 +5,7 @@
         <h6>{{ __('My Upcoming Trips') }}</h6>
 
         @foreach ($tickets->where('is_past', false) as $ticket)
-            <div class="d-flex justify-content-between mb-2">
+            <div class="d-flex justify-content-between mb-2" style="direction: rtl;">
 
                 <div class="passenger-place  w-100 rounded-8 px-3 py-3">
                     <div class="d-flex justify-content-center align-items-center gap-3">
@@ -75,6 +75,15 @@
                             @elseif($ticket['reserv_type'] === 'EXPIRED')
                                 <span class="badge bg-secondary">{{ __('Not Paid') }}</span>
                             @endif
+                            @php
+                                $createdAt = \Carbon\Carbon::parse($ticket['created_at']);
+                                $isWithinHour = $createdAt->diffInMinutes(now()) < 60;
+                            @endphp
+                            @if ($isWithinHour && ($ticket['reserv_type'] == 'NEW' || $ticket['reserv_type'] == 'New'))
+                                <div class="alert alert-info mb-0 py-1 px-2" style="font-size: 0.8rem;">
+                                    {{ __("Payment may take up to 1 hour to process. Don't worry!") }}
+                                </div>
+                            @endif
                         </div>
                     </div>
 
@@ -114,7 +123,7 @@
         </div>
 
         @foreach ($tickets->where('is_past', true) as $ticket)
-            <div class="d-flex justify-content-between mb-2">
+            <div class="d-flex justify-content-between mb-2" style="direction: rtl;">
 
                 <div class="passenger-place  w-100 rounded-8 px-3 py-3">
                     <div class="d-flex justify-content-center align-items-center gap-3">

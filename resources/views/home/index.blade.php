@@ -248,20 +248,21 @@
                                 <div class='cardSection card'>
 
                                     <div class="cardbody card-body py-2">
-                                        <h5 class='cardTitle'>{{ $busType['name'] }}</h5>
+                                        <h5 class='cardTitle'>
+                                            {{ app()->getLocale() == 'ar' ? $busType->name_ar : $busType->name_en }}</h5>
                                         <p class='cardBody text-gray'>
-                                            {{ $busType['passengers'] }} {{ __('Passenger') }}
+                                            {{ $busType->passengers }} {{ __('Passenger') }}
                                         </p>
                                         <div class='cardRate'>
                                             <div>
-                                                {!! render_stars($busType['rate']) !!}
+                                                {!! render_stars($busType->rate) !!}
                                             </div>
                                         </div>
                                     </div>
                                     <div class="position-relative bus-bg-box mt-3">
                                         <div class="bus-bg position-absolute">
                                         </div>
-                                        <img src="{{ $busType['image'] }}" alt="bus" />
+                                        <img src="{{ $busType->image }}" alt="bus" />
                                     </div>
                                 </div>
                             </div>
@@ -580,11 +581,13 @@
         let passengerCount = 1;
         const countElement = document.getElementById('passengerCount');
         const countElementInput = document.getElementById('passenger-count');
+        const countElement2Input = document.getElementById('passenger-count2');
 
         function incrementPassengers() {
             passengerCount++;
             countElement.textContent = passengerCount;
             countElementInput.value = passengerCount;
+            countElement2Input.value = passengerCount;
         }
 
         function decrementPassengers() {
@@ -592,18 +595,21 @@
                 passengerCount--;
                 countElement.textContent = passengerCount;
                 countElementInput.value = passengerCount;
+                countElement2Input.value = passengerCount;
             }
         }
     </script>
     <script>
         let passengerCount2 = 1;
         const countElement2 = document.getElementById('passengerCount2');
-        const countElement2Input = document.getElementById('passenger-count');
+        const countElement2Input = document.getElementById('passenger-count2');
+        const countElementInput = document.getElementById('passenger-count');
 
         function incrementPassengers2() {
             passengerCount2++;
             countElement2.textContent = passengerCount2;
             countElement2Input.value = passengerCount2;
+            countElementInput.value = passengerCount2;
         }
 
         function decrementPassengers2() {
@@ -611,6 +617,7 @@
                 passengerCount2--;
                 countElement2.textContent = passengerCount2;
                 countElement2Input.value = passengerCount2;
+                countElementInput.value = passengerCount2;
             }
         }
     </script>
@@ -712,16 +719,17 @@
         document.addEventListener('DOMContentLoaded', function() {
             const bellBox = document.querySelector('.mo-bell-box');
             const dropdown = document.querySelector('.notifications-dropdown');
+            if (bellBox) {
+                bellBox.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+                });
 
-            bellBox.addEventListener('click', function(e) {
-                e.stopPropagation();
-                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-            });
-
-            // إغلاق القائمة عند النقر خارجها
-            document.addEventListener('click', function() {
-                dropdown.style.display = 'none';
-            });
+                // إغلاق القائمة عند النقر خارجها
+                document.addEventListener('click', function() {
+                    dropdown.style.display = 'none';
+                });
+            }
         });
     </script>
     <style>
@@ -764,11 +772,13 @@
         document.addEventListener('DOMContentLoaded', function() {
             // عناصر DOM
             const fromInput = document.getElementById('fromInput');
+
             const toInput = document.getElementById('toInput');
             const fromStations = document.getElementById('from-stations');
             const toStations = document.getElementById('to-stations');
             const fromSubStations = document.getElementById('from-sub-stations');
             const toSubStations = document.getElementById('to-sub-stations');
+            initDropdowns();
 
             // تحميل المدن من API
             async function loadCities() {
@@ -796,19 +806,32 @@
 
             // تهيئة القوائم المنسدلة
             async function initDropdowns() {
+                console.log('initDropdowns');
                 const cities = await loadCities();
 
                 initDropdown('from', cities);
                 initDropdown('to', cities);
-
+                console.log('initDropdowns after');
                 // أحداث النقر على المدخلات
                 fromInput.addEventListener('click', function(e) {
+                    console.log('fromInput clicked');
+                    e.stopPropagation();
+                    toggleDropdown('from-stations', true);
+                    toggleDropdown('from-sub-stations', false);
+                });
+                fromInput.addEventListener('focus', function(e) {
+                    console.log('fromInput clicked');
                     e.stopPropagation();
                     toggleDropdown('from-stations', true);
                     toggleDropdown('from-sub-stations', false);
                 });
 
                 toInput.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    toggleDropdown('to-stations', true);
+                    toggleDropdown('to-sub-stations', false);
+                });
+                toInput.addEventListener('focus', function(e) {
                     e.stopPropagation();
                     toggleDropdown('to-stations', true);
                     toggleDropdown('to-sub-stations', false);
@@ -944,7 +967,6 @@
             }
 
             // تهيئة أولية
-            initDropdowns();
         });
     </script>
 @endpush

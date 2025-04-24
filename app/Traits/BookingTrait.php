@@ -23,6 +23,8 @@ trait BookingTrait
             ->groupBy('runTrip_id');
 
         $query = DB::table('run_trips')
+            ->where('run_trips.active', 1)
+            ->whereNull('run_trips.deleted_at')
             ->whereBetween('run_trips.startDate', [
                 $originalDate->copy()->subDay()->format('Y-m-d'),
                 $originalDate->format('Y-m-d')
@@ -82,7 +84,7 @@ trait BookingTrait
 
         $query->select([
             'run_trips.id',
-            'degrees.id as degree_id',
+            'degrees.id as degree_id', 
             'lines.priceGo as price',
             'lines.priceBack as round_price',
             DB::raw("JSON_UNQUOTE(JSON_EXTRACT(degrees.name, '$.ar')) as degree"),
@@ -93,9 +95,12 @@ trait BookingTrait
             'bus_types.name as bus_type',
             'trip_stations.timeInMinutes',
             DB::raw('(bus_types.slug - COALESCE(seats_sub_query.booked_seats, 0)) as available_seats'),
-            DB::raw("DATE_ADD(CONCAT(run_trips.startDate, ' ', run_trips.startTime), INTERVAL trip_stations.timeInMinutes MINUTE) as tripTime")
+            DB::raw("DATE_ADD(CONCAT(run_trips.startDate, ' ', run_trips.startTime), INTERVAL trip_stations.timeInMinutes MINUTE) as tripTime"),
+            DB::raw("DATE_FORMAT(DATE_ADD(CONCAT(run_trips.startDate, ' ', run_trips.startTime), INTERVAL trip_stations.timeInMinutes MINUTE), '%Y-%m-%d') as tripDate")
         ])
-            ->having('tripTime', '>', Carbon::now()->addHours(4)->toDateTimeString());
+            ->having('tripTime', '>', Carbon::now()->addHours(24)->toDateTimeString())
+            ->having('tripDate', '=', $date->format('Y-m-d'))
+            ->orderBy('tripTime', 'asc');
         return $query->get();
     }
 

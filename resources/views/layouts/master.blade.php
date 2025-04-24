@@ -36,27 +36,23 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ asset('js/vendors.min.js')}}"></script>
-
     <script src="{{ asset('js/main.js') }}" defer></script>
     <script src="{{ asset('js/custom-toastr.js') }}"></script>
     <script>
-        let lastWidth = window.innerWidth;
-        window.addEventListener('resize', function() {
-            if (window.innerWidth !== lastWidth) {
-                lastWidth = window.innerWidth;
+        $(window).on('resize', function() {
+            let prevWidth = window.innerWidth;
+            if (window.innerWidth !== prevWidth) {
                 window.location.href = '/';
+                prevWidth = window.innerWidth;
             }
         });
     </script>
-
     <script>
-        // Prevent right-click
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
+            return false;
         });
     </script>
-
     @if (session('success'))
         <script>
             showToast('success', "{{ session('success') }}");

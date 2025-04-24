@@ -12,7 +12,6 @@ class PageController extends Controller
     public function index()
     {
         $pages = Page::with('pageSeos')->get();
-        // return response()->json($pages);
         return view('admin.pages.pages.index', compact('pages'));
     }
 
