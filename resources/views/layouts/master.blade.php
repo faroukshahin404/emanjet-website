@@ -41,8 +41,12 @@
     <script src="{{ asset('js/main.js') }}" defer></script>
     <script src="{{ asset('js/custom-toastr.js') }}"></script>
     <script>
+        let lastWidth = window.innerWidth;
         window.addEventListener('resize', function() {
-            window.location.href = '/';
+            if (window.innerWidth !== lastWidth) {
+                lastWidth = window.innerWidth;
+                window.location.href = '/';
+            }
         });
     </script>
 
