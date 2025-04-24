@@ -1,5 +1,47 @@
 @extends('admin.layouts.master')
 
+@section('title', __('Cities'))
+@section('breadcrumb')
+    <div class="row">
+        <div class="col-12">
+            <div class="box p-3 mb-3">
+                <nav>
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="/"><i class="mdi mdi-home-outline"></i></a></li>
+                        <li class="breadcrumb-item">
+                            <a href="{{ route('admin.dashboard.index') }}">{{ __('Dashboard') }}</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ __('Cities') }}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+@endsection
+@section('content')
+    <div class="row">
+        <div class="col-12">
+            <div class="row mb-3">
+                <div class="col-12">
+                    @include('admin.pages.cities.filters')
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="box">
+                        <div class="box-body">
+                           @include('admin.pages.cities.list')
+                        </div>
+                        <div class="d-flex justify-content-center mt-3">
+                            {{ $results->links() }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
 @push('css')
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -44,60 +86,12 @@
     </style>
 @endpush
 
-@section('content')
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">{{ __('Cities Management') }}</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>{{ __('Name') }}</th>
-                                        <th>{{ __('Available Online') }}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($cities as $city)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $city->name }}</td>
-                                            <td class="text-center">
-                                                <button type="button"
-                                                    class="btn btn-toggle {{ $city->available_online ? 'active' : '' }}"
-                                                    data-bs-toggle="button" data-id="{{ $city->id }}"
-                                                    aria-pressed="{{ $city->available_online ? 'true' : 'false' }}"
-                                                    autocomplete="off">
-                                                    <div class="handle"></div>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="d-flex justify-content-center mt-3">
-                            {{ $cities->links() }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-@endsection
-
 @push('scripts')
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     <script>
-        // رسائل Laravel Blade جاهزة للاستخدام في JS
         const successAvailableMsg = "{{ __(':cityName is now available online') }}";
         const successUnavailableMsg = "{{ __(':cityName is now unavailable online') }}";
         const errorMsg = "{{ __('Failed to update status') }}";
@@ -127,11 +121,13 @@
                             if (!currentStatus) {
                                 button.addClass('active');
                                 button.attr('aria-pressed', 'true');
-                                toastr.success(successAvailableMsg.replace(':cityName', cityName));
+                                toastr.success(successAvailableMsg.replace(':cityName',
+                                    cityName));
                             } else {
                                 button.removeClass('active');
                                 button.attr('aria-pressed', 'false');
-                                toastr.success(successUnavailableMsg.replace(':cityName', cityName));
+                                toastr.success(successUnavailableMsg.replace(':cityName',
+                                    cityName));
                             }
                         }
                     },

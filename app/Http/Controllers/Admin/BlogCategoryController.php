@@ -13,11 +13,17 @@ class BlogCategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $results = BlogCategory::paginate();
-        return view('admin.pages.blog-category.index', compact('results'));
+        $query = BlogCategory::query();
+        if ($request->filled('category')) {
+            $query->where('id', $request->category);
+        }
+        $results = $query->paginate(10);
+        $categories = BlogCategory::all();
+        return view('admin.pages.blog-category.index', compact('results', 'categories'));
     }
+
 
     /**
      * Show the form for creating a new resource.
