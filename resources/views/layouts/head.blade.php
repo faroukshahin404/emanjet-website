@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="{{ asset('/css/mobile.css') }}">
     <link rel="stylesheet" href="{{ asset('css/custom-toastr.css') }}">
     <!-- Google Tag Manager -->
+    <meta name="google-site-verification" content="J0IOSNc26_xIWUUhWfg8hvPd19qlI_-Dews37H_qhB0" />
     <script>
         (function(w, d, s, l, i) {
             w[l] = w[l] || [];
