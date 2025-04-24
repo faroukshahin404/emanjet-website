@@ -4,10 +4,10 @@
 
 @push('styles')
     <style>
-        .hero-section::before {
+        /* .hero-section::before {
             background: linear-gradient(to right, #00000040, #00000040), url({{ $heroSection['image'] }});
             transform: scaleX(1);
-        }
+        } */
     </style>
 @endpush
 @section('content')

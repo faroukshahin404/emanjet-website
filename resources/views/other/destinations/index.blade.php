@@ -3,7 +3,7 @@
 @push('styles')
     <style>
         .hero-section-destination::before {
-            background: linear-gradient(to right, #00000040, #00000040), url({{ $heroSection['image'] }});
+            background: linear-gradient(to right, #00000040, #00000040), url({{asset( $heroSection['image']) }});
             transform: scale(1);
         }
     </style>
@@ -84,7 +84,7 @@
                     </p>
                 </div>
                 <div class="col-md-6">
-                    <img class="try-img" src="{{ $trySection['image'] }}" alt="bus">
+                    <img class="try-img" src="{{ asset($trySection['image']) }}" alt="bus">
                 </div>
             </div>
         </div>
@@ -92,7 +92,7 @@
     <!-- End try -->
 
     <!-- start app  -->
-    <div class="app mb-4">
+    {{-- <div class="app mb-4">
         <div class="container">
             <div class="row">
                 <div class="col-md-6 box">
@@ -133,6 +133,6 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- End app  -->
 @endsection

@@ -13,10 +13,10 @@ class PagesSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');  // تعطيل التحقق من القيود
-        Page::truncate();  // حذف جميع السجلات من جدول الشهادات
-        PageSeo::truncate();  // حذف جميع السجلات من جدول الشهادات
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');  // تفعيل التحقق من القيود
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;'); // تعطيل التحقق من القيود
+        Page::truncate(); // حذف جميع السجلات من جدول الشهادات
+        PageSeo::truncate(); // حذف جميع السجلات من جدول الشهادات
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;'); // تفعيل التحقق من القيود
 
         $pages = [
             [
@@ -38,7 +38,7 @@ class PagesSeeder extends Seeder
                         'og_title' => 'General Information',
                         'og_description' => 'General information about the website.',
                         'og_image' => 'general-page-og-image.jpg',
-                    ]
+                    ],
                 ],
                 'status' => true,
                 'created_at' => now(),
@@ -63,7 +63,7 @@ class PagesSeeder extends Seeder
                         'og_title' => 'Welcome to Our Website',
                         'og_description' => 'This is the homepage of our website.',
                         'og_image' => 'home-page-og-image.jpg',
-                    ]
+                    ],
                 ],
                 'status' => true,
                 'created_at' => now(),
@@ -88,7 +88,7 @@ class PagesSeeder extends Seeder
                         'og_title' => 'Learn About Us',
                         'og_description' => 'Information about our company and team.',
                         'og_image' => 'about-page-og-image.jpg',
-                    ]
+                    ],
                 ],
                 'status' => true,
                 'created_at' => now(),
@@ -113,7 +113,7 @@ class PagesSeeder extends Seeder
                         'og_title' => 'Get in Touch',
                         'og_description' => 'Contact information and form to reach us.',
                         'og_image' => 'contact-page-og-image.jpg',
-                    ]
+                    ],
                 ],
                 'status' => true,
                 'created_at' => now(),
@@ -138,7 +138,7 @@ class PagesSeeder extends Seeder
                         'og_title' => 'Explore Our Destinations',
                         'og_description' => 'Discover the best places to visit.',
                         'og_image' => 'destinations-page-og-image.jpg',
-                    ]
+                    ],
                 ],
                 'status' => true,
                 'created_at' => now(),
@@ -163,7 +163,7 @@ class PagesSeeder extends Seeder
                         'og_title' => 'Latest Blogs',
                         'og_description' => 'Read our latest blogs and articles.',
                         'og_image' => 'blogs-page-og-image.jpg',
-                    ]
+                    ],
                 ],
                 'status' => true,
                 'created_at' => now(),
@@ -188,7 +188,7 @@ class PagesSeeder extends Seeder
                         'og_title' => 'Frequently Asked Questions',
                         'og_description' => 'Find answers to common questions.',
                         'og_image' => 'faqs-page-og-image.jpg',
-                    ]
+                    ],
                 ],
                 'status' => true,
                 'created_at' => now(),
@@ -209,11 +209,11 @@ class PagesSeeder extends Seeder
                     ],
                     'en' => [
                         'keywords' => 'privacy policy, data protection, privacy, terms',
-                        'image' => 'privacy-policy-image.jpg', 
+                        'image' => 'privacy-policy-image.jpg',
                         'og_title' => 'Privacy Policy',
                         'og_description' => 'Learn about our privacy policy and how we protect your personal data',
                         'og_image' => 'privacy-policy-og-image.jpg',
-                    ]
+                    ],
                 ],
                 'status' => true,
                 'created_at' => now(),
@@ -238,12 +238,12 @@ class PagesSeeder extends Seeder
                         'og_title' => 'Terms of Use',
                         'og_description' => 'Learn about the terms and conditions for using our website and services',
                         'og_image' => 'terms-of-use-og-image.jpg',
-                    ]
+                    ],
                 ],
                 'status' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ]
+            ],
         ];
 
         foreach ($pages as $page) {
@@ -257,7 +257,7 @@ class PagesSeeder extends Seeder
                     'status' => $page['status'],
                     'created_at' => $page['created_at'],
                     'updated_at' => $page['updated_at'],
-                ]
+                ],
             );
         }
     }

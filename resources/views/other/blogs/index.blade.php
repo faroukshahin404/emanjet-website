@@ -14,7 +14,7 @@
                     </p>
                 </div>
                 <div class="col-md-6">
-                    <img class="img-fluid rounded-bottom-4" src="{{ $heroSection['image'] }}" alt="about-page">
+                    <img class="img-fluid rounded-bottom-4" src="{{ asset($heroSection['image']) }}" alt="about-page">
                 </div>
             </div>
         </div>
@@ -92,13 +92,13 @@
                 <!-- الصور -->
                 <div class="col-md-6">
                     <div class="d-flex justify-content-center align-items-end gap-1 flex-lg-row flex-column">
-                        <img class="img-1" src="{{ $tripStart['images'][0] ?? '' }}" alt="trip">
-                        <img class="img-2" src="{{ $tripStart['images'][1] ?? '' }}" alt="trip">
+                        <img class="img-1" src="{{asset($tripStart['images'][0]) ?? '' }}" alt="trip">
+                        <img class="img-2" src="{{ asset($tripStart['images'][1]) ?? '' }}" alt="trip">
                     </div>
                     <div class="d-flex justify-content-center align-items-start gap-1 mt-1 flex-lg-row flex-column">
-                        <img class="img-3" src="{{ $tripStart['images'][2] ?? '' }}" alt="trip">
-                        <img class="img-4" src="{{ $tripStart['images'][3] ?? '' }}" alt="trip">
-                        <img class="img-5" src="{{ $tripStart['images'][4] ?? '' }}" alt="trip">
+                        <img class="img-3" src="{{ asset($tripStart['images'][2]) ?? '' }}" alt="trip">
+                        <img class="img-4" src="{{ asset($tripStart['images'][3]) ?? '' }}" alt="trip">
+                        <img class="img-5" src="{{ asset($tripStart['images'][4]) ?? '' }}" alt="trip">
                     </div>
                 </div>
 
