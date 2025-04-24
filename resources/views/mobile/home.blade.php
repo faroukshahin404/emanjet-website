@@ -114,7 +114,7 @@
                                     <i class="fa fa-minus"></i>
                                 </button>
                                 <span class="mx-3" id="passengerCount2">1</span>
-                                <input type="hidden" id="passenger-count" name="seats" value="1">
+                                <input type="hidden" id="passenger-count2" name="seats" value="1">
                                 <button type="button" class="passenger-btn" onclick="incrementPassengers2()">
                                     <i class="fa fa-plus"></i>
                                 </button>

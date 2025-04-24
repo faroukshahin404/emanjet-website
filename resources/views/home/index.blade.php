@@ -581,11 +581,13 @@
         let passengerCount = 1;
         const countElement = document.getElementById('passengerCount');
         const countElementInput = document.getElementById('passenger-count');
+        const countElement2Input = document.getElementById('passenger-count2');
 
         function incrementPassengers() {
             passengerCount++;
             countElement.textContent = passengerCount;
             countElementInput.value = passengerCount;
+            countElement2Input.value = passengerCount;
         }
 
         function decrementPassengers() {
@@ -593,18 +595,21 @@
                 passengerCount--;
                 countElement.textContent = passengerCount;
                 countElementInput.value = passengerCount;
+                countElement2Input.value = passengerCount;
             }
         }
     </script>
     <script>
         let passengerCount2 = 1;
         const countElement2 = document.getElementById('passengerCount2');
-        const countElement2Input = document.getElementById('passenger-count');
+        const countElement2Input = document.getElementById('passenger-count2');
+        const countElementInput = document.getElementById('passenger-count');
 
         function incrementPassengers2() {
             passengerCount2++;
             countElement2.textContent = passengerCount2;
             countElement2Input.value = passengerCount2;
+            countElementInput.value = passengerCount2;
         }
 
         function decrementPassengers2() {
@@ -612,6 +617,7 @@
                 passengerCount2--;
                 countElement2.textContent = passengerCount2;
                 countElement2Input.value = passengerCount2;
+                countElementInput.value = passengerCount2;
             }
         }
     </script>
