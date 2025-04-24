@@ -14,7 +14,7 @@
                 <a href="services.html" class="footer-links">{{ __('Services') }}</a>
                 <a href="{{ route('about-us') }}" class="footer-links">{{ __('About Us') }}</a>
                 <a href="{{ route('contact-us') }}" class="footer-links">{{ __('Contact Us') }}</a>
-                <a href="{{ route('privacy') }}" class="footer-links">{{ __('Privacy') }}</a>
+                <a href="{{ route('privacy-policy') }}" class="footer-links">{{ __('Privacy') }}</a>
                 <a href="{{ route('usage-terms') }}" class="footer-links">{{ __('Usage Terms') }}</a>
             </div>
 

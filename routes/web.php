@@ -36,8 +36,7 @@ Route::group([
     Route::get('/', [HomeController::class, 'home'])->name('home');
 
     Route::get('/home', [HomeController::class, 'home']);
-    Route::get('/privacy-policy', [HomeController::class, 'privacy_policy'])->name('privacy');
-    Route::get('/usage-terms', [HomeController::class, 'usage_terms'])->name('usage-terms');
+
     // web.php
     Route::get('/get-cities', [HomeController::class, 'getCities']);
     Route::get('/get-stations/{city}', [HomeController::class, 'getStations']);
