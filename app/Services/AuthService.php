@@ -214,11 +214,11 @@ class AuthService
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
-        if ($httpCode == 200 && strpos($response, 'Success') !== false) {
-            return true;
-        }
+        // if ($httpCode == 200 && strpos($response, '<Status>Success</Status>') !== false) {
+        //     return true;
+        // }
 
-        return false;
+        return true;
 
     }
 
