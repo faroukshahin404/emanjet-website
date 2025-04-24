@@ -2,13 +2,12 @@
 
 @section('mobile-content')
     <div class="d-flex justify-content-between align-items-center mb-2">
-        <a href="bus.html">
+        <a href="javascript:history.back()">
             <i class="fas fa-arrow-right fs-25 text-black"></i>
         </a>
         <p class="m-0 fs-25 text-black">اختر مقعدك</p>
         <div></div>
     </div>
-
     @include('mobile.one-way.choose-seat.seat')
     <form id="seat-booking-form" method="GET" action="{{ route('mobile.one-way.booking-summary') }}">
         @csrf
@@ -20,8 +19,8 @@
         <input type="hidden" name="seats" value="{{ request()->seats }}" />
         <input type="hidden" name="station_from_id" value="{{ request()->station_from_id }}" />
         <input type="hidden" name="station_to_id" value="{{ request()->station_to_id }}" />
-        <input type="hidden" name="go_date_id" value="{{ request()->go_date_id }}" />
-        <input type="hidden" name="back_date_id" value="{{ request()->back_date_id }}" />
+
+        <input type="hidden" name="selected_trip_id" value="{{ request()->selected_trip_id }}" />
         <input type="hidden" id="num-of-seats" name="seats" value="{{ request()->seats }}" />
         <input type="hidden" name="selected_seats" id="selected-seats-input">
         <div class="mt-3">

@@ -134,127 +134,25 @@
 
         </form>
     </div>
-    <!-- Start Search  -->
-
-    <!-- start last search  -->
-    <div class="last-search">
-
-        <div class="d-flex justify-content-between align-items-center my-3">
-            <p class="m-0">البحث الاخير</p>
-            <a href="last-search.html">عرض الكل</a>
-        </div>
-
-        <div class="swiper mySwiper2">
-            <div class="swiper-wrapper">
-
-                <div class="swiper-slide">
-                    <div class="border rounded-7 px-3 py-4">
-                        <div class="d-flex justify-content-start gap-3 align-items-center text-black fw-bold">
-                            <p class="m-0 fs-18">القاهرة</p>
-                            <i class="fas fa-arrow-left-long fs-18"></i>
-                            <p class="m-0 fs-18">الاسكندرية</p>
-                        </div>
-                        <div class="mt-3">
-                            <p class="m-0 text-gray">
-                                24 فبراير 2023 . 1 راكب . درجة اولي
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="swiper-slide">
-
-                    <div class="border rounded-6 px-3 py-4">
-                        <div class="d-flex justify-content-start gap-3 align-items-center text-black fw-bold">
-                            <p class="m-0 fs-18">القاهرة</p>
-                            <i class="fas fa-arrow-left-long fs-18"></i>
-                            <p class="m-0 fs-18">الاسكندرية</p>
-                        </div>
-                        <div class="mt-3">
-                            <p class="m-0 text-gray">
-                                24 فبراير 2023 . 1 راكب . درجة اولي
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-    <!-- End last search  -->
-
-    <!-- start promo  -->
-    <div class="promo mt-3">
-        <h2 class="text-black mb-2">احصل على عروض ترويجية</h2>
-        <div class="swiper mySwiper3">
-            <div class="swiper-wrapper">
-
-                <div class="swiper-slide">
-                    <div class="position-relative rounded-7 promo-box">
-                        <div class="m-0 position-absolute promo-caption">
-                            <p class="m-0">خصم</p>
-                            <span class="fs-20">30%</span>
-                            <p class="m-0">للمستخدمين الجدد</p>
-                        </div>
-                        <img class="promo-img rounded-7" src="{{ asset('images/mobile/promo.png') }}" alt="promo">
-                    </div>
-                </div>
-
-                <div class="swiper-slide">
-                    <div class="position-relative rounded-7 promo-box">
-                        <div class="m-0 position-absolute promo-caption">
-                            <p class="m-0">خصم</p>
-                            <span class="fs-20">30%</span>
-                            <p class="m-0">للمستخدمين الجدد</p>
-                        </div>
-                        <img class="promo-img rounded-7" src="{{ asset('images/mobile/promo.png') }}" alt="promo">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+   
     <!-- End promo  -->
 
     <!-- start new places  -->
     <div class="new-places mt-3">
-        <h2 class="text-black mb-1">استكشف اماكن جديدة</h2>
+        <h2 class="text-black mb-1">
+            {{ __('Explore the Most Popular Destinations ') }}
+        </h2>
         <div class="swiper mySwiper4">
             <div class="swiper-wrapper">
 
+               @foreach ($cities as $city)
                 <div class="swiper-slide">
-                    <div>
-                        <img class="promo-img" src="{{ asset('images/mobile/new-places.png') }}" alt="new-places">
-                        <p class="text-black">الاسكندرية</p>
-                    </div>
+                    <img src="{{ $city->image }}" alt="city" style="border-radius: 10px;" onerror="this.src='https://www.touristegypt.com/wp-content/uploads/2023/05/Sharm-el-Sheikh2.jpg'">
+                    <h4 class="text-truncate">{{ $city->getTranslation('name', app()->getLocale()) }}</h4>
                 </div>
+               @endforeach
 
-                <div class="swiper-slide">
-                    <div>
-                        <img class="promo-img" src="{{ asset('images/mobile/new-places.png') }}" alt="new-places">
-                        <p class="text-black">الاسكندرية</p>
-                    </div>
-                </div>
-
-                <div class="swiper-slide">
-                    <div>
-                        <img class="promo-img" src="{{ asset('images/mobile/new-places.png') }}" alt="new-places">
-                        <p class="text-black">الاسكندرية</p>
-                    </div>
-                </div>
-
-                <div class="swiper-slide">
-                    <div>
-                        <img class="promo-img" src="{{ asset('images/mobile/new-places.png') }}" alt="new-places">
-                        <p class="text-black">الاسكندرية</p>
-                    </div>
-                </div>
-
-                <div class="swiper-slide">
-                    <div>
-                        <img class="promo-img" src="{{ asset('images/mobile/new-places.png') }}" alt="new-places">
-                        <p class="text-black">الاسكندرية</p>
-                    </div>
-                </div>
+               
             </div>
         </div>
     </div>

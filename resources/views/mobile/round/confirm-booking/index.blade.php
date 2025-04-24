@@ -2,9 +2,7 @@
 
 @section('mobile-content')
     <div class="d-flex justify-content-between align-items-center">
-        <a href="index.html">
-            <i class="fas fa-arrow-right fs-18 text-black"></i>
-        </a>
+        <i class="fas fa-arrow-right fs-25 text-black" onclick="window.history.back()"></i>
         <p class="m-0 fs-25 text-black">ملخص</p>
         <div></div>
     </div>
@@ -151,7 +149,7 @@
                         <input class="form-check-input form-check-input-pay" type="radio" name="payment_method"
                             value="fawry" id="flexRadioDefault1" checked>
                         <label class="form-check-label" for="flexRadioDefault1">
-                            <img class="fawry-label-img" src="{{ asset('images/pay/fawry.png') }}" alt="fawry">
+                            <img class="fawry-label-img" src="{{ asset('images/pay/fawry.svg') }}" alt="fawry">
                         </label>
                     </div>
                 </div>
@@ -160,7 +158,7 @@
             <div class="mt-4">
                 @csrf
                 <input type="hidden" name="tripType" value="{{ request()->tripType }}" />
-                <input type="hidden" name="city_from_id" value="{{ request()->city_fro
+                <input type="hidden" name="city_from_id" value="{{ request()->city_from_id }}" />
                 <input type="hidden" name="city_to_id" value="{{ request()->city_to_id }}" />
                 <input type="hidden" name="go_date" value="{{ request()->go_date }}" />
                 <input type="hidden" name="back_date" value="{{ request()->back_date }}" />

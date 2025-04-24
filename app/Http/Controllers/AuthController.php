@@ -460,7 +460,7 @@ class AuthController extends Controller
         $tickets = $requests->map(fn($res) => (new TicketViewModel($res))->toArray());
 
 
-
+        
         return view('profile.index', compact('user', 'tickets'));
     }
 

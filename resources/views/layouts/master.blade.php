@@ -41,6 +41,12 @@
     <script src="{{ asset('js/main.js') }}" defer></script>
     <script src="{{ asset('js/custom-toastr.js') }}"></script>
 
+    <script>
+        // Prevent right-click
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+    </script>
 
     @if (session('success'))
         <script>
