@@ -436,9 +436,7 @@
             </form>
         </div>
     </div>
-@endsection
-@push('js')
-    <script>
+        <script>
         document.addEventListener('DOMContentLoaded', function() {
             const tabs = document.querySelectorAll('.language-tab');
             tabs.forEach(tab => {
@@ -517,4 +515,7 @@
             });
         });
     </script>
+@endsection
+@push('js')
+
 @endpush
