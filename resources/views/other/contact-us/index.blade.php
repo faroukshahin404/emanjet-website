@@ -34,7 +34,7 @@
                     </form>
                 </div>
                 <div class="col-md-6">
-                    <img class="img-fluid" src="{{ $contactForm['image'] }}" alt="about-page">
+                    <img class="img-fluid" src="{{ asset($contactForm['image']) }}" alt="about-page">
                 </div>
             </div>
 
@@ -81,8 +81,8 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
 
         <i class="fas fa-arrow-right fs-25 text-black" onclick="window.history.back()"></i>
-        
-        <p class="m-0 fs-25 text-black">{{__('Contact Us')}}</p>
+
+        <p class="m-0 fs-25 text-black">{{ __('Contact Us') }}</p>
         <div></div>
     </div>
 
@@ -90,30 +90,32 @@
         <h6 class="text-black mb-4">
             {{ $contactForm['description'] }}
         </h6>
-        <form action="{{route('submit-contact-form')}}" method="POST" class="login-form">
+        <form action="{{ route('submit-contact-form') }}" method="POST" class="login-form">
             @csrf
-            @if(!auth()->check())
-            <div class="position-relative mb-3">
-                <i class="fa fa-user position-absolute top-50 translate-middle-y"></i>
-                <input class="form-control rounded-6 ps-4" type="text" name="name" id="" placeholder="{{__('Name')}}">
-            </div>
+            @if (!auth()->check())
+                <div class="position-relative mb-3">
+                    <i class="fa fa-user position-absolute top-50 translate-middle-y"></i>
+                    <input class="form-control rounded-6 ps-4" type="text" name="name" id=""
+                        placeholder="{{ __('Name') }}">
+                </div>
 
-            <div class="position-relative mb-3">
-                <i class="fa fa-phone position-absolute top-50 translate-middle-y"></i>
-                <input class="form-control rounded-6 ps-4" type="text" name="phone" id=""
-                    placeholder="{{__('Phone Number')}}">
-            </div>
+                <div class="position-relative mb-3">
+                    <i class="fa fa-phone position-absolute top-50 translate-middle-y"></i>
+                    <input class="form-control rounded-6 ps-4" type="text" name="phone" id=""
+                        placeholder="{{ __('Phone Number') }}">
+                </div>
             @else
-            <div class="position-relative mb-3">
-                <i class="fa fa-user position-absolute top-50 translate-middle-y"></i>
-                <input class="form-control rounded-6 ps-4" type="text" value="{{auth()->user()->name}}" name="name" id="" placeholder="{{__('Name')}}">
-            </div>
+                <div class="position-relative mb-3">
+                    <i class="fa fa-user position-absolute top-50 translate-middle-y"></i>
+                    <input class="form-control rounded-6 ps-4" type="text" value="{{ auth()->user()->name }}"
+                        name="name" id="" placeholder="{{ __('Name') }}">
+                </div>
 
-            <div class="position-relative mb-3">
-                <i class="fa fa-phone position-absolute top-50 translate-middle-y"></i>
-                <input class="form-control rounded-6 ps-4" value="{{auth()->user()->mobile}}" type="text" name="phone" id=""
-                    placeholder="{{__('Phone Number')}}">
-            </div> 
+                <div class="position-relative mb-3">
+                    <i class="fa fa-phone position-absolute top-50 translate-middle-y"></i>
+                    <input class="form-control rounded-6 ps-4" value="{{ auth()->user()->mobile }}" type="text"
+                        name="phone" id="" placeholder="{{ __('Phone Number') }}">
+                </div>
             @endif
 
             <div class="position-relative">
@@ -122,7 +124,7 @@
             </div>
 
             <div class="col-md-12 d-flex justify-content-center align-items-center my-3">
-                <a class="login" href="">{{__('Submit')}}</a>
+                <a class="login" href="">{{ __('Submit') }}</a>
             </div>
         </form>
     </div>
