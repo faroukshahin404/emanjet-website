@@ -40,6 +40,11 @@
 
     <script src="{{ asset('js/main.js') }}" defer></script>
     <script src="{{ asset('js/custom-toastr.js') }}"></script>
+    <script>
+        window.addEventListener('resize', function() {
+            window.location.href = '/';
+        });
+    </script>
 
     <script>
         // Prevent right-click
