@@ -39,5 +39,9 @@ class RunTrip extends Model
         return $this->belongsTo(TripData::class, 'tripData_id');
     }
 
-
+    public function busType()
+    {
+       
+        return $this->hasOneThrough(BusType::class, TripData::class, 'id', 'id', 'tripData_id', 'busType_id');
+    }
 } //end of class
