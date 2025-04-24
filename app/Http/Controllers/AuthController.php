@@ -87,7 +87,7 @@ class AuthController extends Controller
         $user = User::where('mobile', $request->phone)->first();
 
         if (!$user) {
-            return response()->json(['success' => false, 'message' => 'رقم الهاتف غير صحيح.'], 400);
+            return redirect()->back()->with(['error' =>  'رقم الهاتف غير صحيح.']);
         }
 
         // إذا كان الطلب لإعادة إرسال OTP

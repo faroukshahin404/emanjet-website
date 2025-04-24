@@ -13,7 +13,7 @@
     </div>
 
     @foreach ($tickets->where('is_past', false) as $ticket)
-        <div class="mt-3">
+        <div class="mt-3" style="direction: rtl;">
             <div class="border rounded-7 px-4 pt-2 pb-2 box-shadow">
                 <div class="d-flex justify-content-end align-items-end gap-2 mb-3">
                     <span>#{{ $ticket['ticket_id'] . '.' . $ticket['runTrip_id'] }}</span>
@@ -133,7 +133,7 @@
     </div>
 
     @foreach ($tickets->where('is_past', true) as $ticket)
-        <div class="mt-3">
+        <div class="mt-3" style="direction: rtl;">
             <div class="border rounded-7 px-4 pt-2 pb-2 box-shadow">
                 <div class="d-flex justify-content-center align-items-center gap-2 mb-3">
                     <i class="fa fa-bus fs-18 text-black"></i>
