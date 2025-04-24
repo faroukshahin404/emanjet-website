@@ -43,43 +43,37 @@
         }
     </style>
 @endpush
-
+@section('title', __('Stations'))
+@section('breadcrumb')
+    <div class="row">
+        <div class="col-12">
+            <div class="box p-3 mb-3">
+                <nav>
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="/"><i class="mdi mdi-home-outline"></i></a></li>
+                        <li class="breadcrumb-item">
+                            <a href="{{ route('admin.dashboard.index') }}">{{ __('Dashboard') }}</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ __('Stations') }}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+@endsection
 @section('content')
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">{{ __('Stations Management') }}</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>{{ __('Name') }}</th>
-                                        <th>{{ __('Available Online') }}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($results as $item)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $item->name }}</td>
-                                            <td class="text-center">
-                                                <button type="button"
-                                                    class="btn btn-toggle {{ $item->available_online ? 'active' : '' }}"
-                                                    data-bs-toggle="button" data-id="{{ $item->id }}"
-                                                    aria-pressed="{{ $item->available_online ? 'true' : 'false' }}"
-                                                    autocomplete="off">
-                                                    <div class="handle"></div>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+    <div class="row">
+        <div class="col-12">
+            <div class="row mb-3">
+                <div class="col-12">
+                    @include('admin.pages.stations.filters')
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="box">
+                        <div class="box-body">
+                           @include('admin.pages.stations.list')
                         </div>
                         <div class="d-flex justify-content-center mt-3">
                             {{ $results->links() }}

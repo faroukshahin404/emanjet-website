@@ -193,6 +193,56 @@ class PagesSeeder extends Seeder
                 'status' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
+            ],
+            [
+                'title' => ['ar' => 'سياسة الخصوصية', 'en' => 'Privacy Policy'],
+                'slug' => 'privacy-policy',
+                'meta_title' => ['ar' => 'سياسة الخصوصية', 'en' => 'Privacy Policy'],
+                'meta_description' => ['ar' => 'تعرف على سياسة الخصوصية وكيفية حماية بياناتك الشخصية', 'en' => 'Learn about our privacy policy and how we protect your personal data'],
+                'meta_tags' => [
+                    'ar' => [
+                        'keywords' => 'سياسة الخصوصية, حماية البيانات, الخصوصية',
+                        'image' => 'privacy-policy-image.jpg',
+                        'og_title' => 'سياسة الخصوصية',
+                        'og_description' => 'اقرأ أحدث المدونات والمقالات.',
+                        'og_image' => 'blogs-page-og-image.jpg',
+                    ],
+                    'en' => [
+                        'keywords' => 'privacy policy, data protection, privacy, terms',
+                        'image' => 'privacy-policy-image.jpg', 
+                        'og_title' => 'Privacy Policy',
+                        'og_description' => 'Learn about our privacy policy and how we protect your personal data',
+                        'og_image' => 'privacy-policy-og-image.jpg',
+                    ]
+                ],
+                'status' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'title' => ['ar' => 'شروط الاستخدام', 'en' => 'Terms of Use'],
+                'slug' => 'usage-terms',
+                'meta_title' => ['ar' => 'شروط الاستخدام', 'en' => 'Terms of Use'],
+                'meta_description' => ['ar' => 'تعرف على شروط استخدام موقعنا وخدماتنا', 'en' => 'Learn about the terms and conditions for using our website and services'],
+                'meta_tags' => [
+                    'ar' => [
+                        'keywords' => 'شروط الاستخدام, الشروط والأحكام, القواعد',
+                        'image' => 'terms-of-use-image.jpg',
+                        'og_title' => 'شروط الاستخدام',
+                        'og_description' => 'تعرف على شروط استخدام موقعنا وخدماتنا',
+                        'og_image' => 'terms-of-use-og-image.jpg',
+                    ],
+                    'en' => [
+                        'keywords' => 'terms of use, terms and conditions, rules',
+                        'image' => 'terms-of-use-image.jpg',
+                        'og_title' => 'Terms of Use',
+                        'og_description' => 'Learn about the terms and conditions for using our website and services',
+                        'og_image' => 'terms-of-use-og-image.jpg',
+                    ]
+                ],
+                'status' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
             ]
         ];
 

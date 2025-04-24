@@ -16,23 +16,25 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ asset('js/pages/data-table.js') }}"></script>
+{{-- <script src="{{ asset('assets/vendor_components/datatable/datatables.min.js')}}"></script> --}}
 
 <script>
-    function showConfirmationAlert(message, callback) {
-        event.preventDefault();
-        Swal.fire({
-            title: 'هل أنت متأكد؟',
-            text: message,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'نعم',
-            cancelButtonText: 'لا',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                callback(); // استدعاء الـ callback إذا تم التأكيد
-            }
-        });
-    }
+   function showConfirmationAlert(event, message, callback) {
+    if (event) event.preventDefault();
+    Swal.fire({
+        title: 'هل أنت متأكد؟',
+        text: message,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'نعم',
+        cancelButtonText: 'لا',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            callback(); // استدعاء الـ callback إذا تم التأكيد
+        }
+    });
+}
 
     toastr.options = {
         "closeButton": true,
@@ -78,3 +80,5 @@
 
 @stack('js')
 
+@yield('js')
+@stack('scripts')

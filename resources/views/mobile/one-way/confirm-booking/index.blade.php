@@ -100,7 +100,7 @@
                         <input class="form-check-input form-check-input-pay" type="radio" name="payment_method"
                             value="fawry" id="flexRadioDefault1" checked>
                         <label class="form-check-label" for="flexRadioDefault1">
-                            <img class="fawry-label-img" src="{{ asset('images/pay/fawry.png') }}" alt="fawry">
+                            <img class="fawry-label-img" src="{{ asset('images/pay/fawry.svg') }}" alt="fawry">
                         </label>
                     </div>
 

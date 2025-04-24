@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\BlogCategoryController;
+use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PageController;
@@ -32,12 +33,14 @@ Route::group([
     Route::get('/', [HomeController::class, 'home'])->name('home');
 
     Route::get('/home', [HomeController::class, 'home']);
+    Route::get('/privacy-policy', [HomeController::class, 'privacy_policy'])->name('privacy');
+    Route::get('/usage-terms', [HomeController::class, 'usage_terms'])->name('usage-terms');
     // web.php
     Route::get('/get-cities', [HomeController::class, 'getCities']);
     Route::get('/get-stations/{city}', [HomeController::class, 'getStations']);
 
     // Tickets and Settings routes
-    Route::get('/tickets', [HomeController::class, 'tickets'])->name('tickets');
+    Route::get('/tickets', [HomeController::class, 'tickets'])->name('tickets')->middleware('checkUserVerified');
     Route::get('/settings', [HomeController::class, 'settings'])->name('settings');
 
     // Desktop Routes
@@ -72,6 +75,10 @@ Route::group([
                 Route::get('/choose-seat', [RoundTripMobileController::class, 'chooseSeats'])->name('choose-seat');
                 Route::get('booking-summary', [RoundTripMobileController::class, 'bookingSummary'])->name('booking-summary');
             });
+        });
+        Route::group(['middleware' => 'checkUserVerified'], function () {
+            Route::get('tickets', [ProfileController::class, 'index'])->name('tickets');
+            Route::get('settings', [ProfileController::class, 'settings'])->name('settings');
         });
     });
 
@@ -153,10 +160,9 @@ Route::group([
         Route::post('/stations/{station}/toggle-available', [StationController::class, 'toggleAvailableOnline'])->name('stations.toggle-available');
         //blog-categories
         Route::resource('/blog-categories', BlogCategoryController::class);
+        //blog
+        Route::resource('/blogs', BlogController::class);
     });
-
-
-
 
     Route::get('translation', function () {
         $translations = extractTranslations();

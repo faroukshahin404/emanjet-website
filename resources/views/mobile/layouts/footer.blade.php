@@ -1,19 +1,24 @@
- <!-- start bottom navbar  -->
+@php
+$url = url()->current();            // Current URL without query string
+$isTickets = str_contains($url, '/mobile/tickets');
+$isSettings = str_contains($url, '/settings');
+@endphp
+<!-- start bottom navbar  -->
  <div>
     <div class="bottom-navbar">
-        <a href="index.html" class="nav-item active">
+        <a href="/" class="nav-item {{ !$isTickets && !$isSettings ? 'active' : '' }}">
             <div>
                 <i class="fa fa-home"></i>
                 <p>الرئيسية</p>
             </div>
         </a>
-        <a href="tickets.html" class="nav-item">
+        <a href="{{route('mobile.tickets')}}" class="nav-item {{ $isTickets ? 'active' : '' }}">
             <div>
                 <i class="fas fa-ticket"></i>
                 <p>التذاكر</p>
             </div>
         </a>
-        <a href="setting-page.html" class="nav-item">
+        <a href="{{route('mobile.settings')}}" class="nav-item {{ $isSettings ? 'active' : '' }}">
             <div>
                 <i class="fas fa-gear"></i>
                 <p>الاعدادات</p>
