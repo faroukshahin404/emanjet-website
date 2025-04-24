@@ -17,6 +17,7 @@ use App\Http\Controllers\OneWayTripController;
 use App\Http\Controllers\RoundTripController;
 use App\Http\Controllers\RoundTripMobileController;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
@@ -40,7 +41,7 @@ Route::group([
     Route::get('/get-stations/{city}', [HomeController::class, 'getStations']);
 
     // Tickets and Settings routes
-    Route::get('/tickets', [HomeController::class, 'tickets'])->name('tickets');
+    Route::get('/tickets', [HomeController::class, 'tickets'])->name('tickets')->middleware('checkUserVerified');
     Route::get('/settings', [HomeController::class, 'settings'])->name('settings');
 
     // Desktop Routes
@@ -76,6 +77,10 @@ Route::group([
                 Route::get('booking-summary', [RoundTripMobileController::class, 'bookingSummary'])->name('booking-summary');
             });
         });
+        Route::group(['middleware' => 'checkUserVerified'], function () {
+            Route::get('tickets', [ProfileController::class, 'index'])->name('tickets');
+            Route::get('settings', [ProfileController::class, 'settings'])->name('settings');
+        });
     });
 
 
@@ -88,6 +93,8 @@ Route::group([
         Route::get('blogs', [HomeController::class, 'blogs'])->name('blogs');
         Route::get('destinations', [HomeController::class, 'destinations'])->name('destinations');
         Route::get('faqs', [HomeController::class, 'faqs'])->name('faqs');
+        Route::get('privacy-policy', [HomeController::class, 'privacy_policy'])->name('privacy-policy');
+        Route::get('usage-terms', [HomeController::class, 'usage_terms'])->name('usage-terms');
     });
 
     Route::prefix('auth')->name('auth.')->group(function () {
@@ -170,7 +177,6 @@ Route::group([
     Route::get('translation', function () {
         $translations = extractTranslations();
         dd($translations);
-
     });
 
     // routes/web.php
@@ -188,7 +194,34 @@ Route::group([
 
 
 
+    Route::get('missing-translations', function () {
+        // Get all PHP files in resources/views
+        $files = File::allFiles(resource_path('views'));
 
+        // Load existing translations
+        $existingTranslations = json_decode(file_get_contents(resource_path('lang/ar.json')), true) ?? [];
 
+        $missingTranslations = [];
 
+        foreach ($files as $file) {
+            $content = file_get_contents($file->getPathname());
+
+            // Find all strings inside __(' ... ')
+            preg_match_all("/__\('([^']+)'\)/", $content, $matches);
+
+            if (!empty($matches[1])) {
+                foreach ($matches[1] as $string) {
+                    // Check if translation exists
+                    if (!array_key_exists($string, $existingTranslations)) {
+                        $missingTranslations[] = $string;
+                    }
+                }
+            }
+        }
+
+        // Remove duplicates
+        $missingTranslations = array_unique($missingTranslations);
+
+        dd($missingTranslations);
+    })->name('missing.translations');
 });

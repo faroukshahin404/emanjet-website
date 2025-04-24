@@ -29,7 +29,7 @@ class City extends Model
     /*** end relations ***/
     public function stations()
     {
-        return $this->hasMany(Station::class);
+        return $this->hasMany(Station::class)->where('available_online', 1);
     }
 
 

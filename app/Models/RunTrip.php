@@ -34,7 +34,10 @@ class RunTrip extends Model
         'reservation_possible'
     ];
 
-
+    public function tripData()
+    {
+        return $this->belongsTo(TripData::class, 'tripData_id');
+    }
 
 
 } //end of class

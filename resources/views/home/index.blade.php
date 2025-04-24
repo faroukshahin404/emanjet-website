@@ -159,7 +159,7 @@
                             {{ $heroSection['caption-description'] }}
                         </h6>
                     </div>
-                    <div class="text-white d-flex flex-lg-row flex-column justify-content-start align-items-center gap-3">
+                    {{-- <div class="text-white d-flex flex-lg-row flex-column justify-content-start align-items-center gap-3">
 
                         <a href="{{ $apps['android'] }}" target="_blank"
                             class="google-play-box rounded-5 text-decoration-none">
@@ -182,7 +182,7 @@
                                 <i class="fa-brands fa-apple"></i>
                             </div>
                         </a>
-                    </div>
+                    </div> --}}
 
                 </div>
             </div>

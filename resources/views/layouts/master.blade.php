@@ -40,7 +40,22 @@
 
     <script src="{{ asset('js/main.js') }}" defer></script>
     <script src="{{ asset('js/custom-toastr.js') }}"></script>
+    <script>
+        let lastWidth = window.innerWidth;
+        window.addEventListener('resize', function() {
+            if (window.innerWidth !== lastWidth) {
+                lastWidth = window.innerWidth;
+                window.location.href = '/';
+            }
+        });
+    </script>
 
+    <script>
+        // Prevent right-click
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+    </script>
 
     @if (session('success'))
         <script>
