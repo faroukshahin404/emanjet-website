@@ -25,7 +25,7 @@ class ProfileController extends Controller
     public function edit()
     {
         $user = Auth::user();
-        return view('mobile.profile.edite', compact('user'));
+        return view('mobile.profile.edit', compact('user'));
     }
 
     public function settings()
@@ -37,18 +37,17 @@ class ProfileController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'mobile' => 'required|string|max:20',
+            'email' => 'required|string',
         ],[
             'name.required' => __('Name is required'),
-            'mobile.required' => __('Mobile is required'),
-            'mobile.max' => __('Mobile must be less than 20 characters'),
+            'email.required' => __('Mobile is required'),
         ]);
 
         $user = User::find(Auth::id());
         $user->name = $request->name;
-        $user->mobile = $request->mobile;
+        $user->email = $request->email;
         $user->save();
 
-        return redirect()->route('profile.index')->with('success', 'تم تحديث الملف الشخصي بنجاح');
+        return redirect()->route('mobile.settings')->with('success', 'تم تحديث الملف الشخصي بنجاح');
     }
 }

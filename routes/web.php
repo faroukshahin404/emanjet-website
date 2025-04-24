@@ -4,9 +4,11 @@ use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DestinationController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\PageSeoController;
 use App\Http\Controllers\Admin\StationController;
+use App\Http\Controllers\AdminAuth\LoginController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BusCategoryController;
 use App\Http\Controllers\HomeController;
@@ -15,6 +17,7 @@ use App\Http\Controllers\OneWayTripController;
 use App\Http\Controllers\RoundTripController;
 use App\Http\Controllers\RoundTripMobileController;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
@@ -92,6 +95,8 @@ Route::group([
         Route::get('blogs', [HomeController::class, 'blogs'])->name('blogs');
         Route::get('destinations', [HomeController::class, 'destinations'])->name('destinations');
         Route::get('faqs', [HomeController::class, 'faqs'])->name('faqs');
+        Route::get('privacy-policy', [HomeController::class, 'privacy_policy'])->name('privacy-policy');
+        Route::get('usage-terms', [HomeController::class, 'usage_terms'])->name('usage-terms');
     });
 
     Route::prefix('auth')->name('auth.')->group(function () {
@@ -143,31 +148,37 @@ Route::group([
         Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     });
 
+    Route::prefix('admin')->group(function () {
+        Route::get('/login', [\App\Http\Controllers\AdminAuth\LoginController::class, 'showLoginForm'])->name('admin.login');
+        Route::post('/login', [LoginController::class, 'login'])->name('admin.login.submit');
+    });
 
-    Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
+    Route::prefix('admin')->middleware(\App\Http\Middleware\AdminAuth::class)->as('admin.')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+        Route::post('/logout', [\App\Http\Controllers\AdminAuth\LoginController::class, 'logout'])->name('logout');
+
         Route::resource('/pages', PageController::class)->names('pages');
         Route::get('/pages-seo/{pageId}', [PageSeoController::class, 'index'])->name('pages-seo.index');
         Route::get('/pages-seo/{id}/edit', [PageSeoController::class, 'edit'])->name('pages-seo.edit');
         Route::put('/pages-seo/{id}', [PageSeoController::class, 'update'])->name('pages-seo.update');
 
         Route::resource('bus-categories', BusCategoryController::class)->names('bus-categories');
-        //cities
+
         Route::get('/cities', [CityController::class, 'index'])->name('cities.index');
         Route::post('/cities/{city}/toggle-available', [CityController::class, 'toggleAvailableOnline'])->name('cities.toggle-available');
-        //stations
+
         Route::get('/stations', [StationController::class, 'index'])->name('stations.index');
         Route::post('/stations/{station}/toggle-available', [StationController::class, 'toggleAvailableOnline'])->name('stations.toggle-available');
-        //blog-categories
-        Route::resource('/blog-categories', BlogCategoryController::class);
-        //blog
-        Route::resource('/blogs', BlogController::class);
+
+        Route::resource('/blog-categories', BlogCategoryController::class)->names('blog-categories');
+        Route::resource('/blogs', BlogController::class)->names('blogs');
+        Route::resource('/destinations', DestinationController::class)->names('destinations');
     });
+
 
     Route::get('translation', function () {
         $translations = extractTranslations();
         dd($translations);
-
     });
 
     // routes/web.php
@@ -185,7 +196,34 @@ Route::group([
 
 
 
+    Route::get('missing-translations', function () {
+        // Get all PHP files in resources/views
+        $files = File::allFiles(resource_path('views'));
 
+        // Load existing translations
+        $existingTranslations = json_decode(file_get_contents(resource_path('lang/ar.json')), true) ?? [];
 
+        $missingTranslations = [];
 
+        foreach ($files as $file) {
+            $content = file_get_contents($file->getPathname());
+
+            // Find all strings inside __(' ... ')
+            preg_match_all("/__\('([^']+)'\)/", $content, $matches);
+
+            if (!empty($matches[1])) {
+                foreach ($matches[1] as $string) {
+                    // Check if translation exists
+                    if (!array_key_exists($string, $existingTranslations)) {
+                        $missingTranslations[] = $string;
+                    }
+                }
+            }
+        }
+
+        // Remove duplicates
+        $missingTranslations = array_unique($missingTranslations);
+
+        dd($missingTranslations);
+    })->name('missing.translations');
 });

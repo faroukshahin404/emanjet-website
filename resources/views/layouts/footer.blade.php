@@ -54,7 +54,7 @@
                     </div>
                 </form>
 
-                @if (!empty($apps))
+                {{-- @if (!empty($apps))
                     <div
                         class="text-white d-flex flex-lg-row flex-column justify-content-start align-items-center gap-lg-3 gap-1 mt-4">
                         @if (!empty($apps['ios']))
@@ -83,7 +83,7 @@
                             </a>
                         @endif
                     </div>
-                @endif
+                @endif --}}
             </div>
         </div>
 

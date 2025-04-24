@@ -156,6 +156,8 @@ class HomeController extends Controller
         ]);
     }
 
+  
+
     public function blogs()
     {
         $page = Page::where('slug', 'blogs')->first();

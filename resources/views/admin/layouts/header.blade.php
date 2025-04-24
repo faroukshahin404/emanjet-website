@@ -15,8 +15,8 @@
                         <div class="search-bx mx-5">
                             <form>
                                 <div class="input-group">
-                                    <input type="search" class="form-control" placeholder="Search"
-                                        aria-label="Search" aria-describedby="button-addon2">
+                                    <input type="search" class="form-control" placeholder="Search" aria-label="Search"
+                                        aria-describedby="button-addon2">
                                     <div class="input-group-append">
                                         <button class="btn" type="submit" id="button-addon3"><i
                                                 data-feather="search"></i></button>
@@ -146,8 +146,8 @@
                                 Profile</a>
                             <a class="dropdown-item" href="#"><i class="ti-wallet text-muted me-2"></i>
                                 My Wallet</a>
-                            <a class="dropdown-item" href="#"><i
-                                    class="ti-settings text-muted me-2"></i> Settings</a>
+                            <a class="dropdown-item" href="#"><i class="ti-settings text-muted me-2"></i>
+                                Settings</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#"><i class="ti-lock text-muted me-2"></i>
                                 Logout</a>
@@ -156,7 +156,13 @@
                 </li>
                 <!-- Control Sidebar Toggle Button -->
 
-
+                <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
+                <a class="dropdown-item" href="#"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <i class="ti-lock text-muted me-2"></i> Logout
+                </a>
             </ul>
         </div>
     </nav>

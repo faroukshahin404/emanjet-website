@@ -5,20 +5,17 @@
     <div class="container mo-view mb-5 mt-3 px-4">
         <div class="row">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <a href="{{ route('profile.index') }}">
-                    <i class="fas fa-arrow-right fs-25 text-black"></i>
-                </a>
-                <p class="m-0 fs-25 text-black">تحرير الملف الشخصي</p>
+                <i class="fas fa-arrow-right fs-25 text-black" onclick="window.history.back()"></i>
+
+                <p class="m-0 fs-25 text-black">{{__('Edit Profile')}}</p>
                 <div></div>
             </div>
 
             <div class="mt-3">
                 <form action="{{ route('profile.update') }}" method="POST" class="profile-edit-form d-flex flex-column align-items-center login-form">
                     @csrf
-                    <div class="position-relative profile-img-container mb-5">
-                        <img src="{{ asset('images/mobile/profile-img.png') }}" alt="profile-img">
-                        <i class="fas fa-pen-to-square"></i>
-                    </div>
+                   
+                    
 
                     <div class="position-relative mb-3 w-100">
                         <i class="fa fa-user position-absolute top-50 translate-middle-y"></i>
@@ -26,31 +23,29 @@
                                type="text"
                                name="name"
                                value="{{ old('name', auth()->user()->name) }}"
-                               placeholder="الاسم">
+                               placeholder="{{__('Name')}}">
                         @error('name')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
 
                     <div class="position-relative w-100">
-                        <i class="fa fa-phone position-absolute top-50 translate-middle-y"></i>
-                        <input class="form-control rounded-6 ps-4 @error('mobile') is-invalid @enderror"
+                        <i class="fa fa-envelope position-absolute top-50 translate-middle-y"></i>
+                        <input class="form-control rounded-6 ps-4 @error('email') is-invalid @enderror"
                                type="text"
-                               name="mobile"
-                               value="{{ old('mobile', auth()->user()->mobile) }}"
-                               placeholder="رقم الهاتف">
-                        @error('mobile')
+                               name="email"
+                               value="{{ old('email', auth()->user()->email) }}"
+                               placeholder="{{__('Email')}}">
+                        @error('email')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
 
                     <div class="col-md-12 d-flex justify-content-center align-items-center mb-3 w-100 mt-3">
-                        <button type="submit" class="btn btn-main w-100 rounded-6">حفظ التعديلات</button>
+                        <button type="submit" class="btn btn-main w-100 rounded-6">{{__('Save Changes')}}</button>
                     </div>
 
-                    <div class="col-md-12 d-flex justify-content-center align-items-center mb-3 w-100">
-                        <a href="{{ route('profile.index') }}" class="btn btn-outline-secondary w-100 rounded-6">الغاء</a>
-                    </div>
+                  
                 </form>
             </div>
         </div>

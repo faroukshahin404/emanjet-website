@@ -108,11 +108,11 @@
                                     </div>
                                 </div>
                                 <div style="color: black;">
-                                    <p class="m-0 fs-12" style="color: black;">{{ $trip->price }} جنية مصري</p>
-                                    <p class="m-0 fs-12" style="color: black;">لكل مقعد</p>
-                                    <p class="m-0 fs-12 text-success" style="color: black;">متبقي {{ $trip->available_seats }} مقاعد</p>
+                                    <p class="m-0 fs-12" style="color: black;">{{ $trip->price }} {{__('EGP')}}</p>
+                                    <p class="m-0 fs-12" style="color: black;">{{__('per seat')}}</p>
+                                    <p class="m-0 fs-12 text-success" style="color: black;">{{__('Available Seats')}} {{ $trip->available_seats }}</p>
                                     <button class="btn btn-main mt-2 btn-sm rounded-5" type="button">
-                                        حجز
+                                        {{__('Book')}}
                                     </button>
                                 </div>
                             </div>

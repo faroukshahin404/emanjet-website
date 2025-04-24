@@ -1,9 +1,7 @@
 @extends('layouts.master')
 @section('mobile-content')
     <div class="d-flex justify-content-between align-items-center">
-        <a href="index.html">
-            <i class="fas fa-arrow-right fs-18 text-black"></i>
-        </a>
+        <i class="fas fa-arrow-right fs-25 text-black" onclick="window.history.back()"></i>
         <p class="m-0 fs-25 text-black">ملخص</p>
         <div></div>
     </div>
