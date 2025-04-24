@@ -31,7 +31,7 @@
                         @include('auth.partials.otp-inputs')
 
                         <p class="mt-3 text-center text-main">
-                            <span id="timer">00:30</span>
+                            <span id="timer">02:00</span>
                         </p>
 
                         <div class="mt-4 d-flex justify-content-center">
@@ -60,7 +60,7 @@
 @push('scripts')
     <script>
         // Timer functionality
-        let timeLeft = 30;
+        let timeLeft = 120;
         const timerElement = document.getElementById('timer');
         const resendLink = document.getElementById('resendOtp');
 
@@ -101,7 +101,7 @@
                 .then(data => {
                     if (data.success) {
                         // Reset timer
-                        ئtimeLeft = 30;
+                        timeLeft = 120;
                         clearInterval(timerInterval);
                         timerInterval = setInterval(updateTimer, 1000);
                         updateTimer();

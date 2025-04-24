@@ -32,6 +32,11 @@
                                         <span class="path1"></span>
                                         <span class="path2"></span></i>{{ __('Bus Categories') }}</a>
                             </li>
+                            <li>
+                                <a href="{{ route('admin.destinations.index') }}"><i class="icon-Commit">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span></i>{{ __('Destinations') }}</a>
+                            </li>
                         </ul>
                     </li>
                 </ul>

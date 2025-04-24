@@ -26,7 +26,7 @@
             const timerElement = document.getElementById('timer');
             const resendOtpLink = document.getElementById('resendOtpLink');
 
-            const initialTime = 30;
+            const initialTime = 120;
             let timeLeft = initialTime;
 
             const startTimer = () => {
