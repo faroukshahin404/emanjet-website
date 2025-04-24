@@ -34,7 +34,8 @@
                     </form>
                 </div>
                 <div class="col-md-6">
-                    <img class="img-fluid" src="{{ $contactForm['image'] }}" alt="about-page">
+                    <img class="img-fluid" src="{{ asset($contactForm['image']) }}" alt="about-page">
+
                 </div>
             </div>
 

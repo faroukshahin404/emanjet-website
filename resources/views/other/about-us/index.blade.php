@@ -15,7 +15,7 @@
 
                 </div>
                 <div class="col-md-6">
-                    <img class="img-fluid" src="{{ $heroSection['image'] }}" alt="about-page">
+                    <img class="img-fluid" src="{{ asset($heroSection['image']) }}" alt="about-page">
                 </div>
             </div>
         </div>
