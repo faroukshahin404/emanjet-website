@@ -48,6 +48,6 @@ class ProfileController extends Controller
         $user->email = $request->email;
         $user->save();
 
-        return redirect()->route('mobile.settings')->with('success', 'تم تحديث الملف الشخصي بنجاح');
+        return redirect()->route('mobile.settings')->with('success', __('Profile updated successfully'));
     }
 }

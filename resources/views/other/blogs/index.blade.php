@@ -107,9 +107,10 @@
                     <h2>{{ $tripStart['title'] ?? 'رحلاتك تبدأ هنا' }}</h2>
                     <p>{{ $tripStart['description'] ?? '' }}</p>
 
-                    <button>
+                    <button onclick="window.location.href='{{ route('home') }}'">
                         {{ $tripStart['button-text'] ?? 'ابحث عن رحلتك' }}
                     </button>
+
                 </div>
             </div>
         </div>

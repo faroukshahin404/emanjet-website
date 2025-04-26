@@ -104,7 +104,7 @@ Route::group([
         Route::get('phone', [AuthController::class, 'phone'])->name('phone');
         Route::get('otp', [AuthController::class, 'otp'])->name('otp');
         Route::post('otp', [AuthController::class, 'postOtp'])->name('postOtp');
-        Route::get('resend-otp', [AuthController::class, 'resendOtp'])->name('resendOtp');
+        Route::post('resend-otp', [AuthController::class, 'resendOtp'])->name('resendOtp');
 
         // راوتات الضيف (غير مسجل الدخول)
         Route::middleware('guest')->group(function () {
