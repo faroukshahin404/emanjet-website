@@ -115,6 +115,7 @@
 @endsection
 
 @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const checkboxes = document.querySelectorAll('.chair-checkbox');
@@ -170,6 +171,22 @@
 
 
                 });
+            });
+        });
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.querySelector('form');
+            const termsCheckbox = document.getElementById('flexCheckDefault');
+
+            form.addEventListener('submit', function(e) {
+                if (!termsCheckbox.checked) {
+                    e.preventDefault(); // تمنع الإرسال
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'تنبيه',
+                        text: 'يجب الموافقة على الشروط والأحكام قبل المتابعة.',
+                        confirmButtonText: 'موافق'
+                    });
+                }
             });
         });
     </script>

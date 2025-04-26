@@ -13,32 +13,43 @@
 
                         {{-- رقم الهاتف --}}
                         <div class="position-relative mb-3">
-                            <i class="fa fa-phone position-absolute top-50 translate-middle-y px-2"></i>
-                            <input class="phoneInput" type="text" name="mobile" id="mobile"
-                                placeholder="{{ __('Phone') }}" value="{{ old('mobile') }}" required>
+                            <i class="fa fa-phone position-absolute top-50 translate-middle-y {{ app()->getLocale() == 'ar' ? 'end-0' : 'start-0' }} px-2"></i>
+                            <input
+                                class="phoneInput {{ app()->getLocale() == 'ar' ? 'text-end pe-5' : 'text-start ps-5' }}"
+                                type="text" name="mobile" id="mobile"
+                                placeholder="{{ __('Phone') }}"
+                                value="{{ old('mobile') }}"
+                                required
+                                style="text-align: {{ app()->getLocale() == 'ar' ? 'right' : 'left' }};"
+                            >
                         </div>
 
                         {{-- كلمة المرور --}}
                         <div class="position-relative mb-3">
-                            <i class="fa fa-key position-absolute top-50 translate-middle-y px-2"></i>
-                            <input class="passwordInput" type="password" name="password" id="password"
-                                placeholder="{{ __('Password') }}" required>
+                            <i class="fa fa-key position-absolute top-50 translate-middle-y {{ app()->getLocale() == 'ar' ? 'end-0' : 'start-0' }} px-2"></i>
+                            <input
+                                class="passwordInput {{ app()->getLocale() == 'ar' ? 'text-end pe-5' : 'text-start ps-5' }}"
+                                type="password" name="password" id="password"
+                                placeholder="{{ __('Password') }}"
+                                required
+                                style="text-align: {{ app()->getLocale() == 'ar' ? 'right' : 'left' }};"
+                            >
                         </div>
 
                         {{-- رابط نسيت كلمة المرور --}}
                         <div class="text-end mb-3">
                             <a href="{{ route('auth.forgotPassword') }}"
-                                class="text-primary">{{ __('Forget Password?') }}</a>
+                               class="text-primary">{{ __('Forget Password?') }}</a>
                         </div>
 
                         {{-- رسالة توضيحية --}}
                         <p class="text-center text-muted">
-                            {{ __('Enter your phone number and password to log into your account.') }}</p>
+                            {{ __('Enter your phone number and password to log into your account.') }}
+                        </p>
                         <p class="text-center text-muted">
                             {{ __('If you don’t have an account, you can register by clicking on') }}
                             <a href="{{ route('auth.register') }}" class="text-primary">{{ __('Register') }}</a>
                         </p>
-
 
                         <div class="d-flex justify-content-center">
                             <button type="submit" class="submitBtn mt-3">{{ __('Login') }}</button>

@@ -13,7 +13,7 @@
                 <div class="col-md-12 col-lg-4 mx-auto"
                     style="position: sticky; top: 120px; height: fit-content; z-index: 100;">
 
-                    <form action="{{ route('round.confirm-booking') }}" method="post">
+                    <form id="bookingForm" action="{{ route('round.confirm-booking') }}" method="post">
                         @csrf
                         <input type="hidden" name="city_from_id" value="{{ request()->city_from_id }}" />
                         <input type="hidden" name="city_to_id" value="{{ request()->city_to_id }}" />
@@ -87,7 +87,8 @@
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" checked id="flexCheckDefault">
                                 <label class="form-check-label" for="flexCheckDefault">
-                                    {{ __('I Agree To The') }} <a href="#">{{ __('Terms And Conditions') }}</a>
+                                    {{ __('I Agree To The') }} <a
+                                        href="{{ route('usage-terms') }}">{{ __('Terms And Conditions') }}</a>
 
                                 </label>
                             </div>
@@ -222,28 +223,72 @@
             });
 
             // Form submission handler
+            // Form submission handler
             bookingForm.addEventListener('submit', function(e) {
-                e.preventDefault();
+    // Always prevent the default form submission first
+    e.preventDefault();
 
-                if (selectedGoSeats.length !== numOfSeats || selectedReturnSeats.length !== numOfSeats) {
-                    Swal.fire({
-                        title: 'تنبيه!',
-                        text: `يجب اختيار ${numOfSeats} مقاعد للذهاب و ${numOfSeats} مقاعد للعودة`,
-                        icon: 'warning',
-                        confirmButtonText: 'حسناً',
-                        confirmButtonColor: '#3085d6',
-                        customClass: {
-                            title: 'swal-title',
-                            content: 'swal-text',
-                            confirmButton: 'swal-button'
-                        }
-                    });
-                    return false;
-                }
+    const termsCheckbox = document.getElementById('flexCheckDefault');
+    let isValid = true;
 
-                // If validation passes, submit the form
-                this.submit();
-            });
+    // Check terms and conditions
+    if (!termsCheckbox.checked) {
+        Swal.fire({
+            title: 'تنبيه!',
+            text: 'يجب الموافقة على الشروط والأحكام قبل إتمام الحجز.',
+            icon: 'warning',
+            confirmButtonText: 'حسناً',
+            confirmButtonColor: '#3085d6',
+            customClass: {
+                title: 'swal-title',
+                content: 'swal-text',
+                confirmButton: 'swal-button'
+            }
+        });
+        isValid = false;
+    }
+
+    // Check seat selection
+    else if (selectedGoSeats.length !== numOfSeats || selectedReturnSeats.length !== numOfSeats) {
+        Swal.fire({
+            title: 'تنبيه!',
+            text: `يجب اختيار ${numOfSeats} مقاعد للذهاب و ${numOfSeats} مقاعد للعودة`,
+            icon: 'warning',
+            confirmButtonText: 'حسناً',
+            confirmButtonColor: '#3085d6',
+            customClass: {
+                title: 'swal-title',
+                content: 'swal-text',
+                confirmButton: 'swal-button'
+            }
+        });
+        isValid = false;
+    }
+
+    // Only submit the form if all validations pass
+    if (isValid) {
+        // Use a timeout to ensure the SweetAlert has time to close if it was open
+        setTimeout(function() {
+            // Create and submit a new form instead of using the original
+            const formData = new FormData(bookingForm);
+            const submitForm = document.createElement('form');
+            submitForm.method = bookingForm.method;
+            submitForm.action = bookingForm.action;
+
+            for(const [key, value] of formData.entries()) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = value;
+                submitForm.appendChild(input);
+            }
+
+            document.body.appendChild(submitForm);
+            submitForm.submit();
+            document.body.removeChild(submitForm);
+        }, 100);
+    }
+});
         });
     </script>
 @endpush

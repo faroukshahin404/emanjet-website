@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ProfileRequest;
 use App\Http\Resources\TicketResource;
 use App\Models\ReservationBookingRequest;
+use App\Models\User;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,10 +40,19 @@ class ProfileController extends Controller
 
     public function update(ProfileRequest $request)
     {
-        $response = $this->authService->updateProfile($request->validated());
-        if (!$response['success']) {
-            return redirect()->back()->with('error', $response['message']);
-        }
-        return redirect()->back()->with('success', $response['message']);
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string',
+        ],[
+            'name.required' => __('Name is required'),
+            'email.required' => __('Mobile is required'),
+        ]);
+
+        $user = User::find(Auth::id());
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->save();
+
+        return redirect()->route('mobile.settings')->with('success', __('Profile updated successfully'));
     }
 }

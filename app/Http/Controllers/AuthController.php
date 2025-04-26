@@ -55,11 +55,11 @@ class AuthController extends Controller
         $user = User::where('mobile', $request->mobile)->first();
 
         if (!$user) {
-            return redirect()->back()->with('error', 'لم يتم العثور على المستخدم.');
+            return redirect()->back()->with('error', __('User not found.'))->withInput();
         }
 
         if (!Hash::check($request->password, $user->password)) {
-            return redirect()->back()->with('error', 'كلمة المرور غير صحيحة.');
+            return redirect()->back()->with('error', __('Invalid password.'))->withInput();
         }
 
         Auth::login($user);
@@ -87,7 +87,7 @@ class AuthController extends Controller
         $user = User::where('mobile', $request->phone)->first();
 
         if (!$user) {
-            return redirect()->back()->with(['error' =>  'رقم الهاتف غير صحيح.']);
+            return redirect()->back()->with(['error' =>  __('User not found.')]);
         }
 
         // إذا كان الطلب لإعادة إرسال OTP
@@ -158,7 +158,7 @@ class AuthController extends Controller
             // التحقق من وجود المستخدم
             $user = User::where('mobile', $request->phone)->first();
             if (!$user) {
-                return redirect()->back()->withErrors(['phone' => 'لم يتم العثور على مستخدم بهذا الرقم.']);
+                return redirect()->back()->withErrors(['phone' => __('User not found.')]);
             }
 
             // إرسال OTP
@@ -176,7 +176,7 @@ class AuthController extends Controller
         }
 
         if (!$phone) {
-            return redirect()->route('auth.login')->with('error', 'غير مسموح بالوصول المباشر إلى صفحة إعادة تعيين كلمة المرور.');
+            return redirect()->route('auth.login')->with('error', __('You are not allowed to access the reset password page directly.'));
         }
 
         // Get latest OTP for this phone
@@ -352,8 +352,17 @@ class AuthController extends Controller
     {
         // التحقق من المدخلات
         $request->validate([
-            'password' => 'required|string|confirmed',
+            "password" => "required|string|min:6|confirmed",
             'otp' => 'required|numeric|digits:4',
+        ], [
+            'password.required' => __("Password is required"),
+            'password.string' => __("Password must be a string"),
+            'password.min' => __("Password must be at least 6 characters."),
+            'password.confirmed' => __("Password confirmation does not match"),
+
+            'otp.required' => __("OTP is required"),
+            'otp.numeric' => __("OTP must be numeric"),
+            'otp.digits' => __("OTP must be exactly 4 digits"),
         ]);
 
         // استرجاع الهاتف من الجلسة
@@ -418,7 +427,7 @@ class AuthController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => $otp['message'],
-                'remainingTime' => 30
+                'remainingTime' => 120
             ]);
         }
 

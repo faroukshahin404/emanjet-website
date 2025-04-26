@@ -11,7 +11,7 @@
 
             <div class="col-md-2 d-flex flex-column mx-auto align-items-lg-start align-items-center">
                 <p class="footer-links-top">{{ __('Useful Links') }}</p>
-                <a href="services.html" class="footer-links">{{ __('Services') }}</a>
+                {{-- <a href="services.html" class="footer-links">{{ __('Services') }}</a> --}}
                 <a href="{{ route('about-us') }}" class="footer-links">{{ __('About Us') }}</a>
                 <a href="{{ route('contact-us') }}" class="footer-links">{{ __('Contact Us') }}</a>
                 <a href="{{ route('privacy-policy') }}" class="footer-links">{{ __('Privacy') }}</a>
@@ -46,13 +46,26 @@
             @endif
 
             <div class="col-md-4">
-                <h2 class="text-right mt-lg-0 mt-2">{{ __('Contact Us') }}</h2>
-                <form action="" class="footer-input">
-                    <div>
-                        <input type="email" placeholder="{{ __('Enter Your Email Here') }}">
-                        <button type="submit">{{ __('Join') }}</button>
+                <h2 class="{{ app()->getLocale() == 'ar' ? 'text-end' : 'text-start' }} mt-2 mt-lg-0">
+                    {{ __('Contact Us') }}
+                </h2>
+
+                <form action="">
+                    <div class="footer-input d-flex align-items-center {{ app()->getLocale() == 'ar' ? 'flex-row-reverse' : '' }}">
+                        <input
+                            type="email"
+                            placeholder="{{ __('Enter Your Email Here') }}"
+                            class="email-input"
+                        >
+                        <button
+                            type="submit"
+                            class="join-button"
+                        >
+                            {{ __('Join') }}
+                        </button>
                     </div>
                 </form>
+
 
                 {{-- @if (!empty($apps))
                     <div
