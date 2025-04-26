@@ -142,8 +142,8 @@ Route::group([
     });
 
     Route::middleware(['auth'])->group(function () {
-        Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
-        Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::get('settings/profile', [ProfileController::class, 'index'])->name('profile.index');
+        Route::get('settings/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     });
 

@@ -9,18 +9,18 @@
                     <input class="form-check-input form-check-input-pay" type="radio" name="tripType" id="oneWayRadio"
                         value="oneway" checked>
                     <label class="form-check-label" for="oneWayRadio">
-                        ذهاب فقط
-                    </label>
+                        {{__('One Way Trip') }}
+                        </label>
                 </div>
                 <div class="form-check">
                     <input class="form-check-input form-check-input-pay" type="radio" name="tripType" id="roundTripRadio"
                         value="round">
                     <label class="form-check-label" for="roundTripRadio">
-                        ذهاب وعودة
+                        {{__(key: 'Round Trip') }}
                     </label>
                 </div>
                 <div class="special-offer">
-                    عرض خاص
+                    {{__(key: 'Special Discount') }}
                 </div>
             </div>
             <!-- End trip type -->
@@ -31,7 +31,7 @@
                     <div>
                         <div class="d-flex align-items-center gap-2" id="from-container">
                             <i class="fas fa-location-dot from-icon"></i>
-                            <label for="from-input">من</label>
+                            <label for="from-input">{{ __('From') }}</label>
                             <input type="hidden" id="from-input" class="from-input">
                             <span class="selected-location" id="from-location">
                                 {{ $cities[0]->stations[0]->name }}
@@ -40,7 +40,7 @@
                         <hr>
                         <div class="d-flex align-items-center gap-2" id="to-container">
                             <i class="fas fa-circle-dot to-icon"></i>
-                            <label for="to-input">الي</label>
+                            <label for="to-input">{{ __('To') }}</label>
                             <input type="hidden" id="to-input" class="to-input">
                             <span class="selected-location" id="to-location">
                                 {{ $cities[1]->stations[0]->name }}
@@ -61,7 +61,7 @@
                 <div class="row g-2" id="tripLayoutContainer">
                     <div class="col-md-6 d-flex flex-column" id="departureDateCol">
                         <label>
-                            <span>تاريخ السفر</span>
+                            <span>{{ __('Date') }}</span>
                             <i class="fa fa-calendar mx-1"></i>
                         </label>
                         @php
@@ -75,7 +75,7 @@
                     <div class="col-md-6" id="passengersColSide">
                         <div class="d-flex flex-column w-100 h-100 justify-content-end">
                             <label>
-                                <span>الركاب</span>
+                                <span>{{ __('Passengers') }}</span>
                                 <i class="fa fa-user mx-1"></i>
                             </label>
                             <div class="d-flex justify-content-center align-items-center border rounded-6 p-1">
@@ -95,7 +95,7 @@
                     <div class="col-md-6 d-none" id="returnDateCol">
                         <div class="d-flex flex-column">
                             <label>
-                                <span>تاريخ العودة</span>
+                                <span> {{ __('Return Date') }}</span>
                                 <i class="fa fa-calendar mx-1"></i>
                             </label>
                             <input class="form-control rounded-6" type="date" name="back_date" id="returnDate"
@@ -106,7 +106,7 @@
                     <div class="col-12 d-none" id="passengersColBottom">
                         <div class="d-flex flex-column w-100">
                             <label>
-                                <span>الركاب</span>
+                                <span>{{ __('Passengers') }}</span>
                                 <i class="fa fa-user mx-1"></i>
                             </label>
                             <div class="d-flex justify-content-center align-items-center border rounded-6 p-1">
@@ -128,7 +128,7 @@
 
             <div class=" d-flex justify-content-center align-items-center mt-3">
                 <button class="search-btn">
-                    البحث عن الرحلات
+                    <span>{{ __('Search For Trips') }}</span>
                 </button>
             </div>
 

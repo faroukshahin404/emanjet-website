@@ -22,7 +22,12 @@
                     <i class="fa fa-bus fs-18 text-black"></i>
                     <p class="m-0 fs-18 text-black">{{ $ticket['city_from'] }}</p>
                     <span class="fs-10">{{ $ticket['station_from'] }}</span>
-                    <i class="fas fa-arrow-left fs-18 text-black"></i>
+
+                    @if (app()->getLocale() == 'ar')
+                        <i class="fas fa-arrow-left fs-18 text-black"></i>
+                    @else
+                        <i class="fas fa-arrow-right fs-18 text-black"></i>
+                    @endif
                     <p class="m-0 fs-18 text-black">{{ $ticket['city_to'] }}</p>
                     <span class="fs-10">{{ $ticket['station_to'] }}</span>
                 </div>
