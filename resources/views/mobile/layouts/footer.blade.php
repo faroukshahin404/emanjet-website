@@ -9,19 +9,19 @@ $isSettings = str_contains($url, '/settings');
         <a href="/" class="nav-item {{ !$isTickets && !$isSettings ? 'active' : '' }}">
             <div>
                 <i class="fa fa-home"></i>
-                <p>الرئيسية</p>
+                <p>{{__('Home')}}</p>
             </div>
         </a>
         <a href="{{route('mobile.tickets')}}" class="nav-item {{ $isTickets ? 'active' : '' }}">
             <div>
                 <i class="fas fa-ticket"></i>
-                <p>التذاكر</p>
+                <p>{{__('Tickets')}}</p>
             </div>
         </a>
         <a href="{{route('mobile.settings')}}" class="nav-item {{ $isSettings ? 'active' : '' }}">
             <div>
                 <i class="fas fa-gear"></i>
-                <p>الاعدادات</p>
+                <p>{{__('Settings')}}</p>
             </div>
         </a>
     </div>

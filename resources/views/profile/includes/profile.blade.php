@@ -1,3 +1,22 @@
+@push('styles')
+<style>
+    .input-wrapper {
+        position: relative;
+    }
+    .input-wrapper input {
+        padding-right: 40px; /* مساحة للأيقونة داخل الانبوت */
+    }
+    .input-wrapper .toggle-password {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #6c757d;
+    }
+    </style>
+
+@endpush
 <div class="tab-pane fade mt-4 @if (request()->has('tap') && request()->tap == 'profile') show active @endif" id="v-pills-profile" role="tabpanel"
     aria-labelledby="v-pills-profile-tab">
     <h6 class="my-data mb-3">{{ __('My Data') }}</h6>
@@ -51,31 +70,37 @@
                             value="{{ old('birthdate', auth()->user()->birthdate) }}">
                     </div>
 
-                    <!-- كلمة المرور -->
                     <div class="col-md-12 mb-3">
                         <label class="text-black mb-2" for="current_password">
                             <i class="fa fa-lock text-black me-1"></i> {{ __('Current Password (Optional)') }}
                         </label>
-                        <input class="form-control rounded-6" type="password" name="current_password"
-                            id="current_password"
-                            placeholder="{{ __('Leave blank if you do not want to change it') }}">
+                        <div class="input-wrapper">
+                            <input class="form-control rounded-6" type="password" name="current_password" id="current_password"
+                                placeholder="{{ __('Leave blank if you do not want to change it') }}">
+                            <i class="fa fa-eye toggle-password" toggle="#current_password"></i>
+                        </div>
                     </div>
-                    <!-- كلمة المرور -->
+
                     <div class="col-md-12 mb-3">
                         <label class="text-black mb-2" for="password">
                             <i class="fa fa-lock text-black me-1"></i> {{ __('New Password (Optional)') }}
                         </label>
-                        <input class="form-control rounded-6" type="password" name="password" id="password"
-                            placeholder="{{ __('Leave blank if you do not want to change it') }}">
+                        <div class="input-wrapper">
+                            <input class="form-control rounded-6" type="password" name="password" id="password"
+                                placeholder="{{ __('Leave blank if you do not want to change it') }}">
+                            <i class="fa fa-eye toggle-password" toggle="#password"></i>
+                        </div>
                     </div>
-                    <!-- كلمة المرور -->
+
                     <div class="col-md-12 mb-3">
                         <label class="text-black mb-2" for="password_confirmation">
                             <i class="fa fa-lock text-black me-1"></i> {{ __('Confirm New Password (Optional)') }}
                         </label>
-                        <input class="form-control rounded-6" type="password" name="password_confirmation"
-                            id="password_confirmation"
-                            placeholder="{{ __('Leave blank if you do not want to change it') }}">
+                        <div class="input-wrapper">
+                            <input class="form-control rounded-6" type="password" name="password_confirmation" id="password_confirmation"
+                                placeholder="{{ __('Leave blank if you do not want to change it') }}">
+                            <i class="fa fa-eye toggle-password" toggle="#password_confirmation"></i>
+                        </div>
                     </div>
                 </div>
 
@@ -86,3 +111,21 @@
         </div>
     </form>
 </div>
+@push('scripts')
+<script>
+    document.querySelectorAll('.toggle-password').forEach(function(element) {
+        element.addEventListener('click', function() {
+            const input = document.querySelector(this.getAttribute('toggle'));
+            if (input.type === "password") {
+                input.type = "text";
+                this.classList.remove('fa-eye');
+                this.classList.add('fa-eye-slash');
+            } else {
+                input.type = "password";
+                this.classList.remove('fa-eye-slash');
+                this.classList.add('fa-eye');
+            }
+        });
+    });
+    </script>
+@endpush

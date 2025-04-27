@@ -80,7 +80,11 @@
 @section('mobile-content')
     <div class="d-flex justify-content-between align-items-center mb-3">
 
-        <i class="fas fa-arrow-right fs-25 text-black" onclick="window.history.back()"></i>
+        @if (app()->getLocale() == 'ar')
+            <i class="fas fa-arrow-right fs-18 text-black" onclick="window.history.back()"></i>
+        @else
+            <i class="fas fa-arrow-left fs-18 text-black" onclick="window.history.back()"></i>
+        @endif
 
         <p class="m-0 fs-25 text-black">{{ __('Contact Us') }}</p>
         <div></div>
@@ -120,7 +124,8 @@
 
             <div class="position-relative">
                 <i class="fa fa-envelope position-absolute"></i>
-                <textarea name="message" id="" class="form-control rounded-6 ps-4" placeholder="الرسالة"></textarea>
+                <textarea name="message" id="" class="form-control rounded-6 ps-4"
+                    placeholder="{{ __('Send Us a Message') }}"></textarea>
             </div>
 
             <div class="col-md-12 d-flex justify-content-center align-items-center my-3">

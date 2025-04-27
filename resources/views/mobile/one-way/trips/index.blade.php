@@ -3,16 +3,20 @@
 @section('mobile-content')
     <div class="d-flex justify-content-between align-items-center">
         <a href="/">
-            <i class="fas fa-arrow-right fs-25 text-black"></i>
+            @if (app()->getLocale() == 'ar')
+                <i class="fas fa-arrow-right fs-25 text-black"></i>
+            @else
+                <i class="fas fa-arrow-left fs-25 text-black"></i>
+            @endif
         </a>
-        <p class="m-0 fs-25 text-black">الحافلات المتاحة</p>
+        <p class="m-0 fs-25 text-black">{{ __('Available Buses') }}</p>
         <div></div>
     </div>
 
     <div class="mt-3">
         <div class="tabs-container">
-        
-            
+
+
             <div class="tabs-wrapper" style="position: sticky; top: 0; z-index: 100; background: white;">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     @foreach ($dates as $date)
@@ -61,7 +65,11 @@
                         </div>
                     </div>
                     <div>
-                        <i class="fa fa-arrow-left text-black fs-20"></i>
+                        @if (app()->getLocale() == 'ar')
+                            <i class="fa fa-arrow-left text-black fs-20"></i>
+                        @else
+                            <i class="fa fa-arrow-right text-black fs-20"></i>
+                        @endif
                     </div>
                     <div class="d-flex flex-column align-items-center travel-direction-box">
                         <div class="d-flex align-items-center gap-2">
@@ -74,77 +82,86 @@
                         </div>
                     </div>
                 </div>
-                @if($trips->count() > 0)
-                
-                @foreach ($trips as $trip)
-                    <a
-                        href="{{ route('mobile.one-way.choose-seat', array_merge(request()->all(), ['selected_trip_id' => $trip->id])) }}">
-                        <div class="mt-3 border rounded-7 py-3 px-3 bus-card mb-3">
-                            <div class="d-flex justify-content-between" style="color: black;">
+                @if ($trips->count() > 0)
+                    @foreach ($trips as $trip)
+                        <a
+                            href="{{ route('mobile.one-way.choose-seat', array_merge(request()->all(), ['selected_trip_id' => $trip->id])) }}">
+                            <div class="mt-3 border rounded-7 py-3 px-3 bus-card mb-3">
+                                <div class="d-flex justify-content-between" style="color: black;">
 
-                                <div class="d-flex justify-content-between gap-2" style="color: black;">
-                                    <div class="bus-box-mobile m-auto" style="color: black;">
-                                        <i class="fa fa-bus text-main fs-20"></i>
-                                    </div>
-                                    <div class="mt-1" style="color: black;">
-                                        <div class="d-flex gap-2" style="color: black;">
-                                            @php
-                                                $time = \Carbon\Carbon::parse($trip->tripTime)->format('h:i a');
-                                            @endphp
-                                            <p class="m-0 fs-12" style="color: black;">{{ $time }}</p>
-                                            <p class="m-0 vip" style="color: black;">{{ $trip->degree }}</p>
+                                    <div class="d-flex justify-content-between gap-2" style="color: black;">
+                                        <div class="bus-box-mobile m-auto" style="color: black;">
+                                            <i class="fa fa-bus text-main fs-20"></i>
                                         </div>
-                                        <div class="d-flex align-items-center gap-2" style="color: black;">
-                                            <div class="d-flex flex-column align-items-center" style="color: black;">
-                                                <div class="green-circle-mobile"></div>
-                                                <div class="line-mobile"></div>
-                                                <div class="red-circle-mobile"></div>
+                                        <div class="mt-1" style="color: black;">
+                                            <div class="d-flex gap-2" style="color: black;">
+                                                @php
+                                                    $time = \Carbon\Carbon::parse($trip->tripTime)->format('h:i a');
+                                                @endphp
+                                                <p class="m-0 fs-12" style="color: black;">{{ $time }}</p>
+                                                <p class="m-0 vip" style="color: black;">{{ $trip->degree }}</p>
                                             </div>
-                                            <div class="d-flex flex-column justify-content-between" style="color: black;">
-                                                <p class="m-0 fs-12" style="color: black;">{{ $trip->fromStation }} </p>
-                                                <p class="m-0 fs-12" style="color: black;">{{ $trip->toStation }}</p>
+                                            <div class="d-flex align-items-center gap-2" style="color: black;">
+                                                <div class="d-flex flex-column align-items-center" style="color: black;">
+                                                    <div class="green-circle-mobile"></div>
+                                                    <div class="line-mobile"></div>
+                                                    <div class="red-circle-mobile"></div>
+                                                </div>
+                                                <div class="d-flex flex-column justify-content-between"
+                                                    style="color: black;">
+                                                    <p class="m-0 fs-12" style="color: black;">{{ $trip->fromStation }}
+                                                    </p>
+                                                    <p class="m-0 fs-12" style="color: black;">{{ $trip->toStation }}</p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div style="color: black;">
-                                    <p class="m-0 fs-12" style="color: black;">{{ $trip->price }} {{__('EGP')}}</p>
-                                    <p class="m-0 fs-12" style="color: black;">{{__('per seat')}}</p>
-                                    <p class="m-0 fs-12 text-success" style="color: black;">{{__('Available Seats')}} {{ $trip->available_seats }}</p>
-                                    <button class="btn btn-main mt-2 btn-sm rounded-5" type="button">
-                                        {{__('Book')}}
-                                    </button>
+                                    <div style="color: black;">
+                                        <p class="m-0 fs-12" style="color: black;">{{ $trip->price }}
+                                            {{ __('EGP') }}</p>
+                                        <p class="m-0 fs-12" style="color: black;">{{ __('per seat') }}</p>
+                                        <p class="m-0 fs-12 text-success" style="color: black;">
+                                            {{ __('Available Seats') }} {{ $trip->available_seats }}</p>
+                                        <button class="btn btn-main mt-2 btn-sm rounded-5" type="button">
+                                            {{ __('Book') }}
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </a>
-                @endforeach
-                @else 
-                {{-- NO TRIPS Design --}}
-                <div class="d-flex justify-content-center align-items-center">
-                    <div class="text-center">
-                        <i class="fa fa-bus text-main" style="font-size: 100px"></i>
-                        <p class="m-0 fs-20">{{ __('No Trips Available') }}</p>
-                        <p class="m-0 fs-15">{{ __('Please, choose another date or destination') }}</p>
-                        <hr>
-                        <a
-                         class="login" href="tel:{{ $contactUs['phone'] }}">
-                         <i class="fa fa-phone fs-15"></i>
-                            {{ __('Call Us') }}
                         </a>
+                    @endforeach
+                @else
+                    {{-- NO TRIPS Design --}}
+                    <div class="d-flex justify-content-center align-items-center">
+                        <div class="text-center">
+                            <i class="fa fa-bus text-main" style="font-size: 100px"></i>
+                            <p class="m-0 fs-20">{{ __('No Trips Available') }}</p>
+                            <p class="m-0 fs-15">{{ __('Please, choose another date or destination') }}</p>
+                            <hr>
+                            <a class="login" href="tel:{{ $contactUs['phone'] }}">
+                                <i class="fa fa-phone fs-15"></i>
+                                {{ __('Call Us') }}
+                            </a>
+                        </div>
                     </div>
-                </div>
-                @endif 
-
-
-
-
+                @endif
             </div>
-            
-            
         </div>
     </div>
 @endsection
 
 @push('scripts')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const activeTab = document.querySelector('.nav-link[style*="background-color: var(--main-color)"]');
+
+            if (activeTab) {
+                activeTab.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest',
+                    inline: 'center'
+                });
+            }
+        });
+    </script>
 @endpush

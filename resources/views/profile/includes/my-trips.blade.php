@@ -166,12 +166,13 @@
                     <div class="d-flex justify-content-between align-items-center mt-4">
                         <div>
                             <i class="fas fa-calendar text-black"></i>
-                            <span class="text-black">موعد الرحلة:</span>
-                            <span>{{ $ticket['time'] }}</span>
+                            <span class="text-black">{{ __('Trip Date:') }}</span>
+                            <span>{{ $ticket['date'] }} {{ $ticket['time'] }}</span>
                         </div>
+
                         <div class="d-flex justify-content-start align-items-center gap-1">
                             <img src="{{ asset('images/car-seat.png') }}" alt="car-seat">
-                            <span class="text-black">رقم الكرسي:</span>
+                            <span class="text-black">{{ __('Seat Number:') }}</span>
                             <span>{{ implode(' . ', $ticket['seats']) }}</span>
                             {{-- <div>
                             <p class="m-0 text-white bg-main text-center vip">vip</p>
@@ -179,8 +180,8 @@
                         </div>
                         <div>
                             <i class="fas fa-wallet text-black"></i>
-                            <span class="text-black">سعر الرحلة:</span>
-                            <span>{{ $ticket['price'] }} جنية</span>
+                            <span class="text-black">{{ __('Trip Price:') }}</span>
+                            <span>{{ $ticket['price'] }} {{ __('LE') }}</span>
                         </div>
                     </div>
                     {{--
@@ -205,9 +206,9 @@
                 </div>
 
                 <div class="passenger-info w-50 rounded-8 px-3 py-3">
-                    <h5 class="text-black mb-3">بيانات المسافر</h5>
-                    <p class="mb-1"><strong class="text-black">الاسم:</strong>{{ $ticket['user_name'] }}</p>
-                    <p><strong class="text-black">رقم الهاتف:</strong>{{ $ticket['user_phone'] }}</p>
+                    <h5 class="text-black mb-3">{{ __('Passenger Information') }}</h5>
+                    <p class="mb-1"><strong class="text-black">{{ __('Name:') }}</strong>{{ $ticket['user_name'] }}</p>
+                    <p><strong class="text-black">{{ __('Phone Number:') }}</strong>{{ $ticket['user_phone'] }}</p>
                 </div>
 
             </div>

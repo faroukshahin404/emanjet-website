@@ -4,10 +4,10 @@
 
 @push('styles')
     <style>
-        .hero-section::before {
+        /* .hero-section::before {
             background: linear-gradient(to right, #00000040, #00000040), url({{ $heroSection['image'] }});
             transform: scaleX(1);
-        }
+        } */
     </style>
 @endpush
 @section('content')
@@ -44,7 +44,7 @@
                                             class="d-flex align-items-center gap-2 rounded-6 px-3 py-1 desktop-from-input-box">
                                             <i class="fas fa-location-dot from-icon"></i>
                                             <input type="text" class="border-0 from-input desktop-from-input"
-                                                placeholder="من" readonly data-bs-toggle="dropdown" aria-expanded="false"
+                                                placeholder="{{ __('From') }}" readonly data-bs-toggle="dropdown" aria-expanded="false"
                                                 value="{{ $stations[0]->name }}" id="fromInput">
                                             <ul class="dropdown-menu p-0 main-stations" id="from-stations"></ul>
                                             <ul class="dropdown-menu p-0 sub-stations-dropdown" id="from-sub-stations"></ul>

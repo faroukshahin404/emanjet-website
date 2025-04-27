@@ -1,9 +1,11 @@
   <!-- start header  -->
   <div class="mobileHeader d-flex justify-content-between">
       @if (auth()->check())
-          <p class="m-0 text-black">مرحبا بك يا {{ auth()->user()->name }}</p>
+          <p class="m-0 text-black"> {{ __('Hello') }}, {{ auth()->user()->name }}</p>
       @else
-          <p class="m-0 text-black">مرحبا بك عميلنا العزيز</p>
+          <p class="m-0 text-black">
+              {{ __('Welcome') }}
+          </p>
       @endif
       {{-- @if (auth()->check())
           <div class="mo-bell-box position-relative">
