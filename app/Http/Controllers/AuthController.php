@@ -144,7 +144,7 @@ class AuthController extends Controller
                 if ($user) {
                     Auth::login($user);
                 }
-                return redirect()->route('home')->with('success', 'تم التحقق بنجاح');
+                return redirect()->route('home')->with('success', __('successfully logged in.'));
             }
 
             return redirect()->back()->withErrors(['otp' => $message]);
@@ -208,7 +208,7 @@ class AuthController extends Controller
         }
 
         if (!$phone) {
-            return redirect()->route('auth.register')->withErrors(['error' => 'غير مسموح بالوصول المباشر إلى صفحة التحقق.']);
+            return redirect()->route('auth.register')->withErrors(['error' => __('You are not allowed to access the OTP page directly.')]);
         }
 
         $otp = Otp::where('phone', $phone)->latest()->first();
@@ -238,7 +238,7 @@ class AuthController extends Controller
 
         // التحقق إذا كان المستخدم مسجل دخوله بالفعل
         if (Auth::check()) {
-            return redirect()->route('home')->with('success', 'تم التحقق من رقم الهاتف بنجاح.');
+            return redirect()->route('home')->with('success', __('successfully logged in.'));
         }
 
         // في حالة عدم تسجيل الدخول، نقوم بتسجيل المستخدم مباشرة
@@ -248,7 +248,7 @@ class AuthController extends Controller
         // مسح الـ OTP من الجلسة
         session()->forget('otp_phone');
 
-        return redirect()->route('home')->with('success', 'تم التحقق من رقم الهاتف بنجاح.');
+        return redirect()->route('home')->with('success', __('successfully logged in.'));
     }
 
 
@@ -265,7 +265,7 @@ class AuthController extends Controller
 
         // التأكد من وجود الرقم في الجلسة
         if (!$phone) {
-            return redirect()->route('auth.login')->with('error', 'حدث خطأ أثناء إعادة تعيين كلمة المرور.');
+            return redirect()->route('auth.login')->with('error',__('You are not allowed to access the OTP page directly.'));
         }
 
         // التحقق من صحة الـ OTP
@@ -288,7 +288,7 @@ class AuthController extends Controller
     public function showNewPasswordForm()
     {
         if (!session()->has('reset_password_phone') || !session()->has('reset_password_otp')) {
-            return redirect()->route('auth.login')->with('error', 'انتهت صلاحية الرابط أو تم الوصول إليه بشكل غير صحيح.');
+            return redirect()->route('auth.login')->with('error', __('You are not allowed to access the new password page directly.'));
         }
 
         return view('auth.new-password');
@@ -301,7 +301,7 @@ class AuthController extends Controller
         $phone = session('reset_password_phone');
 
         if (!$phone) {
-            return redirect()->route('auth.login')->with('error', 'غير مسموح بالوصول المباشر إلى صفحة إعادة تعيين كلمة المرور.');
+            return redirect()->route('auth.login')->with('error', __('You are not allowed to access the reset password page directly.'));
         }
         $remainingTime = 60;
         return view('auth.show-reset-password', compact('phone', 'remainingTime'));
@@ -342,7 +342,7 @@ class AuthController extends Controller
         $otp = session('reset_password_otp');
 
         if (!$phone || !$otp) {
-            return redirect()->route('auth.login')->with('error', 'غير مسموح بالوصول المباشر إلى صفحة إعادة تعيين كلمة المرور.');
+            return redirect()->route('auth.login')->with('error', __('You are not allowed to access the new password page directly.'));
         }
         return view('auth.new-password', compact('phone', 'otp'));
     }
@@ -370,13 +370,13 @@ class AuthController extends Controller
 
         // التأكد أن الهاتف موجود في الجلسة
         if (!$phone) {
-            return redirect()->route('auth.login')->with('error', 'حدث خطأ أثناء إعادة تعيين كلمة المرور.');
+            return redirect()->route('auth.login')->with('error', __('You are not allowed to access the reset password page directly.'));
         }
 
         // البحث عن المستخدم بناءً على الهاتف
         $user = User::where('mobile', $phone)->first();
         if (!$user) {
-            return redirect()->route('auth.login')->with('error', 'لم يتم العثور على المستخدم.');
+            return redirect()->route('auth.login')->with('error', __('User not found.'));
         }
 
         // تحديث كلمة المرور
@@ -390,7 +390,7 @@ class AuthController extends Controller
         session()->forget(['reset_password_phone']);
 
         // إعادة التوجيه مع رسالة نجاح
-        return redirect()->route('home')->with('success', 'تم إعادة تعيين كلمة المرور بنجاح وتسجيل الدخول.');
+        return redirect()->route('home')->with('success', __('Password updated successfully. You are now logged in.'));
     }
 
 

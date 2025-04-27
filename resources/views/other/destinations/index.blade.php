@@ -6,6 +6,7 @@
             background: linear-gradient(to right, #00000040, #00000040), url({{asset( $heroSection['image']) }});
             transform: scale(1);
         }
+        
     </style>
 @endpush
 
@@ -15,10 +16,11 @@
         <div class="container box-destination">
             <div class="row">
                 <div class="col-md-6">
-                    <form action="">
-                        <input type="search" name="" id="" placeholder="{{ $heroSection['search-title'] }}">
-                        <i class="fa fa-search search-icon"></i>
+                    <form action="{{ route('destinations') }}" method="GET">
+                        <input type="search" name="search" id="search" placeholder="{{ $heroSection['search-title'] }}" value="{{ old('search', request()->input('search')) }}">
+                        <i class="fa fa-search search-icon" onclick="this.closest('form').submit();"></i>
                     </form>
+
                 </div>
             </div>
         </div>
