@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('content')
-    <div class="chairs mb-5">
+    <div class="chairs mb-5 mt-5">
         <div class="container mb-5">
             <div class="row">
                 <div class="col-md-12 my-3 text-center">
@@ -92,7 +92,7 @@
                                         id="flexCheckDefault">
                                     <label class="form-check-label" for="flexCheckDefault">
                                         {{ __('I agree to the terms and conditions') }} <a
-                                            href="{{route('usage-terms') }}">{{ __('terms and conditions') }}</a>
+                                            href="{{ route('usage-terms') }}">{{ __('terms and conditions') }}</a>
                                     </label>
                                 </div>
                             </div>
@@ -134,18 +134,18 @@
                     const rowId = `row-${seatName.replace(/\s+/g, '-')}`;
 
                     if (this.checked) {
-
                         if ((count + 1) > numberOfSeats.value) {
-                            alert('لا يمكنك اختيار عدد مقاعد اكبر من ' + numberOfSeats.value);
+                            alert(
+                                `{{ __('You cannot select more seats than') }} ${numberOfSeats.value}`);
                             this.checked = false;
                             return;
                         }
                         // Add row
                         const row = document.createElement('tr');
                         row.setAttribute('id', rowId);
-                        row.innerHTML = `<td>مقعد رقم:${seatName}</td>
-                        <input type="hidden" value="${seatId}" name="seat_id[]"/>
-                        <td>${seatPrice}جنيه</td>`;
+                        row.innerHTML = `<td>{{ __('Seat') }}: ${seatName}</td>
+                <input type="hidden" value="${seatId}" name="seat_id[]"/>
+                <td>${seatPrice} {{ __('EGP') }}</td>`;
                         tableBody.appendChild(row);
                         total += seatPrice;
                         count++;
@@ -157,22 +157,21 @@
                         count--;
                     }
                     if (total > 0) {
-                        totalDisplay.textContent = total.toFixed(2) + ' جنيه ';
+                        totalDisplay.textContent = total.toFixed(2) + ' {{ __('EGP') }} ';
                         btnPay.className = "btn-pay";
-                        btnPay.textContent = `احجز ${count} مقاعد مقابل ${total} جنيه`;
+                        btnPay.textContent =
+                            `{{ __('Book') }} ${count} {{ __('seats for') }} ${total} {{ __('EGP') }}`;
                         btnPay.disabled = false;
                     } else {
-                        totalDisplay.textContent = 'من فضلك اختر المقاعد';
+                        totalDisplay.textContent = '{{ __('Choose seats') }}';
                         btnPay.className = "btn-pay-disabled";
-                        btnPay.textContent = "اختر المقاعد";
+                        btnPay.textContent = '{{ __('Choose seats') }}';
                         btnPay.disabled = true;
                     }
-
-
-
                 });
             });
         });
+
         document.addEventListener("DOMContentLoaded", function() {
             const form = document.querySelector('form');
             const termsCheckbox = document.getElementById('flexCheckDefault');
@@ -182,9 +181,9 @@
                     e.preventDefault(); // تمنع الإرسال
                     Swal.fire({
                         icon: 'warning',
-                        title: 'تنبيه',
-                        text: 'يجب الموافقة على الشروط والأحكام قبل المتابعة.',
-                        confirmButtonText: 'موافق'
+                        title: '{{ __('Warning') }}',
+                        text: '{{ __('You must agree to the terms and conditions') }}',
+                        confirmButtonText: '{{ __('OK') }}',
                     });
                 }
             });
