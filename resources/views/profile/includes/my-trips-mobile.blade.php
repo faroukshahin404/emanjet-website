@@ -1,5 +1,10 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <i class="fas fa-arrow-right fs-25 text-black" onclick="window.history.back()"></i>
+    @if (app()->getLocale() == 'ar')
+        <i class="fas fa-arrow-right fs-25 text-black" onclick="window.history.back()"></i>
+    @else
+        <i class="fas fa-arrow-left fs-25 text-black" onclick="window.history.back()"></i>
+    @endif
+
 
     <p class="m-0 fs-25 text-black">{{ __('Tickets') }}</p>
     <div></div>
@@ -138,7 +143,7 @@
     </div>
 
     @foreach ($tickets->where('is_past', true) as $ticket)
-        <div class="mt-3" style="direction: rtl;">
+        <div class="mt-3" style="direction: {{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }};">
             <div class="border rounded-7 px-4 pt-2 pb-2 box-shadow">
                 <div class="d-flex justify-content-center align-items-center gap-2 mb-3">
                     <i class="fa fa-bus fs-18 text-black"></i>

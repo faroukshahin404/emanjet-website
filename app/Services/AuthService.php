@@ -53,16 +53,16 @@ class AuthService
 
     public function sendOtp($user)
     {
+        $userCanSendOtp = $this->checkIfUserCanSendOtp($user);
+        if (!$userCanSendOtp['success']) {
+            return $userCanSendOtp;
+        }
         $otp = $this->generateOtp();
         if (!$this->sendOtpUsingServiceProvider($user->mobile, $otp)) {
             return [
                 'success' => false,
                 'message' => __('Error while sending OTP'),
             ];
-        }
-        $userCanSendOtp = $this->checkIfUserCanSendOtp($user);
-        if (!$userCanSendOtp['success']) {
-            return $userCanSendOtp;
         }
         if (Otp::where('user_id', $user->id)->exists()) {
             $existingOtp = Otp::where('user_id', $user->id)->first();

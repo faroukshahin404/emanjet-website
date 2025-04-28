@@ -1,5 +1,5 @@
 @section('mobile-content')
-@include('mobile.layouts.header')
+    @include('mobile.layouts.header')
 
     <div class="search-trip">
         <form action="{{ route('mobile.one-way.trips') }}" method="get" id="search-form">
@@ -9,18 +9,18 @@
                     <input class="form-check-input form-check-input-pay" type="radio" name="tripType" id="oneWayRadio"
                         value="oneway" checked>
                     <label class="form-check-label" for="oneWayRadio">
-                        {{__('One Way Trip') }}
-                        </label>
+                        {{ __('One Way Trip') }}
+                    </label>
                 </div>
                 <div class="form-check">
                     <input class="form-check-input form-check-input-pay" type="radio" name="tripType" id="roundTripRadio"
                         value="round">
                     <label class="form-check-label" for="roundTripRadio">
-                        {{__(key: 'Round Trip') }}
+                        {{ __(key: 'Round Trip') }}
                     </label>
                 </div>
                 <div class="special-offer">
-                    {{__(key: 'Special Discount') }}
+                    {{ __(key: 'Special Discount') }}
                 </div>
             </div>
             <!-- End trip type -->
@@ -47,7 +47,8 @@
                             </span>
                         </div>
                     </div>
-                    <button type="button" class="swap-btn bg-transparent border-0" aria-label="تبديل الوجهات" id="swap-btn">
+                    <button type="button" class="swap-btn bg-transparent border-0" aria-label="تبديل الوجهات"
+                        id="swap-btn">
                         <img src="{{ asset('images/mobile/swap.png') }}" alt="swap">
                     </button>
                 </div>
@@ -134,7 +135,7 @@
 
         </form>
     </div>
-   
+
     <!-- End promo  -->
 
     <!-- start new places  -->
@@ -145,21 +146,24 @@
         <div class="swiper mySwiper4">
             <div class="swiper-wrapper">
 
-               @foreach ($cities as $city)
-                <div class="swiper-slide">
-                    <img src="{{ $city->image }}" alt="city" style="border-radius: 10px;" onerror="this.src='https://www.touristegypt.com/wp-content/uploads/2023/05/Sharm-el-Sheikh2.jpg'">
-                    <h4 class="text-truncate">{{ $city->getTranslation('name', app()->getLocale()) }}</h4>
-                </div>
-               @endforeach
+                @foreach ($cities as $city)
+                    <div class="swiper-slide">
+                        <a href="{{ route('home', ['city_to_id' => $city->id]) }}#heroSection" class="reserve">
+                            <img src="{{ $city->image }}" alt="city" style="border-radius: 10px;"
+                                onerror="this.src='https://www.touristegypt.com/wp-content/uploads/2023/05/Sharm-el-Sheikh2.jpg'">
+                        </a>
+                        <h4 class="text-truncate">{{ $city->getTranslation('name', app()->getLocale()) }}</h4>
 
-               
+                    </div>
+                @endforeach
+
+
             </div>
         </div>
     </div>
 @endsection
 @section('includes')
-@include('mobile.components.location-bottom-sheet')
-
+    @include('mobile.components.location-bottom-sheet')
 @endsection
 
 @push('scripts')
