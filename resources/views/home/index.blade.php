@@ -8,6 +8,41 @@
                 background: linear-gradient(to right, #00000040, #00000040), url({{ $heroSection['image'] }});
                 transform: scaleX(1);
             } */
+            .hero-section {
+        position: relative;
+        overflow: visible !important; /* Ensure no clipping of child elements */
+    }
+
+    .desktop-from-input-box {
+        position: relative;
+    }
+
+    .main-stations,
+    .sub-stations-dropdown {
+        position: absolute;
+        top: calc(100% + 5px); /* Extra spacing below the field */
+        left: 0;
+        width: 100%;
+        z-index: 9999;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        max-height: 250px;
+        overflow-y: auto; /* Scroll only if the list exceeds the height */
+        display: none; /* Hidden by default */
+    }
+
+    /* Show the list on interaction */
+    .desktop-from-input-box.show .main-stations,
+    .desktop-from-input-box.show .sub-stations-dropdown {
+        display: block;
+    }
+
+    /* منع أي قص للقوائم */
+    .container-fluid, .row, .col-lg-5, .card, .card-body {
+        overflow: visible !important;
+    }
+
     </style>
 @endpush
 @section('content')
@@ -1008,6 +1043,27 @@
             }
 
             // تهيئة أولية
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentLang = document.documentElement.dir; // الحصول على اتجاه النصوص (rtl أو ltr)
+
+            // تحديث اتجاه السهم بناءً على اللغة
+            function updateArrowDirection() {
+                const arrowIcons = document.querySelectorAll('.dropdown-item i');
+                arrowIcons.forEach(icon => {
+                    if (currentLang === 'rtl') {
+                        icon.classList.remove('fa-chevron-right');
+                        icon.classList.add('fa-chevron-left');
+                    } else {
+                        icon.classList.remove('fa-chevron-left');
+                        icon.classList.add('fa-chevron-right');
+                    }
+                });
+            }
+
+            updateArrowDirection(); // استدعاء الوظيفة عند التحميل
         });
     </script>
 @endpush
