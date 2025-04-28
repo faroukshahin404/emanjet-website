@@ -29,9 +29,9 @@
                             <div></div>
                             <div></div>
                             <div></div>
-                            <a href="register-Page.html">
+                            {{-- <a href="{{  }}">
                                 <i class="fas fa-arrow-left fs-25 text-black"></i>
-                            </a>
+                            </a> --}}
                         </div>
                         <p class="text-black text-center fs-14 text-gray">
                             {{ __('We have sent the verification code to your number ending with') }}
