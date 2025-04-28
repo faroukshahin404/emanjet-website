@@ -8,11 +8,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BusType extends Model
 {
-    use HasFactory , SoftDeletes;
+    use HasFactory, SoftDeletes;
 
-    protected $fillable = ['id','name', 'admin_id', 'length', 'width', 'slug', 'active'];
-
-    
+    protected $fillable = ['id', 'name', 'admin_id', 'length', 'width', 'slug', 'active'];
 
 
+    public function seats()
+    {
+        return $this->hasMany(Seat::class, 'busType_id');
+    }
 } //end of class
