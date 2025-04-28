@@ -82,80 +82,80 @@
 @push('scripts')
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const timerElement = document.getElementById('timer');
-            const resendOtpLink = document.getElementById('resendOtpLink');
+                    const timerElement = document.getElementById('timer');
+                    const resendOtpLink = document.getElementById('resendOtpLink');
 
-            const otpExpiresAt = {{ $otp->expires_at->timestamp }} * 1000;
+                    // تعيين الوقت الثابت (دقيقتين)
+                    let remainingTime = 120; // 2 دقائق (120 ثانية)
 
-            const interval = setInterval(() => {
-                const now = Date.now();
-                const remaining = Math.floor((otpExpiresAt - now) / 1000);
+                    const interval = setInterval(() => {
+                            const minutes = Math.floor(remainingTime / 60);
+                            const seconds = remainingTime % 60;
 
-                if (remaining > 0) {
-                    const minutes = Math.floor(remaining / 60);
-                    const seconds = remaining % 60;
-                    timerElement.textContent =
-                        `يرجى الانتظار ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} قبل إعادة الإرسال`;
+                            if (remainingTime > 0) {
+                                timerElement.textContent =
+                                    `{{ __('Please wait') }} ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} {{ __('seconds') }}`;
 
-                    if (resendOtpLink) {
-                        resendOtpLink.style.pointerEvents = 'none';
-                        resendOtpLink.style.color = '#aaa';
-                        resendOtpLink.textContent = 'جاري الانتظار...';
-                    }
-                } else {
-                    clearInterval(interval);
-                    timerElement.textContent = '';
-                    if (resendOtpLink) {
-                        resendOtpLink.style.pointerEvents = 'auto';
-                        resendOtpLink.style.color = '';
-                        resendOtpLink.textContent = 'هل تريد إعادة إرساله؟';
-                    }
-                }
-            }, 1000);
+                                if (resendOtpLink) {
+                                    resendOtpLink.style.pointerEvents = 'none';
+                                    resendOtpLink.style.color = '#aaa';
+                                    resendOtpLink.textContent = '{{ __('waiting...') }}';
+                                } else {
+                                    clearInterval(interval);
+                                    timerElement.textContent = '';
+                                    if (resendOtpLink) {
+                                        resendOtpLink.style.pointerEvents = 'auto';
+                                        resendOtpLink.style.color = '';
+                                        resendOtpLink.textContent = '{{ __('Do you want to resend it?') }}';
+                                    }
+                                }
 
-            // Auto move to next input
-            const inputs = document.querySelectorAll('.otp-box');
-            inputs.forEach((input, index) => {
-                input.addEventListener('input', () => {
-                    if (input.value.length === 1 && index < inputs.length - 1) {
-                        inputs[index + 1].focus();
-                    }
-                });
-
-                input.addEventListener('keydown', (e) => {
-                    if (e.key === "Backspace" && input.value === "" && index > 0) {
-                        inputs[index - 1].focus();
-                    }
-                });
-            });
-
-            // Resend OTP AJAX
-            if (resendOtpLink) {
-                resendOtpLink.addEventListener('click', function() {
-                    fetch("{{ route('auth.resendOtp') }}", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                                "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                            },
-                            body: JSON.stringify({
-                                phone: "{{ $phone }}"
-                            })
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                alert(data.message);
-                                location.reload();
-                            } else {
-                                alert(data.message);
                             }
-                        })
-                        .catch(() => {
-                            alert("حدث خطأ. يرجى المحاولة مرة أخرى.");
+                                remainingTime--; // تقليل الوقت المتبقي كل ثانية
+                            }, 1000);
+
+                        // Auto move to next input
+                        const inputs = document.querySelectorAll('.otp-box'); inputs.forEach((input, index) => {
+                            input.addEventListener('input', () => {
+                                if (input.value.length === 1 && index < inputs.length - 1) {
+                                    inputs[index + 1].focus();
+                                }
+                            });
+
+                            input.addEventListener('keydown', (e) => {
+                                if (e.key === "Backspace" && input.value === "" && index > 0) {
+                                    inputs[index - 1].focus();
+                                }
+                            });
                         });
-                });
-            }
-        });
+
+                        // Resend OTP AJAX
+                        if (resendOtpLink) {
+                            resendOtpLink.addEventListener('click', function() {
+                                fetch("{{ route('auth.resendOtp') }}", {
+                                        method: "POST",
+                                        headers: {
+                                            "Content-Type": "application/json",
+                                            "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                                        },
+                                        body: JSON.stringify({
+                                            phone: "{{ $phone }}"
+                                        })
+                                    })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.success) {
+                                            alert(data.message);
+                                            location.reload();
+                                        } else {
+                                            alert(data.message);
+                                        }
+                                    })
+                                    .catch(() => {
+                                        alert('{{ __('Error occurred while resending OTP') }}');
+                                    });
+                            });
+                        }
+                    });
     </script>
 @endpush

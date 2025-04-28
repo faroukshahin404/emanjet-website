@@ -88,7 +88,7 @@
                                                 readonly id="dateTextInput">
 
                                             <input type="date" class="form-control datepicker-real"
-                                                min="{{ date('Y-m-d') }}" max="2027-04-07" name="go_date"
+                                                min="{{ date('Y-m-d') }}" name="go_date"
                                                 value="{{ request()->go_date ?? date('Y-m-d') }}" id="dateRealInput">
                                         </div>
                                     </div>
@@ -969,4 +969,5 @@
             // تهيئة أولية
         });
     </script>
+
 @endpush

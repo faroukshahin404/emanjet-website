@@ -156,7 +156,7 @@ class HomeController extends Controller
         ]);
     }
 
-  
+
 
     public function blogs()
     {
@@ -173,17 +173,24 @@ class HomeController extends Controller
             'blogsCategories' => $blogsCategories
         ]);
     }
-
-    public function destinations()
+    public function destinations(Request $request)
     {
-        $cities = City::available()->orderBy('rank')->get();
+        $search = $request->input('search', '');
+        $query = City::available()->orderBy('rank');
+        if ($search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('name->ar', 'LIKE', '%' . $search . '%')
+                    ->orWhere('name->en', 'LIKE', '%' . $search . '%');
+            });
+        }
+        $cities = $query->inRandomOrder()->limit(9)->get();
         $page = Page::where('slug', 'destinations')->first();
         $destinationsPageSeos = $page->pageSeos()->get();
         $heroSection = $destinationsPageSeos->where('section_type', 'hero-section')->first()->translated_content_json;
         $trySection = $destinationsPageSeos->where('section_type', 'try')->first()->translated_content_json;
         $appSection = $destinationsPageSeos->where('section_type', 'app')->first()->translated_content_json;
         $seo = getSeoData($page);
-        $cities = City::available()->orderBy('rank')->inRandomOrder()->limit(9)->get();
+
         return view('other.destinations.index')->with([
             'cities' => $cities,
             'heroSection' => $heroSection,
