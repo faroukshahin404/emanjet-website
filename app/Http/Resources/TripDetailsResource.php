@@ -38,7 +38,7 @@ class TripDetailsResource extends JsonResource
         $seats = TripSeat::where('tripData_id', $this->tripData_id)->get();
         if ($request->station_from_id != null && $request->station_to_id != null) {
             foreach ($seats as $key => $seat) {
-                $item['id'] = $seat->seat->id;
+                $item['id'] = $seat->id;
                 $item['name'] = $seat->seat->name;
                 $item['type'] = $seat->seat->type;
                 $item['visible'] = $seat->seat->type != 2;

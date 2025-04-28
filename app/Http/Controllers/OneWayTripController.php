@@ -36,12 +36,27 @@ class OneWayTripController extends Controller
             'seats' => 'required',
             'back_date' => 'nullable|date|after_or_equal:today',
             'go_date' => 'required|date|after_or_equal:today'
-        ],[
-            'city_from_id.exists' => __('City From is required'),
-            'city_to_id.exists' => __('City To is required'),
-            'station_from_id.exists' => __('Station From is required'),
-            'station_to_id.exists' => __('Station To is required'),
+        ], [
+            'tripType.required' => __('Trip Type is required'),
+            'tripType.in' => __('Trip Type must be either oneway or round'),
+
+            'city_from_id.required' => __('City From is required'),
+            'city_from_id.exists' => __('Selected City From does not exist'),
+
+            'city_to_id.required' => __('City To is required'),
+            'city_to_id.exists' => __('Selected City To does not exist'),
+
+            'station_from_id.required' => __('Station From is required'),
+            'station_from_id.exists' => __('Selected Station From does not exist'),
+
+            'station_to_id.required' => __('Station To is required'),
+            'station_to_id.exists' => __('Selected Station To does not exist'),
+
             'seats.required' => __('Seats are required'),
+
+            'back_date.date' => __('Back Date must be a valid date'),
+            'back_date.after_or_equal' => __('Back Date must be today or later'),
+
             'go_date.required' => __('Go Date is required'),
             'go_date.date' => __('Go Date must be a valid date'),
             'go_date.after_or_equal' => __('Go Date must be today or later')

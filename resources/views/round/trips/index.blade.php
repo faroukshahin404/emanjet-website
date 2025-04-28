@@ -434,7 +434,7 @@
                                 </label>
                             </div>
                             <br>
-                            <button class=" btn-search" type="submit">
+                            <button class="btn-search" type="submit">
                                 {{ __('Search') }}
                             </button>
                         </form>

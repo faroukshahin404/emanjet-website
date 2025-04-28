@@ -347,7 +347,7 @@
                                 </label>
                             </div>
                             <br>
-                            <button class="bg-main text-white btn w-100" type="submit">
+                            <button class="btn-search" type="submit">
                                 {{ __('Search') }}
                             </button>
                         </form>
@@ -407,7 +407,7 @@
                                     <div class="d-flex flex-column align-items-start">
                                         <div>
                                             <i class="fas fa-location-dot text-black"></i>
-                                            <span class="text-black">{{ __('Travel From') }}</span>
+                                            <span class="text-black">{{ __('Travel To') }}</span>
                                         </div>
                                         <select class="form-select" name="city_to_id" id="city_to_id">
                                             @foreach ($cities as $city)

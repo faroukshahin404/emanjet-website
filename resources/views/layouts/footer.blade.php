@@ -6,7 +6,7 @@
                 <a href="{{ route('home') }}#heroSection" class="footer-links">{{ __('Book A Trip') }}</a>
                 <a href="{{ route('destinations') }}" class="footer-links">{{ __('Destinations') }}</a>
                 <a href="{{ route('blogs') }}" class="footer-links">{{ __('Bus Blogs') }}</a>
-                <a href="{{ route('faqs') }}" class="footer-links">{{ __('Faqs') }}</a>
+                <a href="{{ route('faqs') }}" class="footer-links">{{ __('FAQS') }}</a>
             </div>
 
             <div class="col-md-2 d-flex flex-column mx-auto align-items-lg-start align-items-center">
