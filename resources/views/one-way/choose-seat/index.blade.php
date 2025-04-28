@@ -92,7 +92,7 @@
                                         id="flexCheckDefault">
                                     <label class="form-check-label" for="flexCheckDefault">
                                         {{ __('I agree to the terms and conditions') }} <a
-                                            href="!#">{{ __('terms and conditions') }}</a>
+                                            href="{{route('usage-terms') }}">{{ __('terms and conditions') }}</a>
                                     </label>
                                 </div>
                             </div>

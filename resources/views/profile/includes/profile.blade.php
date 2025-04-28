@@ -1,19 +1,31 @@
 @push('styles')
 <style>
-    .input-wrapper {
-        position: relative;
-    }
-    .input-wrapper input {
-        padding-right: 40px; /* مساحة للأيقونة داخل الانبوت */
-    }
-    .input-wrapper .toggle-password {
-        position: absolute;
-        top: 50%;
-        right: 10px;
-        transform: translateY(-50%);
-        cursor: pointer;
-        color: #6c757d;
-    }
+   .input-wrapper {
+    position: relative;
+}
+.input-wrapper input {
+    padding-inline-end: 40px; /* بدل padding-right علشان يدعم RTL و LTR تلقائي */
+}
+.input-wrapper .toggle-password {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #6c757d;
+}
+
+/* لما تكون الصفحة RTL (عربي) */
+html:dir(rtl) .input-wrapper .toggle-password {
+    left: 10px;
+    right: auto;
+}
+
+/* لما تكون الصفحة LTR (إنجليزي) */
+html:dir(ltr) .input-wrapper .toggle-password {
+    right: 10px;
+    left: auto;
+}
+
     </style>
 
 @endpush

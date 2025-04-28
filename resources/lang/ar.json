@@ -416,6 +416,16 @@
     "Please wait": "برجاء الانتظار",
     "seconds": "ثانية",
     "waiting...": "جارٍ الانتظار...",
-    "Error occurred while resending OTP": "حدث خطأ أثناء إعادة إرسال كود التحقق"
+    "Error occurred while resending OTP": "حدث خطأ أثناء إعادة إرسال كود التحقق",
+    "Trip Type is required": "نوع الرحلة مطلوب",
+    "Trip Type must be either oneway or round": "يجب أن يكون نوع الرحلة ذهاب فقط أو ذهاب وعودة",
+    "Selected City From does not exist": "مدينة الانطلاق المحددة غير موجودة",
+    "Selected City To does not exist": "مدينة الوصول المحددة غير موجودة",
+    "Selected Station From does not exist": "محطة الانطلاق المحددة غير موجودة",
+    "Selected Station To does not exist": "محطة الوصول المحددة غير موجودة",
+    "Back Date must be a valid date": "تاريخ العودة يجب أن يكون تاريخًا صالحًا",
+    "Back Date must be today or later": "تاريخ العودة يجب أن يكون اليوم أو لاحقًا",
+    "FAQS": "الأسئلة الشائعة",
+    "Clear search": "مسح البحث"
 
 }
