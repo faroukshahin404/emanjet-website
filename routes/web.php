@@ -104,7 +104,7 @@ Route::group([
         Route::get('phone', [AuthController::class, 'phone'])->name('phone');
         Route::get('otp', [AuthController::class, 'otp'])->name('otp');
         Route::post('otp', [AuthController::class, 'postOtp'])->name('postOtp');
-        Route::get('resend-otp', [AuthController::class, 'resendOtp'])->name('resendOtp');
+        Route::post('resend-otp', [AuthController::class, 'resendOtp'])->name('resendOtp');
 
         // راوتات الضيف (غير مسجل الدخول)
         Route::middleware('guest')->group(function () {
@@ -142,8 +142,8 @@ Route::group([
     });
 
     Route::middleware(['auth'])->group(function () {
-        Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
-        Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::get('settings/profile', [ProfileController::class, 'index'])->name('profile.index');
+        Route::get('settings/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     });
 

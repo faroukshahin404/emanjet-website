@@ -2,7 +2,7 @@
 @section('mobile-content')
     <div class="d-flex justify-content-between align-items-center">
         <i class="fas fa-arrow-right fs-25 text-black" onclick="window.history.back()"></i>
-        <p class="m-0 fs-25 text-black">ملخص</p>
+        <p class="m-0 fs-25 text-black">{{__('Summary')}}</p>
         <div></div>
     </div>
     @php
@@ -13,7 +13,7 @@
         <div class="border rounded-7 p-3">
             <div>
                 <h6 class="text-black">
-                    الاسم
+                    {{ __('Name') }}
                 </h6>
                 <p>
                     {{ auth()->user()->name }}
@@ -21,16 +21,32 @@
             </div>
             <div>
                 <h6 class="text-black">
-                    رقم الهاتف
+                    {{ __('Mobile') }}
                 </h6>
                 <p>
                     {{ auth()->user()->mobile }}
                 </p>
             </div>
+            <div>
+                <h6 class="text-black">
+                    {{ __('Trip Date') }}
+                </h6>
+                <p>
+                    {{ $tripDate }}
+                </p>
+            </div>
+            <div>
+                <h6 class="text-black">
+                    {{ __('Trip Time') }}
+                </h6>
+                <p>
+                    {{ $tripTime }}
+                </p>
+            </div>
 
             <div class="summary-circle">
                 <h6 class="text-black">
-                    نقاط الصعود والنزول
+                    {{ __('Points of departure and arrival') }}
                 </h6>
                 <div class="d-flex align-items-center gap-2">
                     <div class="d-flex flex-column align-items-center">
@@ -47,7 +63,7 @@
 
             <div class="mt-2">
                 <h6 class="text-black">
-                    رقم المقعد
+                    {{ __('Seat number') }}
                 </h6>
                 <p>
                     @foreach ($selectedSeats as $seat)
@@ -58,7 +74,7 @@
 
             <div class="mt-2">
                 <h6 class="text-black">
-                    الركاب
+                    {{ __('Passengers') }}
                 </h6>
                 <p>
                     {{ count($selectedSeats) }}
@@ -71,16 +87,16 @@
     <div class="mt-3">
         <div class="border rounded-7 p-3">
             <div class="d-flex justify-content-between align-items-center text-black">
-                <p>تفاصيل الدفع</p>
-                <p>جنية مصري</p>
+                <p>{{ __('Payment details') }}</p>
+                <p>{{ __('Egyptian pound') }}</p>
             </div>
             <div class="d-flex justify-content-between align-items-center text-half-gray">
-                <p>{{ count($selectedSeats) }} مقاعد </p>
+                <p>{{ count($selectedSeats) }} {{ __('seats') }} </p>
                 <p>{{ array_sum(array_column($selectedSeats, 'price')) }}</p>
             </div>
 
             <div class="d-flex justify-content-between align-items-center text-black">
-                <p>المجموع</p>
+                <p>{{ __('Total') }}</p>
                 <p>{{ array_sum(array_column($selectedSeats, 'price')) }}</p>
             </div>
         </div>
@@ -91,7 +107,7 @@
         <div class="mt-3">
 
             <div class="border rounded-8 px-3 py-3 mt-2">
-                <h4 class="text-black">أختر وسيلة الدفع</h4>
+                <h4 class="text-black">{{ __('Choose Payment Method') }}</h4>
                 <div class="d-flex flex-column justify-content-end align-items-end gap-2">
 
                     <div class="form-check">
@@ -121,7 +137,7 @@
                     <input type="hidden" name="seat_id[]" value="{{ $seatId }}">
                 @endforeach
                 <button type="submit" class="login">
-                    دفع
+                    {{ __('Pay') }}
                 </button>
             </div>
 

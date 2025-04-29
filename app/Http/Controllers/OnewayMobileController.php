@@ -55,7 +55,7 @@ class OnewayMobileController extends Controller
             degrees: $request->degrees
         );
 
-        $dates = $this->getNextWeekDays();
+        $dates = $this->getNextWeekDays($request->go_date);
         return view('mobile.one-way.trips.index', [
             'trips' => $trips,
             'fromCity' => City::find(request()->city_from_id),
@@ -133,7 +133,9 @@ class OnewayMobileController extends Controller
             'toCity' => City::find(request()->city_to_id),
             'fromStation' => Station::find(request()->station_from_id),
             'toStation' => Station::find(request()->station_to_id),
-            'tripTime' => $tripTime
+            'tripTime' => $tripTime ,
+            'tripDate' => $request->go_date,
+
         ]);
 
     }

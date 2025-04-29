@@ -84,9 +84,10 @@ trait BookingTrait
 
         $query->select([
             'run_trips.id',
-            'degrees.id as degree_id', 
+            'degrees.id as degree_id',
             'lines.priceGo as price',
             'lines.priceBack as round_price',
+            DB::raw('lines.priceBack - lines.priceGo as back_price'),
             DB::raw("JSON_UNQUOTE(JSON_EXTRACT(degrees.name, '$.ar')) as degree"),
             DB::raw("JSON_UNQUOTE(JSON_EXTRACT(fromCity.name, '$.ar')) as fromCity"),
             DB::raw("JSON_UNQUOTE(JSON_EXTRACT(toCity.name, '$.ar')) as toCity"),
@@ -144,12 +145,15 @@ trait BookingTrait
         return Carbon::createFromFormat('Y-m-d H:i:s', $runTrip->startDate . ' ' . $runTrip->startTime)->addMinutes(@$tripStation->timeInMinutes ?? 0);
     }
 
-    public function getNextWeekDays()
+    public function getNextWeekDays($date)
     {
         $days = [];
-        for ($i = 0; $i < 7; $i++) {
-            $days[] = Carbon::now()->addDays($i)->format('Y-m-d');
+        $startDate = Carbon::parse($date);
+
+        for ($i = -3; $i <= 4; $i++) {
+            $days[] = $startDate->copy()->addDays($i)->format('Y-m-d');
         }
+
         return $days;
     }
 

@@ -5,9 +5,44 @@
 @push('styles')
     <style>
         /* .hero-section::before {
-            background: linear-gradient(to right, #00000040, #00000040), url({{ $heroSection['image'] }});
-            transform: scaleX(1);
-        } */
+                background: linear-gradient(to right, #00000040, #00000040), url({{ $heroSection['image'] }});
+                transform: scaleX(1);
+            } */
+            .hero-section {
+        position: relative;
+        overflow: visible !important; /* Ensure no clipping of child elements */
+    }
+
+    .desktop-from-input-box {
+        position: relative;
+    }
+
+    .main-stations,
+    .sub-stations-dropdown {
+        position: absolute;
+        top: calc(100% + 5px); /* Extra spacing below the field */
+        left: 0;
+        width: 100%;
+        z-index: 9999;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        max-height: 250px;
+        overflow-y: auto; /* Scroll only if the list exceeds the height */
+        display: none; /* Hidden by default */
+    }
+
+    /* Show the list on interaction */
+    .desktop-from-input-box.show .main-stations,
+    .desktop-from-input-box.show .sub-stations-dropdown {
+        display: block;
+    }
+
+    /* منع أي قص للقوائم */
+    .container-fluid, .row, .col-lg-5, .card, .card-body {
+        overflow: visible !important;
+    }
+
     </style>
 @endpush
 @section('content')
@@ -44,8 +79,8 @@
                                             class="d-flex align-items-center gap-2 rounded-6 px-3 py-1 desktop-from-input-box">
                                             <i class="fas fa-location-dot from-icon"></i>
                                             <input type="text" class="border-0 from-input desktop-from-input"
-                                                placeholder="من" readonly data-bs-toggle="dropdown" aria-expanded="false"
-                                                value="{{ $stations[0]->name }}" id="fromInput">
+                                                placeholder="{{ __('From') }}" readonly data-bs-toggle="dropdown"
+                                                aria-expanded="false" value="{{ $stations[0]->name }}" id="fromInput">
                                             <ul class="dropdown-menu p-0 main-stations" id="from-stations"></ul>
                                             <ul class="dropdown-menu p-0 sub-stations-dropdown" id="from-sub-stations"></ul>
                                         </div>
@@ -86,9 +121,8 @@
                                         <div class="position-relative">
                                             <input type="text" class="form-control datepicker-text" value=""
                                                 readonly id="dateTextInput">
-
                                             <input type="date" class="form-control datepicker-real"
-                                                min="{{ date('Y-m-d') }}" max="2027-04-07" name="go_date"
+                                                lang="{{ app()->getLocale() }}" min="{{ date('Y-m-d') }}" name="go_date"
                                                 value="{{ request()->go_date ?? date('Y-m-d') }}" id="dateRealInput">
                                         </div>
                                     </div>
@@ -520,41 +554,52 @@
         });
     </script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const dateTextInput2 = document.getElementById('dateTextInput2');
-            const dateRealInput2 = document.getElementById('dateRealInput2');
-            const selectedDate = new Date();
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const dateTextInput = document.getElementById('dateTextInput');
+        const dateRealInput = document.getElementById('dateRealInput');
+        const dateTextInput2 = document.getElementById('dateTextInput2');
+        const dateRealInput2 = document.getElementById('dateRealInput2');
+
+        const currentLang = '{{ app()->getLocale() }}';
+        const locale = currentLang === 'ar' ? 'ar-EG' : 'en-US';
+
+        function formatDate(date) {
             const options = {
                 weekday: 'long',
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric'
             };
-            dateTextInput2.value = selectedDate.toLocaleDateString('ar-EG', options);
-            dateTextInput2.addEventListener('click', function() {
-                dateRealInput2.showPicker();
-            });
+            return date.toLocaleDateString(locale, options);
+        }
 
-            dateRealInput.addEventListener('change', function() {
-                const selectedDate = new Date(this.value);
-                const options = {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                };
-                dateTextInput.value = selectedDate.toLocaleDateString('ar-EG', options);
+        function updateDisplayedDates(date) {
+            const formattedDate = formatDate(date);
+            dateTextInput.value = formattedDate;
+            dateTextInput2.value = formattedDate;
 
-                const dateTextInput2 = document.getElementById('dateTextInput2');
-                dateTextInput2.value = dateTextInput.value;
+            dateRealInput2.value = date.toISOString().split('T')[0]; // تخزين التاريخ بصيغة input
+        }
 
-                const dateRealInput2 = document.getElementById('dateRealInput2');
-                dateRealInput2.value = selectedDate.toISOString().split('T')[0];
-            });
+        const today = new Date();
+        updateDisplayedDates(today);
 
+        dateTextInput2.addEventListener('click', () => dateRealInput2.showPicker());
+        dateTextInput.addEventListener('click', () => dateRealInput.showPicker());
+
+        dateRealInput.addEventListener('change', function() {
+            const selectedDate = new Date(this.value);
+            updateDisplayedDates(selectedDate);
         });
-    </script>
+
+        dateRealInput2.addEventListener('change', function() {
+            const selectedDate = new Date(this.value);
+            updateDisplayedDates(selectedDate);
+        });
+    });
+</script>
+
 
 
     <script>
@@ -715,6 +760,37 @@
         });
     </script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateTextInput = document.getElementById('dateTextInput');
+            const dateRealInput = document.getElementById('dateRealInput');
+
+            const currentLang = '{{ app()->getLocale() }}';
+            const locale = currentLang === 'ar' ? 'ar-EG' : 'en-US';
+
+            function formatDate(date) {
+                const options = {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                };
+                return date.toLocaleDateString(locale, options);
+            }
+
+            const selectedDate = new Date(dateRealInput.value);
+            dateTextInput.value = formatDate(selectedDate);
+
+            dateTextInput.addEventListener('click', function() {
+                dateRealInput.showPicker();
+            });
+
+            dateRealInput.addEventListener('change', function() {
+                const selectedDate = new Date(this.value);
+                dateTextInput.value = formatDate(selectedDate);
+            });
+        });
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const bellBox = document.querySelector('.mo-bell-box');
@@ -911,7 +987,7 @@
                 backItem.innerHTML = `
         <i class="fas fa-arrow-left me-2"></i>
         <span>رجوع إلى ${cityName}</span>
-    `;
+        `;
                 backItem.addEventListener('click', (e) => {
                     e.stopPropagation();
                     toggleDropdown(subMenuId, false);
@@ -967,6 +1043,27 @@
             }
 
             // تهيئة أولية
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentLang = document.documentElement.dir; // الحصول على اتجاه النصوص (rtl أو ltr)
+
+            // تحديث اتجاه السهم بناءً على اللغة
+            function updateArrowDirection() {
+                const arrowIcons = document.querySelectorAll('.dropdown-item i');
+                arrowIcons.forEach(icon => {
+                    if (currentLang === 'rtl') {
+                        icon.classList.remove('fa-chevron-right');
+                        icon.classList.add('fa-chevron-left');
+                    } else {
+                        icon.classList.remove('fa-chevron-left');
+                        icon.classList.add('fa-chevron-right');
+                    }
+                });
+            }
+
+            updateArrowDirection(); // استدعاء الوظيفة عند التحميل
         });
     </script>
 @endpush

@@ -16,7 +16,7 @@ class AuthService
 {
     protected function getOtpExpiryMinutes()
     {
-        return Config::get('auth.otp_expiry_minutes', 5);
+        return Config::get('auth.otp_expiry_minutes', 2);
     }
 
     protected function getMaxOtpAttempts()
@@ -53,16 +53,16 @@ class AuthService
 
     public function sendOtp($user)
     {
+        $userCanSendOtp = $this->checkIfUserCanSendOtp($user);
+        if (!$userCanSendOtp['success']) {
+            return $userCanSendOtp;
+        }
         $otp = $this->generateOtp();
         if (!$this->sendOtpUsingServiceProvider($user->mobile, $otp)) {
             return [
                 'success' => false,
                 'message' => __('Error while sending OTP'),
             ];
-        }
-        $userCanSendOtp = $this->checkIfUserCanSendOtp($user);
-        if (!$userCanSendOtp['success']) {
-            return $userCanSendOtp;
         }
         if (Otp::where('user_id', $user->id)->exists()) {
             $existingOtp = Otp::where('user_id', $user->id)->first();
@@ -134,7 +134,7 @@ class AuthService
             if (!Hash::check($data['current_password'] ?? '', $user->password)) {
                 return [
                     'success' => false,
-                    'message' => 'كلمة المرور الحالية غير صحيحة.',
+                    'message' => __('Current password is incorrect'),
                 ];
             }
             $user->password = Hash::make($data['password']);
@@ -144,7 +144,7 @@ class AuthService
 
         return [
             'success' => true,
-            'message' => 'تم تحديث الملف الشخصي بنجاح.',
+            'message' => __('Profile updated successfully'),
             'user' => $user,
         ];
     }
@@ -166,7 +166,7 @@ class AuthService
 
     public function sendOtpUsingServiceProvider($receiver, $otp)
     {
-   
+
         $accountId = '550182041';
         $password = 'Vodafone.1';
         $secretKey = 'CA7FAB8B6A4146FFB66513E912D1DEF4';
@@ -178,7 +178,7 @@ class AuthService
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?>
     <SubmitSMSRequest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:="http://www.edafa.com/web2sms/sms/model/" 
+    xmlns:="http://www.edafa.com/web2sms/sms/model/"
     xsi:schemaLocation="http://www.edafa.com/web2sms/sms/model/SMSAPI.xsd "
     xsi:type="SubmitSMSRequest">
         <AccountId>' . $accountId . '</AccountId>

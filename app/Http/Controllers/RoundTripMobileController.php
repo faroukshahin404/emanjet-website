@@ -53,7 +53,7 @@ class RoundTripMobileController extends Controller
             degrees: $request->degrees
         );
 
-        $dates = $this->getNextWeekDays();
+        $dates = $this->getNextWeekDays($request->go_date);
         return view('mobile.round.trips.go-index', [
             'trips' => $trips,
             'fromCity' => City::find(request()->city_from_id),
@@ -89,7 +89,7 @@ class RoundTripMobileController extends Controller
             degrees: $request->degrees
         );
 
-        $dates = $this->getNextWeekDays();
+        $dates = $this->getNextWeekDays($request->back_date);
         return view('mobile.round.trips.back-index', [
             'trips' => $trips,
             'fromCity' => City::find(request()->city_to_id),

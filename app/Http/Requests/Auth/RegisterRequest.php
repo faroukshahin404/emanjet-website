@@ -22,7 +22,7 @@ class RegisterRequest extends FormRequest
                 'regex:/^(01)[0-9]{9}$/',  // التأكد من رقم الهاتف
                 'unique:users,mobile',
             ],
-            "password" => "required|string|confirmed",
+            "password" => "required|string|min:6|confirmed",
             "password_confirmation" => "required|string",
         ];
     }
@@ -40,6 +40,8 @@ class RegisterRequest extends FormRequest
             'password_confirmation.required' => __("Password confirmation is required"),
             'password_confirmation.string' => __("Password confirmation must be a string"),
             'password_confirmation.confirmed' => __("Password confirmation does not match"),
+            'password.min' => __("Password must be at least 6 characters."),
+
         ];
     }
 }

@@ -209,6 +209,7 @@
 
                     <!-- center  -->
                     <div class="col-lg-7 col-md-12 VIP">
+                        @if ($trips->count())
                         @foreach ($trips as $trip)
                             <div class="border rounded-9 px-3 py-3 mb-3">
                                 <div class="row ">
@@ -237,8 +238,14 @@
                                                     <div class="line"></div>
                                                     <div class="red-circle"></div>
                                                 </div>
-                                                <h6>{{ \Carbon\Carbon::parse($trip->tripTime)->format('h:i a ') }}</h6>
-                                            </div>
+                                                @php
+                                                $time = \Carbon\Carbon::parse($trip->tripTime);
+                                                $formattedTime = $time->format('h:i');
+                                                $meridiem = app()->getLocale() == 'ar' ? ($time->format('a') == 'am' ? 'ص' : 'م') : $time->format('a');
+                                            @endphp
+
+                                            <h6>{{ $formattedTime }} {{ $meridiem }}</h6>
+                                                                                        </div>
                                             <!-- to  -->
                                             <div class="d-flex flex-column align-items-center">
                                                 <div class="d-flex align-items-center gap-2">
@@ -267,7 +274,7 @@
 
                                             <div class="d-flex flex-column">
                                                 <h6 class="text-black m-0">
-                                                    {{ $trip->price }}
+                                                    {{ $trip->price }} {{ __('LE') }}
                                                 </h6>
                                                 <p class="text-black m-0">
                                                     {{ __('For Seat') }}
@@ -284,6 +291,11 @@
                                 </div>
                             </div>
                         @endforeach
+                        @else
+                        <div class="text-center p-5">
+                            <h4 class="text-black">{{ __('We apologize, there are no available trips right now.') }}</h4>
+                        </div>
+                    @endif
 
                     </div>
 
@@ -335,7 +347,7 @@
                                 </label>
                             </div>
                             <br>
-                            <button class="bg-main text-white btn w-100" type="submit">
+                            <button class="btn-search" type="submit">
                                 {{ __('Search') }}
                             </button>
                         </form>
@@ -395,7 +407,7 @@
                                     <div class="d-flex flex-column align-items-start">
                                         <div>
                                             <i class="fas fa-location-dot text-black"></i>
-                                            <span class="text-black">{{ __('Travel From') }}</span>
+                                            <span class="text-black">{{ __('Travel To') }}</span>
                                         </div>
                                         <select class="form-select" name="city_to_id" id="city_to_id">
                                             @foreach ($cities as $city)
@@ -447,7 +459,7 @@
                                 </div>
 
                                 <div class="col-12 text-center">
-                                    <button class="bg-main text-white btn">{{ __('Search') }}</button>
+                                    <button class="btn search-trip-btn fw-bold py-2">{{ __('Search') }}</button>
                                 </div>
 
                             </div>
@@ -506,14 +518,14 @@
 
             function fetchStations(cityId, stationSelect, selectedStationId = null) {
                 if (!cityId) {
-                    stationSelect.innerHTML = '<option value="">اختر محطة</option>';
+                    stationSelect.innerHTML = '<option value="">{{ __('Select a station') }}</option>';
                     return;
                 }
 
                 fetch(`/get-stations/${cityId}`)
                     .then(response => response.json())
                     .then(data => {
-                        let options = '<option value="">اختر محطة</option>';
+                        let options = '<option value="">{{ __('Select a station') }}</option>';
                         data.forEach(station => {
                             const selected = station.id == selectedStationId ? 'selected' : '';
                             options +=
