@@ -55,14 +55,16 @@
                     @php
                         $now = now();
                         $tripTime = $ticket['trip_time'];
+                        $tripDate = $ticket['date'];
+                        $diffDay = (int) $now->diffInDays($tripDate);
                         $diff = $now->diff($tripTime);
                     @endphp
                     <div class="d-flex align-items-center gap-2">
                         <i class="fas fa-clock text-black"></i>
                         <p class="m-0">
                             {{ __('Remaining') }}:
-                            @if ($diff->days > 0)
-                                {{ $diff->days }} {{ __('Days') }}
+                            @if ($diffDay > 0)
+                                {{ $diffDay }} {{ __('Days') }}
                             @endif
                             @if ($diff->h > 0)
                                 {{ $diff->h }} {{ __('Hours') }}

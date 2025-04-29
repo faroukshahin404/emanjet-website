@@ -179,6 +179,17 @@
             const searchForm = document.getElementById('search-form');
             const oneWayRadio = document.getElementById('oneWayRadio');
             const roundTripRadio = document.getElementById('roundTripRadio');
+
+            const departureDateCol = document.getElementById('departureDateCol');
+            const returnDateCol = document.getElementById('returnDateCol');
+            const passengersColSide = document.getElementById('passengersColSide');
+            const passengersColBottom = document.getElementById('passengersColBottom');
+
+            const passengerCount = document.getElementById('passengerCount');
+            const passengerCount2 = document.getElementById('passengerCount2');
+            const passengerCountInput = document.getElementById('passenger-count');
+            const passengerCountInput2 = document.getElementById('passenger-count2');
+
             let activeInput = null;
             let activeLocationSpan = null;
             let currentSubStations = null;
@@ -192,18 +203,99 @@
             const fromLocationSpan = document.getElementById('from-location');
             const toLocationSpan = document.getElementById('to-location');
 
+            // Function to update form layout based on trip type
+            function updateTripLayout() {
+                if (oneWayRadio.checked) {
+                    // One way trip layout
+                    departureDateCol.classList.remove('col-md-6');
+                    departureDateCol.classList.add('col-md-6');
+                    returnDateCol.classList.add('d-none');
+                    passengersColSide.classList.remove('d-none');
+                    passengersColBottom.classList.add('d-none');
+
+                    // Sync passenger counts between the two UI elements
+                    passengerCount2.textContent = passengerCount.textContent;
+                    passengerCountInput2.value = passengerCountInput.value;
+                } else if (roundTripRadio.checked) {
+                    // Round trip layout
+                    departureDateCol.classList.remove('col-md-6');
+                    departureDateCol.classList.add('col-md-6');
+                    returnDateCol.classList.remove('d-none');
+                    passengersColSide.classList.add('d-none');
+                    passengersColBottom.classList.remove('d-none');
+
+                    // Sync passenger counts between the two UI elements
+                    passengerCount.textContent = passengerCount2.textContent;
+                    passengerCountInput.value = passengerCountInput2.value;
+                }
+            }
+
             // Function to update form action based on trip type
             function updateFormAction() {
                 if (oneWayRadio.checked) {
-                    searchForm.action = "{{ route('mobile.one-way.trips') }}";
+                    searchForm.action = oneWayRoute;
                 } else if (roundTripRadio.checked) {
-                    searchForm.action = "{{ route('mobile.round.trips') }}";
+                    searchForm.action = roundRoute;
                 }
+
+                // Update layout when trip type changes
+                updateTripLayout();
             }
+
+            // Function to keep passenger counts in sync across both UIs
+            function syncPassengerCounts(value) {
+                // Update both displays
+                passengerCount.textContent = value;
+                passengerCount2.textContent = value;
+
+                // Update both hidden inputs
+                passengerCountInput.value = value;
+                passengerCountInput2.value = value;
+            }
+
+            // Passenger increment/decrement functions - now with syncing
+            window.incrementPassengers = function() {
+                let count = parseInt(passengerCount.textContent);
+                if (count < 9) {
+                    count++;
+                    syncPassengerCounts(count);
+                }
+            };
+
+            window.decrementPassengers = function() {
+                let count = parseInt(passengerCount.textContent);
+                if (count > 1) {
+                    count--;
+                    syncPassengerCounts(count);
+                }
+            };
+
+            window.incrementPassengers2 = function() {
+                let count = parseInt(passengerCount2.textContent);
+                if (count < 9) {
+                    count++;
+                    syncPassengerCounts(count);
+                }
+            };
+
+            window.decrementPassengers2 = function() {
+                let count = parseInt(passengerCount2.textContent);
+                if (count > 1) {
+                    count--;
+                    syncPassengerCounts(count);
+                }
+            };
 
             // Add event listeners for trip type radio buttons
             oneWayRadio.addEventListener('change', updateFormAction);
             roundTripRadio.addEventListener('change', updateFormAction);
+
+            // Initialize the layout based on the default selection
+            updateTripLayout();
+
+            // Define your routes here (replace with your actual route values)
+            const oneWayRoute = "{{ route('mobile.one-way.trips') }}";
+            const roundRoute = "{{ route('mobile.round.trips') }}";
 
             // Function to swap locations
             function swapLocations() {
@@ -229,6 +321,7 @@
                 swapLocations();
             });
 
+            // Bottom sheet functionality continues...
             function showBottomSheet() {
                 bottomSheet.classList.add('show');
                 document.body.style.overflow = 'hidden';
