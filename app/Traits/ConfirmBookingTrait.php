@@ -19,6 +19,9 @@ trait ConfirmBookingTrait
 
         $runTrip = RunTrip::find($runTrip_id);
         $user = Auth::user();
+        if(!$user){
+            $user = auth('sanctum')->user();
+        }
         $line = Line::where([
             'from_id' => $stationFrom_id,
             'to_id' => $stationTo_id,

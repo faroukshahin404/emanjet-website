@@ -210,7 +210,6 @@ class AuthController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'phone' => 'required|numeric|min:10|exists:users,mobile',
-
                 'password' => 'required|confirmed',
             ], [
                 'phone.required' => __('Phone is required'),
@@ -240,6 +239,40 @@ class AuthController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['status' => false, 'message' => $e->getMessage()]);
+        }
+    }
+
+    public function refresh_token(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'refresh_token' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => $validator->getMessageBag()->first()
+            ]);
+        }
+        $user = User::where('remember_token',  $request->refresh_token)->first();
+        $refreshToken = bin2hex(random_bytes(32));
+        if ($user) {
+            $user->remember_token =  $refreshToken;
+            $user->save();
+            return response()->json([
+                'status' => true,
+                'message' => null,
+                'is_user_registered' => $user->name != 'Guest',
+                'refresh_token' => $refreshToken,
+                'access_token' => $user->createToken('reservation')->plainTextToken,
+                'data' => $user,
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'User not found!',
+                'data' => null,
+            ], 404);
         }
     }
 }

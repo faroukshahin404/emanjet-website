@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class OnewayConfirmBookingRequest extends FormRequest
 {
@@ -23,11 +25,11 @@ class OnewayConfirmBookingRequest extends FormRequest
     {
         return [
             'selected_trip_id' => 'required|exists:run_trips,id',
-            'station_from_id'=>'required|exists:stations,id',
-            'station_to_id'=>'required|exists:stations,id',
-            'seat_id'=>'required|array',
-            'seat_id.*'=>'required|exists:trip_seats,id',
-            'payment_method'=>'required|in:fawry'
+            'station_from_id' => 'required|exists:stations,id',
+            'station_to_id' => 'required|exists:stations,id',
+            'seat_id' => 'required|array',
+            'seat_id.*' => 'required|exists:trip_seats,id',
+            'payment_method' => 'required|in:fawry'
         ];
     }
     public function messages(): array
@@ -50,5 +52,21 @@ class OnewayConfirmBookingRequest extends FormRequest
             'payment_method.required' => __('Please select a payment method.'),
             'payment_method.in' => __('The selected payment method is invalid.'),
         ];
+    }
+    public function failedValidation(Validator $validator)
+    {
+        // If request expects JSON, return a JSON response
+        if ($this->expectsJson()) {
+            throw new HttpResponseException(
+                response()->json([
+                    'status' => false,
+                    'message' => $validator->errors()->first(),
+
+                ], 422)
+            );
+        }
+
+        // Otherwise, use the default behavior (redirect back)
+        parent::failedValidation($validator);
     }
 }

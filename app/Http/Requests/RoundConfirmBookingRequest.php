@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class RoundConfirmBookingRequest extends FormRequest
 {
@@ -22,14 +24,10 @@ class RoundConfirmBookingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'tripType' => 'required|in:oneway,round',
-            'city_from_id' => 'required|exists:cities,id',
-            'city_to_id' => 'required|exists:cities,id',
             'station_from_id' => 'required|exists:stations,id',
             'station_to_id' => 'required|exists:stations,id',
             'go_date' => 'required|date|after_or_equal:today',
             'back_date' => 'required|date|after_or_equal:go_date',
-            'seats' => 'required|integer|min:1',
             'go_trip_id' => 'required|exists:run_trips,id',
             'back_trip_id' => 'required|exists:run_trips,id',
             'go_seat_id' => 'required|array',
@@ -88,5 +86,20 @@ class RoundConfirmBookingRequest extends FormRequest
             'payment_method.in' => __('Invalid payment method')
         ];
     }
+    public function failedValidation(Validator $validator)
+    {
+        // If request expects JSON, return a JSON response
+        if ($this->expectsJson()) {
+            throw new HttpResponseException(
+                response()->json([
+                    'status' => false,
+                    'message' => $validator->errors()->first(),
 
+                ], 422)
+            );
+        }
+
+        // Otherwise, use the default behavior (redirect back)
+        parent::failedValidation($validator);
+    }
 }
