@@ -18,7 +18,7 @@
     </div>
 
     @foreach ($tickets->where('is_past', false) as $ticket)
-        <div class="mt-3" style="direction: rtl;">
+        <div class="mt-3" style="direction: {{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }};">
             <div class="border rounded-7 px-4 pt-2 pb-2 box-shadow">
                 <div class="d-flex justify-content-end align-items-end gap-2 mb-3">
                     <span>#{{ $ticket['ticket_id'] . '.' . $ticket['runTrip_id'] }}</span>
@@ -55,14 +55,16 @@
                     @php
                         $now = now();
                         $tripTime = $ticket['trip_time'];
+                        $tripDate = $ticket['date'];
+                        $diffDay = (int) $now->diffInDays($tripDate);
                         $diff = $now->diff($tripTime);
                     @endphp
                     <div class="d-flex align-items-center gap-2">
                         <i class="fas fa-clock text-black"></i>
                         <p class="m-0">
                             {{ __('Remaining') }}:
-                            @if ($diff->days > 0)
-                                {{ $diff->days }} {{ __('Days') }}
+                            @if ($diffDay > 0)
+                                {{ $diffDay }} {{ __('Days') }}
                             @endif
                             @if ($diff->h > 0)
                                 {{ $diff->h }} {{ __('Hours') }}

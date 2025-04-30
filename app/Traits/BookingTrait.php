@@ -99,7 +99,7 @@ trait BookingTrait
             DB::raw("DATE_ADD(CONCAT(run_trips.startDate, ' ', run_trips.startTime), INTERVAL trip_stations.timeInMinutes MINUTE) as tripTime"),
             DB::raw("DATE_FORMAT(DATE_ADD(CONCAT(run_trips.startDate, ' ', run_trips.startTime), INTERVAL trip_stations.timeInMinutes MINUTE), '%Y-%m-%d') as tripDate")
         ])
-            ->having('tripTime', '>', Carbon::now()->addHours(24)->toDateTimeString())
+            ->having('tripTime', '>', Carbon::now()->addHours(8)->toDateTimeString())
             ->having('tripDate', '=', $date->format('Y-m-d'))
             ->orderBy('tripTime', 'asc');
         return $query->get();
