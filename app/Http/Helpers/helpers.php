@@ -48,6 +48,20 @@ function isSeatAvailable($seat_id, $runTrip_id, $tripData_id, $line_id)
     return null;
 }
 
+function payment_status($status)
+{
+    if ($status == "PAID" || $status == "CAPTURED" || $status == "pending") {
+        return 'مؤكد';
+    } elseif ($status == "CANCELED") {
+        return 'ملغي';
+    } elseif ($status == "NEW" || $status == "New") {
+        return "معلق";
+    } else {
+        return "فشل";
+    }
+}
+
+
 
 
 

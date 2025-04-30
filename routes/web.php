@@ -97,6 +97,7 @@ Route::group([
         Route::get('privacy-policy', [HomeController::class, 'privacy_policy'])->name('privacy-policy');
         Route::get('usage-terms', [HomeController::class, 'usage_terms'])->name('usage-terms');
     });
+    Route::get('login', [AuthController::class, 'login'])->name('login');
 
     Route::prefix('auth')->name('auth.')->group(function () {
 
