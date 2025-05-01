@@ -36,6 +36,7 @@ class ProfileController extends Controller
         if ($request->email) {
             $user->email = $request->email;
         }
+        $user->save();
 
         return response()->json([
             'status' => true,

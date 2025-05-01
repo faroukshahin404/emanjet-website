@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\TripDetailsResource;
 use App\Models\City;
 use App\Http\Resources\CityResource;
+use App\Models\Contact;
+use App\Models\Page;
 use App\Models\RunTrip;
 use App\Traits\BookingTrait;
 use Illuminate\Http\Request;
@@ -106,7 +108,7 @@ class PublicServiceController extends Controller
                 'station_from_id.exists' => $request->header('lang') == 'ar' ? 'المحطة غير موجودة' : 'Station not found',
                 'station_to_id.required' =>  $request->header('lang') == 'ar' ? 'الي محطة مطلوبة' : 'To station required',
                 'station_to_id.exists' => $request->header('lang') == 'ar' ? 'المحطة غير موجودة' : 'Station not found',
-           
+
             ]);
             if ($validator->fails()) {
                 return response()->json([
@@ -136,5 +138,64 @@ class PublicServiceController extends Controller
                 'data' => []
             ], 500);
         }
+    }
+    public function contact_us(Request $request)
+    {
+        try {
+            $validator = Validator::make(
+                $request->all(),
+                [
+                    'phone' => 'required',
+                    'name' => 'required',
+                    'message' => 'required'
+                ],
+                [
+                    'phone.required' => __('Phone is required'),
+                    'name.required' => __('Name is required'),
+                    'message.required' => __('Message is required')
+                ]
+            );
+            if ($validator->fails()) {
+                return response()->json(['status' => false, 'message' => $validator->errors()->first()]);
+            }
+            Contact::create([
+                'name' => $request->name,
+                'mobile' => $request->phone,
+                'message' => $request->message,
+            ]);
+            return response()->json(['status' => true, 'message' => __('Submitted Successfully!')]);
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'message' => $e->getMessage()]);
+        }
+    }
+    public function privacy_policy()
+    {
+        $page = Page::where('slug', 'privacy-policy')->first();
+        $privacePageSeos = $page->pageSeos()->get();
+        $heroSection = @$privacePageSeos->first()->translated_content_json;
+        $serviceSection = @$privacePageSeos->first()->translated_content_json;
+        $seo = getSeoData($page);
+
+
+        return view('other.api.privacy-policy')->with([
+            'heroSection' => $heroSection,
+            'serviceSection' => $serviceSection,
+            'seo' => $seo
+        ]);
+    }
+    public function usage_terms()
+    {
+        $page = Page::where('slug', 'usage-terms')->first();
+        $privacePageSeos = $page->pageSeos()->get();
+        $heroSection = @$privacePageSeos->first()->translated_content_json;
+        $serviceSection = @$privacePageSeos->first()->translated_content_json;
+        $seo = getSeoData($page);
+
+
+        return view('other.api.usage-terms')->with([
+            'heroSection' => $heroSection,
+            'serviceSection' => $serviceSection,
+            'seo' => $seo
+        ]);
     }
 }

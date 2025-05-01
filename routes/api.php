@@ -15,9 +15,13 @@ Route::group(['prefix' => 'auth'], function () {
     Route::get('/forgot-password', [AuthController::class, 'forgot_password']);
     Route::post('/reset-password', [AuthController::class, 'reset_password']);
     Route::get('/refresh-token', [AuthController::class, 'refresh_token']);
+    Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 });
 Route::get('/cities', [PublicServiceController::class, 'cities']);
+Route::post('contact-us', [PublicServiceController::class, 'contact_us']);
+Route::get('privacy-policy', [PublicServiceController::class, 'privacy_policy']);
+Route::get('usage-terms', [PublicServiceController::class, 'usage_terms']);
 Route::group(['prefix' => 'booking'], function () {
     Route::get('/search-trips', [PublicServiceController::class, 'search_trips']);
     Route::get('trip-details', [PublicServiceController::class, 'trip_details']);
