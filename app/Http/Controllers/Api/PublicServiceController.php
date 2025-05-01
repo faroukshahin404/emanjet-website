@@ -175,12 +175,13 @@ class PublicServiceController extends Controller
         $heroSection = @$privacePageSeos->first()->translated_content_json;
         $serviceSection = @$privacePageSeos->first()->translated_content_json;
         $seo = getSeoData($page);
-
-
-        return view('other.api.privacy-policy')->with([
-            'heroSection' => $heroSection,
-            'serviceSection' => $serviceSection,
-            'seo' => $seo
+        return response()->json([
+            'status'=>true,
+            'message'=>'success',
+            'data'=> [
+                'title'=>$heroSection['title'],
+                'description'=>$heroSection['description']
+            ]
         ]);
     }
     public function usage_terms()
@@ -192,10 +193,13 @@ class PublicServiceController extends Controller
         $seo = getSeoData($page);
 
 
-        return view('other.api.usage-terms')->with([
-            'heroSection' => $heroSection,
-            'serviceSection' => $serviceSection,
-            'seo' => $seo
+        return response()->json([
+            'status'=>true,
+            'message'=>'success',
+            'data'=> [
+                'title'=>$heroSection['title'],
+                'description'=>$heroSection['description']
+            ]
         ]);
     }
 }
