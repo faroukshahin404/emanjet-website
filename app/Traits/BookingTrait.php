@@ -157,4 +157,37 @@ trait BookingTrait
         return $days;
     }
 
+
+    
+public function parseAnyDate($input, $formats = ['Y-m-d', 'Y/m/d']) {
+    // Step 1: Normalize Arabic numbers to Western
+    $arabic = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+    $western = ['0','1','2','3','4','5','6','7','8','9'];
+    $input = str_replace($arabic, $western, $input);
+
+    // Step 2: Remove extra spaces and normalize separators
+    $input = trim($input);
+    $input = str_replace(['\\', '.', '_'], '-', $input); // optional normalization
+    $input = preg_replace('/[\/\-]/', '-', $input); // unify to dash
+
+    // Step 3: Try parsing with common formats
+    foreach ($formats as $format) {
+        try {
+            $date = Carbon::createFromFormat($format, $input)->format('Y-m-d');
+          return $date;
+        } catch (\Exception $e) {
+            return date('Y-m-d');
+            // continue to next format
+        }
+    }
+
+    // Step 4: Fallback: try general Carbon parsing
+    try {
+        return Carbon::parse($input)->format('Y-m-d');
+    } catch (\Exception $e) {
+
+        return date('Y-m-d');
+    }
+}
+
 }

@@ -78,7 +78,9 @@ class PublicServiceController extends Controller
                     'data' => []
                 ], 200);
             }
-            $trips = $this->getTrips(date: Carbon::parse($request->date)->format('Y-m-d'), stationFrom_id: $request->station_from_id, stationTo_id: $request->station_to_id, seats: $request->seats);
+            $date = $this->parseAnyDate($request->date);
+
+            $trips = $this->getTrips(date: $date, stationFrom_id: $request->station_from_id, stationTo_id: $request->station_to_id, seats: $request->seats);
             return response()->json([
                 'status' => true,
                 'message' => '',
