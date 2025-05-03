@@ -10,6 +10,7 @@ use App\Models\Contact;
 use App\Models\Page;
 use App\Models\RunTrip;
 use App\Traits\BookingTrait;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -59,7 +60,7 @@ class PublicServiceController extends Controller
             $validator =     Validator::make($request->all(), [
                 'station_from_id' => 'required|exists:stations,id',
                 'station_to_id' => 'required|exists:stations,id',
-                'date' => 'required|date',
+                'date' => 'required',
                 'seats' => 'nullable|integer'
             ], [
                 'station_from_id.required' => $request->header('lang') == 'ar' ? 'من محطة مطلوبة!' : 'From station required',
@@ -77,7 +78,7 @@ class PublicServiceController extends Controller
                     'data' => []
                 ], 200);
             }
-            $trips = $this->getTrips(date: $request->date, stationFrom_id: $request->station_from_id, stationTo_id: $request->station_to_id, seats: $request->seats);
+            $trips = $this->getTrips(date: Carbon::parse($request->date)->format('Y-m-d'), stationFrom_id: $request->station_from_id, stationTo_id: $request->station_to_id, seats: $request->seats);
             return response()->json([
                 'status' => true,
                 'message' => '',
