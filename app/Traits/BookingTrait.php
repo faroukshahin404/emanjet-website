@@ -63,7 +63,6 @@ trait BookingTrait
             });
         }
 
-
         $query->join('cities as fromCity', 'fromCity.id', '=', 'fromStation.city_id')
             ->join('cities as toCity', 'toCity.id', '=', 'toStation.city_id')
             ->join('trip_stations', function ($q) {
@@ -72,12 +71,16 @@ trait BookingTrait
             })
             ->join('bus_types', 'bus_types.id', '=', 'run_trips.busType_id')
             ->join('trip_degrees', 'trip_degrees.tripData_id', '=', 'run_trips.tripData_id')
-            ->join('degrees', 'degrees.id', '=', 'trip_degrees.degree_id')
-
+            ->join('degrees', function ($join) {
+                $join->on('degrees.id', '=', 'trip_degrees.degree_id')
+                    ->whereRaw('JSON_VALID(degrees.name)');
+            })
             ->leftJoinSub($seatsSubQuery, 'seats_sub_query', 'seats_sub_query.runTrip_id', '=', 'run_trips.id');
+
         if ($degrees) {
             $query->whereIn('trip_degrees.degree_id', $degrees);
         }
+
         if ($seats) {
             $query->where(DB::raw('bus_types.slug - COALESCE(seats_sub_query.booked_seats, 0)'), '>=', $seats);
         }
@@ -102,8 +105,10 @@ trait BookingTrait
             ->having('tripTime', '>', Carbon::now()->addHours(8)->toDateTimeString())
             ->having('tripDate', '=', $date->format('Y-m-d'))
             ->orderBy('tripTime', 'asc');
+
         return $query->get();
     }
+
 
 
     public function getBusSeat($runTrip_id, $stationFrom_id, $stationTo_id)
@@ -158,36 +163,36 @@ trait BookingTrait
     }
 
 
-    
-public function parseAnyDate($input, $formats = ['Y-m-d', 'Y/m/d', 'd-m-Y', 'd/m/Y', 'd-m-Y', 'd/m/Y', 'dmY','dmy','ymd','Ymd']) {
-    // Step 1: Normalize Arabic numbers to Western
-    $arabic = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
-    $western = ['0','1','2','3','4','5','6','7','8','9'];
-    $input = str_replace($arabic, $western, $input);
 
-    // Step 2: Remove extra spaces and normalize separators
-    $input = trim($input);
-    $input = str_replace(['\\', '.', '_'], '-', $input); // optional normalization
-    $input = preg_replace('/[\/\-]/', '-', $input); // unify to dash
+    public function parseAnyDate($input, $formats = ['Y-m-d', 'Y/m/d', 'd-m-Y', 'd/m/Y', 'd-m-Y', 'd/m/Y', 'dmY', 'dmy', 'ymd', 'Ymd'])
+    {
+        // Step 1: Normalize Arabic numbers to Western
+        $arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+        $western = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+        $input = str_replace($arabic, $western, $input);
 
-    // Step 3: Try parsing with common formats
-    foreach ($formats as $format) {
+        // Step 2: Remove extra spaces and normalize separators
+        $input = trim($input);
+        $input = str_replace(['\\', '.', '_'], '-', $input); // optional normalization
+        $input = preg_replace('/[\/\-]/', '-', $input); // unify to dash
+
+        // Step 3: Try parsing with common formats
+        foreach ($formats as $format) {
+            try {
+                $date = Carbon::createFromFormat($format, $input)->format('Y-m-d');
+                return $date;
+            } catch (\Exception $e) {
+
+                // continue to next format
+            }
+        }
+
+        // Step 4: Fallback: try general Carbon parsing
         try {
-            $date = Carbon::createFromFormat($format, $input)->format('Y-m-d');
-          return $date;
+            return Carbon::parse($input)->format('Y-m-d');
         } catch (\Exception $e) {
 
-            // continue to next format
+            return date('Y-m-d');
         }
     }
-
-    // Step 4: Fallback: try general Carbon parsing
-    try {
-        return Carbon::parse($input)->format('Y-m-d');
-    } catch (\Exception $e) {
-
-        return date('Y-m-d');
-    }
-}
-
 }

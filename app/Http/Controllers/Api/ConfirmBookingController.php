@@ -26,7 +26,7 @@ class ConfirmBookingController extends Controller
         try {
             DB::beginTransaction();
 
-            $ticket = $this->confirmBookingService->one_way_confirm_booking($request);
+            $ticket = $this->confirmBookingService->one_way_confirm_booking($request , 'application');
             if ($request->payment_method == 'fawry') {
                 $payment_link = $this->getPaymentLink($ticket->id, $ticket->total, $ticket->user_id, 1, asset('/'));
 
@@ -60,7 +60,7 @@ class ConfirmBookingController extends Controller
 
         try {
             DB::beginTransaction();
-            $ticket = $this->confirmBookingService->round_confirm_booking($request);
+            $ticket = $this->confirmBookingService->round_confirm_booking($request, 'application');
             if ($request->payment_method == 'fawry') {
                 $payment_link = $this->getPaymentLink($ticket->id, $ticket->total, $ticket->user_id, 1, asset('/'));
                 DB::commit();

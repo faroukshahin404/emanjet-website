@@ -62,7 +62,7 @@
                     </div>
                     
                     <div class="d-flex justify-content-center gap-3 mb-3">
-                        {{-- <a href="{{ $apps['android'] }}" target="_blank" class="google-play-box rounded-5 text-decoration-none">
+                        <a href="{{ $apps['android'] }}" target="_blank" class="google-play-box rounded-5 text-decoration-none">
                             <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-3">
                                 <div class="google-play">
                                     <p>{{ __('Get It On') }}</p>
@@ -70,7 +70,7 @@
                                 </div>
                                 <img src="{{ asset('images/google-play-icon.png') }}" alt="google-play">
                             </div>
-                        </a> --}}
+                        </a>
                         
                         {{-- Uncomment when iOS app is available --}}
                         {{-- <a href="{{ $apps['ios'] }}" target="_blank" class="google-play-box rounded-5 text-decoration-none">
@@ -241,7 +241,7 @@
                     </div>
                     <div class="text-white d-flex flex-lg-row flex-column justify-content-start align-items-center gap-3">
 
-                        {{-- <a href="{{ $apps['android'] }}" target="_blank"
+                        <a href="{{ $apps['android'] }}" target="_blank"
                             class="google-play-box rounded-5 text-decoration-none">
                             <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-2">
                                 <div class="google-play">
@@ -250,7 +250,7 @@
                                 </div>
                                 <img src="{{ asset('images/google-play-icon.png') }}" alt="google-play">
                             </div>
-                        </a> --}}
+                        </a>
 
                         {{-- <a href="{{ $apps['ios'] }}" target="_blank"
                             class="google-play-box rounded-5 text-decoration-none">
@@ -1156,7 +1156,7 @@
             updateArrowDirection(); // استدعاء الوظيفة عند التحميل
         });
     </script>
-    {{-- <script>
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Show the app download modal after a short delay
             setTimeout(function() {
@@ -1167,5 +1167,5 @@
                 localStorage.setItem('appModalShown', 'true');
             }, 500); // 1.5 second delay
         });
-    </script> --}}
+    </script>
 @endpush

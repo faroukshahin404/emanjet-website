@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 trait ConfirmBookingTrait
 {
     
-    public function store_ticket($seats = [], $payment_key = null, $stationFrom_id, $stationTo_id, $runTrip_id, $payment_method , $trip_type , $round_trip_id = null)
+    public function store_ticket($seats = [], $payment_key = null, $stationFrom_id, $stationTo_id, $runTrip_id, $payment_method , $trip_type , $round_trip_id = null , $pos = 'website')
     {
 
         $runTrip = RunTrip::find($runTrip_id);
@@ -64,7 +64,7 @@ trait ConfirmBookingTrait
             'office_id' => 225,
             'payment_type' => 7,
             'reserv_type' => 'NEW',
-            'pos' => 'website',
+            'pos' =>$pos,
             'type'=>$trip_type,
             'passenger_type'=>1,
 

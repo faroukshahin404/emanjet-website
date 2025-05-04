@@ -10,7 +10,7 @@ class ConfirmBookingService
 {
     use ConfirmBookingTrait;
 
-    public function one_way_confirm_booking(OnewayConfirmBookingRequest $request)
+    public function one_way_confirm_booking(OnewayConfirmBookingRequest $request, $pos = 'website')
     {
 
         $parent = $this->store_ticket(
@@ -20,7 +20,8 @@ class ConfirmBookingService
             stationTo_id: $request->station_to_id,
             runTrip_id: $request->selected_trip_id,
             payment_method: $request->payment_method,
-            trip_type: 1
+            trip_type: 1,
+            pos: $pos
         );
         foreach ($request->seat_id as $key => $seat_id) {
             $ticket = $this->store_ticket(
@@ -30,13 +31,15 @@ class ConfirmBookingService
                 stationTo_id: $request->station_to_id,
                 runTrip_id: $request->selected_trip_id,
                 payment_method: $request->payment_method,
-                trip_type: 1
+                trip_type: 1,
+                pos: $pos
             );
         }
         return $parent;
     }
 
-    public function round_confirm_booking(RoundConfirmBookingRequest $request){
+    public function round_confirm_booking(RoundConfirmBookingRequest $request, $pos = 'website')
+    {
         $parent = $this->store_ticket(
             seats: $request->go_seat_id,
             payment_key: null,
@@ -45,7 +48,8 @@ class ConfirmBookingService
             runTrip_id: $request->go_trip_id,
             payment_method: $request->payment_method,
             trip_type: 2,
-            round_trip_id: $request->back_trip_id
+            round_trip_id: $request->back_trip_id,
+            pos: $pos
         );
         // Book Go Trip
         foreach ($request->go_seat_id as $key => $seat_id) {
@@ -56,7 +60,8 @@ class ConfirmBookingService
                 stationTo_id: $request->station_to_id,
                 runTrip_id: $request->go_trip_id,
                 payment_method: $request->payment_method,
-                trip_type: 1
+                trip_type: 1,
+                pos: $pos
             );
         }
         // Book Back Trip
@@ -68,7 +73,8 @@ class ConfirmBookingService
                 stationTo_id: $request->station_from_id,
                 runTrip_id: $request->back_trip_id,
                 payment_method: $request->payment_method,
-                trip_type: 1
+                trip_type: 1,
+                pos: $pos
             );
         }
         return $parent;
