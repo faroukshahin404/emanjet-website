@@ -67,10 +67,10 @@
                 </form>
 
 
-                {{-- @if (!empty($apps))
+                @if (!empty($apps))
                     <div
                         class="text-white d-flex flex-lg-row flex-column justify-content-start align-items-center gap-lg-3 gap-1 mt-4">
-                        @if (!empty($apps['ios']))
+                        {{-- @if (!empty($apps['ios']))
                             <a href="{{ $apps['ios'] }}" target="_blank"
                                 class="google-play-box-footer rounded-5 text-decoration-none">
                                 <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-2">
@@ -81,7 +81,7 @@
                                     <i class="fa-brands fa-apple"></i>
                                 </div>
                             </a>
-                        @endif
+                        @endif --}}
 
                         @if (!empty($apps['android']))
                             <a href="{{ $apps['android'] }}" target="_blank"
@@ -96,7 +96,7 @@
                             </a>
                         @endif
                     </div>
-                @endif --}}
+                @endif
             </div>
         </div>
 

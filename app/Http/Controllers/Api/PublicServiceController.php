@@ -79,7 +79,8 @@ class PublicServiceController extends Controller
                 ], 200);
             }
             $date = $this->parseAnyDate($request->date);
-
+            dd($date);
+            
             $trips = $this->getTrips(date: $date, stationFrom_id: $request->station_from_id, stationTo_id: $request->station_to_id, seats: $request->seats);
             return response()->json([
                 'status' => true,

@@ -46,6 +46,52 @@
     </style>
 @endpush
 @section('content')
+    <!-- App Download Modal -->
+    <div class="modal fade" id="appDownloadModal" tabindex="-1" aria-labelledby="appDownloadModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="appDownloadModalLabel">{{ __('Download Our App') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-tags text-warning fa-2x mb-3"></i>
+                        <h4>{{ __('Get Exclusive Discounts!') }}</h4>
+                        <p>{{ __('Download the SuperJet app now and enjoy special offers on your trips') }}</p>
+                    </div>
+                    
+                    <div class="d-flex justify-content-center gap-3 mb-3">
+                        <a href="{{ $apps['android'] }}" target="_blank" class="google-play-box rounded-5 text-decoration-none">
+                            <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-3">
+                                <div class="google-play">
+                                    <p>{{ __('Get It On') }}</p>
+                                    <h6>{{ __('Google Play') }}</h6>
+                                </div>
+                                <img src="{{ asset('images/google-play-icon.png') }}" alt="google-play">
+                            </div>
+                        </a>
+                        
+                        {{-- Uncomment when iOS app is available --}}
+                        {{-- <a href="{{ $apps['ios'] }}" target="_blank" class="google-play-box rounded-5 text-decoration-none">
+                            <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-3">
+                                <div class="google-play">
+                                    <p>{{ __('Download On The') }}</p>
+                                    <h6>{{ __('App Store') }}</h6>
+                                </div>
+                                <i class="fa-brands fa-apple"></i>
+                            </div>
+                        </a> --}}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Maybe Later') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End App Download Modal -->
+
     <!-- start hero section  -->
     <div class="hero-section"id="heroSection">
         <div class="container-fluid px-5 box">
@@ -193,7 +239,7 @@
                             {{ $heroSection['caption-description'] }}
                         </h6>
                     </div>
-                    {{-- <div class="text-white d-flex flex-lg-row flex-column justify-content-start align-items-center gap-3">
+                    <div class="text-white d-flex flex-lg-row flex-column justify-content-start align-items-center gap-3">
 
                         <a href="{{ $apps['android'] }}" target="_blank"
                             class="google-play-box rounded-5 text-decoration-none">
@@ -206,7 +252,7 @@
                             </div>
                         </a>
 
-                        <a href="{{ $apps['ios'] }}" target="_blank"
+                        {{-- <a href="{{ $apps['ios'] }}" target="_blank"
                             class="google-play-box rounded-5 text-decoration-none">
                             <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-2">
                                 <div class="google-play">
@@ -215,8 +261,8 @@
                                 </div>
                                 <i class="fa-brands fa-apple"></i>
                             </div>
-                        </a>
-                    </div> --}}
+                        </a> --}}
+                    </div>
 
                 </div>
             </div>
@@ -410,6 +456,50 @@
 
     <!-- start footer  -->
 @endsection
+ <!-- App Download Modal -->
+    <div class="modal fade" id="appDownloadModal" tabindex="-1" aria-labelledby="appDownloadModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="appDownloadModalLabel">{{ __('Download Our App') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-tags text-warning fa-2x mb-3"></i>
+                        <h4>{{ __('Get Exclusive Discounts!') }}</h4>
+                        <p>{{ __('Download the SuperJet app now and enjoy special offers on your trips') }}</p>
+                    </div>
+                    
+                    <div class="d-flex justify-content-center gap-3 mb-3">
+                        <a href="{{ $apps['android'] }}" target="_blank" class="google-play-box rounded-5 text-decoration-none">
+                            <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-3">
+                                <div class="google-play">
+                                    <p>{{ __('Get It On') }}</p>
+                                    <h6>{{ __('Google Play') }}</h6>
+                                </div>
+                                <img src="{{ asset('images/google-play-icon.png') }}" alt="google-play">
+                            </div>
+                        </a>
+                        
+                        {{-- Uncomment when iOS app is available --}}
+                        {{-- <a href="{{ $apps['ios'] }}" target="_blank" class="google-play-box rounded-5 text-decoration-none">
+                            <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-3">
+                                <div class="google-play">
+                                    <p>{{ __('Download On The') }}</p>
+                                    <h6>{{ __('App Store') }}</h6>
+                                </div>
+                                <i class="fa-brands fa-apple"></i>
+                            </div>
+                        </a> --}}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Maybe Later') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @include('mobile.home')
 @push('scripts')
     <script>
@@ -1064,6 +1154,18 @@
             }
 
             updateArrowDirection(); // استدعاء الوظيفة عند التحميل
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show the app download modal after a short delay
+            setTimeout(function() {
+                const appDownloadModal = new bootstrap.Modal(document.getElementById('appDownloadModal'));
+                appDownloadModal.show();
+                
+                // Store in localStorage that we've shown the modal
+                localStorage.setItem('appModalShown', 'true');
+            }, 500); // 1.5 second delay
         });
     </script>
 @endpush

@@ -159,7 +159,7 @@ trait BookingTrait
 
 
     
-public function parseAnyDate($input, $formats = ['Y-m-d', 'Y/m/d']) {
+public function parseAnyDate($input, $formats = ['Y-m-d', 'Y/m/d', 'd-m-Y', 'd/m/Y', 'd-m-Y', 'd/m/Y', 'dmY','dmy','ymd','Ymd']) {
     // Step 1: Normalize Arabic numbers to Western
     $arabic = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
     $western = ['0','1','2','3','4','5','6','7','8','9'];
@@ -176,7 +176,7 @@ public function parseAnyDate($input, $formats = ['Y-m-d', 'Y/m/d']) {
             $date = Carbon::createFromFormat($format, $input)->format('Y-m-d');
           return $date;
         } catch (\Exception $e) {
-            return date('Y-m-d');
+
             // continue to next format
         }
     }
