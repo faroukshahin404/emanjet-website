@@ -29,6 +29,7 @@ class PublicServiceController extends Controller
             $cities = City::with('stations')
                 ->whereHas('stations')
                 ->where('active', 1)
+                ->where('available_online',1)
                 ->get();
 
             if ($cities->isEmpty()) {

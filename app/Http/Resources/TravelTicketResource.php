@@ -25,8 +25,8 @@ class TravelTicketResource extends JsonResource
             'created_at'=>$this->created_at,
             
             'duration'=>'--',
-            'date'=> $this->tripDate($this->trip_id , $this->stationTo_id , $this->runTrip->startDate .' '. $this->runTrip->startTime)->format('Y-m-d'),
-            'time'=> $this->tripDate($this->trip_id , $this->stationTo_id , $this->runTrip->startDate .' '. $this->runTrip->startTime)->format('h:i a'),
+            'date'=> $this->tripDate($this->trip_id , $this->stationFrom_id , $this->runTrip->startDate .' '. $this->runTrip->startTime)->format('Y-m-d'),
+            'time'=> $this->tripDate($this->trip_id , $this->stationFrom_id , $this->runTrip->startDate .' '. $this->runTrip->startTime)->format('h:i a'),
             'driver'=>@$this->runTrip->driver->name,
             'bus'=>@$this->runTrip->bus->code,
             'from'=>@$this->stationFrom->name,
