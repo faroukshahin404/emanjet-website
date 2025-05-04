@@ -1156,7 +1156,7 @@
             updateArrowDirection(); // استدعاء الوظيفة عند التحميل
         });
     </script>
-    <script>
+    {{-- <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Show the app download modal after a short delay
             setTimeout(function() {
@@ -1167,5 +1167,5 @@
                 localStorage.setItem('appModalShown', 'true');
             }, 500); // 1.5 second delay
         });
-    </script>
+    </script> --}}
 @endpush
