@@ -6,6 +6,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use App\Models\RunTrip;
 use App\Models\TripSeat;
 use App\Models\Line;
+use App\Models\TripStation;
 use Carbon\Carbon;
 
 class TripDetailsResource extends JsonResource
@@ -21,7 +22,7 @@ class TripDetailsResource extends JsonResource
         return [
             'id' => $this->id,
             'tripData_id' => $this->tripData_id,
-
+            'tripTime' => $this->getTripTime($this->id, $request->station_from_id),
             'pick_from_hotel' => true,
             'bus' => [
                 'length' => $this->tripData->busType->length,
@@ -58,5 +59,19 @@ class TripDetailsResource extends JsonResource
             }
         }
         return $handledSeats;
+    }
+    public function getTripTime($runTrip_id, $stationFrom_id = null)
+    {
+        $runTrip = RunTrip::find($runTrip_id);  
+
+        if($stationFrom_id == null){
+            return Carbon::parse( $runTrip->startDate . ' ' . $runTrip->startTime)->format('Y-m-d H:i:s');
+        }
+        $tripStation = TripStation::where([
+            'station_id' => $stationFrom_id,
+            'tripData_id' => $runTrip->tripData_id,
+        ])->first();
+
+        return Carbon::parse( $runTrip->startDate . ' ' . $runTrip->startTime)->addMinutes(@$tripStation->timeInMinutes ?? 0)->format('Y-m-d H:i:s');
     }
 }
