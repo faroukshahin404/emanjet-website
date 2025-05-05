@@ -24,8 +24,8 @@ Route::get('privacy-policy', [PublicServiceController::class, 'privacy_policy'])
 Route::get('usage-terms', [PublicServiceController::class, 'usage_terms']);
 Route::group(['prefix' => 'booking'], function () {
     Route::get('/search-trips', [PublicServiceController::class, 'search_trips']);
-    Route::get('trip-details', [PublicServiceController::class, 'trip_details']);
     Route::group(['middleware' => \App\Http\Middleware\ApiAuthMiddleware::class], function () {
+        Route::get('trip-details', [PublicServiceController::class, 'trip_details']);
         Route::post('/oneway-confirm-booking', [ConfirmBookingController::class, 'oneway_confirm_booking']);
         Route::post('/round-confirm-booking', [ConfirmBookingController::class, 'round_confirm_booking']);
     });
