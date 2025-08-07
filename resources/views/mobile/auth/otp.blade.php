@@ -64,7 +64,8 @@
 
 @push('scripts')
 <script>
-    const otpExpiresAt = {{ $otp->expires_at->timestamp }} * 1000;
+const otpExpiresAt = {{ $otp?->expires_at?->timestamp ?? 'null' }} * 1000;
+
 </script>
     <script>
        document.addEventListener('DOMContentLoaded', function() {

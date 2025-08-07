@@ -78,6 +78,7 @@ class AuthController extends Controller
     }
 
     // معالجة طلب إعادة تعيين كلمة المرور
+    // هنا المشكلة
     public function resetPassword(Request $request)
     {
         $request->validate([
@@ -89,7 +90,7 @@ class AuthController extends Controller
         if (!$user) {
             return redirect()->back()->with(['error' =>  __('User not found.')]);
         }
-
+      
         // إذا كان الطلب لإعادة إرسال OTP
         if ($request->ajax()) {
 
@@ -152,18 +153,20 @@ class AuthController extends Controller
 
         // إذا كان الطلب لعرض صفحة إعادة تعيين كلمة المرور
         $phone = session('reset_password_phone');
-
+ 
         // إذا كان الطلب لإدخال رقم الهاتف لأول مرة
         if ($request->has('phone') && !$phone) {
+         
             // التحقق من وجود المستخدم
             $user = User::where('mobile', $request->phone)->first();
+
             if (!$user) {
                 return redirect()->back()->withErrors(['phone' => __('User not found.')]);
             }
-
+         
             // إرسال OTP
             $otp = $this->authService->sendOtp($user);
-
+  
             if ($otp['success']) {
                 session([
                     'reset_password_phone' => $request->phone

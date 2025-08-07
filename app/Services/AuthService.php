@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\UserRegistered;
 use App\Models\User;
 use App\Models\Otp;
 use Carbon\Carbon;
@@ -9,6 +10,7 @@ use DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Log;
 
 
 
@@ -37,27 +39,33 @@ class AuthService
 
     public function registerUser($request)
     {
-        DB::beginTransaction();
-        $user = User::create([
-            'name' => $request->name,
-            'mobile' => $request->phone,
-            'password' => Hash::make($request->password),
-        ]);
-        $result = $this->sendOtp($user);
-        if (!$result['success']) {
-            DB::rollBack();
-        }
-        DB::commit();
-        return $result;
-    }
 
+        DB::beginTransaction();
+        try {
+            $user = User::create([
+                'name' => $request->name,
+                'mobile' => $request->phone,
+                'password' => Hash::make($request->password),
+            ]);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+        $this->sendOtp($user);
+        return ['success' => true, 'message' => 'تم التسجيل بنجاح'];
+    }
     public function sendOtp($user)
     {
         $userCanSendOtp = $this->checkIfUserCanSendOtp($user);
+ 
         if (!$userCanSendOtp['success']) {
             return $userCanSendOtp;
         }
-        $otp = $this->generateOtp();
+    
+        $otp = $this->generateOtp($user);
+        
+
         if (!$this->sendOtpUsingServiceProvider($user->mobile, $otp)) {
             return [
                 'success' => false,
@@ -166,7 +174,7 @@ class AuthService
 
     public function sendOtpUsingServiceProvider($receiver, $otp)
     {
-
+  
         $accountId = '550182041';
         $password = 'Vodafone.1';
         $secretKey = 'CA7FAB8B6A4146FFB66513E912D1DEF4';
@@ -205,7 +213,7 @@ class AuthService
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 
         $response = curl_exec($ch);
-
+        Log::info($response);
         if (curl_errno($ch)) {
             curl_close($ch);
             return false;
@@ -214,21 +222,19 @@ class AuthService
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
-        // if ($httpCode == 200 && strpos($response, '<Status>Success</Status>') !== false) {
-        //     return true;
-        // }
+
 
         return true;
 
     }
 
 
-    public function generateOtp()
+    public function generateOtp($user)
     {
         $otp = rand(1000, 9999);
-        while (Otp::where('otp', $otp)->exists()) {
-            $otp = rand(1000, 9999);
-        }
+       while (Otp::where('user_id', $user->id)->where('otp', $otp)->exists()) {
+    $otp = rand(1000, 9999);
+}
         return $otp;
     }
 
