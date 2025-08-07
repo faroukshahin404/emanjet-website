@@ -33,4 +33,5 @@ class ReservationBookingRequest extends Model
     public function payment()  {
         return $this->hasOne(PaymentDataSave::class, 'item_id', 'payment_key');
     }
+    
 } 

@@ -5,91 +5,56 @@
 @push('styles')
     <style>
         /* .hero-section::before {
-                background: linear-gradient(to right, #00000040, #00000040), url({{ $heroSection['image'] }});
-                transform: scaleX(1);
-            } */
-            .hero-section {
-        position: relative;
-        overflow: visible !important; /* Ensure no clipping of child elements */
-    }
+                        background: linear-gradient(to right, #00000040, #00000040), url({{ $heroSection['image'] }});
+                        transform: scaleX(1);
+                    } */
+        .hero-section {
+            position: relative;
+            overflow: visible !important;
+            /* Ensure no clipping of child elements */
+        }
 
-    .desktop-from-input-box {
-        position: relative;
-    }
+        .desktop-from-input-box {
+            position: relative;
+        }
 
-    .main-stations,
-    .sub-stations-dropdown {
-        position: absolute;
-        top: calc(100% + 5px); /* Extra spacing below the field */
-        left: 0;
-        width: 100%;
-        z-index: 9999;
-        background: white;
-        border-radius: 8px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        max-height: 250px;
-        overflow-y: auto; /* Scroll only if the list exceeds the height */
-        display: none; /* Hidden by default */
-    }
+        .main-stations,
+        .sub-stations-dropdown {
+            position: absolute;
+            top: calc(100% + 5px);
+            /* Extra spacing below the field */
+            left: 0;
+            width: 100%;
+            z-index: 9999;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            max-height: 250px;
+            overflow-y: auto;
+            /* Scroll only if the list exceeds the height */
+            display: none;
+            /* Hidden by default */
+        }
 
-    /* Show the list on interaction */
-    .desktop-from-input-box.show .main-stations,
-    .desktop-from-input-box.show .sub-stations-dropdown {
-        display: block;
-    }
+        /* Show the list on interaction */
+        .desktop-from-input-box.show .main-stations,
+        .desktop-from-input-box.show .sub-stations-dropdown {
+            display: block;
+        }
 
-    /* منع أي قص للقوائم */
-    .container-fluid, .row, .col-lg-5, .card, .card-body {
-        overflow: visible !important;
-    }
-
+        /* منع أي قص للقوائم */
+        .container-fluid,
+        .row,
+        .col-lg-5,
+        .card,
+        .card-body {
+            overflow: visible !important;
+        }
     </style>
 @endpush
 @section('content')
     <!-- App Download Modal -->
-    <div class="modal fade" id="appDownloadModal" tabindex="-1" aria-labelledby="appDownloadModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="appDownloadModalLabel">{{ __('Download Our App') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center">
-                    <div class="mb-4">
-                        <i class="fas fa-tags text-warning fa-2x mb-3"></i>
-                        <h4>{{ __('Get Exclusive Discounts!') }}</h4>
-                        <p>{{ __('Download the SuperJet app now and enjoy special offers on your trips') }}</p>
-                    </div>
-                    
-                    <div class="d-flex justify-content-center gap-3 mb-3">
-                        <a href="{{ $apps['android'] }}" target="_blank" class="google-play-box rounded-5 text-decoration-none">
-                            <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-3">
-                                <div class="google-play">
-                                    <p>{{ __('Get It On') }}</p>
-                                    <h6>{{ __('Google Play') }}</h6>
-                                </div>
-                                <img src="{{ asset('images/google-play-icon.png') }}" alt="google-play">
-                            </div>
-                        </a>
-                        
-                        {{-- Uncomment when iOS app is available --}}
-                        {{-- <a href="{{ $apps['ios'] }}" target="_blank" class="google-play-box rounded-5 text-decoration-none">
-                            <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-3">
-                                <div class="google-play">
-                                    <p>{{ __('Download On The') }}</p>
-                                    <h6>{{ __('App Store') }}</h6>
-                                </div>
-                                <i class="fa-brands fa-apple"></i>
-                            </div>
-                        </a> --}}
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Maybe Later') }}</button>
-                </div>
-            </div>
-        </div>
-    </div>
+
     <!-- End App Download Modal -->
 
     <!-- start hero section  -->
@@ -452,12 +417,8 @@
     </div>
 
     <!-- End blogs  -->
-
-
-    <!-- start footer  -->
-@endsection
- <!-- App Download Modal -->
-    <div class="modal fade" id="appDownloadModal" tabindex="-1" aria-labelledby="appDownloadModalLabel" aria-hidden="true">
+    <div class="modal fade" id="appDownloadModal" tabindex="-1" aria-labelledby="appDownloadModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -470,9 +431,10 @@
                         <h4>{{ __('Get Exclusive Discounts!') }}</h4>
                         <p>{{ __('Download the SuperJet app now and enjoy special offers on your trips') }}</p>
                     </div>
-                    
+
                     <div class="d-flex justify-content-center gap-3 mb-3">
-                        <a href="{{ $apps['android'] }}" target="_blank" class="google-play-box rounded-5 text-decoration-none">
+                        <a href="{{ $apps['android'] }}" target="_blank"
+                            class="google-play-box rounded-5 text-decoration-none">
                             <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-3">
                                 <div class="google-play">
                                     <p>{{ __('Get It On') }}</p>
@@ -481,7 +443,7 @@
                                 <img src="{{ asset('images/google-play-icon.png') }}" alt="google-play">
                             </div>
                         </a>
-                        
+
                         {{-- Uncomment when iOS app is available --}}
                         {{-- <a href="{{ $apps['ios'] }}" target="_blank" class="google-play-box rounded-5 text-decoration-none">
                             <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-3">
@@ -495,11 +457,62 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Maybe Later') }}</button>
+                    <button type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">{{ __('Maybe Later') }}</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- start footer  -->
+@endsection
+<!-- App Download Modal -->
+<div class="modal fade" id="appDownloadModal" tabindex="-1" aria-labelledby="appDownloadModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="appDownloadModalLabel">{{ __('Download Our App') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <div class="mb-4">
+                    <i class="fas fa-tags text-warning fa-2x mb-3"></i>
+                    <h4>{{ __('Get Exclusive Discounts!') }}</h4>
+                    <p>{{ __('Download the SuperJet app now and enjoy special offers on your trips') }}</p>
+                </div>
+
+                <div class="d-flex justify-content-center gap-3 mb-3">
+                    <a href="{{ $apps['android'] }}" target="_blank"
+                        class="google-play-box rounded-5 text-decoration-none">
+                        <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-3">
+                            <div class="google-play">
+                                <p>{{ __('Get It On') }}</p>
+                                <h6>{{ __('Google Play') }}</h6>
+                            </div>
+                            <img src="{{ asset('images/google-play-icon.png') }}" alt="google-play">
+                        </div>
+                    </a>
+
+                    {{-- Uncomment when iOS app is available --}}
+                    {{-- <a href="{{ $apps['ios'] }}" target="_blank" class="google-play-box rounded-5 text-decoration-none">
+                            <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-3">
+                                <div class="google-play">
+                                    <p>{{ __('Download On The') }}</p>
+                                    <h6>{{ __('App Store') }}</h6>
+                                </div>
+                                <i class="fa-brands fa-apple"></i>
+                            </div>
+                        </a> --}}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                    data-bs-dismiss="modal">{{ __('Maybe Later') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
 @include('mobile.home')
 @push('scripts')
     <script>
@@ -644,51 +657,51 @@
         });
     </script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const dateTextInput = document.getElementById('dateTextInput');
-        const dateRealInput = document.getElementById('dateRealInput');
-        const dateTextInput2 = document.getElementById('dateTextInput2');
-        const dateRealInput2 = document.getElementById('dateRealInput2');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateTextInput = document.getElementById('dateTextInput');
+            const dateRealInput = document.getElementById('dateRealInput');
+            const dateTextInput2 = document.getElementById('dateTextInput2');
+            const dateRealInput2 = document.getElementById('dateRealInput2');
 
-        const currentLang = '{{ app()->getLocale() }}';
-        const locale = currentLang === 'ar' ? 'ar-EG' : 'en-US';
+            const currentLang = '{{ app()->getLocale() }}';
+            const locale = currentLang === 'ar' ? 'ar-EG' : 'en-US';
 
-        function formatDate(date) {
-            const options = {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            };
-            return date.toLocaleDateString(locale, options);
-        }
+            function formatDate(date) {
+                const options = {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                };
+                return date.toLocaleDateString(locale, options);
+            }
 
-        function updateDisplayedDates(date) {
-            const formattedDate = formatDate(date);
-            dateTextInput.value = formattedDate;
-            dateTextInput2.value = formattedDate;
+            function updateDisplayedDates(date) {
+                const formattedDate = formatDate(date);
+                dateTextInput.value = formattedDate;
+                dateTextInput2.value = formattedDate;
 
-            dateRealInput2.value = date.toISOString().split('T')[0]; // تخزين التاريخ بصيغة input
-        }
+                dateRealInput2.value = date.toISOString().split('T')[0]; // تخزين التاريخ بصيغة input
+            }
 
-        const today = new Date();
-        updateDisplayedDates(today);
+            const today = new Date();
+            updateDisplayedDates(today);
 
-        dateTextInput2.addEventListener('click', () => dateRealInput2.showPicker());
-        dateTextInput.addEventListener('click', () => dateRealInput.showPicker());
+            dateTextInput2.addEventListener('click', () => dateRealInput2.showPicker());
+            dateTextInput.addEventListener('click', () => dateRealInput.showPicker());
 
-        dateRealInput.addEventListener('change', function() {
-            const selectedDate = new Date(this.value);
-            updateDisplayedDates(selectedDate);
+            dateRealInput.addEventListener('change', function() {
+                const selectedDate = new Date(this.value);
+                updateDisplayedDates(selectedDate);
+            });
+
+            dateRealInput2.addEventListener('change', function() {
+                const selectedDate = new Date(this.value);
+                updateDisplayedDates(selectedDate);
+            });
         });
-
-        dateRealInput2.addEventListener('change', function() {
-            const selectedDate = new Date(this.value);
-            updateDisplayedDates(selectedDate);
-        });
-    });
-</script>
+    </script>
 
 
 
@@ -1162,7 +1175,7 @@
             setTimeout(function() {
                 const appDownloadModal = new bootstrap.Modal(document.getElementById('appDownloadModal'));
                 appDownloadModal.show();
-                
+
                 // Store in localStorage that we've shown the modal
                 localStorage.setItem('appModalShown', 'true');
             }, 500); // 1.5 second delay

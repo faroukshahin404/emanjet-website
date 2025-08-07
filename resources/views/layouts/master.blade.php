@@ -5,6 +5,9 @@
 
 <body
     style="direction: {{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}; text-align: {{ app()->getLocale() === 'ar' ? 'right' : 'left' }}">
+    <div id="site-loader">
+        <div class="spinner"></div>
+    </div>
     <div class="custom-toastr-container"></div>
 
     <!-- Desktop View -->
@@ -27,6 +30,14 @@
     </div>
     @yield('includes')
 
+    <script>
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('site-loader');
+            if (loader) {
+                loader.classList.add('hidden');
+            }
+        });
+    </script>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>

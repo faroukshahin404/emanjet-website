@@ -2,6 +2,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <!-- Google Fonts -->
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{{asset('images/favicon/apple-touch-icon.png')}}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{asset('images/favicon/favicon-32x32.png')}}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{asset('images/favicon/favicon-16x16.png')}}">
+    <link rel="manifest" href="{{asset('images/favicon/site.webmanifest')}}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
@@ -17,9 +22,8 @@
     <!-- MDB CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css" rel="stylesheet">
     <!-- Favicon -->
-    <link rel="shortcut icon" href="{{ asset('/images/logo.png') }}" type="image/x-icon">
+    {{-- <link rel="shortcut icon" href="{{ asset('/images/logo.png') }}" type="image/x-icon"> --}}
     <!-- apple-touch-icon -->
-    <link rel="apple-touch-icon" href="{{ asset('/images/logo.png') }}">
     {{-- vendors styles  --}}
     <link rel="stylesheet" href="{{ asset('/css/vendors_css.css') }}">
     <!-- Custom CSS -->
@@ -58,4 +62,41 @@
     {{-- end Seo --}}
     @stack('styles')
     <title>Super Jet</title>
+    <style>
+        #site-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 99999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.4s ease;
+        }
+    
+        #site-loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+    
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #ddd;
+            border-top-color: #007bff; /* your primary color */
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+    
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+    
 </head>

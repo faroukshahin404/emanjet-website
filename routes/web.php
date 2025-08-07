@@ -14,6 +14,7 @@ use App\Http\Controllers\BusCategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OnewayMobileController;
 use App\Http\Controllers\OneWayTripController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RoundTripController;
 use App\Http\Controllers\RoundTripMobileController;
 use App\Http\Controllers\ProfileController;
@@ -36,7 +37,8 @@ Route::group([
     Route::get('/', [HomeController::class, 'home'])->name('home');
 
     Route::get('/home', [HomeController::class, 'home']);
-
+    Route::get('/payment/{payment_key}', [PaymentController::class, 'index'])->name('payment');
+    Route::post('/payment/confirm', [PaymentController::class, 'confirm'])->name('payment.confirm');
     // web.php
     Route::get('/get-cities', [HomeController::class, 'getCities']);
     Route::get('/get-stations/{city}', [HomeController::class, 'getStations']);
