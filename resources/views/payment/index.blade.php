@@ -78,15 +78,19 @@
 
         .payment-method {
             /* width: 50px; */
-            height: 50px;
-            border-radius: 10px;
+            height: 30px;
 
         }
     </style>
 @endpush
 
 @section('content')
-    @include('payment.qnb-payment-content')
+<div class="reservation-header">
+    <div class="container">
+        @include('payment.qnb-payment-content')
+
+    </div>
+</div>
 @endsection
 @section('mobile-content')
     @include('payment.qnb-payment-content')
