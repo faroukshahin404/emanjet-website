@@ -29,7 +29,7 @@ class OnewayConfirmBookingRequest extends FormRequest
             'station_to_id' => 'required|exists:stations,id',
             'seat_id' => 'required|array',
             'seat_id.*' => 'required|exists:trip_seats,id',
-            'payment_method' => 'required|in:fawry'
+            'payment_method' => 'required|in:fawry,qnb'
         ];
     }
     public function messages(): array

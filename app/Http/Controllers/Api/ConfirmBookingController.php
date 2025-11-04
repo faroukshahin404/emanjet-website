@@ -10,11 +10,11 @@ use App\Traits\FawryIntegration;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use App\Traits\QNBPaymentIntegration;
 class ConfirmBookingController extends Controller
 {
     protected $confirmBookingService;
-    use  FawryIntegration;
+    use  FawryIntegration, QNBPaymentIntegration;
 
 
     public function __construct(ConfirmBookingService $confirmBookingService)
@@ -28,7 +28,7 @@ class ConfirmBookingController extends Controller
 
             $ticket = $this->confirmBookingService->one_way_confirm_booking($request , 'application');
             if ($request->payment_method == 'fawry') {
-                $payment_link = $this->getPaymentLink($ticket->id, $ticket->total, $ticket->user_id, 1, asset('/'));
+                $payment_link = $this->getPaymentLink($ticket['payment_key'], $ticket['total'], $ticket['user_id'], 1, asset('/'));
 
                 DB::commit();
                 return response()->json([
@@ -37,6 +37,20 @@ class ConfirmBookingController extends Controller
                     'message' => 'Payment link generated successfully',
                     'data' => $ticket
                 ]);
+            } else if($request->payment_method == 'qnb'){
+                $payment = $this->initiateQNBPaymentLink([
+                    'amount' => $ticket['total'],
+                    'order_id' => $ticket['payment_key'],
+                ]);
+                if ($payment['success'] == true) {
+                    DB::commit();
+                    return response()->json([
+                        'status' => true,
+                        'payment_link' => $payment['url'],
+                        'message' => 'Payment link generated successfully',
+                        'data' => $ticket
+                    ]);
+                }
             } else {
                 DB::rollBack();
                 return response()->json([
@@ -62,7 +76,7 @@ class ConfirmBookingController extends Controller
             DB::beginTransaction();
             $ticket = $this->confirmBookingService->round_confirm_booking($request, 'application');
             if ($request->payment_method == 'fawry') {
-                $payment_link = $this->getPaymentLink($ticket->id, $ticket->total, $ticket->user_id, 1, asset('/'));
+                $payment_link = $this->getPaymentLink($ticket['payment_key'], $ticket['total'], $ticket['user_id'], 1, asset('/'));
                 DB::commit();
                 return response()->json([
                     'status' => true,
@@ -70,7 +84,21 @@ class ConfirmBookingController extends Controller
                     'message' => 'Payment link generated successfully',
                     'data' => $ticket
                 ]);
-            } else {
+            } else if($request->payment_method == 'qnb'){
+                $payment = $this->initiateQNBPaymentLink([
+                    'amount' => $ticket['total'],
+                    'order_id' => $ticket['payment_key'],
+                ]);
+                if ($payment['success'] == true) {
+                    DB::commit();
+                    return response()->json([
+                        'status' => true,
+                        'payment_link' => $payment['url'],
+                        'message' => 'Payment link generated successfully',
+                        'data' => $ticket
+                    ]);
+                }
+            }else {
                 DB::rollBack();
                 return response()->json([
                     'status' => false,

@@ -76,11 +76,18 @@
                         <div class="border rounded-8 px-3 py-3 mt-2">
                             <h4 class="text-black">{{ __('Choose Payment Method') }}</h4>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="payment_method" value="fawry" checked>
-                                <label class="form-check-label" for="fawry">
-                                    <img class="fawry-label-img" src="{{ asset('/images/pay/fawry.png') }}" alt="fawry">
+                                <input class="form-check-input" type="radio" name="payment_method" value="qnb" id="qnb" checked>
+                                <label class="form-check-label" for="qnb">
+                                    Debit/Credit card
                                 </label>
                             </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="payment_method" value="fawry"  id="fawry">
+                                <label class="form-check-label" for="fawry">
+                                    Fawry
+                                </label>
+                            </div>
+
                         </div>
 
                         <div class="mt-2 checkbox-rules">

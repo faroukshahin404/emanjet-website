@@ -14,12 +14,15 @@ use App\Traits\BookingTrait;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Traits\FawryIntegration;
+use App\Traits\{
+    FawryIntegration, 
+    QNBPaymentIntegration,
+};
 
 class OneWayTripController extends Controller
 {
     protected $confirmBookingService;
-    use BookingTrait, FawryIntegration;
+    use BookingTrait, FawryIntegration , QNBPaymentIntegration;
 
     public function __construct(ConfirmBookingService $confirmBookingService)
     {
@@ -121,12 +124,20 @@ class OneWayTripController extends Controller
             DB::beginTransaction();
             $ticket = $this->confirmBookingService->one_way_confirm_booking($request);
             if ($request->payment_method == 'fawry') {
-                $payment_link = $this->getPaymentLink($ticket->id, $ticket->total, $ticket->user_id, 1, asset('/'));
+                $payment_link = $this->getPaymentLink($ticket['payment_key'], $ticket['total'], $ticket['user_id'], 1, asset('/'));
                 DB::commit();
                 return redirect()->to($payment_link);
             } else {
-
-                return redirect()->back()->with('error', __('Incorrect payment method!'));
+                $payment = $this->initiateQNBPaymentLink([
+                    'amount' => $ticket['total'],
+                    'order_id' => $ticket['payment_key'],
+                ]);
+                if ($payment['success'] == true) {
+                    DB::commit();
+                    return redirect($payment['url']);
+                } else {
+                    return redirect()->back()->with('error', __('Payment failed'));
+                }
             }
         } catch (Exception $e) {
             DB::rollBack();

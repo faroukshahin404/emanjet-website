@@ -74,15 +74,22 @@
 
                             <div class="border rounded-8 px-3 py-3 mt-2">
                                 <h4 class="text-black">{{ __('Choose Payment Method') }}</h4>
-                                <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex flex-column gap-2  align-items-start" style="direction: ltr;">
                                     <div class="form-check">
-                                        <input class="form-check-input form-check-input-pay" type="radio"
-                                            name="payment_method" id="flexRadioDefault1" checked value="fawry">
-                                        <label class="form-check-label" for="flexRadioDefault1">
-                                            <img class="fawry-label-img" src="{{ asset('/images/pay/fawry.svg') }}"
-                                                alt="fawry">
+                                        <input class="form-check-input form-check-input-pay"  checked type="radio"
+                                            name="payment_method" id="flexRadioDefault2" value="qnb">
+                                        <label class="form-check-label" for="flexRadioDefault2">
+                                            Debit/Credit card
                                         </label>
                                     </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input form-check-input-pay" type="radio"
+                                            name="payment_method" id="flexRadioDefault1"  value="fawry">
+                                        <label class="form-check-label" for="flexRadioDefault1">
+                                            Fawry
+                                        </label>
+                                    </div>
+                                   
                                 </div>
                             </div>
 
@@ -136,7 +143,8 @@
                     if (this.checked) {
                         if ((count + 1) > numberOfSeats.value) {
                             alert(
-                                `{{ __('You cannot select more seats than') }} ${numberOfSeats.value}`);
+                                `{{ __('You cannot select more seats than') }} ${numberOfSeats.value}`
+                            );
                             this.checked = false;
                             return;
                         }

@@ -14,10 +14,10 @@ use Illuminate\Support\Facades\Log;
 
 trait QNBPaymentIntegration
 {
-    protected $qnbBaseUrl = 'https://qnbalahli.test.gateway.mastercard.com/api/rest/version/67/merchant/';
-    protected $qnbMerchantId = 'TESTQNBAATEST001';
-    protected $qnbUserName = 'merchant.TESTQNBAATEST001';
-    protected $qnbPassword = '9c6a123857f1ea50830fa023ad8c8d1b';
+    protected $qnbBaseUrl = 'https://qnbalahli.gateway.mastercard.com/api/rest/version/67/merchant/';
+    protected $qnbMerchantId = 'SUPERJETPL';
+    protected $qnbUserName = 'merchant.SUPERJETPL';
+    protected $qnbPassword = '79505d7ceb2c0e29674ce461a83871b8';
     // url and logo image
     protected $qnbUrl = 'https://www.superjet.com.eg/ar';
     protected $qnbLogo = 'https://www.superjet.com.eg/images/logo.png';
@@ -76,7 +76,6 @@ trait QNBPaymentIntegration
                 'status' => $response->status(),
             ];
         } catch (\Exception $e) {
-            dd($e);
             // Log::error('QNB Payment Error', ['message' => $e->getMessage()]);
 
             return [

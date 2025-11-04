@@ -445,7 +445,7 @@
                         </a>
 
                         {{-- Uncomment when iOS app is available --}}
-                        {{-- <a href="{{ $apps['ios'] }}" target="_blank" class="google-play-box rounded-5 text-decoration-none">
+                        <a href="{{ $apps['ios'] }}" target="_blank" class="google-play-box rounded-5 text-decoration-none">
                             <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-3">
                                 <div class="google-play">
                                     <p>{{ __('Download On The') }}</p>
@@ -453,7 +453,7 @@
                                 </div>
                                 <i class="fa-brands fa-apple"></i>
                             </div>
-                        </a> --}}
+                        </a>
                     </div>
                 </div>
                 <div class="modal-footer">

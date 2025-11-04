@@ -108,17 +108,22 @@
 
             <div class="border rounded-8 px-3 py-3 mt-2">
                 <h4 class="text-black">{{ __('Choose Payment Method') }}</h4>
-                <div class="d-flex flex-column justify-content-end align-items-end gap-2">
-
-                    <div class="form-check">
-                        <input class="form-check-input form-check-input-pay" type="radio" name="payment_method"
-                            value="fawry" id="flexRadioDefault1" checked>
-                        <label class="form-check-label" for="flexRadioDefault1">
-                            <img class="fawry-label-img" src="{{ asset('images/pay/fawry.svg') }}" alt="fawry">
-                        </label>
-                    </div>
-
+                <div class="form-check">
+                    <input class="form-check-input form-check-input-pay" type="radio" name="payment_method"
+                        value="qnb" id="qnb" checked>
+                    <label class="form-check-label" for="qnb">
+                        Debit/Credit card
+                    </label>
                 </div>
+                <br>
+                <div class="form-check">
+                    <input class="form-check-input form-check-input-pay" type="radio" name="payment_method"
+                        value="fawry" id="flexRadioDefault1">
+                    <label class="form-check-label" for="flexRadioDefault1">
+                        Fawry
+                    </label>
+                </div>
+                
             </div>
 
             <div class="mt-4">
@@ -143,4 +148,17 @@
 
         </div>
     </form>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var form = document.querySelector('form[action="{{ route('one-way.confirm-booking') }}"]');
+            if (!form) return;
+            form.addEventListener('submit', function () {
+                var submitButton = form.querySelector('button[type="submit"]');
+                if (submitButton) {
+                    submitButton.disabled = true;
+                    submitButton.classList.add('disabled');
+                }
+            });
+        });
+    </script>
 @endsection

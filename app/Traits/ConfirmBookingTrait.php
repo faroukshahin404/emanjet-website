@@ -31,16 +31,14 @@ trait ConfirmBookingTrait
             $total = $line->priceGo * count($seats);
             $subTotal = $line->priceGo * count($seats);
         }else{
-            $roundtrip = RunTrip::find($round_trip_id);
-            $roundLine = Line::where([
-                'from_id' => $stationTo_id,
-                'to_id' => $stationFrom_id,
-                'tripData_id' => $roundtrip->tripData_id,
-            ])->first();
-            $total = ($roundLine->priceBack - $roundLine->priceGo) * count($seats);
-            $subTotal = ($roundLine->priceBack - $roundLine->priceGo) * count($seats);
-            $total += $line->priceGo * count($seats);
-            $subTotal += $line->priceGo * count($seats);
+            if($payment_key){
+            $total = ($line->priceBack - $line->priceGo) * count($seats);
+            $subTotal = ($line->priceBack - $line->priceGo) * count($seats);
+            }else{
+                $total = $line->priceBack * count($seats);
+                $subTotal = $line->priceBack * count($seats); 
+            }
+            
         }
         
 
@@ -64,6 +62,7 @@ trait ConfirmBookingTrait
             'office_id' => 225,
             'payment_type' => 7,
             'reserv_type' => 'NEW',
+            'payment_method' => $payment_method,
             'pos' =>$pos,
             'type'=>$trip_type,
             'passenger_type'=>1,

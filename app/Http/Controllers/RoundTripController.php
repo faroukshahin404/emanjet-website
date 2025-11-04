@@ -13,10 +13,11 @@ use App\Traits\FawryIntegration;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Traits\QNBPaymentIntegration;
 
 class RoundTripController extends Controller
 {
-    use BookingTrait, FawryIntegration;
+    use BookingTrait, FawryIntegration, QNBPaymentIntegration;
     public function __construct(private ConfirmBookingService $confirmBookingService)
     {
     }
@@ -91,6 +92,22 @@ class RoundTripController extends Controller
             'back_date' => 'required|date|after_or_equal:go_date',
             'selected_go_trip_id' => 'required|exists:run_trips,id',
             'selected_back_trip_id' => 'required|exists:run_trips,id',
+        ], [
+            'city_from_id.exists' => __('City From is required'),
+            'city_to_id.exists' => __('City To is required'),
+            'station_from_id.exists' => __('Station From is required'),
+            'station_to_id.exists' => __('Station To is required'),
+            'seats.required' => __('Seats are required'),
+            'go_date.required' => __('Go Date is required'),
+            'go_date.date' => __('Go Date must be a valid date'),
+            'go_date.after_or_equal' => __('Go Date must be today or later'),
+            'back_date.required' => __('Back Date is required'),
+            'back_date.date' => __('Back Date must be a valid date'),
+            'back_date.after_or_equal' => __('Back Date must be today or later'),
+            'selected_go_trip_id.required' => __('Go Trip is required'),
+            'selected_go_trip_id.exists' => __('Go Trip is invalid'),
+            'selected_back_trip_id.required' => __('Back Trip is required'),
+            'selected_back_trip_id.exists' => __('Back Trip is invalid'),
         ]);
 
         // بيانات المدن والمحطات
@@ -139,12 +156,20 @@ class RoundTripController extends Controller
             DB::beginTransaction();
             $ticket = $this->confirmBookingService->round_confirm_booking($request);
             if ($request->payment_method == 'fawry') {
-                $payment_link = $this->getPaymentLink($ticket->id, $ticket->total, $ticket->user_id, 1, asset('/'));
+                $payment_link = $this->getPaymentLink($ticket['payment_key'], $ticket['total'], $ticket['user_id'], 1, asset('/'));
                 DB::commit();
                 return redirect()->to($payment_link);
             } else {
-
-                return redirect()->back()->with('error', __('Incorrect payment method!'));
+                $payment = $this->initiateQNBPaymentLink([
+                    'amount' => $ticket['total'],
+                    'order_id' => $ticket['payment_key'],
+                ]);
+                if ($payment['success'] == true) {
+                    DB::commit();
+                    return redirect($payment['url']);
+                } else {
+                    return redirect()->back()->with('error', __('Payment failed'));
+                }
             }
         } catch (Exception $e) {
             DB::rollBack();

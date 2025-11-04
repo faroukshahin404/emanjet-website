@@ -34,7 +34,7 @@ class RoundConfirmBookingRequest extends FormRequest
             'go_seat_id.*' => 'required|exists:trip_seats,id',
             'round_seat_id' => 'required|array',
             'round_seat_id.*' => 'required|exists:trip_seats,id',
-            'payment_method' => 'required|in:fawry'
+            'payment_method' => 'required|in:fawry,qnb'
         ];
     }
 
