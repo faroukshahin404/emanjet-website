@@ -79,12 +79,17 @@
                                 <input class="form-check-input" type="radio" name="payment_method" value="qnb" id="qnb" checked>
                                 <label class="form-check-label" for="qnb">
                                     Debit/Credit card
+                                    <img src="{{ asset('images/pay/master.png') }}" alt="Mastercard" style="height: 30px;">
+                                    <img src="{{ asset('images/pay/visa.png') }}" alt="Mastercard" style="height: 30px;">
+                                
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="payment_method" value="fawry"  id="fawry">
                                 <label class="form-check-label" for="fawry">
                                     Fawry
+                                    <img src="{{ asset('images/pay/fawry.svg') }}" alt="Fawry" style="height: 30px;">
+
                                 </label>
                             </div>
 

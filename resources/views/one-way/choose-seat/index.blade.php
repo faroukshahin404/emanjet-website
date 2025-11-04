@@ -80,6 +80,8 @@
                                             name="payment_method" id="flexRadioDefault2" value="qnb">
                                         <label class="form-check-label" for="flexRadioDefault2">
                                             Debit/Credit card
+                                            <img src="{{ asset('images/pay/master.png') }}" alt="Mastercard" style="height: 30px;">
+                                            <img src="{{ asset('images/pay/visa.png') }}" alt="Mastercard" style="height: 30px;">
                                         </label>
                                     </div>
                                     <div class="form-check">
@@ -87,6 +89,7 @@
                                             name="payment_method" id="flexRadioDefault1"  value="fawry">
                                         <label class="form-check-label" for="flexRadioDefault1">
                                             Fawry
+                                            <img src="{{ asset('images/pay/fawry.svg') }}" alt="Fawry" style="height: 30px;">
                                         </label>
                                     </div>
                                    

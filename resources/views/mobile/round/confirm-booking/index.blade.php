@@ -149,6 +149,9 @@
                         value="qnb" id="qnb" checked>
                     <label class="form-check-label" for="qnb">
                         Debit/Credit card
+                        <img src="{{ asset('images/pay/master.png') }}" alt="Mastercard" style="height: 30px;">
+                        <img src="{{ asset('images/pay/visa.png') }}" alt="Mastercard" style="height: 30px;">
+                    
                     </label>
                 </div>
                 <br>
@@ -157,6 +160,7 @@
                         value="fawry" id="flexRadioDefault1">
                     <label class="form-check-label" for="flexRadioDefault1">
                         Fawry
+                        <img src="{{ asset('images/pay/fawry.svg') }}" alt="Fawry" style="height: 30px;">
                     </label>
                 </div>
                 

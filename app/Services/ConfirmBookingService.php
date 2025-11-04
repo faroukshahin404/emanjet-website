@@ -37,10 +37,11 @@ class ConfirmBookingService
                     pos: $pos
                 );
             }
+        
             return [
                 'total' => $parent->total,
                 'payment_key' => $parent->id,
-                'user_id' => Auth::user()->id,
+                'user_id' => $parent->user_id,
             ];
         } else {
             $paymentKey = $this->generateUniqueId();
@@ -57,10 +58,11 @@ class ConfirmBookingService
                 );
             }
             $total = ReservationBookingRequest::where('payment_key', $paymentKey)->sum('total');
+           $ticket = ReservationBookingRequest::where('payment_key', $paymentKey)->first();
             return [
                 'total' => $total,
                 'payment_key' => $paymentKey,
-                'user_id' => Auth::user()->id,
+                'user_id' => $ticket->user_id,
             ];
         }
     }
@@ -119,7 +121,7 @@ class ConfirmBookingService
             return [
                 'total' => $parent->total,
                 'payment_key' => $parent->id,
-                'user_id' => Auth::user()->id,
+                'user_id' => $parent->user_id,
             ];
         }else if($request->payment_method == 'qnb'){
             $paymentKey = $this->generateUniqueId();
@@ -150,10 +152,11 @@ class ConfirmBookingService
                 );
             }
             $total = ReservationBookingRequest::where('payment_key', $paymentKey)->sum('total');
+            $ticket = ReservationBookingRequest::where('payment_key', $paymentKey)->first();
             return [
                 'total' => $total,
                 'payment_key' => $paymentKey,
-                'user_id' => Auth::user()->id,
+                'user_id' => $ticket->user_id,
             ];
         }
     }
