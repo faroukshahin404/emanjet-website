@@ -16,13 +16,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Traits\{
     FawryIntegration, 
-    QNBPaymentIntegration,
 };
+use App\Services\QNBPaymentService;
 
 class OneWayTripController extends Controller
 {
     protected $confirmBookingService;
-    use BookingTrait, FawryIntegration , QNBPaymentIntegration;
+    use BookingTrait, FawryIntegration;
 
     public function __construct(ConfirmBookingService $confirmBookingService)
     {
@@ -128,7 +128,8 @@ class OneWayTripController extends Controller
                 DB::commit();
                 return redirect()->to($payment_link);
             } else {
-                $payment = $this->initiateQNBPaymentLink([
+                $qnbPaymentService = new QNBPaymentService('web');
+                $payment = $qnbPaymentService->initiateQNBPaymentLink([
                     'amount' => $ticket['total'],
                     'order_id' => $ticket['payment_key'],
                 ]);

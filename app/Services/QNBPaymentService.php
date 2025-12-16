@@ -1,19 +1,11 @@
 <?php
 
-namespace App\Traits;
-
-use App\Models\BookingSeat;
-use App\Models\Les;
-use App\Models\PaymentDataSave;
-use App\Models\ReservationBookingRequest;
-use App\Models\ThrowError;
+namespace App\Services;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
-
-trait QNBPaymentIntegration
+class QNBPaymentService
 {
+
     protected $qnbBaseUrl = 'https://qnbalahli.gateway.mastercard.com/api/rest/version/67/merchant/';
     protected $qnbMerchantId = 'SUPERJETPL';
     protected $qnbUserName = 'merchant.SUPERJETPL';
@@ -22,7 +14,26 @@ trait QNBPaymentIntegration
     protected $qnbUrl = 'https://www.superjet.com.eg/ar';
     protected $qnbLogo = 'https://www.superjet.com.eg/images/logo.png';
 
-    public function initiateQNBPaymentLink(array $data)
+    public function __construct($source ='system'){
+        
+        if($source == 'web'){
+            $this->qnbMerchantId = "SUPERJET1";
+            $this->qnbUserName = "merchant.SUPERJET1";
+            $this->qnbPassword = "cc199a764f6d412b39c09ae95848f9c5";
+        } else if($source =='app'){
+            $this->qnbMerchantId = "SUPERJET2";
+            $this->qnbUserName = "merchant.SUPERJET2";
+            $this->qnbPassword = "e04fd3cc7be001b77a4291ab99ebcc3a";
+        }else {
+            $this->qnbMerchantId = $qnbMerchantId ?? $this->qnbMerchantId;
+            $this->qnbUserName = $qnbUserName ?? $this->qnbUserName;
+            $this->qnbPassword = $qnbPassword ?? $this->qnbPassword;
+           
+        } 
+      
+    }
+
+    public  function initiateQNBPaymentLink(array $data)
     {
         $url = $this->qnbBaseUrl . $this->qnbMerchantId . '/session';
 
@@ -85,8 +96,5 @@ trait QNBPaymentIntegration
             ];
         }
     }
-  
 
-    
-   
 }

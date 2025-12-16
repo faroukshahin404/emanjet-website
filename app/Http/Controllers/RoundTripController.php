@@ -13,11 +13,10 @@ use App\Traits\FawryIntegration;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Traits\QNBPaymentIntegration;
-
+use App\Services\QNBPaymentService;
 class RoundTripController extends Controller
 {
-    use BookingTrait, FawryIntegration, QNBPaymentIntegration;
+    use BookingTrait, FawryIntegration;
     public function __construct(private ConfirmBookingService $confirmBookingService)
     {
     }
@@ -160,7 +159,8 @@ class RoundTripController extends Controller
                 DB::commit();
                 return redirect()->to($payment_link);
             } else {
-                $payment = $this->initiateQNBPaymentLink([
+                $qnbPaymentService = new QNBPaymentService('web');
+                $payment = $qnbPaymentService->initiateQNBPaymentLink([
                     'amount' => $ticket['total'],
                     'order_id' => $ticket['payment_key'],
                 ]);

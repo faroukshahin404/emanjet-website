@@ -16,6 +16,15 @@ class HomeController extends Controller
 {
     public function home()
     {
+     
+        $qnbPaymentService = new \App\Services\QNBPaymentService('app');
+                
+                $payment = $qnbPaymentService->initiateQNBPaymentLink([
+                    'amount' => 100,
+                    'order_id' => 1234567890,
+                ]);
+                
+
         $stations = Station::where('available_online', 1)->get();
         $cities = City::available()->orderBy('rank')->get();
         $page = Page::where('slug', 'home')->first();

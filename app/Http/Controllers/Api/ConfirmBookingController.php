@@ -10,11 +10,11 @@ use App\Traits\FawryIntegration;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Traits\QNBPaymentIntegration;
+use App\Services\QNBPaymentService;
 class ConfirmBookingController extends Controller
 {
     protected $confirmBookingService;
-    use  FawryIntegration, QNBPaymentIntegration;
+    use  FawryIntegration;
 
 
     public function __construct(ConfirmBookingService $confirmBookingService)
@@ -38,7 +38,9 @@ class ConfirmBookingController extends Controller
                     'data' => $ticket
                 ]);
             } else if($request->payment_method == 'qnb'){
-                $payment = $this->initiateQNBPaymentLink([
+                $qnbPaymentService = new QNBPaymentService('app');
+
+                $payment = $qnbPaymentService->initiateQNBPaymentLink([
                     'amount' => $ticket['total'],
                     'order_id' => $ticket['payment_key'],
                 ]);
@@ -85,7 +87,8 @@ class ConfirmBookingController extends Controller
                     'data' => $ticket
                 ]);
             } else if($request->payment_method == 'qnb'){
-                $payment = $this->initiateQNBPaymentLink([
+                $qnbPaymentService = new QNBPaymentService('app');
+                $payment = $qnbPaymentService->initiateQNBPaymentLink([
                     'amount' => $ticket['total'],
                     'order_id' => $ticket['payment_key'],
                 ]);
