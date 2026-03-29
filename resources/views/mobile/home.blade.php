@@ -1,216 +1,262 @@
 @section('mobile-content')
     @include('mobile.layouts.header')
 
-    <div class="search-trip">
-        <form action="{{ route('mobile.one-way.trips') }}" method="get" id="search-form">
+    <div class="search-trip px-3 mt-3">
+        <form action="{{ route('mobile.one-way.trips') }}" method="get" id="search-form"
+            class="bg-white rounded-5 shadow-sm p-3">
             <!-- start trip type -->
-            <div class="trip-type bg-white  mt-3 d-flex justify-content-between align-items-center p-3">
-                <div class="form-check">
-                    <input class="form-check-input form-check-input-pay" type="radio" name="tripType" id="oneWayRadio"
-                        value="oneway" checked>
-                    <label class="form-check-label" for="oneWayRadio">
-                        {{ __('One Way Trip') }}
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input form-check-input-pay" type="radio" name="tripType" id="roundTripRadio"
-                        value="round">
-                    <label class="form-check-label" for="roundTripRadio">
-                        {{ __(key: 'Round Trip') }}
-                    </label>
-                </div>
-                <div class="special-offer">
-                    {{ __(key: 'Special Discount') }}
+            <div class="text-center mb-4">
+                <div class="trip-type-tabs nav nav-pills d-inline-flex w-100 p-1 mo-trip-type-container">
+                    <div class="nav-item flex-fill" role="presentation">
+                        <button class="nav-link active w-100 py-2 fw-bold mo-trip-type-nav-link" id="pills-oneway-tab-mo"
+                            data-bs-toggle="pill" type="button" role="tab"
+                            onclick="document.getElementById('oneWayRadio').click()">{{ __('One Way Trip') }}</button>
+                    </div>
+                    <div class="nav-item flex-fill" role="presentation">
+                        <button class="nav-link w-100 py-2 fw-bold mo-trip-type-nav-link" id="pills-round-tab-mo"
+                            data-bs-toggle="pill" type="button" role="tab"
+                            onclick="document.getElementById('roundTripRadio').click()">{{ __('Round Trip') }}</button>
+                    </div>
+                    <!-- Hidden radios for JS compatibility -->
+                    <input class="d-none" type="radio" name="tripType" id="oneWayRadio" value="oneway" checked>
+                    <input class="d-none" type="radio" name="tripType" id="roundTripRadio" value="round">
                 </div>
             </div>
             <!-- End trip type -->
 
             <!-- start from to  -->
-            <div class="form-to border rounded-7 px-3 py-3 mt-3">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <div class="d-flex align-items-center gap-2" id="from-container">
-                            <i class="fas fa-location-dot from-icon"></i>
-                            <label for="from-input">{{ __('From') }}</label>
-                            <input type="hidden" id="from-input" class="from-input">
-                            <span class="selected-location" id="from-location">
-                                {{ $cities[0]->stations[0]->name }}
-                            </span>
+            <div class="station-group mb-4">
+                <div class="form-to border-0 rounded-4 px-3 py-3 mo-station-group-bg">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="flex-grow-1">
+                            <div class="d-flex align-items-center gap-4 py-3" id="from-container" style="cursor: pointer;">
+                                <div
+                                    class="bg-white rounded-circle shadow-sm d-flex align-items-center justify-content-center mo-location-icon-box">
+                                    <i class="fas fa-location-dot text-main"></i>
+                                </div>
+                                <div>
+                                    <div class="text-muted small mb-1">{{ __('From') }}</div>
+                                    <span class="selected-location fw-bold fs-6" id="from-location">
+                                        {{ $cities->get(0)?->stations?->first()?->name ?? '' }}
+                                    </span>
+                                </div>
+                            </div>
+                            <hr class="my-0 opacity-10">
+                            <div class="d-flex align-items-center gap-4 py-3" id="to-container" style="cursor: pointer;">
+                                <div
+                                    class="bg-white rounded-circle shadow-sm d-flex align-items-center justify-content-center mo-location-icon-box">
+                                    <i class="fas fa-circle-dot text-success"></i>
+                                </div>
+                                <div>
+                                    <div class="text-muted small mb-1">{{ __('To') }}</div>
+                                    <span class="selected-location fw-bold fs-6" id="to-location">
+                                        {{ $cities->get(1)?->stations?->first()?->name ?? '' }}
+                                    </span>
+                                </div>
+                            </div>
                         </div>
-                        <hr>
-                        <div class="d-flex align-items-center gap-2" id="to-container">
-                            <i class="fas fa-circle-dot to-icon"></i>
-                            <label for="to-input">{{ __('To') }}</label>
-                            <input type="hidden" id="to-input" class="to-input">
-                            <span class="selected-location" id="to-location">
-                                {{ $cities[1]->stations[0]->name }}
-                            </span>
-                        </div>
+                        <button type="button" id="swap-btn"
+                            class="mo-swap-btn bg-white shadow-sm border rounded-circle d-flex align-items-center justify-content-center ms-3">
+                            <i class="fas fa-exchange-alt fa-rotate-90"></i>
+                        </button>
                     </div>
-                    <button type="button" class="swap-btn bg-transparent border-0" aria-label="تبديل الوجهات"
-                        id="swap-btn">
-                        <img src="{{ asset('images/mobile/swap.png') }}" alt="swap">
+                </div>
+            </div>
+
+            <input type="hidden" id="from-input" class="from-input">
+            <input type="hidden" id="to-input" class="to-input">
+            <input type="hidden" id="from-city" name="city_from_id" value="{{ $cities->get(0)?->id ?? '' }}">
+            <input type="hidden" id="to-city" name="city_to_id" value="{{ $cities->get(1)?->id ?? '' }}">
+            <input type="hidden" id="from-station" name="station_from_id" value="{{ $cities->get(0)?->stations?->first()?->id ?? '' }}">
+            <input type="hidden" id="to-station" name="station_to_id" value="{{ $cities->get(1)?->stations?->first()?->id ?? '' }}">
+
+            <!-- Start date and passenger numer -->
+            <div class="date-passenger mt-3">
+                <div class="row g-3" id="tripLayoutContainer">
+                    <input class="form-control border-0 rounded-4 py-2 mo-bg-gray" type="text" readonly
+                        id="departureDateDisplay" value="{{ date('d / m / Y') }}"
+                        onclick="openDateWheelPicker('departureDateDisplay', 'departureDate')">
+                    <input type="hidden" name="go_date" id="departureDate" value="{{ date('Y-m-d') }}">
+                </div>
+            </div>
+
+            <div class="col-6" id="passengersColSide">
+                <label class="small text-muted mb-1">{{ __('Passengers') }}</label>
+                <div class="d-flex justify-content-between align-items-center rounded-4 py-1 px-2 mo-bg-gray">
+                    <button type="button" class="btn btn-sm btn-white shadow-sm rounded-circle p-0 mo-passenger-count-btn"
+                        onclick="decrementPassengers()">
+                        <i class="fa fa-minus x-small"></i>
+                    </button>
+                    <span class="fw-bold" id="passengerCount">1</span>
+                    <input type="hidden" id="passenger-count" name="seats" value="1">
+                    <button type="button"
+                        class="btn btn-sm btn-white shadow-sm rounded-circle p-0 mo-passenger-count-btn"
+                        onclick="incrementPassengers()">
+                        <i class="fa fa-plus x-small"></i>
                     </button>
                 </div>
             </div>
-            <input type="hidden" id="from-city" name="city_from_id" value="{{ $cities[0]->id }}">
-            <input type="hidden" id="to-city" name="city_to_id" value="{{ $cities[1]->id }}">
-            <input type="hidden" id="from-station" name="station_from_id" value="{{ $cities[0]->stations[0]->id }}">
-            <input type="hidden" id="to-station" name="station_to_id" value="{{ $cities[1]->stations[0]->id }}">
-            <!-- Start date and passenger numer -->
-            <div class="date-passenger mt-3">
-                <div class="row g-2" id="tripLayoutContainer">
-                    <div class="col-md-6 d-flex flex-column" id="departureDateCol">
-                        <label>
-                            <span>{{ __('Date') }}</span>
-                            <i class="fa fa-calendar mx-1"></i>
-                        </label>
-                        @php
-                            $go_date = date('Y-m-d');
-                            $return_date = date('Y-m-d', strtotime('+1 day'));
-                        @endphp
-                        <input class="form-control rounded-6" type="date" name="go_date" id="departureDate"
-                            value="{{ $go_date }}">
-                    </div>
 
-                    <div class="col-md-6" id="passengersColSide">
-                        <div class="d-flex flex-column w-100 h-100 justify-content-end">
-                            <label>
-                                <span>{{ __('Passengers') }}</span>
-                                <i class="fa fa-user mx-1"></i>
-                            </label>
-                            <div class="d-flex justify-content-center align-items-center border rounded-6 p-1">
-                                <button type="button" class="border passenger-btn plus-btn"
-                                    onclick="decrementPassengers()">
-                                    <i class="fa fa-minus"></i>
-                                </button>
-                                <span class="mx-3" id="passengerCount">1</span>
-                                <input type="hidden" id="passenger-count" name="seats" value="1">
-                                <button type="button" class="passenger-btn minus-btn" onclick="incrementPassengers()">
-                                    <i class="fa fa-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+            <div class="col-6 d-none" id="returnDateCol">
+                <label class="small text-muted mb-1">{{ __('Return Date') }}</label>
+                <input class="form-control border-0 rounded-4 py-2 mo-bg-gray" type="text" readonly
+                    id="returnDateDisplay" value="{{ date('d / m / Y', strtotime('+1 day')) }}"
+                    onclick="openDateWheelPicker('returnDateDisplay', 'returnDate')">
+                <input type="hidden" name="back_date" id="returnDate"
+                    value="{{ date('Y-m-d', strtotime('+1 day')) }}">
+            </div>
 
-                    <div class="col-md-6 d-none" id="returnDateCol">
-                        <div class="d-flex flex-column">
-                            <label>
-                                <span> {{ __('Return Date') }}</span>
-                                <i class="fa fa-calendar mx-1"></i>
-                            </label>
-                            <input class="form-control rounded-6" type="date" name="back_date" id="returnDate"
-                                value="{{ $return_date }}">
-                        </div>
-                    </div>
-
-                    <div class="col-12 d-none" id="passengersColBottom">
-                        <div class="d-flex flex-column w-100">
-                            <label>
-                                <span>{{ __('Passengers') }}</span>
-                                <i class="fa fa-user mx-1"></i>
-                            </label>
-                            <div class="d-flex justify-content-center align-items-center border rounded-6 p-1">
-                                <button type="button" class="border passenger-btn" onclick="decrementPassengers2()">
-                                    <i class="fa fa-minus"></i>
-                                </button>
-                                <span class="mx-3" id="passengerCount2">1</span>
-                                <input type="hidden" id="passenger-count2" name="seats" value="1">
-                                <button type="button" class="passenger-btn" onclick="incrementPassengers2()">
-                                    <i class="fa fa-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
+            <div class="col-12 d-none" id="passengersColBottom">
+                <label class="small text-muted mb-1">{{ __('Passengers') }}</label>
+                <div class="d-flex justify-content-between align-items-center rounded-4 py-2 px-3 mo-bg-gray">
+                    <button type="button" class="btn btn-white shadow-sm rounded-circle mo-btn-32"
+                        onclick="decrementPassengers2()">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                    <span class="fw-bold fs-5" id="passengerCount2">1</span>
+                    <input type="hidden" id="passenger-count2" name="seats" value="1">
+                    <button type="button" class="btn btn-white shadow-sm rounded-circle mo-btn-32"
+                        onclick="incrementPassengers2()">
+                        <i class="fa fa-plus"></i>
+                    </button>
                 </div>
             </div>
-            <!-- End date and passenger numer -->
 
-            <div class=" d-flex justify-content-center align-items-center mt-3">
-                <button class="search-btn">
-                    <span>{{ __('Search For Trips') }}</span>
-                </button>
-            </div>
+    </div>
+    </div>
 
-        </form>
+    <div class="mt-4">
+        <button type="submit" class="hero-btn w-100 rounded-4 py-3 border-0">
+            <i class="fas fa-search me-2"></i>
+            {{ __('Search For Trips') }}
+        </button>
+    </div>
+    </form>
     </div>
 
     <!-- End promo  -->
 
-    <!-- start new places  -->
-    <div class="new-places mt-3">
-        <h2 class="text-black mb-1">
-            {{ __('Explore the Most Popular Destinations ') }}
+    <!-- start new places (Explore the Most Popular Destinations) -->
+    <div class="new-places new-places-mobile mt-3 pb-5 mb-5">
+        <h2 class="new-places-title text-black mb-3">
+            {{ $popularDestinationsSection['title'] }}
         </h2>
-        <div class="swiper mySwiper4">
+        <div class="swiper new-places-swiper" id="newPlacesSwiperMobile">
             <div class="swiper-wrapper">
-
                 @foreach ($cities as $city)
+                    @php
+                        $cityPhoto = $city->getRawOriginal('image');
+                        $hasCityPhoto =
+                            filled($cityPhoto) && is_file(public_path('uploads/city/' . $cityPhoto));
+                        $cityName = $city->getTranslation('name', app()->getLocale());
+                    @endphp
                     <div class="swiper-slide">
-                        <a href="{{ route('home', ['city_to_id' => $city->id]) }}#heroSection" class="reserve">
-                            <img src="{{ $city->image }}" alt="city" style="border-radius: 10px;"
-                                onerror="this.src='https://www.touristegypt.com/wp-content/uploads/2023/05/Sharm-el-Sheikh2.jpg'">
+                        <a href="{{ route('home', ['city_to_id' => $city->id]) }}#heroSection"
+                            class="popular-dest-card popular-dest-card--mobile d-block text-decoration-none">
+                            <div class="popular-dest-card__inner rounded-4 overflow-hidden shadow-sm">
+                                <div
+                                    class="popular-dest-card__media popular-dest-card__media--mobile popular-destination-thumb">
+                                    @if ($hasCityPhoto)
+                                        <img src="{{ asset('uploads/city/' . $cityPhoto) }}"
+                                            class="popular-dest-card__img object-fit-cover" alt="{{ $cityName }}"
+                                            loading="lazy">
+                                    @else
+                                        <div class="popular-dest-card__img popular-destination-placeholder"
+                                            role="img" aria-label="{{ $cityName }}">
+                                            <span class="popular-destination-placeholder__pattern"
+                                                aria-hidden="true"></span>
+                                            <i class="fas fa-image popular-destination-placeholder__icon"
+                                                aria-hidden="true"></i>
+                                        </div>
+                                    @endif
+                                    <div class="popular-dest-card__overlay popular-dest-card__overlay--mobile">
+                                        <span class="popular-dest-card__name">{{ $cityName }}</span>
+                                        <span class="popular-dest-card__hint">
+                                            <span>{{ __('Book Now') }}</span>
+                                            <i class="fas fa-arrow-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }} popular-dest-card__hint-icon"
+                                                aria-hidden="true"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
                         </a>
-                        <h4 class="text-truncate">{{ $city->getTranslation('name', app()->getLocale()) }}</h4>
-
                     </div>
                 @endforeach
-
-
             </div>
+        </div>
+    </div>
+
+    <!-- Wheel Picker HTML Structure -->
+    <div class="wheel-picker-backdrop" id="wheelBackdrop" role="button" tabindex="0"
+        aria-label="{{ __('Close') }}"></div>
+    <div class="wheel-picker-container" id="wheelPicker">
+        <div class="wheel-picker-header">
+            <button type="button" class="btn btn-light rounded-4 px-4 wheel-picker-cancel">{{ __('Cancel') }}</button>
+            <h5 class="mb-0 fw-bold">{{ __('Select Date') }}</h5>
+            <button type="button"
+                class="btn btn-main rounded-4 px-4 text-white wheel-picker-confirm">{{ __('Confirm') }}</button>
+        </div>
+        <div class="wheel-picker-content text-center">
+            <div class="wheel-selection-indicator"></div>
+            <div class="wheel-column" id="dayColumn"></div>
+            <div class="wheel-column" id="monthColumn"></div>
+            <div class="wheel-column" id="yearColumn"></div>
         </div>
     </div>
 @endsection
 @section('includes')
-    <!-- App Download Modal -->
-    <div class="modal fade" id="appDownloadModal" tabindex="-1" aria-labelledby="appDownloadModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="appDownloadModalLabel">{{ __('Download Our App') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center">
-                    <div class="mb-4">
-                        <i class="fas fa-tags text-warning fa-2x mb-3"></i>
-                        <h4>{{ __('Get Exclusive Discounts!') }}</h4>
-                        <p>{{ __('Download the SuperJet app now and enjoy special offers on your trips') }}</p>
+    @if (!empty($apps['android']) || !empty($apps['ios']))
+        <!-- App Download Modal -->
+        <div class="modal fade" id="appDownloadModal" tabindex="-1" aria-labelledby="appDownloadModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="appDownloadModalLabel">{{ __('Download Our App') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+                    <div class="modal-body text-center">
+                        <div class="mb-4">
+                            <i class="fas fa-tags text-main fa-2x mb-3"></i>
+                            <h4>{{ __('Get Exclusive Discounts!') }}</h4>
+                            <p>{{ __('Download the HighBus app now and enjoy special offers on your trips') }}</p>
+                        </div>
 
-                    <div class="d-flex justify-content-center gap-3 mb-3">
-                        <a href="{{ $apps['android'] }}" target="_blank"
-                            class="google-play-box rounded-5 text-decoration-none">
-                            <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-3">
-                                <div class="google-play">
-                                    <p>{{ __('Get It On') }}</p>
-                                    <h6>{{ __('Google Play') }}</h6>
-                                </div>
-                                <img src="{{ asset('images/google-play-icon.png') }}" alt="google-play">
-                            </div>
-                        </a>
-
-                        {{-- Uncomment when iOS app is available --}}
-                        <a href="{{ $apps['ios'] }}" target="_blank"
-                            class="google-play-box rounded-5 text-decoration-none">
-                            <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-3">
-                                <div class="google-play">
-                                    <p>{{ __('Download On The') }}</p>
-                                    <h6>{{ __('App Store') }}</h6>
-                                </div>
-                                <i class="fa-brands fa-apple"></i>
-                            </div>
-                        </a>
+                        <div class="d-flex justify-content-center gap-3 mb-3">
+                            @if (!empty($apps['android']))
+                                <a href="{{ $apps['android'] }}" target="_blank"
+                                    class="google-play-box rounded-5 text-decoration-none">
+                                    <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-3">
+                                        <div class="google-play">
+                                            <p>{{ __('Get It On') }}</p>
+                                            <h6>{{ __('Google Play') }}</h6>
+                                        </div>
+                                        <img src="{{ asset('images/google-play-icon.png') }}" alt="google-play">
+                                    </div>
+                                </a>
+                            @endif
+                            @if (!empty($apps['ios']))
+                                <a href="{{ $apps['ios'] }}" target="_blank"
+                                    class="google-play-box rounded-5 text-decoration-none">
+                                    <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-3">
+                                        <div class="google-play">
+                                            <p>{{ __('Download On The') }}</p>
+                                            <h6>{{ __('App Store') }}</h6>
+                                        </div>
+                                        <i class="fa-brands fa-apple"></i>
+                                    </div>
+                                </a>
+                            @endif
+                        </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary"
-                        data-bs-dismiss="modal">{{ __('Maybe Later') }}</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary"
+                            data-bs-dismiss="modal">{{ __('Maybe Later') }}</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endif
     @include('mobile.components.location-bottom-sheet')
 @endsection
 
@@ -219,11 +265,11 @@
         document.addEventListener('DOMContentLoaded', function() {
             const fromContainer = document.getElementById('from-container');
             const toContainer = document.getElementById('to-container');
+
             const bottomSheet = document.getElementById('locationBottomSheet');
             const locationSearch = document.getElementById('locationSearch');
             const cityHeaders = bottomSheet.querySelectorAll('.city-header');
             const subStations = bottomSheet.querySelectorAll('.sub-stations');
-            const swapBtn = document.getElementById('swap-btn');
             const searchForm = document.getElementById('search-form');
             const oneWayRadio = document.getElementById('oneWayRadio');
             const roundTripRadio = document.getElementById('roundTripRadio');
@@ -251,30 +297,48 @@
             const fromLocationSpan = document.getElementById('from-location');
             const toLocationSpan = document.getElementById('to-location');
 
+            // Mobile Tab Buttons
+            const onewayTabMo = document.getElementById('pills-oneway-tab-mo');
+            const roundTabMo = document.getElementById('pills-round-tab-mo');
+
             // Function to update form layout based on trip type
             function updateTripLayout() {
-                if (oneWayRadio.checked) {
-                    // One way trip layout
+                if (departureDateCol) {
                     departureDateCol.classList.remove('col-md-6');
                     departureDateCol.classList.add('col-md-6');
-                    returnDateCol.classList.add('d-none');
-                    passengersColSide.classList.remove('d-none');
-                    passengersColBottom.classList.add('d-none');
+                }
+                if (returnDateCol) {
+                    if (oneWayRadio.checked) returnDateCol.classList.add('d-none');
+                    else returnDateCol.classList.remove('d-none');
+                }
+                if (passengersColSide) {
+                    if (oneWayRadio.checked) passengersColSide.classList.remove('d-none');
+                    else passengersColSide.classList.add('d-none');
+                }
+                if (passengersColBottom) {
+                    if (oneWayRadio.checked) passengersColBottom.classList.add('d-none');
+                    else passengersColBottom.classList.remove('d-none');
+                }
 
-                    // Sync passenger counts between the two UI elements
-                    passengerCount2.textContent = passengerCount.textContent;
-                    passengerCountInput2.value = passengerCountInput.value;
-                } else if (roundTripRadio.checked) {
-                    // Round trip layout
-                    departureDateCol.classList.remove('col-md-6');
-                    departureDateCol.classList.add('col-md-6');
-                    returnDateCol.classList.remove('d-none');
-                    passengersColSide.classList.add('d-none');
-                    passengersColBottom.classList.remove('d-none');
+                // Sync passenger counts between the two UI elements
+                if (passengerCount && passengerCount2) {
+                    if (oneWayRadio.checked) {
+                        passengerCount2.textContent = passengerCount.textContent;
+                        if (passengerCountInput2) passengerCountInput2.value = passengerCountInput.value;
+                    } else {
+                        passengerCount.textContent = passengerCount2.textContent;
+                        if (passengerCountInput) passengerCountInput.value = passengerCountInput2.value;
+                    }
+                }
 
-                    // Sync passenger counts between the two UI elements
-                    passengerCount.textContent = passengerCount2.textContent;
-                    passengerCountInput.value = passengerCountInput2.value;
+                // Sync tabs
+                if (onewayTabMo) {
+                    if (oneWayRadio.checked) onewayTabMo.classList.add('active');
+                    else onewayTabMo.classList.remove('active');
+                }
+                if (roundTabMo) {
+                    if (roundTripRadio.checked) roundTabMo.classList.add('active');
+                    else roundTabMo.classList.remove('active');
                 }
             }
 
@@ -345,32 +409,12 @@
             const oneWayRoute = "{{ route('mobile.one-way.trips') }}";
             const roundRoute = "{{ route('mobile.round.trips') }}";
 
-            // Function to swap locations
-            function swapLocations() {
-                // Swap city IDs
-                const tempCityId = fromCityInput.value;
-                fromCityInput.value = toCityInput.value;
-                toCityInput.value = tempCityId;
-
-                // Swap station IDs
-                const tempStationId = fromStationInput.value;
-                fromStationInput.value = toStationInput.value;
-                toStationInput.value = tempStationId;
-
-                // Swap location display text
-                const tempLocation = fromLocationSpan.textContent;
-                fromLocationSpan.textContent = toLocationSpan.textContent;
-                toLocationSpan.textContent = tempLocation;
-            }
-
-            // Add click event listener to swap button
-            swapBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                swapLocations();
-            });
+            // Swap button is handled by event delegation in home/index.blade.php
+            // so it works consistently for both desktop and mobile forms.
 
             // Bottom sheet functionality continues...
             function showBottomSheet() {
+                if (!bottomSheet) return;
                 bottomSheet.classList.add('show');
                 document.body.style.overflow = 'hidden';
                 // Hide any open sub-stations
@@ -426,19 +470,22 @@
                 }
             }
 
-            fromContainer.addEventListener('click', function() {
-                activeInput = fromContainer.querySelector('#from-input');
-                activeLocationSpan = fromContainer.querySelector('#from-location');
-                isFromSelection = true;
-                showBottomSheet();
-            });
-
-            toContainer.addEventListener('click', function() {
-                activeInput = toContainer.querySelector('#to-input');
-                activeLocationSpan = toContainer.querySelector('#to-location');
-                isFromSelection = false;
-                showBottomSheet();
-            });
+            if (fromContainer) {
+                fromContainer.addEventListener('click', function() {
+                    activeInput = fromContainer.querySelector('#from-input');
+                    activeLocationSpan = fromContainer.querySelector('#from-location');
+                    isFromSelection = true;
+                    showBottomSheet();
+                });
+            }
+            if (toContainer) {
+                toContainer.addEventListener('click', function() {
+                    activeInput = toContainer.querySelector('#to-input');
+                    activeLocationSpan = toContainer.querySelector('#to-location');
+                    isFromSelection = false;
+                    showBottomSheet();
+                });
+            }
 
             // Handle city header clicks
             cityHeaders.forEach(header => {
@@ -506,6 +553,176 @@
                     hideBottomSheet();
                 }
             });
+        });
+    </script>
+
+
+    <script>
+        // Wheel Picker JS Logic
+        let currentTargetInput = null;
+        let currentTargetHidden = null;
+
+        const monthsAr = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر",
+            "نوفمبر", "ديسمبر"
+        ];
+        const monthsEn = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+        function initWheelColumns() {
+            const dayCol = document.getElementById('dayColumn');
+            const monthCol = document.getElementById('monthColumn');
+            const yearCol = document.getElementById('yearColumn');
+            const isRTL = document.documentElement.dir === 'rtl';
+            const months = isRTL ? monthsAr : monthsEn;
+
+            const addSpacers = (col) => {
+                col.innerHTML += '<div class="wheel-item spacer"></div><div class="wheel-item spacer"></div>';
+            };
+
+            // Days 1-31
+            dayCol.innerHTML = '';
+            addSpacers(dayCol);
+            for (let i = 1; i <= 31; i++) {
+                dayCol.innerHTML += `<div class="wheel-item" data-value="${i}">${i}</div>`;
+            }
+            addSpacers(dayCol);
+
+            // Months
+            monthCol.innerHTML = '';
+            addSpacers(monthCol);
+            months.forEach((m, idx) => {
+                monthCol.innerHTML += `<div class="wheel-item" data-value="${idx+1}">${m}</div>`;
+            });
+            addSpacers(monthCol);
+
+            // Years
+            const curYear = new Date().getFullYear();
+            yearCol.innerHTML = '';
+            addSpacers(yearCol);
+            for (let i = curYear; i <= curYear + 1; i++) {
+                yearCol.innerHTML += `<div class="wheel-item" data-value="${i}">${i}</div>`;
+            }
+            addSpacers(yearCol);
+
+            [dayCol, monthCol, yearCol].forEach(col => {
+                col.addEventListener('scroll', () => {
+                    const center = col.scrollTop + col.clientHeight / 2;
+                    col.querySelectorAll('.wheel-item:not(.spacer)').forEach(item => {
+                        const itemCenter = item.offsetTop + item.clientHeight / 2;
+                        if (Math.abs(center - itemCenter) < 20) {
+                            item.classList.add('selected');
+                        } else {
+                            item.classList.remove('selected');
+                        }
+                    });
+                });
+            });
+        }
+
+        function openDateWheelPicker(targetId, hiddenId) {
+            currentTargetInput = document.getElementById(targetId);
+            currentTargetHidden = document.getElementById(hiddenId);
+
+            document.getElementById('wheelBackdrop').style.display = 'block';
+            document.getElementById('wheelPicker').classList.add('active');
+
+            const date = currentTargetHidden.value ? new Date(currentTargetHidden.value) : new Date();
+            scrollToValue('dayColumn', date.getDate());
+            scrollToValue('monthColumn', date.getMonth() + 1);
+            scrollToValue('yearColumn', date.getFullYear());
+        }
+
+        function scrollToValue(colId, value) {
+            const col = document.getElementById(colId);
+            const item = col.querySelector(`.wheel-item[data-value="${value}"]`);
+            if (item) {
+                setTimeout(() => {
+                    col.scrollTop = item.offsetTop - (col.clientHeight / 2) + (item.clientHeight / 2);
+                }, 100);
+            }
+        }
+
+        function closeWheelPicker() {
+            const backdrop = document.getElementById('wheelBackdrop');
+            const container = document.getElementById('wheelPicker');
+            if (backdrop) backdrop.style.display = 'none';
+            if (container) container.classList.remove('active');
+        }
+
+        function confirmWheelDate() {
+            const dayCol = document.getElementById('dayColumn');
+            const monthCol = document.getElementById('monthColumn');
+            const yearCol = document.getElementById('yearColumn');
+            const getSelectedValue = (col) => {
+                if (!col) return null;
+                const selected = col.querySelector('.wheel-item.selected');
+                if (selected) return selected.getAttribute('data-value');
+                const center = col.scrollTop + col.clientHeight / 2;
+                let found = null;
+                col.querySelectorAll('.wheel-item:not(.spacer)').forEach(item => {
+                    const itemCenter = item.offsetTop + item.clientHeight / 2;
+                    if (Math.abs(center - itemCenter) < 30) found = item.getAttribute('data-value');
+                });
+                return found || (col.querySelector('.wheel-item:not(.spacer)')?.getAttribute('data-value'));
+            };
+            const day = getSelectedValue(dayCol);
+            const month = getSelectedValue(monthCol);
+            const year = getSelectedValue(yearCol);
+            if (!day || !month || !year || !currentTargetHidden || !currentTargetInput) {
+                closeWheelPicker();
+                return;
+            }
+            const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            const displayStr = `${String(day).padStart(2, '0')} / ${String(month).padStart(2, '0')} / ${year}`;
+            currentTargetHidden.value = dateStr;
+            currentTargetInput.value = displayStr;
+            closeWheelPicker();
+        }
+
+        window.closeWheelPicker = closeWheelPicker;
+        window.confirmWheelDate = confirmWheelDate;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initWheelColumns();
+            const cancelBtn = document.querySelector('#wheelPicker .wheel-picker-cancel');
+            const confirmBtn = document.querySelector('#wheelPicker .wheel-picker-confirm');
+            const backdrop = document.getElementById('wheelBackdrop');
+            if (cancelBtn) cancelBtn.addEventListener('click', closeWheelPicker);
+            if (confirmBtn) confirmBtn.addEventListener('click', confirmWheelDate);
+            if (backdrop) backdrop.addEventListener('click', closeWheelPicker);
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const el = document.querySelector('#newPlacesSwiperMobile');
+            if (el && typeof Swiper !== 'undefined') {
+                const isRTL = document.documentElement.dir === 'rtl';
+                new Swiper('#newPlacesSwiperMobile', {
+                    slidesPerView: 2.2,
+                    spaceBetween: 12,
+                    loop: false,
+                    rtl: isRTL,
+                    freeMode: true,
+                    breakpoints: {
+                        375: {
+                            slidesPerView: 2.3,
+                            spaceBetween: 12
+                        },
+                        480: {
+                            slidesPerView: 2.8,
+                            spaceBetween: 14
+                        },
+                        576: {
+                            slidesPerView: 3.2,
+                            spaceBetween: 14
+                        },
+                        768: {
+                            slidesPerView: 4,
+                            spaceBetween: 16
+                        },
+                    },
+                });
+            }
         });
     </script>
 @endpush

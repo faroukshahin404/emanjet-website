@@ -4,51 +4,13 @@
 
 @push('styles')
     <style>
-        /* .hero-section::before {
-                        background: linear-gradient(to right, #00000040, #00000040), url({{ $heroSection['image'] }});
-                        transform: scaleX(1);
-                    } */
-        .hero-section {
-            position: relative;
-            overflow: visible !important;
-            /* Ensure no clipping of child elements */
-        }
-
-        .desktop-from-input-box {
-            position: relative;
-        }
-
-        .main-stations,
-        .sub-stations-dropdown {
-            position: absolute;
-            top: calc(100% + 5px);
-            /* Extra spacing below the field */
-            left: 0;
-            width: 100%;
-            z-index: 9999;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            max-height: 250px;
-            overflow-y: auto;
-            /* Scroll only if the list exceeds the height */
-            display: none;
-            /* Hidden by default */
-        }
-
-        /* Show the list on interaction */
-        .desktop-from-input-box.show .main-stations,
-        .desktop-from-input-box.show .sub-stations-dropdown {
-            display: block;
-        }
-
-        /* منع أي قص للقوائم */
-        .container-fluid,
-        .row,
-        .col-lg-5,
-        .card,
-        .card-body {
-            overflow: visible !important;
+        .hero-section::before {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0,
+            0, 0.2) 100%),
+                url('{{ $heroSection['image'] ?? asset('images/hero-section.png') }}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
     </style>
 @endpush
@@ -64,160 +26,170 @@
                 <div class="col-lg-5 col-md-12 m-auto">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title text-center fw-bold mb-3">{{ $heroSection['card-title'] }}</h5>
+                            <h5 class="card-title text-center mb-4">{{ $heroSection['card-title'] }}</h5>
                             <form id="tripForm" action="{{ route('one-way.trips') }}" method="GET">
-                                <!-- اختيار نوع الرحلة -->
-                                <div class="d-flex justify-content-center gap-3 mb-3 trip-type py-3">
-                                    <div class="form-check">
-                                        <input class="form-check-input form-check-input-pay" type="radio" name="tripType"
-                                            id="oneWayRadioDes" value="oneway" checked>
-                                        <label class="form-check-label fw-bold text-black"
-                                            for="oneWayRadioDes">{{ __('One Way Trip') }}</label>
+                                <!-- Choice of trip type -->
+                                <div class="text-center">
+                                    <div class="trip-type-tabs nav nav-pills d-inline-flex" id="pills-tab" role="tablist">
+                                        <div class="nav-item" role="presentation">
+                                            <button class="nav-link active" id="pills-oneway-tab" data-bs-toggle="pill"
+                                                type="button" role="tab"
+                                                onclick="document.getElementById('oneWayRadioDes').click()">{{ __('One Way Trip') }}</button>
+                                        </div>
+                                        <div class="nav-item" role="presentation">
+                                            <button class="nav-link" id="pills-round-tab" data-bs-toggle="pill"
+                                                type="button" role="tab"
+                                                onclick="document.getElementById('roundTripRadioDes').click()">{{ __('Round Trip') }}</button>
+                                        </div>
+                                        <!-- Hidden radios for JS compatibility -->
+                                        <input class="d-none" type="radio" name="tripType" id="oneWayRadioDes"
+                                            value="oneway" checked>
+                                        <input class="d-none" type="radio" name="tripType" id="roundTripRadioDes"
+                                            value="round">
                                     </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input form-check-input-pay" type="radio" value="round"
-                                            name="tripType" id="roundTripRadioDes">
-                                        <label class="form-check-label fw-bold text-black"
-                                            for="roundTripRadioDes">{{ __('Round Trip') }}</label>
-                                    </div>
-                                    <span class="badge bg-warning text-white">{{ __('Special Discount') }}</span>
                                 </div>
 
                                 <!-- start from to  -->
-                                <div class="row g-3 mb-3">
-                                    <div class="col-md-6 position-relative">
-                                        <div
-                                            class="d-flex align-items-center gap-2 rounded-6 px-3 py-1 desktop-from-input-box">
-                                            <i class="fas fa-location-dot from-icon"></i>
-                                            <input type="text" class="border-0 from-input desktop-from-input"
-                                                placeholder="{{ __('From') }}" readonly data-bs-toggle="dropdown"
-                                                aria-expanded="false" value="{{ $stations[0]->name }}" id="fromInput">
-                                            <ul class="dropdown-menu p-0 main-stations" id="from-stations"></ul>
-                                            <ul class="dropdown-menu p-0 sub-stations-dropdown" id="from-sub-stations"></ul>
+                                <div class="station-group mb-4">
+                                    <div class="row g-2">
+                                        <div class="col-md-6">
+                                            <div class="input-with-icon">
+                                                <i class="fas fa-location-dot"></i>
+                                                <input type="text" class="modern-input from-input"
+                                                    placeholder="{{ __('From') }}" readonly aria-expanded="false"
+                                                    value="{{ $stations->get(0)?->name ?? '' }}" id="fromInput">
+                                                <ul class="dropdown-menu p-0 main-stations shadow" id="from-stations"></ul>
+                                                <ul class="dropdown-menu p-0 sub-stations-dropdown shadow"
+                                                    id="from-sub-stations"></ul>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div class="col-md-6 position-relative">
-                                        <div
-                                            class="d-flex align-items-center gap-2 rounded-6 px-3 py-1 desktop-from-input-box">
-                                            <i class="fas fa-circle-dot to-icon"></i>
-                                            <input type="text" class="border-0 to-input desktop-from-input"
-                                                placeholder="إلى" readonly data-bs-toggle="dropdown" aria-expanded="false"
-                                                id="toInput"
-                                                value=" {{ request()->city_to_id ? $stations->where('city_id', request()->city_to_id)->first()->name : $stations[1]->name }}">
-                                            <ul class="dropdown-menu p-0 main-stations" id="to-stations"></ul>
-                                            <ul class="dropdown-menu p-0 sub-stations-dropdown" id="to-sub-stations"></ul>
-                                        </div>
-                                    </div>
-
-                                    <!-- Hidden inputs for IDs -->
-                                    <input type="hidden" name="city_from_id" id="cityFrom_id"
-                                        value="{{ $stations[0]->city_id }}">
-                                    <input type="hidden" name="city_to_id" id="cityTo_id"
-                                        value="{{ request()->city_to_id ? request()->city_to_id : $stations[1]->city_id }}">
-                                    <input type="hidden" name="station_from_id" id="stationFrom_id"
-                                        value="{{ $stations[0]->id }}">
-                                    <input type="hidden" name="station_to_id" id="stationTo_id"
-                                        value="{{ request()->city_to_id ? $stations->where('city_id', request()->city_to_id)->first()->id : $stations[1]->id }}">
-
-                                </div>
-
-                                <div class="d-flex justify-content-between align-items-center gap-2">
-                                    <div class="mb-2 col-md-6">
-                                        <label class="form-label fw-bold text-black">
-                                            <i class="fas fa-calendar-alt mx-1"></i>
-                                            {{ __('Travel Date') }}
-                                        </label>
-
-                                        <div class="position-relative">
-                                            <input type="text" class="form-control datepicker-text" value=""
-                                                readonly id="dateTextInput">
-                                            <input type="date" class="form-control datepicker-real"
-                                                lang="{{ app()->getLocale() }}" min="{{ date('Y-m-d') }}" name="go_date"
-                                                value="{{ request()->go_date ?? date('Y-m-d') }}" id="dateRealInput">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 d-none">
-                                        <div class="d-flex flex-column">
-                                            <label class="form-label fw-bold text-black">
-                                                <i class="fas fa-calendar-alt mx-1"></i>
-                                                {{ __('Back Date') }}
-                                            </label>
-
-                                            <div class="position-relative">
-                                                <input type="text" class="form-control datepicker-text" value=""
-                                                    readonly id="dateTextInput2">
-
-                                                <input type="date" class="form-control datepicker-real"
-                                                    min="{{ date('Y-m-d') }}" max="2027-04-07"
-                                                    value="{{ request()->back_date ?? date('Y-m-d') }}"
-                                                    id="dateRealInput2" name="back_date">
+                                        <div class="col-md-6">
+                                            <div class="input-with-icon">
+                                                <i class="fas fa-circle-dot text-success"></i>
+                                                <input type="text" class="modern-input to-input"
+                                                    placeholder="{{ __('To') }}" readonly aria-expanded="false"
+                                                    id="toInput"
+                                                    value="{{ request()->city_to_id ? ($stations->where('city_id', request()->city_to_id)->first()?->name ?? '') : ($stations->get(1)?->name ?? '') }}">
+                                                <ul class="dropdown-menu p-0 main-stations shadow" id="to-stations"></ul>
+                                                <ul class="dropdown-menu p-0 sub-stations-dropdown shadow"
+                                                    id="to-sub-stations"></ul>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="mb-2 col-md-6 mt-4">
-                                        <i class="fas fa-calendar-alt mx-1 text-main"></i>
-                                        <a href="#" class="text-warning fw-bold arrival-time">
-                                            {{ __('When are you coming back? Book your seat') }}
-                                            <span class="badge bg-warning text-white fs-10">
-                                                {{ __('Special Discount') }}
-                                            </span>
-                                        </a>
 
+                                    <!-- Hidden Inputs for Station IDs (Required for the backend and JS) -->
+                                    <input type="hidden" name="city_from_id" id="city_from_id"
+                                        value="{{ $stations->get(0)?->city_id ?? '' }}">
+                                    <input type="hidden" name="city_to_id" id="city_to_id"
+                                        value="{{ request()->city_to_id ?? $stations->get(1)?->city_id ?? '' }}">
+                                    <input type="hidden" name="station_from_id" id="station_from_id"
+                                        value="{{ $stations->get(0)?->id ?? '' }}">
+                                    <input type="hidden" name="station_to_id" id="station_to_id"
+                                        value="{{ request()->city_to_id ? ($stations->where('city_id', request()->city_to_id)->first()?->id ?? '') : ($stations->get(1)?->id ?? '') }}">
+
+                                    <button type="button" class="swap-btn-floating swap-btn">
+                                        <i class="fas fa-exchange-alt"></i>
+                                    </button>
+                                </div>
+
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <div class="position-relative">
+                                            <div class="input-with-icon">
+                                                <i class="fas fa-calendar-alt"></i>
+                                                <input type="text" class="modern-input" value="" readonly
+                                                    id="dateTextInput">
+                                            </div>
+                                            <input type="date" class="datepicker-real" lang="{{ app()->getLocale() }}"
+                                                min="{{ date('Y-m-d') }}" name="go_date"
+                                                value="{{ request()->go_date ?? date('Y-m-d') }}" id="dateRealInput">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 return-date-col d-none">
+                                        <div class="position-relative">
+                                            <div class="input-with-icon">
+                                                <i class="fas fa-calendar-alt"></i>
+                                                <input type="text" class="modern-input" value="" readonly
+                                                    id="dateTextInput2">
+                                            </div>
+                                            <input type="date" class="datepicker-real" min="{{ date('Y-m-d') }}"
+                                                max="2027-04-07" value="{{ request()->back_date ?? date('Y-m-d') }}"
+                                                id="dateRealInput2" name="back_date">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 arrival-time-box">
+                                        <a href="#"
+                                            class="arrival-time d-flex align-items-center gap-2 text-muted small mt-2">
+                                            <i class="fas fa-percent text-success"></i>
+                                            {{ __('Book Round Trip & Save') }}
+                                        </a>
                                     </div>
                                 </div>
 
-                                <!-- عدد المسافرين -->
-                                <div class="d-flex flex-column align-items-start gap-2 mb-3">
-                                    <label class="fw-bold text-black">
-                                        <i class="fas fa-user mx-1"></i>
-                                        {{ __('Number of travelers') }}</label>
-                                    <div class="d-flex align-items-center rounded px-3 py-1 trip-input">
-                                        <button type="button" class="plus-btn" onclick="incrementPassengersdesktop()">
-                                            <i class="fas fa-plus"></i>
+                                <!-- Number of travelers -->
+                                <div
+                                    class="d-flex align-items-center justify-content-between mb-4 p-3 rounded-4 passenger-box-home">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="fas fa-user-friends text-main fs-5"></i>
+                                        <div>
+                                            <div class="fw-bold text-dark lh-1">{{ __('Number of travelers') }}</div>
+                                            <small class="text-muted">{{ __('Adults/Children') }}</small>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <button type="button"
+                                            class="btn btn-sm shadow-sm rounded-circle bg-white mo-btn-32"
+                                            onclick="decrementPassengersdesktop()">
+                                            <i class="fas fa-minus small"></i>
                                         </button>
-                                        <span class="mx-3" id="passengerCountdesktop">1</span>
+                                        <span class="fw-bold fs-5" id="passengerCountdesktop">1</span>
                                         <input type="hidden" id="passengerCountDesktopInput" value="1"
                                             name="seats" />
-                                        <button type="button" class="minus-btn" onclick="decrementPassengersdesktop()">
-                                            <i class="fas fa-minus"></i>
+                                        <button type="button"
+                                            class="btn btn-sm shadow-sm rounded-circle bg-white mo-btn-32"
+                                            onclick="incrementPassengersdesktop()">
+                                            <i class="fas fa-plus small"></i>
                                         </button>
                                     </div>
                                 </div>
 
-                                <!-- زر البحث -->
-                                <div class="d-flex justify-content-center">
-                                    <button type="submit"
-                                        class="btn search-trip-btn fw-bold py-2">{{ __('Search For Your Trip') }}</button>
-                                </div>
+                                <!-- Search button -->
+                                <button type="submit" class="hero-btn">
+                                    <i class="fas fa-search"></i>
+                                    {{ __('Search For Your Trip') }}
+                                </button>
                             </form>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-lg-6 mx-auto col-md-12 hero-caption-box">
-                    <div class="hero-caption-title">
-                        <p class="text-white m-0">
+                <div class="col-lg-6 mx-auto col-md-12 hero-caption-box mt-5 mt-lg-0">
+                    <div class="hero-caption-title text-start">
+                        <h1 class="text-white fw-bold mb-3 display-4 animate__animated animate__fadeInUp">
                             {{ $heroSection['caption-title'] }}
-                        </p>
-                        <h6 class="text-white">
+                        </h1>
+                        <h4
+                            class="text-white fw-light mb-5 opacity-75 animate__animated animate__fadeInUp animate__delay-1s">
                             {{ $heroSection['caption-description'] }}
-                        </h6>
+                        </h4>
                     </div>
                     <div class="text-white d-flex flex-lg-row flex-column justify-content-start align-items-center gap-3">
-
-                        <a href="{{ $apps['android'] }}" target="_blank"
-                            class="google-play-box rounded-5 text-decoration-none">
-                            <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-2">
-                                <div class="google-play">
-                                    <p>Get It On</p>
-                                    <h6>Google Play</h6>
+                        @if (!empty($apps['android']))
+                            <a href="{{ $apps['android'] }}" target="_blank"
+                                class="google-play-box rounded-5 text-decoration-none">
+                                <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-2">
+                                    <div class="google-play">
+                                        <p>Get It On</p>
+                                        <h6>Google Play</h6>
+                                    </div>
+                                    <img src="{{ asset('images/google-play-icon.png') }}" alt="google-play">
                                 </div>
-                                <img src="{{ asset('images/google-play-icon.png') }}" alt="google-play">
-                            </div>
-                        </a>
+                            </a>
+                        @endif
 
-                        {{-- <a href="{{ $apps['ios'] }}" target="_blank"
+                        {{-- @if (!empty($apps['ios']))
+                        <a href="{{ $apps['ios'] }}" target="_blank"
                             class="google-play-box rounded-5 text-decoration-none">
                             <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-2">
                                 <div class="google-play">
@@ -226,7 +198,8 @@
                                 </div>
                                 <i class="fa-brands fa-apple"></i>
                             </div>
-                        </a> --}}
+                        </a>
+                        @endif --}}
                     </div>
 
                 </div>
@@ -236,7 +209,7 @@
     <!-- End hero section  -->
 
     <!-- start any where  -->
-    <div class="any-where py-5 bg-white px-4">
+    {{-- <div class="any-where py-5 bg-white px-4">
         <div class="container-fluid px-5">
             <div class="row">
                 <div class="col-md-6 any-where-caption d-flex flex-column align-items-start justify-content-center">
@@ -248,7 +221,7 @@
                 </div>
                 <div class="col-md-6 position-relative map">
                     <img class="" src="{{ asset('images/map.png') }}" alt="map">
-                    {{-- <img class="" src="{{ $anyWhereSection['image'] }}" alt="map"> --}}
+                    <img class="" src="{{ $anyWhereSection['image'] }}" alt="map">
                     <div>
                         <div class="circle-alex"></div>
                         <div class="title-alex">الاسكندرية</div>
@@ -262,8 +235,74 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- End any where  -->
+
+
+    <!-- start Popular Destinations -->
+    <div class="popular-destinations py-5">
+        <div class="container-fluid px-3 px-md-4 px-xl-5">
+            <header class="popular-destinations__head text-center mb-4 mb-lg-5">
+                <h2 class="popular-destinations__title h3 fw-bold mb-2">{{ $popularDestinationsSection['title'] }}</h2>
+                @if (filled($popularDestinationsSection['description'] ?? null))
+                    <p class="popular-destinations__lead text-muted mb-0 mx-auto" style="max-width: 36rem;">
+                        {{ $popularDestinationsSection['description'] }}</p>
+                @endif
+            </header>
+
+            <div class="popular-destinations__carousel-wrap position-relative">
+                <div class="swiper mySwiperPopular popular-destinations-swiper">
+                    <div class="swiper-wrapper">
+                        @foreach ($cities as $city)
+                            @php
+                                $cityPhoto = $city->getRawOriginal('image');
+                                $hasCityPhoto =
+                                    filled($cityPhoto) && is_file(public_path('uploads/city/' . $cityPhoto));
+                                $cityName = $city->getTranslation('name', app()->getLocale());
+                            @endphp
+                            <div class="swiper-slide">
+                                <a href="{{ route('home', ['city_to_id' => $city->id]) }}#heroSection"
+                                    class="popular-dest-card d-block text-decoration-none h-100">
+                                    <div class="popular-dest-card__inner rounded-4 overflow-hidden shadow-sm h-100">
+                                        <div class="popular-dest-card__media popular-destination-thumb">
+                                            @if ($hasCityPhoto)
+                                                <img src="{{ asset('uploads/city/' . $cityPhoto) }}"
+                                                    class="popular-dest-card__img object-fit-cover" alt="{{ $cityName }}"
+                                                    loading="lazy">
+                                            @else
+                                                <div class="popular-dest-card__img popular-destination-placeholder"
+                                                    role="img" aria-label="{{ $cityName }}">
+                                                    <span class="popular-destination-placeholder__pattern"
+                                                        aria-hidden="true"></span>
+                                                    <i class="fas fa-image popular-destination-placeholder__icon"
+                                                        aria-hidden="true"></i>
+                                                </div>
+                                            @endif
+                                            <div class="popular-dest-card__overlay">
+                                                <span class="popular-dest-card__name">{{ $cityName }}</span>
+                                                <span class="popular-dest-card__hint">
+                                                    <span>{{ __('Book Now') }}</span>
+                                                    <i class="fas fa-arrow-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }} popular-dest-card__hint-icon"
+                                                        aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="swiper-scrollbar swiper-scrollbar-popular" aria-hidden="true"></div>
+                </div>
+
+                <div class="popular-dest-btn popular-dest-btn--prev swiper-button-prev" role="button" tabindex="0"
+                    aria-label="{{ __('Previous') }}"></div>
+                <div class="popular-dest-btn popular-dest-btn--next swiper-button-next" role="button" tabindex="0"
+                    aria-label="{{ __('Next') }}"></div>
+            </div>
+        </div>
+    </div>
+    <!-- End Popular Destinations -->
 
     <!-- start pay  -->
     <div class="pay py-3 mt-5">
@@ -279,6 +318,7 @@
     <!-- End pay  -->
 
     <!-- start bus type  -->
+    @if($busTypesSection->isNotEmpty())
     <div class="bus-type">
         <div class="container-fluid">
             <div class="row">
@@ -294,20 +334,20 @@
 
                                     <div class="cardbody card-body py-2">
                                         <h5 class='cardTitle'>
-                                            {{ app()->getLocale() == 'ar' ? $busType->name_ar : $busType->name_en }}</h5>
+                                            {{ $busType['name'] }}</h5>
                                         <p class='cardBody text-gray'>
-                                            {{ $busType->passengers }} {{ __('Passenger') }}
+                                            {{ $busType['passengers'] }} {{ __('Passenger') }}
                                         </p>
                                         <div class='cardRate'>
                                             <div>
-                                                {!! render_stars($busType->rate) !!}
+                                                {!! render_stars($busType['rate']) !!}
                                             </div>
                                         </div>
                                     </div>
                                     <div class="position-relative bus-bg-box mt-3">
                                         <div class="bus-bg position-absolute">
                                         </div>
-                                        <img src="{{ $busType->image }}" alt="bus" />
+                                        <img src="{{ $busType['image'] }}" alt="bus" />
                                     </div>
                                 </div>
                             </div>
@@ -324,6 +364,7 @@
             </div>
         </div>
     </div>
+    @endif
     <!-- End bus type  -->
 
     <!-- start testimonials  -->
@@ -348,9 +389,13 @@
                                 </p>
                                 <div class='d-flex justify-content-end align-items-center gap-2'>
                                     <p class="m-0">{{ $testimonial->translated_content }}</p>
-                                    <div>
-                                        <img src="{{ $testimonial->image }}"
-                                            alt="صورة {{ $testimonial->translated_name }}">
+                                    <div class="testimonial-avatar">
+                                        @if(!empty($testimonial->image))
+                                            <img src="{{ Str::startsWith($testimonial->image, ['http://', 'https://']) ? $testimonial->image : asset($testimonial->image) }}"
+                                                alt="{{ $testimonial->translated_name }}">
+                                        @else
+                                            <span class="testimonial-avatar-placeholder">{{ mb_substr($testimonial->translated_name, 0, 1) }}</span>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -417,102 +462,60 @@
     </div>
 
     <!-- End blogs  -->
-    <div class="modal fade" id="appDownloadModal" tabindex="-1" aria-labelledby="appDownloadModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="appDownloadModalLabel">{{ __('Download Our App') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center">
-                    <div class="mb-4">
-                        <i class="fas fa-tags text-warning fa-2x mb-3"></i>
-                        <h4>{{ __('Get Exclusive Discounts!') }}</h4>
-                        <p>{{ __('Download the SuperJet app now and enjoy special offers on your trips') }}</p>
+    @if (!empty($apps['android']) || !empty($apps['ios']))
+        <div class="modal fade" id="appDownloadModal" tabindex="-1" aria-labelledby="appDownloadModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="appDownloadModalLabel">{{ __('Download Our App') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+                    <div class="modal-body text-center">
+                        <div class="mb-4">
+                            <i class="fas fa-tags text-warning fa-2x mb-3"></i>
+                            <h4>{{ __('Get Exclusive Discounts!') }}</h4>
+                            <p>{{ __('Download the HighBus app now and enjoy special offers on your trips') }}</p>
+                        </div>
 
-                    <div class="d-flex justify-content-center gap-3 mb-3">
-                        <a href="{{ $apps['android'] }}" target="_blank"
-                            class="google-play-box rounded-5 text-decoration-none">
-                            <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-3">
-                                <div class="google-play">
-                                    <p>{{ __('Get It On') }}</p>
-                                    <h6>{{ __('Google Play') }}</h6>
-                                </div>
-                                <img src="{{ asset('images/google-play-icon.png') }}" alt="google-play">
-                            </div>
-                        </a>
-
-                        {{-- Uncomment when iOS app is available --}}
-                        <a href="{{ $apps['ios'] }}" target="_blank" class="google-play-box rounded-5 text-decoration-none">
-                            <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-3">
-                                <div class="google-play">
-                                    <p>{{ __('Download On The') }}</p>
-                                    <h6>{{ __('App Store') }}</h6>
-                                </div>
-                                <i class="fa-brands fa-apple"></i>
-                            </div>
-                        </a>
+                        <div class="d-flex justify-content-center gap-3 mb-3">
+                            @if (!empty($apps['android']))
+                                <a href="{{ $apps['android'] }}" target="_blank"
+                                    class="google-play-box rounded-5 text-decoration-none">
+                                    <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-3">
+                                        <div class="google-play">
+                                            <p>{{ __('Get It On') }}</p>
+                                            <h6>{{ __('Google Play') }}</h6>
+                                        </div>
+                                        <img src="{{ asset('images/google-play-icon.png') }}" alt="google-play">
+                                    </div>
+                                </a>
+                            @endif
+                            @if (!empty($apps['ios']))
+                                <a href="{{ $apps['ios'] }}" target="_blank"
+                                    class="google-play-box rounded-5 text-decoration-none">
+                                    <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-3">
+                                        <div class="google-play">
+                                            <p>{{ __('Download On The') }}</p>
+                                            <h6>{{ __('App Store') }}</h6>
+                                        </div>
+                                        <i class="fa-brands fa-apple"></i>
+                                    </div>
+                                </a>
+                            @endif
+                        </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary"
-                        data-bs-dismiss="modal">{{ __('Maybe Later') }}</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary"
+                            data-bs-dismiss="modal">{{ __('Maybe Later') }}</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endif
 
     <!-- start footer  -->
 @endsection
-<!-- App Download Modal -->
-<div class="modal fade" id="appDownloadModal" tabindex="-1" aria-labelledby="appDownloadModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="appDownloadModalLabel">{{ __('Download Our App') }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body text-center">
-                <div class="mb-4">
-                    <i class="fas fa-tags text-warning fa-2x mb-3"></i>
-                    <h4>{{ __('Get Exclusive Discounts!') }}</h4>
-                    <p>{{ __('Download the SuperJet app now and enjoy special offers on your trips') }}</p>
-                </div>
-
-                <div class="d-flex justify-content-center gap-3 mb-3">
-                    <a href="{{ $apps['android'] }}" target="_blank"
-                        class="google-play-box rounded-5 text-decoration-none">
-                        <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-3">
-                            <div class="google-play">
-                                <p>{{ __('Get It On') }}</p>
-                                <h6>{{ __('Google Play') }}</h6>
-                            </div>
-                            <img src="{{ asset('images/google-play-icon.png') }}" alt="google-play">
-                        </div>
-                    </a>
-
-                    {{-- Uncomment when iOS app is available --}}
-                    <a href="{{ $apps['ios'] }}" target="_blank" class="google-play-box rounded-5 text-decoration-none">
-                            <div class="d-flex justify-content-center align-items-center gap-3 py-2 px-3">
-                                <div class="google-play">
-                                    <p>{{ __('Download On The') }}</p>
-                                    <h6>{{ __('App Store') }}</h6>
-                                </div>
-                                <i class="fa-brands fa-apple"></i>
-                            </div>
-                        </a>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary"
-                    data-bs-dismiss="modal">{{ __('Maybe Later') }}</button>
-            </div>
-        </div>
-    </div>
-</div>
 @include('mobile.home')
 @push('scripts')
     <script>
@@ -621,6 +624,43 @@
                     },
                 },
             });
+
+            new Swiper('.mySwiperPopular', {
+                slidesPerView: 1.15,
+                spaceBetween: 14,
+                loop: false,
+                rtl: isRTL,
+                watchOverflow: true,
+                grabCursor: true,
+                speed: 450,
+                navigation: {
+                    nextEl: '.popular-dest-btn--next',
+                    prevEl: '.popular-dest-btn--prev',
+                },
+                scrollbar: {
+                    el: '.swiper-scrollbar-popular',
+                    draggable: true,
+                    hide: false,
+                },
+                breakpoints: {
+                    576: {
+                        slidesPerView: 2,
+                        spaceBetween: 16,
+                    },
+                    768: {
+                        slidesPerView: 2.5,
+                        spaceBetween: 18,
+                    },
+                    992: {
+                        slidesPerView: 3,
+                        spaceBetween: 20,
+                    },
+                    1200: {
+                        slidesPerView: 4,
+                        spaceBetween: 22,
+                    },
+                },
+            });
         });
     </script>
 
@@ -649,10 +689,7 @@
                     day: 'numeric'
                 };
                 dateTextInput.value = selectedDate.toLocaleDateString('ar-EG', options);
-                const dateTextInput2 = document.getElementById('dateTextInput2');
-                dateTextInput2.value = dateTextInput.value;
-                const dateRealInput2 = document.getElementById('dateRealInput2');
-                dateRealInput2.value = selectedDate;
+                // Do not sync go date to return date - user can set return date independently
             });
         });
     </script>
@@ -663,6 +700,7 @@
             const dateRealInput = document.getElementById('dateRealInput');
             const dateTextInput2 = document.getElementById('dateTextInput2');
             const dateRealInput2 = document.getElementById('dateRealInput2');
+            if (!dateTextInput || !dateRealInput) return;
 
             const currentLang = '{{ app()->getLocale() }}';
             const locale = currentLang === 'ar' ? 'ar-EG' : 'en-US';
@@ -677,29 +715,37 @@
                 return date.toLocaleDateString(locale, options);
             }
 
-            function updateDisplayedDates(date) {
-                const formattedDate = formatDate(date);
-                dateTextInput.value = formattedDate;
-                dateTextInput2.value = formattedDate;
-
-                dateRealInput2.value = date.toISOString().split('T')[0]; // تخزين التاريخ بصيغة input
+            // Initial display: set each date from its own input only (do not sync)
+            if (dateRealInput.value) {
+                dateTextInput.value = formatDate(new Date(dateRealInput.value));
             }
+            if (dateRealInput2 && dateRealInput2.value) {
+                dateTextInput2.value = formatDate(new Date(dateRealInput2.value));
+            }
+            // Return date cannot be before go date (min only; do not change return value)
+            if (dateRealInput2) dateRealInput2.min = dateRealInput.value;
 
-            const today = new Date();
-            updateDisplayedDates(today);
-
-            dateTextInput2.addEventListener('click', () => dateRealInput2.showPicker());
+            if (dateTextInput2) dateTextInput2.addEventListener('click', () => dateRealInput2.showPicker());
             dateTextInput.addEventListener('click', () => dateRealInput.showPicker());
 
+            // Go date change: update only go date display and set min for return date
             dateRealInput.addEventListener('change', function() {
-                const selectedDate = new Date(this.value);
-                updateDisplayedDates(selectedDate);
+                dateTextInput.value = formatDate(new Date(this.value));
+                if (dateRealInput2) {
+                    dateRealInput2.min = this.value;
+                    if (dateRealInput2.value && dateRealInput2.value < this.value) {
+                        dateRealInput2.value = this.value;
+                        dateTextInput2.value = formatDate(new Date(this.value));
+                    }
+                }
             });
 
-            dateRealInput2.addEventListener('change', function() {
-                const selectedDate = new Date(this.value);
-                updateDisplayedDates(selectedDate);
-            });
+            // Return date change: update only return date display
+            if (dateRealInput2) {
+                dateRealInput2.addEventListener('change', function() {
+                    dateTextInput2.value = formatDate(new Date(this.value));
+                });
+            }
         });
     </script>
 
@@ -733,62 +779,41 @@
 
         function incrementPassengers() {
             passengerCount++;
-            countElement.textContent = passengerCount;
-            countElementInput.value = passengerCount;
-            countElement2Input.value = passengerCount;
+            if (countElement) countElement.textContent = passengerCount;
+            if (countElementInput) countElementInput.value = passengerCount;
+            if (countElement2Input) countElement2Input.value = passengerCount;
         }
 
         function decrementPassengers() {
             if (passengerCount > 1) {
                 passengerCount--;
-                countElement.textContent = passengerCount;
-                countElementInput.value = passengerCount;
-                countElement2Input.value = passengerCount;
+                if (countElement) countElement.textContent = passengerCount;
+                if (countElementInput) countElementInput.value = passengerCount;
+                if (countElement2Input) countElement2Input.value = passengerCount;
             }
         }
     </script>
     <script>
         let passengerCount2 = 1;
         const countElement2 = document.getElementById('passengerCount2');
-        const countElement2Input = document.getElementById('passenger-count2');
-        const countElementInput = document.getElementById('passenger-count');
+        const passengerCount2InputEl = document.getElementById('passenger-count2');
+        const passengerCountInputEl = document.getElementById('passenger-count');
 
         function incrementPassengers2() {
             passengerCount2++;
             countElement2.textContent = passengerCount2;
-            countElement2Input.value = passengerCount2;
-            countElementInput.value = passengerCount2;
+            if (passengerCount2InputEl) passengerCount2InputEl.value = passengerCount2;
+            if (passengerCountInputEl) passengerCountInputEl.value = passengerCount2;
         }
 
         function decrementPassengers2() {
             if (passengerCount2 > 1) {
                 passengerCount2--;
                 countElement2.textContent = passengerCount2;
-                countElement2Input.value = passengerCount2;
-                countElementInput.value = passengerCount2;
+                if (passengerCount2InputEl) passengerCount2InputEl.value = passengerCount2;
+                if (passengerCountInputEl) passengerCountInputEl.value = passengerCount2;
             }
         }
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const swapBtn = document.querySelector('.swap-btn');
-
-            swapBtn.addEventListener('click', function() {
-                const fromInput = document.querySelector('.from-input');
-                const toInput = document.querySelector('.to-input');
-
-                const tempValue = fromInput.value;
-
-                fromInput.value = toInput.value;
-                toInput.value = tempValue;
-
-                this.classList.add('clicked');
-                setTimeout(() => {
-                    this.classList.remove('clicked');
-                }, 300);
-            });
-        });
     </script>
 
     <script>
@@ -801,15 +826,16 @@
             const departureDateCol = document.getElementById('departureDateCol');
 
             function updateLayout() {
+                if (!returnDateCol || !departureDateCol || !passengersColSide || !passengersColBottom) return;
                 if (roundTripRadio.checked) {
-                    // حالة ذهاب وعودة
+                    // Round trip layout
                     returnDateCol.classList.remove('d-none');
                     departureDateCol.classList.remove('col-md-6');
                     departureDateCol.classList.add('col-md-6');
                     passengersColSide.classList.add('d-none');
                     passengersColBottom.classList.remove('d-none');
                 } else {
-                    // حالة ذهاب فقط
+                    // One way layout
                     returnDateCol.classList.add('d-none');
                     departureDateCol.classList.remove('col-md-6');
                     departureDateCol.classList.add('col-md-6');
@@ -818,10 +844,11 @@
                 }
             }
 
-            oneWayRadio.addEventListener('change', updateLayout);
-            roundTripRadio.addEventListener('change', updateLayout);
-
-            updateLayout();
+            if (oneWayRadio && roundTripRadio) {
+                oneWayRadio.addEventListener('change', updateLayout);
+                roundTripRadio.addEventListener('change', updateLayout);
+                updateLayout();
+            }
         });
     </script>
 
@@ -829,35 +856,47 @@
         document.addEventListener('DOMContentLoaded', function() {
             const oneWayRadioDes = document.getElementById('oneWayRadioDes');
             const roundTripRadioDes = document.getElementById('roundTripRadioDes');
-            const returnDateContainer = document.querySelector('.col-md-6.d-none');
-            const arrivalTimeSection = document.querySelector('.col-md-6.mt-4');
+            const returnDateContainer = document.querySelector('.return-date-col');
+            const arrivalTimeSection = document.querySelector('.arrival-time-box');
             const arrivalTimeLink = document.querySelector('.arrival-time');
+            const tripForm = document.getElementById('tripForm');
+
+            // Tab buttons
+            const onewayTab = document.getElementById('pills-oneway-tab');
+            const roundTab = document.getElementById('pills-round-tab');
 
             document.querySelectorAll('input[name="tripType"]').forEach(radio => {
                 radio.addEventListener('change', updateTripTypeDisplay);
             });
 
-            arrivalTimeLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                roundTripRadioDes.checked = true;
-                updateTripTypeDisplay();
-            });
+            if (arrivalTimeLink) {
+                arrivalTimeLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    roundTripRadioDes.checked = true;
+                    // Trigger tab sync
+                    roundTab.classList.add('active');
+                    onewayTab.classList.remove('active');
+                    updateTripTypeDisplay();
+                });
+            }
 
             function updateTripTypeDisplay() {
                 if (roundTripRadioDes.checked) {
-                    // إظهار تاريخ العودة
                     returnDateContainer.classList.remove('d-none');
                     arrivalTimeSection.classList.add('d-none');
-
-                    // تغيير الـ action لرحلة ذهاب وعودة
                     tripForm.action = "{{ route('round.trips') }}";
+
+                    // Sync tabs
+                    roundTab.classList.add('active');
+                    onewayTab.classList.remove('active');
                 } else {
-                    // إخفاء تاريخ العودة
                     returnDateContainer.classList.add('d-none');
                     arrivalTimeSection.classList.remove('d-none');
-
-                    // تغيير الـ action لرحلة ذهاب فقط
                     tripForm.action = "{{ route('one-way.trips') }}";
+
+                    // Sync tabs
+                    onewayTab.classList.add('active');
+                    roundTab.classList.remove('active');
                 }
             }
         });
@@ -911,89 +950,125 @@
             }
         });
     </script>
-    <style>
-        #to-sub-stations,
-        #from-sub-stations {
-            z-index: 9999999 !important;
-            max-height: 300px !important;
-            overflow-y: scroll !important;
-        }
 
-        .main-stations,
-        .sub-stations-dropdown {
-            transform: none !important;
-            top: 100% !important;
-            left: 0 !important;
-            position: absolute;
-            inset: 0px 0px auto auto;
-            margin: 0px;
-        }
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/ar.js"></script>
 
-        /* لما تقف على الـ input */
-        .from-input,
-        .to-input {
-            cursor: pointer;
-        }
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const isRTL = document.documentElement.dir === 'rtl';
 
-        /* لما تقف على عناصر القائمة */
-        #fromInput,
-        #toInput,
-        #from-stations li,
-        #to-stations li,
-        #from-sub-stations li,
-        #to-sub-stations li {
-            cursor: pointer;
-        }
-    </style>
+            // Initialize Flatpickr
+            const goDateInput = document.getElementById('dateRealInput');
+            const returnDateInput = document.getElementById('dateRealInput2');
+            const goDateStr = goDateInput && goDateInput.value ? goDateInput.value : 'today';
+
+            const fp = flatpickr("#dateRealInput", {
+                locale: isRTL ? "ar" : "en",
+                dateFormat: "Y-m-d",
+                minDate: "today",
+                onChange: function(selectedDates, dateStr) {
+                    document.getElementById('dateTextInput').value = dateStr;
+                    if (returnDateInput) {
+                        returnDateInput.min = dateStr;
+                        if (returnDateInput.value && returnDateInput.value < dateStr) {
+                            returnDateInput.value = dateStr;
+                            const dateTextInput2 = document.getElementById('dateTextInput2');
+                            if (dateTextInput2) dateTextInput2.value = dateStr;
+                        }
+                    }
+                    if (typeof fp2 !== 'undefined' && fp2) fp2.set('minDate', dateStr);
+                }
+            });
+
+            document.getElementById('dateTextInput').addEventListener('click', () => {
+                fp.open();
+            });
+
+            let fp2 = null;
+            if (returnDateInput) {
+                fp2 = flatpickr("#dateRealInput2", {
+                    locale: isRTL ? "ar" : "en",
+                    dateFormat: "Y-m-d",
+                    minDate: goDateStr,
+                    onChange: function(selectedDates, dateStr) {
+                        document.getElementById('dateTextInput2').value = dateStr;
+                    }
+                });
+
+                document.getElementById('dateTextInput2').addEventListener('click', () => {
+                    const goVal = goDateInput && goDateInput.value ? goDateInput.value : null;
+                    if (goVal && fp2) fp2.set('minDate', goVal);
+                    fp2.open();
+                });
+            }
+
+            // Sync initial display values from hidden inputs (so both dates show correctly on load)
+            if (goDateInput && goDateInput.value) {
+                const txt = document.getElementById('dateTextInput');
+                if (txt) txt.value = goDateInput.value;
+            }
+            if (returnDateInput && returnDateInput.value) {
+                const txt2 = document.getElementById('dateTextInput2');
+                if (txt2) txt2.value = returnDateInput.value;
+            }
+        });
+    </script>
 
     <!-- stations  -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // عناصر DOM
             const fromInput = document.getElementById('fromInput');
-
             const toInput = document.getElementById('toInput');
             const fromStations = document.getElementById('from-stations');
             const toStations = document.getElementById('to-stations');
-            const fromSubStations = document.getElementById('from-sub-stations');
-            const toSubStations = document.getElementById('to-sub-stations');
-            initDropdowns();
 
-            // تحميل المدن من API
-            async function loadCities() {
+            // Pre-load Cities Immediately
+            let cachedCities = null;
+            const stationCache = {};
+
+            async function getCities() {
+                if (cachedCities) return cachedCities;
                 try {
                     const response = await fetch('/get-cities');
-                    if (!response.ok) throw new Error('Network response was not ok');
-                    return await response.json();
+                    cachedCities = await response.json();
+                    return cachedCities;
                 } catch (error) {
                     console.error('Error loading cities:', error);
                     return [];
                 }
             }
 
-            // تحميل المحطات من API
+            // Early init
+            initDropdowns();
+
             async function loadStations(cityId) {
+                if (stationCache[cityId]) return stationCache[cityId];
                 try {
                     const response = await fetch(`/get-stations/${cityId}`);
-                    if (!response.ok) throw new Error('Network response was not ok');
-                    return await response.json();
+                    const data = await response.json();
+                    stationCache[cityId] = data;
+                    return data;
                 } catch (error) {
                     console.error('Error loading stations:', error);
                     return [];
                 }
             }
 
-            // تهيئة القوائم المنسدلة
             async function initDropdowns() {
-                console.log('initDropdowns');
-                const cities = await loadCities();
-
+                const cities = await getCities();
                 initDropdown('from', cities);
                 initDropdown('to', cities);
-                console.log('initDropdowns after');
-                // أحداث النقر على المدخلات
+
+                // Pre-load stations for the default cities to make it instant
+                const defaultFromCityId = document.getElementById('city_from_id').value;
+                const defaultToCityId = document.getElementById('city_to_id').value;
+                if (defaultFromCityId) loadStations(defaultFromCityId);
+                if (defaultToCityId) loadStations(defaultToCityId);
+
                 fromInput.addEventListener('click', function(e) {
-                    console.log('fromInput clicked');
                     e.stopPropagation();
                     toggleDropdown('from-stations', true);
                     toggleDropdown('from-sub-stations', false);
@@ -1010,10 +1085,29 @@
                     toggleDropdown('to-stations', true);
                     toggleDropdown('to-sub-stations', false);
                 });
-                toInput.addEventListener('focus', function(e) {
-                    e.stopPropagation();
-                    toggleDropdown('to-stations', true);
-                    toggleDropdown('to-sub-stations', false);
+
+                // Live Filtering Logic
+                fromInput.addEventListener('input', function() {
+                    filterDropdown('from-stations', this.value);
+                });
+                toInput.addEventListener('input', function() {
+                    filterDropdown('to-stations', this.value);
+                });
+
+                // Remove readonly on focus to allow typing
+                fromInput.addEventListener('focus', function() {
+                    this.removeAttribute('readonly');
+                });
+                toInput.addEventListener('focus', function() {
+                    this.removeAttribute('readonly');
+                });
+
+                // Restore readonly on blur
+                fromInput.addEventListener('blur', function() {
+                    setTimeout(() => this.setAttribute('readonly', true), 200);
+                });
+                toInput.addEventListener('blur', function() {
+                    setTimeout(() => this.setAttribute('readonly', true), 200);
                 });
 
                 // إغلاق القوائم عند النقر خارجها
@@ -1022,6 +1116,17 @@
                     toggleDropdown('from-sub-stations', false);
                     toggleDropdown('to-stations', false);
                     toggleDropdown('to-sub-stations', false);
+                });
+            }
+
+            function filterDropdown(menuId, query) {
+                const menu = document.getElementById(menuId);
+                const items = menu.querySelectorAll('li.dropdown-item');
+                const lowerQuery = query.toLowerCase();
+
+                items.forEach(item => {
+                    const text = item.textContent.toLowerCase();
+                    item.style.display = text.includes(lowerQuery) ? 'flex' : 'none';
                 });
             }
 
@@ -1045,16 +1150,18 @@
                     const item = document.createElement('li');
                     item.className =
                         'dropdown-item d-flex justify-content-between align-items-center py-2 px-3';
+                    const isRTL = document.documentElement.dir === 'rtl';
+                    const chevronClass = isRTL ? 'fa-chevron-left' : 'fa-chevron-right';
                     item.innerHTML = `
                 <span>${city.name}</span>
-                <i class="fas fa-chevron-left ms-2"></i>
+                <i class="fas ${chevronClass} ms-2 opacity-50 small"></i>
             `;
 
                     item.addEventListener('click', async (e) => {
                         e.stopPropagation();
 
                         // حط ID المدينة في الـ hidden input المناسب
-                        const cityInputId = type === 'from' ? 'cityFrom_id' : 'cityTo_id';
+                        const cityInputId = type === 'from' ? 'city_from_id' : 'city_to_id';
                         document.getElementById(cityInputId).value = city.id;
 
                         // عرض حالة التحميل
@@ -1070,8 +1177,10 @@
 
                         // تحميل المحطات
                         const stations = await loadStations(city.id);
-                        populateSubMenu(`${type}-sub-stations`, stations,
-                            `${type}-stations`, city.name, type);
+                        setTimeout(() => {
+                            populateSubMenu(`${type}-sub-stations`, stations,
+                                `${type}-stations`, city.name, type);
+                        }, 50); // Tiny delay for smoother animation transition
                     });
 
 
@@ -1086,11 +1195,11 @@
 
                 // زر الرجوع
                 const backItem = document.createElement('li');
-                backItem.className = 'dropdown-item d-flex align-items-center py-2 px-3';
+                backItem.className = 'dropdown-item back-item d-flex align-items-center py-2 px-3';
                 backItem.innerHTML = `
-        <i class="fas fa-arrow-left me-2"></i>
-        <span>رجوع إلى ${cityName}</span>
-        `;
+                <i class="fas fa-arrow-right me-2"></i>
+                <span class="fw-bold">رجوع للمدن</span>
+                `;
                 backItem.addEventListener('click', (e) => {
                     e.stopPropagation();
                     toggleDropdown(subMenuId, false);
@@ -1117,8 +1226,8 @@
                         item.textContent = station.name;
                         item.addEventListener('click', () => {
                             const inputId = subMenuId.includes('from') ? 'fromInput' : 'toInput';
-                            const hiddenId = subMenuId.includes('from') ? 'stationFrom_id' :
-                                'stationTo_id';
+                            const hiddenId = subMenuId.includes('from') ? 'station_from_id' :
+                                'station_to_id';
                             document.getElementById(inputId).value = station.name;
                             document.getElementById(hiddenId).value = station.id; // ✅ حفظ ID المحطة
                             toggleDropdown(subMenuId, false);
@@ -1129,56 +1238,96 @@
             }
 
 
+            // Swap stations: use delegation so both desktop and mobile swap buttons work
+            document.addEventListener('click', function(e) {
+                const swapBtn = e.target.closest('.swap-btn-floating, #swap-btn');
+                if (!swapBtn) return;
+
+                e.preventDefault();
+                e.stopPropagation();
+
+                // Desktop form (#tripForm)
+                const tripForm = document.getElementById('tripForm');
+                if (tripForm && tripForm.contains(swapBtn)) {
+                    const cityFromId = tripForm.querySelector('#city_from_id');
+                    const cityToId = tripForm.querySelector('#city_to_id');
+                    const stationFromId = tripForm.querySelector('#station_from_id');
+                    const stationToId = tripForm.querySelector('#station_to_id');
+                    const fromInput = tripForm.querySelector('#fromInput');
+                    const toInput = tripForm.querySelector('#toInput');
+                    if (cityFromId && cityToId && stationFromId && stationToId && fromInput && toInput) {
+                        const tempCity = cityFromId.value;
+                        cityFromId.value = cityToId.value;
+                        cityToId.value = tempCity;
+                        const tempStation = stationFromId.value;
+                        stationFromId.value = stationToId.value;
+                        stationToId.value = tempStation;
+                        const tempText = fromInput.value;
+                        fromInput.value = toInput.value;
+                        toInput.value = tempText;
+                    }
+                    return;
+                }
+
+                // Mobile form (#search-form)
+                const searchForm = document.getElementById('search-form');
+                if (searchForm && searchForm.contains(swapBtn)) {
+                    const fromCityInput = document.getElementById('from-city');
+                    const toCityInput = document.getElementById('to-city');
+                    const fromStationInput = document.getElementById('from-station');
+                    const toStationInput = document.getElementById('to-station');
+                    const fromLocationSpan = document.getElementById('from-location');
+                    const toLocationSpan = document.getElementById('to-location');
+                    if (fromCityInput && toCityInput && fromStationInput && toStationInput &&
+                        fromLocationSpan && toLocationSpan) {
+                        const tempCityId = fromCityInput.value;
+                        fromCityInput.value = toCityInput.value;
+                        toCityInput.value = tempCityId;
+                        const tempStationId = fromStationInput.value;
+                        fromStationInput.value = toStationInput.value;
+                        toStationInput.value = tempStationId;
+                        const tempLocation = fromLocationSpan.textContent;
+                        fromLocationSpan.textContent = toLocationSpan.textContent;
+                        toLocationSpan.textContent = tempLocation;
+                    }
+                }
+            });
+
             // تبديل حالة القائمة المنسدلة
             function toggleDropdown(menuId, show) {
                 const menu = document.getElementById(menuId);
                 if (menu) {
                     menu.style.display = show ? 'block' : 'none';
-                    // تعديل position إذا كانت القائمة طويلة
                     if (show) {
+                        // Ensure it's above other elements but below navbar if navbar is fixed
                         const rect = menu.getBoundingClientRect();
                         if (rect.bottom > window.innerHeight) {
                             menu.style.top = 'auto';
                             menu.style.bottom = '100%';
+                        } else {
+                            menu.style.top = 'calc(100% + 10px)';
+                            menu.style.bottom = 'auto';
                         }
                     }
                 }
             }
-
-            // تهيئة أولية
         });
     </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const currentLang = document.documentElement.dir; // الحصول على اتجاه النصوص (rtl أو ltr)
-
-            // تحديث اتجاه السهم بناءً على اللغة
-            function updateArrowDirection() {
-                const arrowIcons = document.querySelectorAll('.dropdown-item i');
-                arrowIcons.forEach(icon => {
-                    if (currentLang === 'rtl') {
-                        icon.classList.remove('fa-chevron-right');
-                        icon.classList.add('fa-chevron-left');
-                    } else {
-                        icon.classList.remove('fa-chevron-left');
-                        icon.classList.add('fa-chevron-right');
+    <!-- Arrow direction handling removed as it's now handled during dynamic population -->
+    @if (!empty($apps['android']) || !empty($apps['ios']))
+        <script>
+            // Show app modal only after full page load so the home page is visible first
+            window.addEventListener('load', function() {
+                if (localStorage.getItem('appModalShown')) return;
+                setTimeout(function() {
+                    var el = document.getElementById('appDownloadModal');
+                    if (el) {
+                        var appDownloadModal = new bootstrap.Modal(el);
+                        appDownloadModal.show();
+                        localStorage.setItem('appModalShown', 'true');
                     }
-                });
-            }
-
-            updateArrowDirection(); // استدعاء الوظيفة عند التحميل
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Show the app download modal after a short delay
-            setTimeout(function() {
-                const appDownloadModal = new bootstrap.Modal(document.getElementById('appDownloadModal'));
-                appDownloadModal.show();
-
-                // Store in localStorage that we've shown the modal
-                localStorage.setItem('appModalShown', 'true');
-            }, 500); // 1.5 second delay
-        });
-    </script>
+                }, 1500);
+            });
+        </script>
+    @endif
 @endpush

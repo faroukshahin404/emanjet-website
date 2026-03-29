@@ -16,25 +16,44 @@ class HomeController extends Controller
 {
     public function home()
     {
-     
+
         $qnbPaymentService = new \App\Services\QNBPaymentService('app');
-                
-                $payment = $qnbPaymentService->initiateQNBPaymentLink([
-                    'amount' => 100,
-                    'order_id' => 1234567890,
-                ]);
-                
+
+        $payment = $qnbPaymentService->initiateQNBPaymentLink([
+            'amount' => 100,
+            'order_id' => 1234567890,
+        ]);
+
 
         $stations = Station::where('available_online', 1)->get();
         $cities = City::available()->orderBy('rank')->get();
         $page = Page::where('slug', 'home')->first();
-        $homePageSeos = $page->pageSeos()->get();
-        $heroSection = $homePageSeos->where('section_type', 'hero-section')->first()->translated_content_json;
-        $anyWhereSection = $homePageSeos->where('section_type', 'any-where')->first()->translated_content_json;
-        $paymentMethodsSection = $homePageSeos->where('section_type', 'payment-methods')->first()->translated_content_json;
+        $homePageSeos = $page ? $page->pageSeos()->get() : collect();
+        $heroSection = $this->getSectionContent($homePageSeos, 'hero-section', [
+            'card-title' => __('Book your trip now!'),
+            'image' => asset('images/hero-section.png'),
+            'caption-title' => __('We are here to help you'),
+            'caption-description' => __('Book your trip with Super Jet'),
+        ]);
+        $anyWhereSection = $this->getSectionContent($homePageSeos, 'any-where', [
+            'title' => __('Super Jet is with you anywhere'),
+            'description' => '',
+            'image' => 'https://placehold.co/745x677',
+        ]);
+        $paymentMethodsSection = $this->getSectionContent($homePageSeos, 'payment-methods', [
+            'title' => __('Choose the payment method that suits you'),
+            'images' => [],
+        ]);
         $busTypesSection = BusCategory::get();
-        $reservationSection = $homePageSeos->where('section_type', 'reservation')->first()->translated_content_json;
-        $seo = getSeoData($page);
+        $popularDestinationsSection = $this->getSectionContent($homePageSeos, 'popular-destinations', [
+            'title' => __('Popular Destinations'),
+            'description' => '',
+        ]);
+        $reservationSection = $this->getSectionContent($homePageSeos, 'reservation', [
+            'title' => '',
+            'description' => '',
+        ]);
+        $seo = $page ? getSeoData($page->toArray()) : $this->getDefaultSeo();
         $testimonials = Testimonial::inRandomOrder()->limit(3)->get();
         $blogs = Blog::inRandomOrder()->limit(6)->get();
 
@@ -45,6 +64,7 @@ class HomeController extends Controller
             'anyWhereSection' => $anyWhereSection,
             'paymentMethodsSection' => $paymentMethodsSection,
             'busTypesSection' => $busTypesSection,
+            'popularDestinationsSection' => $popularDestinationsSection,
             'reservationSection' => $reservationSection,
             'seo' => $seo,
             'testimonials' => $testimonials,
@@ -92,9 +112,14 @@ class HomeController extends Controller
     public function contact_us()
     {
         $page = Page::where('slug', 'contact-us')->first();
-        $contactPageSeos = $page->pageSeos()->get();
-        $contactForm = $contactPageSeos->where('section_type', 'contact-form')->first()->translated_content_json;
-        $seo = getSeoData($page);
+        $contactPageSeos = $page ? $page->pageSeos()->get() : collect();
+        $contactForm = $this->getSectionContent($contactPageSeos, 'contact-form', [
+            'title' => __('Contact Form'),
+            'description' => '',
+            'image' => '',
+            'button-text' => __('Send'),
+        ]);
+        $seo = $page ? getSeoData($page->toArray()) : $this->getDefaultSeo();
         return view('other.contact-us.index')->with([
             'contactForm' => $contactForm,
             'seo' => $seo
@@ -123,10 +148,10 @@ class HomeController extends Controller
     public function about_us()
     {
         $page = Page::where('slug', 'about-us')->first();
-        $aboutPageSeos = $page->pageSeos()->get();
-        $heroSection = $aboutPageSeos->where('section_type', 'hero-section')->first()->translated_content_json;
-        $serviceSection = $aboutPageSeos->where('section_type', 'services')->first()->translated_content_json;
-        $seo = getSeoData($page);
+        $aboutPageSeos = $page ? $page->pageSeos()->get() : collect();
+        $heroSection = $this->getSectionContent($aboutPageSeos, 'hero-section', ['title' => __('About Us'), 'description' => '', 'image' => '']);
+        $serviceSection = $this->getSectionContent($aboutPageSeos, 'services', []);
+        $seo = $page ? getSeoData($page->toArray()) : $this->getDefaultSeo();
         return view('other.about-us.index')->with([
             'heroSection' => $heroSection,
             'serviceSection' => $serviceSection,
@@ -137,11 +162,10 @@ class HomeController extends Controller
     public function privacy_policy()
     {
         $page = Page::where('slug', 'privacy-policy')->first();
-        $privacePageSeos = $page->pageSeos()->get();
-        $heroSection = @$privacePageSeos->first()->translated_content_json;
-        $serviceSection = @$privacePageSeos->first()->translated_content_json;
-        $seo = getSeoData($page);
-
+        $privacePageSeos = $page ? $page->pageSeos()->get() : collect();
+        $heroSection = $this->getSectionContent($privacePageSeos, 'privacy-policy', ['title' => __('Privacy Policy'), 'description' => '', 'image' => '', 'button-text' => '']);
+        $serviceSection = $heroSection;
+        $seo = $page ? getSeoData($page->toArray()) : $this->getDefaultSeo();
 
         return view('other.privacy-policy.index')->with([
             'heroSection' => $heroSection,
@@ -152,11 +176,10 @@ class HomeController extends Controller
     public function usage_terms()
     {
         $page = Page::where('slug', 'usage-terms')->first();
-        $privacePageSeos = $page->pageSeos()->get();
-        $heroSection = @$privacePageSeos->first()->translated_content_json;
-        $serviceSection = @$privacePageSeos->first()->translated_content_json;
-        $seo = getSeoData($page);
-
+        $privacePageSeos = $page ? $page->pageSeos()->get() : collect();
+        $heroSection = $this->getSectionContent($privacePageSeos, 'usage-terms', ['title' => __('Usage Terms'), 'description' => '', 'image' => '', 'button-text' => '']);
+        $serviceSection = $heroSection;
+        $seo = $page ? getSeoData($page->toArray()) : $this->getDefaultSeo();
 
         return view('other.usage-terms.index')->with([
             'heroSection' => $heroSection,
@@ -170,10 +193,10 @@ class HomeController extends Controller
     public function blogs()
     {
         $page = Page::where('slug', 'blogs')->first();
-        $blogsPageSeos = $page->pageSeos()->get();
-        $heroSection = $blogsPageSeos->where('section_type', 'hero-section')->first()->translated_content_json;
-        $tripStartSection = $blogsPageSeos->where('section_type', 'trip-start')->first()->translated_content_json;
-        $seo = getSeoData($page);
+        $blogsPageSeos = $page ? $page->pageSeos()->get() : collect();
+        $heroSection = $this->getSectionContent($blogsPageSeos, 'hero-section', ['title' => __('Bus Blogs'), 'description' => '', 'image' => '']);
+        $tripStartSection = $this->getSectionContent($blogsPageSeos, 'trip-start', ['title' => '', 'description' => '', 'button-text' => __('Book Now'), 'images' => []]);
+        $seo = $page ? getSeoData($page->toArray()) : $this->getDefaultSeo();
         $blogsCategories = BlogCategory::with('blogs')->get();
         return view('other.blogs.index')->with([
             'heroSection' => $heroSection,
@@ -194,11 +217,11 @@ class HomeController extends Controller
         }
         $cities = $query->inRandomOrder()->limit(9)->get();
         $page = Page::where('slug', 'destinations')->first();
-        $destinationsPageSeos = $page->pageSeos()->get();
-        $heroSection = $destinationsPageSeos->where('section_type', 'hero-section')->first()->translated_content_json;
-        $trySection = $destinationsPageSeos->where('section_type', 'try')->first()->translated_content_json;
-        $appSection = $destinationsPageSeos->where('section_type', 'app')->first()->translated_content_json;
-        $seo = getSeoData($page);
+        $destinationsPageSeos = $page ? $page->pageSeos()->get() : collect();
+        $heroSection = $this->getSectionContent($destinationsPageSeos, 'hero-section', ['search-title' => __('Where are you traveling to?'), 'image' => '']);
+        $trySection = $this->getSectionContent($destinationsPageSeos, 'try', ['title' => '', 'description' => '', 'image' => '']);
+        $appSection = $this->getSectionContent($destinationsPageSeos, 'app', ['title' => '', 'description' => '', 'image' => '']);
+        $seo = $page ? getSeoData($page->toArray()) : $this->getDefaultSeo();
 
         return view('other.destinations.index')->with([
             'cities' => $cities,
@@ -213,18 +236,43 @@ class HomeController extends Controller
     public function faqs()
     {
         $page = Page::where('slug', 'faqs')->first();
-        $faqsPageSeos = $page->pageSeos()->get();
-        $heroSection = $faqsPageSeos->where('section_type', 'hero-section')->first()->translated_content_json;
-        $faqsList = $faqsPageSeos->where('section_type', 'faq-list')->first()->translated_content_json;
-        $seo = getSeoData($page);
-        return view('other.faqs.index', )->with([
+        $faqsPageSeos = $page ? $page->pageSeos()->get() : collect();
+        $heroSection = $this->getSectionContent($faqsPageSeos, 'hero-section', ['title' => __('FAQs'), 'description' => '', 'image' => '']);
+        $faqsList = $this->getSectionContent($faqsPageSeos, 'faq-list', ['faqs' => []]);
+        $seo = $page ? getSeoData($page->toArray()) : $this->getDefaultSeo();
+        return view('other.faqs.index')->with([
             'heroSection' => $heroSection,
             'faqsList' => $faqsList,
             'seo' => $seo
         ]);
     }
 
+    /**
+     * Get section content from page SEO collection with fallback defaults.
+     */
+    private function getSectionContent($pageSeos, string $sectionType, array $default = []): array
+    {
+        $section = $pageSeos->where('section_type', $sectionType)->first();
+        if (!$section) {
+            return $default;
+        }
+        $content = $section->translated_content_json;
+        return is_array($content) ? $content : $default;
+    }
 
-
-
+    /**
+     * Default SEO data when no page is found.
+     */
+    private function getDefaultSeo(): array
+    {
+        return [
+            'meta_title' => 'Super Jet',
+            'meta_description' => 'Super Jet - ' . __('Book your trip'),
+            'meta_keywords' => 'super jet, travel, booking',
+            'meta_image' => 'default-image.jpg',
+            'og_title' => 'Super Jet',
+            'og_description' => 'Super Jet - ' . __('Book your trip'),
+            'og_image' => 'default-og-image.jpg',
+        ];
+    }
 }
