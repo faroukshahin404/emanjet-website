@@ -40,43 +40,29 @@
     </script>
 
     <!-- Scripts -->
+    {{-- Swiper before @stack: page scripts expect Swiper global after DOMContentLoaded --}}
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
-    @stack('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    {{-- Bootstrap bundle includes Popper; separate popper script removed as redundant --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js" defer></script>
+    @stack('scripts')
     <script src="{{ asset('js/main.js') }}" defer></script>
     <script src="{{ asset('js/custom-toastr.js') }}"></script>
-    <script>
-        $(window).on('resize', function() {
-            let prevWidth = window.innerWidth;
-            if (window.innerWidth !== prevWidth) {
-                window.location.href = '/';
-                prevWidth = window.innerWidth;
-            }
-        });
-    </script>
-    <script>
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            return false;
-        });
-    </script>
     @if (session('success'))
         <script>
-            showToast('success', "{{ session('success') }}");
+            showToast('success', @json(session('success')));
         </script>
     @endif
     @if (session('error'))
         <script>
-            showToast('error', "{{ session('error') }}");
+            showToast('error', @json(session('error')));
         </script>
     @endif
     @if ($errors->any())
         <script>
-            showToast('error', "{{ $errors->first() }}");
+            showToast('error', @json($errors->first()));
         </script>
     @endif
 

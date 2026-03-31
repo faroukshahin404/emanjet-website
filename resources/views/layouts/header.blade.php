@@ -9,14 +9,14 @@
     </a>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
-        aria-controls="offcanvasNavbar">
-        <i class="fas fa-bars"></i>
+        aria-controls="offcanvasNavbar" aria-expanded="false" aria-label="{{ __('Open navigation menu') }}">
+        <i class="fas fa-bars" aria-hidden="true"></i>
     </button>
 
     <!-- Offcanvas Sidebar -->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
         <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasNavbarLabel"></h5>
+            <h5 class="offcanvas-title" id="offcanvasNavbarLabel">{{ __('Menu') }}</h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">

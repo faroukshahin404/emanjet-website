@@ -1,4 +1,18 @@
+/*
+ * Main site stylesheet. High use of !important is legacy technical debt;
+ * prefer CSS variables and specificity over time when touching related rules.
+ */
+
 /* start global  */
+
+/* Heart favorite buttons — toggled in main.js via .is-liked */
+.heart-btn.is-liked i.fa-heart {
+    color: var(--main-color);
+}
+
+.heart-btn:not(.is-liked) i.fa-heart {
+    color: #000;
+}
 
 @font-face {
     font-family: "Jozoor";
@@ -44,8 +58,9 @@ a {
 }
 
 :root {
-    --main-color: #ff6127;
-    --main-hover: #cc4d1e;
+    --main-color: #f2b02c;
+    --main-hover: #c99316;
+    --main-color-rgb: 242, 176, 44;
     --glass-bg: rgba(255, 255, 255, 0.7);
     --glass-border: rgba(255, 255, 255, 0.3);
     --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
@@ -67,21 +82,21 @@ a {
 }
 
 .bg-main {
-    background-color: #ff6127;
+    background-color: var(--main-color);
 }
 
 .text-main {
-    color: #ff6127 !important;
+    color: var(--main-color) !important;
 }
 
 .btn-main {
-    background-color: #ff6127;
+    background-color: var(--main-color);
     color: white;
 }
 
 .btn-main-outline {
-    color: #ff6127;
-    border: 1px solid #ff6127;
+    color: var(--main-color);
+    border: 1px solid var(--main-color);
 }
 
 .text-black {
@@ -94,26 +109,26 @@ a {
 
 /* Override Bootstrap warning colors to match brand */
 .text-warning {
-    color: #ff6127 !important;
+    color: var(--main-color) !important;
 }
 
 .bg-warning {
-    background-color: #ff6127 !important;
+    background-color: var(--main-color) !important;
 }
 
 .badge.bg-warning {
-    background-color: #ff6127 !important;
+    background-color: var(--main-color) !important;
 }
 
 .btn-warning {
-    background-color: #ff6127 !important;
-    border-color: #ff6127 !important;
+    background-color: var(--main-color) !important;
+    border-color: var(--main-color) !important;
 }
 
 .btn-warning:hover,
 .btn-warning:focus {
-    background-color: #cc4d1e !important;
-    border-color: #cc4d1e !important;
+    background-color: var(--main-hover) !important;
+    border-color: var(--main-hover) !important;
 }
 
 /* Global Dropdown Premium Styles */
@@ -211,7 +226,7 @@ a {
 }
 
 .navbar .dropdown-menu .dropdown-item:hover {
-    color: #ff6127;
+    color: var(--main-color);
     text-decoration: underline;
 }
 
@@ -330,7 +345,7 @@ html[dir="ltr"] .navbar-nav {
     width: 167px;
     height: 53px;
     border-radius: 20.49px;
-    background-color: #ff6127;
+    background-color: var(--main-color);
     color: white;
     border: none;
 }
@@ -419,7 +434,7 @@ html[dir="ltr"] .navbar-nav {
 }
 
 .navbar-white.scrolled {
-    /* background-color: #ff6127 !important; */
+    /* background-color: var(--main-color) !important; */
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -517,14 +532,14 @@ html[dir="ltr"] .navbar-nav {
 
 
 .fa-bars {
-    background-color: #cc4d1e;
+    background-color: var(--main-hover);
     padding: 10px;
     border-radius: 5px;
 }
 
 @media (max-width: 768px) {
     .offcanvas {
-        background-color: #ff6127 !important;
+        background-color: var(--main-color) !important;
         padding: 20px;
     }
 
@@ -594,7 +609,7 @@ html[dir="ltr"] .navbar-nav {
 .trip-type-tabs .nav-link.active {
     background-color: var(--main-color) !important;
     color: #fff !important;
-    box-shadow: 0 4px 12px rgba(255, 97, 39, 0.25);
+    box-shadow: 0 4px 12px rgba(var(--main-color-rgb), 0.25);
 }
 
 .trip-type-tabs .nav-link::after {
@@ -706,14 +721,14 @@ html[dir="ltr"] .navbar-nav {
 .modern-input:focus {
     background: #fff;
     border-color: var(--main-color);
-    box-shadow: 0 0 0 4px rgba(255, 97, 39, 0.1);
+    box-shadow: 0 0 0 4px rgba(var(--main-color-rgb), 0.1);
     outline: none;
 }
 
 .hero-btn {
     height: 65px;
     width: 100%;
-    background: linear-gradient(to right, var(--main-color), #ff6127);
+    background: linear-gradient(to right, var(--main-color), var(--main-hover));
     border: none;
     border-radius: var(--input-radius);
     color: #fff;
@@ -724,13 +739,13 @@ html[dir="ltr"] .navbar-nav {
     justify-content: center;
     gap: 12px;
     transition: all 0.3s ease;
-    box-shadow: 0 6px 20px rgba(255, 97, 39, 0.3);
+    box-shadow: 0 6px 20px rgba(var(--main-color-rgb), 0.3);
 }
 
 .hero-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(255, 97, 39, 0.4);
-    background: linear-gradient(to right, #ff6127, var(--main-color));
+    box-shadow: 0 10px 25px rgba(var(--main-color-rgb), 0.4);
+    background: linear-gradient(to right, var(--main-color), var(--main-hover));
     color: #fff;
 }
 
@@ -938,19 +953,19 @@ html[dir="ltr"] .navbar-nav {
     appearance: none;
 }
 
+/* Hidden native date input — only Flatpickr opens the calendar (avoid broken native month/year UI) */
 .datepicker-real {
-    position: absolute;
-    /* top: 0;
-    left: 0; */
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    cursor: pointer;
-    border-radius: 12px !important;
-    border: 0.5px solid #000000 !important;
-    height: 44px;
-    width: 217px !important;
-    max-width: 100%;
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    clip-path: inset(50%) !important;
+    border: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
 }
 
 .datepicker-text {
@@ -968,6 +983,21 @@ html[dir="ltr"] .navbar-nav {
     right: 0;
 }
 
+/*
+ * Flatpickr: do not override internal flex/table layout (breaks day grid).
+ * Keep calendar LTR internally so weekday + day rows stay aligned on RTL pages.
+ */
+.flatpickr-calendar {
+    direction: ltr;
+    font-family: inherit;
+    z-index: 1100 !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+[dir="rtl"] .flatpickr-calendar {
+    direction: ltr;
+}
+
 .hero-section .arrival-time {
     font-weight: 400;
     font-size: 13px;
@@ -977,7 +1007,7 @@ html[dir="ltr"] .navbar-nav {
 .search-trip-btn {
     height: 63px;
     border: none;
-    background-color: #ff6127;
+    background-color: var(--main-color);
     border-radius: 16px;
     font-weight: 400;
     font-size: 20px;
@@ -990,7 +1020,7 @@ html[dir="ltr"] .navbar-nav {
 
 .search-trip-btn:hover {
     background-color: white;
-    color: #ff6127;
+    color: var(--main-color);
 }
 
 .hero-caption-box {
@@ -1075,7 +1105,7 @@ html[dir="ltr"] .navbar-nav {
 .map .circle-alex {
     width: 20px;
     height: 20px;
-    background-color: #ff6127;
+    background-color: var(--main-color);
     border: 3px solid #fff;
     border-radius: 50%;
     position: absolute;
@@ -1098,7 +1128,7 @@ html[dir="ltr"] .navbar-nav {
 .map .circle-cairo {
     width: 20px;
     height: 20px;
-    background-color: #ff6127;
+    background-color: var(--main-color);
     border: 3px solid #fff;
     border-radius: 50%;
     position: absolute;
@@ -1121,7 +1151,7 @@ html[dir="ltr"] .navbar-nav {
 .map .circle-sharm {
     width: 20px;
     height: 20px;
-    background-color: #ff6127;
+    background-color: var(--main-color);
     border: 3px solid #fff;
     border-radius: 50%;
     position: absolute;
@@ -1144,7 +1174,7 @@ html[dir="ltr"] .navbar-nav {
 .map .circle-her {
     width: 20px;
     height: 20px;
-    background-color: #ff6127;
+    background-color: var(--main-color);
     border: 3px solid #fff;
     border-radius: 50%;
     position: absolute;
@@ -1187,7 +1217,7 @@ html[dir="ltr"] .navbar-nav {
 /* start bus type  */
 .bus-type {
     background:
-        linear-gradient(to right, #ff6127, #ff6127),
+        linear-gradient(to right, var(--main-color), var(--main-hover)),
         url(../images/bus-type-bg.png);
     background-blend-mode: overlay;
     background-size: cover;
@@ -1328,7 +1358,7 @@ html[dir="rtl"] .swiper-button-prev {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--main-color), #ff6127);
+    background: linear-gradient(135deg, var(--main-color), var(--main-hover));
     color: #fff;
     font-weight: 700;
     font-size: 1.25rem;
@@ -1373,7 +1403,7 @@ html[dir="rtl"] .swiper-button-prev {
 .reservation a {
     width: 190px;
     height: 80px;
-    background-color: #ff6127;
+    background-color: var(--main-color);
     color: white;
     border: none;
     border-radius: 27px;
@@ -1438,6 +1468,17 @@ footer {
     background-image: none !important;
     height: auto;
     clip-path: ellipse(130% 100% at center bottom);
+    overflow-x: hidden;
+}
+
+/* Prevent flex/grid columns from refusing to shrink (long email / fixed-width children) */
+footer .row > [class*="col-"] {
+    min-width: 0;
+}
+
+footer .footer-contact-column,
+footer .footer-newsletter-column {
+    max-width: 100%;
 }
 
 footer .footer-links {
@@ -1447,6 +1488,14 @@ footer .footer-links {
     letter-spacing: 0%;
     text-align: right;
     color: #ffffff;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    max-width: 100%;
+}
+
+footer a.footer-links[href^="mailto:"] {
+    display: inline-block;
+    max-width: 100%;
 }
 
 footer .footer-links-top {
@@ -1459,9 +1508,10 @@ footer .footer-links-top {
 
 .footer-input {
     border: 0.5px solid #00000071;
-    width: 400px;
+    width: 100%;
+    max-width: 400px;
     border-radius: 13px;
-    background-color: #ff6127;
+    background-color: var(--main-color);
     overflow: hidden;
 }
 
@@ -1479,7 +1529,7 @@ footer .footer-links-top {
     border: none;
     width: 155px;
     height: 50px;
-    background-color: #ff6127;
+    background-color: var(--main-color);
     color: white;
 }
 
@@ -1673,13 +1723,13 @@ footer .footer-links-top {
 }
 
 .popular .heart-btn.active i {
-    color: #ff6127;
+    color: var(--main-color);
 }
 
 .popular .reserve {
     width: 115px;
     height: 50px;
-    background-color: #ff6127;
+    background-color: var(--main-color);
     font-weight: 400;
     font-size: 22px;
     color: white;
@@ -1713,7 +1763,7 @@ footer .footer-links-top {
 
 /* start try */
 .try {
-    background-image: linear-gradient(rgba(255, 97, 39, 0.85), rgba(255, 97, 39, 0.85)), url(../images/try-bg.png);
+    background-image: linear-gradient(rgba(var(--main-color-rgb), 0.85), rgba(var(--main-color-rgb), 0.85)), url(../images/try-bg.png);
     background-color: var(--main-color);
     height: auto;
     background-size: cover;
@@ -1855,7 +1905,7 @@ footer .footer-links-top {
 }
 
 .blogs-taps .nav-pills .nav-link.active {
-    background-color: #ff6127;
+    background-color: var(--main-color);
     color: black;
     border-radius: 100px;
     font-size: 29px;
@@ -1904,7 +1954,7 @@ footer .footer-links-top {
     font-weight: 400;
     font-size: 23px;
     color: white;
-    background-color: #cc4d1e;
+    background-color: var(--main-hover);
     border-radius: 16px;
     border: none;
     margin-top: 20px;
@@ -1994,7 +2044,7 @@ footer .footer-links-top {
 }
 
 .contact-us .contact-btn {
-    background-color: #ff6127;
+    background-color: var(--main-color);
     color: white;
     border-radius: 20px;
     border: none;
@@ -2121,7 +2171,7 @@ footer .footer-links-top {
 }
 
 .reservation-travel-box .search-edit-btn {
-    color: #ff6127;
+    color: var(--main-color);
     border: none;
     background-color: transparent;
     font-weight: 400;
@@ -2242,7 +2292,7 @@ footer .footer-links-top {
 .trip-choose-btn {
     width: 100%;
     height: 40px;
-    background-color: #ff6127;
+    background-color: var(--main-color);
     color: white;
     border: none;
     display: flex;
@@ -2258,11 +2308,11 @@ footer .footer-links-top {
 }
 
 .selected-trip-button {
-    border: 2px solid #ff6127;
+    border: 2px solid var(--main-color);
     /* Customize the color */
     border-radius: 8px;
     background-color: white;
-    color: #ff6127;
+    color: var(--main-color);
 }
 
 @media (max-width: 992px) {
@@ -2287,20 +2337,20 @@ footer .footer-links-top {
 
 .profile-page .nav-pills .nav-link.active {
     background-color: #ffeac057;
-    color: #ff6127;
+    color: var(--main-color);
     border-radius: 5px;
     font-size: 20px;
 }
 
 .profile-page .logout {
-    border: 1px solid #ff6127;
+    border: 1px solid var(--main-color);
     background-color: white;
     border-radius: 5px;
     font-weight: 400;
     font-size: 20px;
     width: 100%;
     height: 48px;
-    color: #ff6127;
+    color: var(--main-color);
     margin-top: 5px;
 }
 
@@ -2370,7 +2420,7 @@ footer .footer-links-top {
     width: 80px;
     height: 40px;
     border-radius: 13.02px;
-    background-color: #ff6127;
+    background-color: var(--main-color);
     font-weight: 400;
     border: none;
     color: white;
@@ -2378,8 +2428,8 @@ footer .footer-links-top {
 
 .no-btn {
     background-color: #fff;
-    border: 1px solid #ff6127;
-    color: #ff6127;
+    border: 1px solid var(--main-color);
+    color: var(--main-color);
 }
 
 .cancel-reserve .confirm-icon-box {
@@ -2416,7 +2466,7 @@ footer .footer-links-top {
 
 .save-data-btn {
     border: none;
-    background-color: #ff6127;
+    background-color: var(--main-color);
     color: white;
     width: 165px;
     height: 46px;
@@ -2530,7 +2580,7 @@ footer .footer-links-top {
     appearance: none;
     width: 20px;
     height: 20px;
-    border: 2px solid #ff6127;
+    border: 2px solid var(--main-color);
     border-radius: 50%;
     background-color: white;
     position: relative;
@@ -2538,7 +2588,7 @@ footer .footer-links-top {
 }
 
 .chairs .form-check-input-pay:checked {
-    border-color: #ff6127;
+    border-color: var(--main-color);
 }
 
 .chairs .form-check-input-pay:checked::before {
@@ -2554,13 +2604,13 @@ footer .footer-links-top {
 }
 
 .chairs .form-check-input-pay[type="radio"]:checked:after {
-    background-color: #ff6127;
+    background-color: var(--main-color);
 }
 
 .chairs .form-check-input-pay:hover,
 .chairs .form-select:hover {
-    border-color: #ff6127;
-    box-shadow: 0 0 5px #ff6127;
+    border-color: var(--main-color);
+    box-shadow: 0 0 5px var(--main-color);
 }
 
 .chairs .form-check-input-pay:focus {
@@ -2589,7 +2639,7 @@ footer .footer-links-top {
     font-weight: 400;
     font-size: 25px;
     color: white;
-    background-color: #ff6127;
+    background-color: var(--main-color);
 }
 
 .chairs .btn-pay-disabled {
@@ -2644,7 +2694,7 @@ footer .footer-links-top {
 .mo-view .mobileHeader .mo-bell-box {
     width: 48px;
     height: 48px;
-    background-color: rgba(255, 97, 39, 0.12);
+    background-color: rgba(var(--main-color-rgb), 0.12);
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -2948,7 +2998,7 @@ footer .footer-links-top {
 .popular-dest-btn.popular-dest-btn--next:hover {
     background: var(--main-color);
     color: #fff;
-    box-shadow: 0 8px 24px rgba(255, 97, 39, 0.35);
+    box-shadow: 0 8px 24px rgba(var(--main-color-rgb), 0.35);
 }
 
 .popular-dest-btn.popular-dest-btn--prev::after,
@@ -3026,7 +3076,7 @@ html[dir="rtl"] .popular-destinations .popular-dest-btn.popular-dest-btn--next {
 @media (max-width: 991px) {
     .new-places-mobile {
         padding-bottom: 1rem;
-        overflow: visible;
+        overflow-x: hidden;
     }
     .new-places-mobile .new-places-title {
         font-size: clamp(1.1rem, 4.5vw, 1.35rem);
@@ -3038,6 +3088,7 @@ html[dir="rtl"] .popular-destinations .popular-dest-btn.popular-dest-btn--next {
         margin-left: -4px;
         margin-right: -4px;
         padding: 4px 0 8px;
+        overflow: hidden;
     }
     .new-places-swiper .swiper-slide {
         height: auto;
@@ -3222,11 +3273,11 @@ html[dir="rtl"] .popular-destinations .popular-dest-btn.popular-dest-btn--next {
 }
 
 .mo-view .form-check-input-pay[type="radio"]:checked:after {
-    background-color: #ff6127 !important;
+    background-color: var(--main-color) !important;
 }
 
 .mo-view .form-check-input-pay:checked {
-    border-color: #ff6127;
+    border-color: var(--main-color);
 }
 
 /* start welcome page  */
@@ -3377,7 +3428,7 @@ html[dir="rtl"] .popular-destinations .popular-dest-btn.popular-dest-btn--next {
     border-radius: 6px;
     font-weight: 600;
     font-size: 15.8px;
-    background-color: #ff6127;
+    background-color: var(--main-color);
     text-align: center;
     color: white;
 }
@@ -3612,7 +3663,7 @@ html[dir="rtl"] .popular-destinations .popular-dest-btn.popular-dest-btn--next {
 .btn-search {
     width: 100%;
     height: 40px;
-    background-color: #ff6127;
+    background-color: var(--main-color);
     color: white;
     border: none;
     display: flex;
@@ -3785,9 +3836,9 @@ img {
 }
 
 .premium-input-group:focus-within {
-    border-color: var(--main-color, #ff6127);
+    border-color: var(--main-color);
     box-shadow:
-        0 0 0 4px rgba(255, 97, 39, 0.1),
+        0 0 0 4px rgba(var(--main-color-rgb), 0.1),
         0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
@@ -3796,7 +3847,7 @@ img {
 }
 
 .premium-input-group:focus-within .premium-label {
-    color: var(--main-color, #ff6127);
+    color: var(--main-color);
 }
 
 .premium-input-icon {
@@ -3817,7 +3868,7 @@ img {
 }
 
 .premium-input-group:focus-within .premium-input-icon {
-    color: var(--main-color, #ff6127);
+    color: var(--main-color);
 }
 
 .premium-input,
@@ -4009,7 +4060,7 @@ img {
 
 .reserve:hover {
     background-color: var(--main-hover);
-    box-shadow: 0 8px 20px rgba(255, 97, 39, 0.3);
+    box-shadow: 0 8px 20px rgba(var(--main-color-rgb), 0.3);
 }
 
 /* Mobile Adjustments */
@@ -4056,8 +4107,18 @@ img {
 .mo-swap-btn {
     width: 44px;
     height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    flex-shrink: 0;
     color: var(--main-color);
     transition: transform 0.3s;
+}
+
+.mo-swap-btn i {
+    font-size: 1rem;
+    line-height: 1;
+    max-width: 1.25rem;
+    max-height: 1.25rem;
 }
 
 .mo-passenger-count-btn {
@@ -4167,7 +4228,7 @@ img {
 }
 
 .dropdown-item:hover {
-    background-color: rgba(255, 97, 39, 0.05) !important;
+    background-color: rgba(var(--main-color-rgb), 0.05) !important;
     color: var(--main-color) !important;
 }
 
@@ -4201,133 +4262,153 @@ img {
     border-color: var(--main-color) !important;
 }
 
-/* Wheel Picker Component Styles (Mobile Only) - Responsive */
-@media (max-width: 991px) {
-    /* Hidden by default; JS sets display:block when opening the date picker */
-    .wheel-picker-backdrop {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        height: 100dvh;
-        background: rgba(0, 0, 0, 0.5);
-        backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px);
-        z-index: 2000;
-        animation: fadeIn 0.3s ease;
-    }
+/*
+ * Wheel date picker: styles are NOT scoped to max-width so columns never render
+ * as in-flow text (Arabic month names + numbers) when media queries do not match.
+ * Closed state uses translateY so tall content cannot peek into the viewport.
+ */
+.wheel-picker-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 2000;
+    animation: fadeIn 0.3s ease;
+}
 
-    .wheel-picker-container {
-        position: fixed;
-        bottom: -100%;
-        left: 0;
-        right: 0;
-        width: 100%;
-        max-width: 100vw;
-        max-height: 85vh;
-        max-height: 85dvh;
-        background: white;
-        border-radius: 30px 30px 0 0;
-        transition: bottom 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        z-index: 2001;
-        padding: 16px 16px calc(24px + env(safe-area-inset-bottom, 0px));
-        padding-left: calc(16px + env(safe-area-inset-left, 0px));
-        padding-right: calc(16px + env(safe-area-inset-right, 0px));
-        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.15);
-        overflow: hidden;
-        box-sizing: border-box;
-    }
+.wheel-picker-container {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 100vw;
+    max-height: 85vh;
+    max-height: 85dvh;
+    background: #fff;
+    border-radius: 30px 30px 0 0;
+    z-index: 2001;
+    padding: 16px 16px calc(24px + env(safe-area-inset-bottom, 0px));
+    padding-left: calc(16px + env(safe-area-inset-left, 0px));
+    padding-right: calc(16px + env(safe-area-inset-right, 0px));
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    box-sizing: border-box;
+    transform: translateY(100%);
+    pointer-events: none;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    contain: layout paint;
+}
 
-    .wheel-picker-container.active {
-        bottom: 0;
-    }
+.wheel-picker-container.active {
+    transform: translateY(0);
+    pointer-events: auto;
+}
 
-    .wheel-picker-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 16px;
-        padding-bottom: 12px;
-        border-bottom: 1px solid #f0f0f0;
-        flex-wrap: nowrap;
-    }
+.wheel-picker-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f0f0f0;
+    flex-wrap: nowrap;
+}
 
-    .wheel-picker-header .btn {
-        min-height: 44px;
-        min-width: 44px;
-        padding: 10px 16px;
-        font-size: 0.9rem;
-        flex-shrink: 0;
-    }
+.wheel-picker-header .btn {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 10px 16px;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
 
-    .wheel-picker-header h5 {
-        font-size: clamp(0.95rem, 4vw, 1.1rem);
-        margin: 0;
-        color: #333;
-        flex-shrink: 0;
-    }
+.wheel-picker-header h5 {
+    font-size: clamp(0.95rem, 4vw, 1.1rem);
+    margin: 0;
+    color: #333;
+    flex-shrink: 0;
+}
 
-    .wheel-picker-content {
-        display: flex;
-        justify-content: center;
-        height: min(220px, 40vh);
-        min-height: 160px;
-        position: relative;
-        background: #f8f9fa;
-        border-radius: 16px;
-        overflow: hidden;
-    }
+.wheel-picker-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: stretch;
+    height: min(220px, 40vh);
+    min-height: 160px;
+    position: relative;
+    background: #f8f9fa;
+    border-radius: 16px;
+    overflow: hidden;
+    isolation: isolate;
+}
 
-    .wheel-column {
-        flex: 1;
-        min-width: 0;
-        overflow-y: scroll;
-        scrollbar-width: none;
-        position: relative;
-        -ms-overflow-style: none;
-        scroll-snap-type: y mandatory;
-        -webkit-overflow-scrolling: touch;
-    }
+.wheel-column {
+    flex: 1 1 0;
+    min-width: 0;
+    max-height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+    position: relative;
+    -ms-overflow-style: none;
+    scroll-snap-type: y mandatory;
+    -webkit-overflow-scrolling: touch;
+}
 
-    .wheel-column::-webkit-scrollbar {
-        display: none;
-    }
+.wheel-column::-webkit-scrollbar {
+    display: none;
+}
 
-    .wheel-item {
-        height: 44px;
-        min-height: 44px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: clamp(16px, 4vw, 18px);
-        color: #999;
-        transition: all 0.2s ease;
-        scroll-snap-align: center;
-    }
+.wheel-item {
+    height: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(16px, 4vw, 18px);
+    color: #999;
+    transition: color 0.2s ease, font-weight 0.2s ease, transform 0.2s ease;
+    scroll-snap-align: center;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
 
-    .wheel-item.selected {
-        color: var(--main-color);
-        font-weight: 700;
-        font-size: clamp(18px, 4.5vw, 22px);
-        transform: scale(1.1);
-    }
+.wheel-item.spacer {
+    height: 44px;
+    min-height: 44px;
+    flex-shrink: 0;
+    pointer-events: none;
+    visibility: hidden;
+}
 
-    .wheel-selection-indicator {
-        position: absolute;
-        top: 50%;
-        left: 0;
-        width: 100%;
-        height: 44px;
-        transform: translateY(-50%);
-        background: rgba(255, 97, 39, 0.05);
-        border-top: 1px solid rgba(255, 97, 39, 0.1);
-        border-bottom: 1px solid rgba(255, 97, 39, 0.1);
-        pointer-events: none;
-        z-index: 10;
-    }
+.wheel-item.selected {
+    color: var(--main-color);
+    font-weight: 700;
+    font-size: clamp(18px, 4.5vw, 22px);
+    transform: scale(1.1);
+}
+
+.wheel-selection-indicator {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 44px;
+    transform: translateY(-50%);
+    background: rgba(var(--main-color-rgb), 0.05);
+    border-top: 1px solid rgba(var(--main-color-rgb), 0.1);
+    border-bottom: 1px solid rgba(var(--main-color-rgb), 0.1);
+    pointer-events: none;
+    z-index: 10;
 }
 
 @keyframes fadeIn {

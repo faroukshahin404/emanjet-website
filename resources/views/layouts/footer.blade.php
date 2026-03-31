@@ -1,4 +1,4 @@
-<Footer>
+<footer>
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-2 d-flex flex-column mx-auto align-items-lg-start align-items-center">
@@ -19,7 +19,7 @@
             </div>
 
             @if (!empty($contactUs))
-                <div class="col-md-2 d-flex flex-column mx-auto align-items-lg-start align-items-center">
+                <div class="col-md-2 footer-contact-column d-flex flex-column mx-auto align-items-lg-start align-items-center">
                     <p class="footer-links-top">{{ __('Contact Us') }}</p>
                     @if (!empty($contactUs['phone']))
                         <a href="tel:{{ $contactUs['phone'] }}" class="footer-links">
@@ -45,9 +45,9 @@
                 </div>
             @endif
 
-            <div class="col-md-4">
+            <div class="col-md-4 footer-newsletter-column">
                 <h2 class="{{ app()->getLocale() == 'ar' ? 'text-end' : 'text-start' }} mt-2 mt-lg-0">
-                    {{ __('Contact Us') }}
+                    {{ __('Newsletter') }}
                 </h2>
 
                 <form action="">
@@ -123,4 +123,4 @@
             </div>
         @endif
     </div>
-</Footer>
+</footer>

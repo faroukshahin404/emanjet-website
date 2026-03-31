@@ -3,6 +3,7 @@
 ])
 
 @push('styles')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
     <style>
         .hero-section::before {
             background: linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0,
@@ -20,7 +21,7 @@
     <!-- End App Download Modal -->
 
     <!-- start hero section  -->
-    <div class="hero-section"id="heroSection">
+    <div class="hero-section" id="heroSection">
         <div class="container-fluid px-5 box">
             <div class="row">
                 <div class="col-lg-5 col-md-12 m-auto">
@@ -101,8 +102,7 @@
                                                 <input type="text" class="modern-input" value="" readonly
                                                     id="dateTextInput">
                                             </div>
-                                            <input type="date" class="datepicker-real" lang="{{ app()->getLocale() }}"
-                                                min="{{ date('Y-m-d') }}" name="go_date"
+                                            <input type="hidden" name="go_date"
                                                 value="{{ request()->go_date ?? date('Y-m-d') }}" id="dateRealInput">
                                         </div>
                                     </div>
@@ -113,17 +113,18 @@
                                                 <input type="text" class="modern-input" value="" readonly
                                                     id="dateTextInput2">
                                             </div>
-                                            <input type="date" class="datepicker-real" min="{{ date('Y-m-d') }}"
-                                                max="2027-04-07" value="{{ request()->back_date ?? date('Y-m-d') }}"
-                                                id="dateRealInput2" name="back_date">
+                                            <input type="hidden" name="back_date"
+                                                value="{{ request()->back_date ?? date('Y-m-d') }}"
+                                                id="dateRealInput2" data-max-date="2027-04-07">
                                         </div>
                                     </div>
                                     <div class="col-md-6 arrival-time-box">
-                                        <a href="#"
-                                            class="arrival-time d-flex align-items-center gap-2 text-muted small mt-2">
-                                            <i class="fas fa-percent text-success"></i>
+                                        <button type="button"
+                                            class="arrival-time d-flex align-items-center gap-2 text-muted small mt-2 btn btn-link p-0 border-0 bg-transparent text-start"
+                                            onclick="document.getElementById('pills-round-tab').click(); document.getElementById('roundTripRadioDes').click();">
+                                            <i class="fas fa-percent text-success" aria-hidden="true"></i>
                                             {{ __('Book Round Trip & Save') }}
-                                        </a>
+                                        </button>
                                     </div>
                                 </div>
 
@@ -140,16 +141,18 @@
                                     <div class="d-flex align-items-center gap-3">
                                         <button type="button"
                                             class="btn btn-sm shadow-sm rounded-circle bg-white mo-btn-32"
-                                            onclick="decrementPassengersdesktop()">
-                                            <i class="fas fa-minus small"></i>
+                                            onclick="decrementPassengersdesktop()"
+                                            aria-label="{{ __('Decrease number of travelers') }}">
+                                            <i class="fas fa-minus small" aria-hidden="true"></i>
                                         </button>
                                         <span class="fw-bold fs-5" id="passengerCountdesktop">1</span>
                                         <input type="hidden" id="passengerCountDesktopInput" value="1"
                                             name="seats" />
                                         <button type="button"
                                             class="btn btn-sm shadow-sm rounded-circle bg-white mo-btn-32"
-                                            onclick="incrementPassengersdesktop()">
-                                            <i class="fas fa-plus small"></i>
+                                            onclick="incrementPassengersdesktop()"
+                                            aria-label="{{ __('Increase number of travelers') }}">
+                                            <i class="fas fa-plus small" aria-hidden="true"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -665,93 +668,6 @@
     </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const dateTextInput = document.getElementById('dateTextInput');
-            const dateRealInput = document.getElementById('dateRealInput');
-            const selectedDate = new Date();
-            const options = {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            };
-            dateTextInput.value = selectedDate.toLocaleDateString('ar-EG', options);
-            dateTextInput.addEventListener('click', function() {
-                dateRealInput.showPicker();
-            });
-
-            dateRealInput.addEventListener('change', function() {
-                const selectedDate = new Date(this.value);
-                const options = {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                };
-                dateTextInput.value = selectedDate.toLocaleDateString('ar-EG', options);
-                // Do not sync go date to return date - user can set return date independently
-            });
-        });
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const dateTextInput = document.getElementById('dateTextInput');
-            const dateRealInput = document.getElementById('dateRealInput');
-            const dateTextInput2 = document.getElementById('dateTextInput2');
-            const dateRealInput2 = document.getElementById('dateRealInput2');
-            if (!dateTextInput || !dateRealInput) return;
-
-            const currentLang = '{{ app()->getLocale() }}';
-            const locale = currentLang === 'ar' ? 'ar-EG' : 'en-US';
-
-            function formatDate(date) {
-                const options = {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                };
-                return date.toLocaleDateString(locale, options);
-            }
-
-            // Initial display: set each date from its own input only (do not sync)
-            if (dateRealInput.value) {
-                dateTextInput.value = formatDate(new Date(dateRealInput.value));
-            }
-            if (dateRealInput2 && dateRealInput2.value) {
-                dateTextInput2.value = formatDate(new Date(dateRealInput2.value));
-            }
-            // Return date cannot be before go date (min only; do not change return value)
-            if (dateRealInput2) dateRealInput2.min = dateRealInput.value;
-
-            if (dateTextInput2) dateTextInput2.addEventListener('click', () => dateRealInput2.showPicker());
-            dateTextInput.addEventListener('click', () => dateRealInput.showPicker());
-
-            // Go date change: update only go date display and set min for return date
-            dateRealInput.addEventListener('change', function() {
-                dateTextInput.value = formatDate(new Date(this.value));
-                if (dateRealInput2) {
-                    dateRealInput2.min = this.value;
-                    if (dateRealInput2.value && dateRealInput2.value < this.value) {
-                        dateRealInput2.value = this.value;
-                        dateTextInput2.value = formatDate(new Date(this.value));
-                    }
-                }
-            });
-
-            // Return date change: update only return date display
-            if (dateRealInput2) {
-                dateRealInput2.addEventListener('change', function() {
-                    dateTextInput2.value = formatDate(new Date(this.value));
-                });
-            }
-        });
-    </script>
-
-
-
-    <script>
         let passengerCountdesktop = 1;
         const countElementdesktop = document.getElementById('passengerCountdesktop');
         const countElementdesktopInput = document.getElementById('passengerCountDesktopInput');
@@ -904,37 +820,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const dateTextInput = document.getElementById('dateTextInput');
-            const dateRealInput = document.getElementById('dateRealInput');
-
-            const currentLang = '{{ app()->getLocale() }}';
-            const locale = currentLang === 'ar' ? 'ar-EG' : 'en-US';
-
-            function formatDate(date) {
-                const options = {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                };
-                return date.toLocaleDateString(locale, options);
-            }
-
-            const selectedDate = new Date(dateRealInput.value);
-            dateTextInput.value = formatDate(selectedDate);
-
-            dateTextInput.addEventListener('click', function() {
-                dateRealInput.showPicker();
-            });
-
-            dateRealInput.addEventListener('change', function() {
-                const selectedDate = new Date(this.value);
-                dateTextInput.value = formatDate(selectedDate);
-            });
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
             const bellBox = document.querySelector('.mo-bell-box');
             const dropdown = document.querySelector('.notifications-dropdown');
             if (bellBox) {
@@ -951,67 +836,133 @@
         });
     </script>
 
-    <!-- Flatpickr JS -->
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://npmcdn.com/flatpickr/dist/l10n/ar.js"></script>
+    <!-- Flatpickr: pinned version for stable API; locale bundled -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/l10n/ar.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            if (typeof flatpickr === 'undefined') {
+                return;
+            }
+
             const isRTL = document.documentElement.dir === 'rtl';
+            const currentLang = '{{ app()->getLocale() }}';
+            const localeTag = currentLang === 'ar' ? 'ar-EG' : 'en-US';
+            const desktopMq = window.matchMedia('(min-width: 992px)');
 
-            // Initialize Flatpickr
-            const goDateInput = document.getElementById('dateRealInput');
-            const returnDateInput = document.getElementById('dateRealInput2');
-            const goDateStr = goDateInput && goDateInput.value ? goDateInput.value : 'today';
-
-            const fp = flatpickr("#dateRealInput", {
-                locale: isRTL ? "ar" : "en",
-                dateFormat: "Y-m-d",
-                minDate: "today",
-                onChange: function(selectedDates, dateStr) {
-                    document.getElementById('dateTextInput').value = dateStr;
-                    if (returnDateInput) {
-                        returnDateInput.min = dateStr;
-                        if (returnDateInput.value && returnDateInput.value < dateStr) {
-                            returnDateInput.value = dateStr;
-                            const dateTextInput2 = document.getElementById('dateTextInput2');
-                            if (dateTextInput2) dateTextInput2.value = dateStr;
-                        }
-                    }
-                    if (typeof fp2 !== 'undefined' && fp2) fp2.set('minDate', dateStr);
+            function formatHeroDate(date) {
+                if (!date || !(date instanceof Date) || isNaN(date.getTime())) {
+                    return '';
                 }
-            });
+                return date.toLocaleDateString(localeTag, {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                });
+            }
 
-            document.getElementById('dateTextInput').addEventListener('click', () => {
-                fp.open();
-            });
-
+            let fp = null;
             let fp2 = null;
-            if (returnDateInput) {
-                fp2 = flatpickr("#dateRealInput2", {
-                    locale: isRTL ? "ar" : "en",
-                    dateFormat: "Y-m-d",
-                    minDate: goDateStr,
+
+            function destroyHeroPickers() {
+                if (fp) {
+                    fp.destroy();
+                    fp = null;
+                }
+                if (fp2) {
+                    fp2.destroy();
+                    fp2 = null;
+                }
+            }
+
+            function initHeroPickers() {
+                destroyHeroPickers();
+
+                if (!desktopMq.matches) {
+                    return;
+                }
+
+                const goHidden = document.getElementById('dateRealInput');
+                const returnHidden = document.getElementById('dateRealInput2');
+                const dateTextInput = document.getElementById('dateTextInput');
+                const dateTextInput2 = document.getElementById('dateTextInput2');
+
+                if (!goHidden || !dateTextInput) {
+                    return;
+                }
+
+                const goYmd = goHidden.value || null;
+                const returnMax = returnHidden && returnHidden.dataset.maxDate ? returnHidden.dataset.maxDate : '2027-04-07';
+
+                const localeOpts = isRTL ? {
+                    locale: 'ar'
+                } : {};
+
+                if (returnHidden && dateTextInput2) {
+                    fp2 = flatpickr(dateTextInput2, Object.assign({
+                        dateFormat: 'Y-m-d',
+                        minDate: goYmd || 'today',
+                        maxDate: returnMax,
+                        disableMobile: true,
+                        allowInput: false,
+                        clickOpens: true,
+                        appendTo: document.body,
+                        defaultDate: returnHidden.value || undefined,
+                        onChange: function(selectedDates, dateStr) {
+                            returnHidden.value = dateStr;
+                            if (selectedDates.length) {
+                                dateTextInput2.value = formatHeroDate(selectedDates[0]);
+                            }
+                        },
+                    }, localeOpts));
+                }
+
+                fp = flatpickr(dateTextInput, Object.assign({
+                    dateFormat: 'Y-m-d',
+                    minDate: 'today',
+                    disableMobile: true,
+                    allowInput: false,
+                    clickOpens: true,
+                    appendTo: document.body,
+                    defaultDate: goYmd || undefined,
                     onChange: function(selectedDates, dateStr) {
-                        document.getElementById('dateTextInput2').value = dateStr;
-                    }
-                });
+                        goHidden.value = dateStr;
+                        if (selectedDates.length) {
+                            dateTextInput.value = formatHeroDate(selectedDates[0]);
+                        }
+                        if (returnHidden && fp2) {
+                            fp2.set('minDate', dateStr);
+                            if (returnHidden.value && returnHidden.value < dateStr) {
+                                fp2.setDate(dateStr, false);
+                                returnHidden.value = dateStr;
+                                if (dateTextInput2) {
+                                    dateTextInput2.value = formatHeroDate(new Date(dateStr + 'T12:00:00'));
+                                }
+                            }
+                        }
+                    },
+                }, localeOpts));
 
-                document.getElementById('dateTextInput2').addEventListener('click', () => {
-                    const goVal = goDateInput && goDateInput.value ? goDateInput.value : null;
-                    if (goVal && fp2) fp2.set('minDate', goVal);
-                    fp2.open();
-                });
+                if (goYmd) {
+                    fp.setDate(goYmd, false);
+                    dateTextInput.value = formatHeroDate(new Date(goYmd + 'T12:00:00'));
+                }
+                if (returnHidden && returnHidden.value && dateTextInput2 && fp2) {
+                    const r = returnHidden.value;
+                    fp2.set('minDate', goYmd || 'today');
+                    fp2.setDate(r, false);
+                    dateTextInput2.value = formatHeroDate(new Date(r + 'T12:00:00'));
+                }
             }
 
-            // Sync initial display values from hidden inputs (so both dates show correctly on load)
-            if (goDateInput && goDateInput.value) {
-                const txt = document.getElementById('dateTextInput');
-                if (txt) txt.value = goDateInput.value;
-            }
-            if (returnDateInput && returnDateInput.value) {
-                const txt2 = document.getElementById('dateTextInput2');
-                if (txt2) txt2.value = returnDateInput.value;
+            initHeroPickers();
+
+            if (typeof desktopMq.addEventListener === 'function') {
+                desktopMq.addEventListener('change', initHeroPickers);
+            } else if (typeof desktopMq.addListener === 'function') {
+                desktopMq.addListener(initHeroPickers);
             }
         });
     </script>

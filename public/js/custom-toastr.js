@@ -8,22 +8,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function showToast(type, message, duration = 5000) {
     const container = document.querySelector('.custom-toastr-container');
+    if (!container) {
+        return;
+    }
 
     const toast = document.createElement('div');
     toast.className = `custom-toast ${type}`;
 
-    // محتوى التوست
-    toast.innerHTML = `
-        <span class="custom-toast-message">${message}</span>
-        <button class="custom-toast-close">&times;</button>
-        <div class="custom-toast-timer"></div>
-    `;
+    const messageSpan = document.createElement('span');
+    messageSpan.className = 'custom-toast-message';
+    messageSpan.textContent = message;
+
+    const closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.className = 'custom-toast-close';
+    closeBtn.setAttribute('aria-label', 'Close');
+    closeBtn.innerHTML = '&times;';
+
+    const timer = document.createElement('div');
+    timer.className = 'custom-toast-timer';
+
+    toast.appendChild(messageSpan);
+    toast.appendChild(closeBtn);
+    toast.appendChild(timer);
 
     container.appendChild(toast);
 
-    // تحريك التايمر
-    const timer = toast.querySelector('.custom-toast-timer');
-    timer.style.animation = `timerLine ${duration}ms linear forwards`;
+    const timerEl = toast.querySelector('.custom-toast-timer');
+    timerEl.style.animation = `timerLine ${duration}ms linear forwards`;
 
     // إزالة التوست بعد المدة
     const timeout = setTimeout(() => {

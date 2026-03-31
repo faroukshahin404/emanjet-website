@@ -64,16 +64,16 @@
     }
 
     @if (session('success'))
-        showToast("{{ session('success') }}", "success");
+        showToast(@json(session('success')), 'success');
     @endif
     @if (session('error'))
-        showToast("{{ session('error') }}", "error");
+        showToast(@json(session('error')), 'error');
     @endif
     @if (session('warning'))
-        showToast("{{ session('warning') }}", "warning");
+        showToast(@json(session('warning')), 'warning');
     @endif
     @if (session('info'))
-        showToast("{{ session('info') }}", "info");
+        showToast(@json(session('info')), 'info');
     @endif
 </script>
 

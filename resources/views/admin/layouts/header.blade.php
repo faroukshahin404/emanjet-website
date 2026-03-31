@@ -138,7 +138,8 @@
                     <a href="#"
                         class="waves-effect waves-light dropdown-toggle no-border p-5 text-dark hover-white"
                         data-bs-toggle="dropdown" title="User">
-                        <img class="avatar avatar-pill" src="../images/avatar/3.jpg" alt="">
+                        <img class="avatar avatar-pill" src="{{ asset('assets/images/avatar/3.jpg') }}"
+                            alt="{{ __('User profile') }}">
                     </a>
                     <ul class="dropdown-menu animated flipInX">
                         <li class="user-body">

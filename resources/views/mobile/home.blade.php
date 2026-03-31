@@ -70,35 +70,38 @@
             <input type="hidden" id="from-station" name="station_from_id" value="{{ $cities->get(0)?->stations?->first()?->id ?? '' }}">
             <input type="hidden" id="to-station" name="station_to_id" value="{{ $cities->get(1)?->stations?->first()?->id ?? '' }}">
 
-            <!-- Start date and passenger numer -->
+            <!-- Start date and passenger number (must stay inside one .row for Bootstrap grid) -->
             <div class="date-passenger mt-3">
-                <div class="row g-3" id="tripLayoutContainer">
-                    <input class="form-control border-0 rounded-4 py-2 mo-bg-gray" type="text" readonly
-                        id="departureDateDisplay" value="{{ date('d / m / Y') }}"
-                        onclick="openDateWheelPicker('departureDateDisplay', 'departureDate')">
-                    <input type="hidden" name="go_date" id="departureDate" value="{{ date('Y-m-d') }}">
-                </div>
-            </div>
+                <div class="row g-3 align-items-end" id="tripLayoutContainer">
+                    <div class="col-12" id="departureDateCol">
+                        <label class="small text-muted mb-1 d-block" for="departureDateDisplay">{{ __('Departure date') }}</label>
+                        <input class="form-control border-0 rounded-4 py-2 mo-bg-gray" type="text" readonly
+                            id="departureDateDisplay" value="{{ date('d / m / Y') }}"
+                            onclick="openDateWheelPicker('departureDateDisplay', 'departureDate')">
+                        <input type="hidden" name="go_date" id="departureDate" value="{{ date('Y-m-d') }}">
+                    </div>
 
-            <div class="col-6" id="passengersColSide">
+            <div class="col-12 col-sm-6" id="passengersColSide">
                 <label class="small text-muted mb-1">{{ __('Passengers') }}</label>
                 <div class="d-flex justify-content-between align-items-center rounded-4 py-1 px-2 mo-bg-gray">
                     <button type="button" class="btn btn-sm btn-white shadow-sm rounded-circle p-0 mo-passenger-count-btn"
-                        onclick="decrementPassengers()">
-                        <i class="fa fa-minus x-small"></i>
+                        onclick="decrementPassengers()"
+                        aria-label="{{ __('Decrease number of travelers') }}">
+                        <i class="fa fa-minus x-small" aria-hidden="true"></i>
                     </button>
                     <span class="fw-bold" id="passengerCount">1</span>
                     <input type="hidden" id="passenger-count" name="seats" value="1">
                     <button type="button"
                         class="btn btn-sm btn-white shadow-sm rounded-circle p-0 mo-passenger-count-btn"
-                        onclick="incrementPassengers()">
-                        <i class="fa fa-plus x-small"></i>
+                        onclick="incrementPassengers()"
+                        aria-label="{{ __('Increase number of travelers') }}">
+                        <i class="fa fa-plus x-small" aria-hidden="true"></i>
                     </button>
                 </div>
             </div>
 
-            <div class="col-6 d-none" id="returnDateCol">
-                <label class="small text-muted mb-1">{{ __('Return Date') }}</label>
+            <div class="col-12 col-sm-6 d-none" id="returnDateCol">
+                <label class="small text-muted mb-1 d-block" for="returnDateDisplay">{{ __('Return Date') }}</label>
                 <input class="form-control border-0 rounded-4 py-2 mo-bg-gray" type="text" readonly
                     id="returnDateDisplay" value="{{ date('d / m / Y', strtotime('+1 day')) }}"
                     onclick="openDateWheelPicker('returnDateDisplay', 'returnDate')">
@@ -110,20 +113,22 @@
                 <label class="small text-muted mb-1">{{ __('Passengers') }}</label>
                 <div class="d-flex justify-content-between align-items-center rounded-4 py-2 px-3 mo-bg-gray">
                     <button type="button" class="btn btn-white shadow-sm rounded-circle mo-btn-32"
-                        onclick="decrementPassengers2()">
-                        <i class="fa fa-minus"></i>
+                        onclick="decrementPassengers2()"
+                        aria-label="{{ __('Decrease number of travelers') }}">
+                        <i class="fa fa-minus" aria-hidden="true"></i>
                     </button>
                     <span class="fw-bold fs-5" id="passengerCount2">1</span>
                     <input type="hidden" id="passenger-count2" name="seats" value="1">
                     <button type="button" class="btn btn-white shadow-sm rounded-circle mo-btn-32"
-                        onclick="incrementPassengers2()">
-                        <i class="fa fa-plus"></i>
+                        onclick="incrementPassengers2()"
+                        aria-label="{{ __('Increase number of travelers') }}">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
                     </button>
                 </div>
             </div>
 
-    </div>
-    </div>
+                </div>
+            </div>
 
     <div class="mt-4">
         <button type="submit" class="hero-btn w-100 rounded-4 py-3 border-0">
@@ -304,8 +309,12 @@
             // Function to update form layout based on trip type
             function updateTripLayout() {
                 if (departureDateCol) {
-                    departureDateCol.classList.remove('col-md-6');
-                    departureDateCol.classList.add('col-md-6');
+                    if (oneWayRadio.checked) {
+                        departureDateCol.classList.remove('col-md-6');
+                        departureDateCol.classList.add('col-12');
+                    } else {
+                        departureDateCol.classList.add('col-12', 'col-md-6');
+                    }
                 }
                 if (returnDateCol) {
                     if (oneWayRadio.checked) returnDateCol.classList.add('d-none');

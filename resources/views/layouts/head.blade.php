@@ -1,6 +1,6 @@
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Google Fonts -->
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="{{asset('images/favicon/apple-touch-icon.png')}}">
@@ -49,7 +49,7 @@
         })(window, document, 'script', 'dataLayer', 'GTM-N3NL6Z9H');
     </script>
     <!-- End Google Tag Manager -->
-    {{-- Start Seo --}}
+    {{-- Single document title: SEO payload or default / per-page override --}}
     @if (isset($seo) && !empty($seo))
         <title>{{ $seo['meta_title'] }}</title>
         <meta name="description" content="{{ $seo['meta_description'] }}">
@@ -57,11 +57,11 @@
         <meta property="og:title" content="{{ $seo['og_title'] }}">
         <meta property="og:description" content="{{ $seo['og_description'] }}">
         <meta property="og:image" content="{{ $seo['og_image'] }}">
+    @else
+        <title>@yield('meta_title', 'Super Jet')</title>
     @endif
 
-    {{-- end Seo --}}
     @stack('styles')
-    <title>Super Jet</title>
     <style>
         #site-loader {
             position: fixed;
