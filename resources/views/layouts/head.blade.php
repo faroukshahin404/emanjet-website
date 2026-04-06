@@ -88,7 +88,7 @@
             width: 50px;
             height: 50px;
             border: 4px solid #ddd;
-            border-top-color: #007bff; /* your primary color */
+            border-top-color: var(--main-color); /* your primary color */
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }

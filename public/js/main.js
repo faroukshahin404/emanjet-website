@@ -12,69 +12,7 @@ if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
 document.body.classList.add('ios');
 }
 
-  // Fix Language Dropdown - Match toggle width exactly (ROOT SOLUTION)
-  (function fixLanguageDropdown() {
-    const dropdown = document.querySelector('.navbar-dropdown.dropdown-language');
-    if (!dropdown) return;
-
-    const toggle = dropdown.querySelector('.dropdown-toggle');
-    const menu = dropdown.querySelector('.dropdown-menu');
-    if (!toggle || !menu) return;
-
-    const MIN_WIDTH = 160;
-    const MAX_WIDTH = 220;
-
-    const applyCorrectWidth = () => {
-      // Get actual toggle width
-      const toggleRect = toggle.getBoundingClientRect();
-      const toggleWidth = toggleRect.width;
-
-      // Calculate correct width: match toggle, but respect min/max
-      const calculatedWidth = Math.max(MIN_WIDTH, Math.min(toggleWidth, MAX_WIDTH));
-
-      // Apply width - EXACT match to toggle
-      menu.style.setProperty('width', `${calculatedWidth}px`, 'important');
-      menu.style.setProperty('min-width', `${calculatedWidth}px`, 'important');
-      menu.style.setProperty('max-width', `${calculatedWidth}px`, 'important');
-
-      // Force position: centered below button
-      menu.style.setProperty('left', '50%', 'important');
-      menu.style.setProperty('right', 'auto', 'important');
-      menu.style.setProperty('transform', 'translateX(-50%)', 'important');
-      menu.style.setProperty('margin-left', '0', 'important');
-      menu.style.setProperty('margin-right', '0', 'important');
-    };
-
-    const handleShow = () => {
-      // Use double requestAnimationFrame to ensure DOM is ready
-      requestAnimationFrame(() => {
-        requestAnimationFrame(applyCorrectWidth);
-      });
-    };
-
-    // Listen to all dropdown events
-    toggle.addEventListener('show.bs.dropdown', handleShow);
-    toggle.addEventListener('shown.bs.dropdown', handleShow);
-
-    // Watch for resize
-    window.addEventListener('resize', () => {
-      if (menu.classList.contains('show')) {
-        applyCorrectWidth();
-      }
-    });
-
-    // Watch for style changes from Popper
-    const observer = new MutationObserver(() => {
-      if (menu.classList.contains('show')) {
-        applyCorrectWidth();
-      }
-    });
-
-    observer.observe(menu, {
-      attributes: true,
-      attributeFilter: ['style', 'class']
-    });
-  })();
+  // Language dropdown width is handled in demo.css / rtl.css (max-content); do not force fixed px here.
 });
 
 (function () {

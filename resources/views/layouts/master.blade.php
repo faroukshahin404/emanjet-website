@@ -5,6 +5,129 @@
 
 <body
     style="direction: {{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}; text-align: {{ app()->getLocale() === 'ar' ? 'right' : 'left' }}">
+    @php
+        $viewportLocalePrefixes = array_keys(config('laravellocalization.supportedLocales', []));
+    @endphp
+    {{-- Run before rest of body parses: fast web↔mobile trip redirects; matchMedia fires on breakpoint cross only --}}
+    <script>
+        (function() {
+            var DESKTOP_MQL = window.matchMedia('(min-width: 992px)');
+            var localePrefixes = @json($viewportLocalePrefixes);
+
+            function pathNorm(pathname) {
+                return (pathname || '/').replace(/\/+$/, '') || '/';
+            }
+
+            function hasDesktopEquivalent(rest) {
+                return /^\/one-way\/trips(\/|$)/.test(rest) ||
+                    /^\/one-way\/choose-seat(\/|$)/.test(rest) ||
+                    /^\/round\/trips(\/|$)/.test(rest) ||
+                    /^\/round\/back-trips(\/|$)/.test(rest) ||
+                    /^\/round\/choose-seat(\/|$)/.test(rest);
+            }
+
+            function mobilePathToDesktop(pathname) {
+                var p = pathNorm(pathname);
+                var key = '/mobile/';
+                var i = p.indexOf(key);
+                if (i === -1) {
+                    return null;
+                }
+                var rest = p.slice(i + key.length - 1);
+                if (!rest.startsWith('/')) {
+                    rest = '/' + rest;
+                }
+                if (!hasDesktopEquivalent(rest)) {
+                    return null;
+                }
+                rest = rest.replace(/^\/round\/back-trips(\/|$)/, '/round/trips$1');
+                var prefix = p.slice(0, i).replace(/\/+$/, '') || '';
+                return prefix + rest;
+            }
+
+            function isTripDesktopSegment(parts, startIdx) {
+                var a = parts[startIdx];
+                var b = parts[startIdx + 1];
+                if (!a || !b) {
+                    return false;
+                }
+                if (a === 'one-way' && (b === 'trips' || b === 'choose-seat')) {
+                    return true;
+                }
+                if (a === 'round' && (b === 'trips' || b === 'choose-seat')) {
+                    return true;
+                }
+                return false;
+            }
+
+            function desktopPathToMobile(pathname) {
+                var p = pathNorm(pathname);
+                if (p.indexOf('/mobile/') !== -1) {
+                    return null;
+                }
+                var parts = p.split('/').filter(Boolean);
+                var i = 0;
+                if (parts.length && localePrefixes.indexOf(parts[0]) !== -1) {
+                    i = 1;
+                }
+                if (!isTripDesktopSegment(parts, i)) {
+                    return null;
+                }
+                var next = parts.slice();
+                next.splice(i, 0, 'mobile');
+                return '/' + next.join('/');
+            }
+
+            function applyViewportRouting() {
+                if (document.body && document.body.dataset.skipMobileDesktopRedirect === '1') {
+                    return;
+                }
+                var path = window.location.pathname;
+                var qs = window.location.search + window.location.hash;
+                var pathKey = pathNorm(path);
+                if (DESKTOP_MQL.matches) {
+                    var toDesk = mobilePathToDesktop(path);
+                    if (toDesk && pathNorm(toDesk) !== pathKey) {
+                        window.location.replace(toDesk + qs);
+                    }
+                } else {
+                    var toMob = desktopPathToMobile(path);
+                    if (toMob && pathNorm(toMob) !== pathKey) {
+                        window.location.replace(toMob + qs);
+                    }
+                }
+            }
+
+            function prefetchMobileTwinIfDesktop() {
+                if (!document.head || !DESKTOP_MQL.matches) {
+                    return;
+                }
+                if (document.body && document.body.dataset.skipMobileDesktopRedirect === '1') {
+                    return;
+                }
+                var toMob = desktopPathToMobile(window.location.pathname);
+                if (!toMob) {
+                    return;
+                }
+                if (document.querySelector('link[rel="prefetch"][data-viewport-mobile-twin="1"]')) {
+                    return;
+                }
+                var l = document.createElement('link');
+                l.rel = 'prefetch';
+                l.href = toMob + window.location.search;
+                l.setAttribute('data-viewport-mobile-twin', '1');
+                document.head.appendChild(l);
+            }
+
+            if (typeof DESKTOP_MQL.addEventListener === 'function') {
+                DESKTOP_MQL.addEventListener('change', applyViewportRouting);
+            } else {
+                DESKTOP_MQL.addListener(applyViewportRouting);
+            }
+            applyViewportRouting();
+            prefetchMobileTwinIfDesktop();
+        })();
+    </script>
     <div id="site-loader">
         <div class="spinner"></div>
     </div>
@@ -17,8 +140,15 @@
         </div>
     </div>
 
-    <!-- Mobile View -->
     <div class="mobile d-lg-none d-block">
+        <nav class="mobile-header navbar navbar-light bg-white border-bottom sticky-top shadow-sm py-2">
+            <div class="container-fluid d-flex justify-content-center">
+                <a class="navbar-brand p-0 m-0" href="{{ route('home') }}">
+                    <img src="{{ asset('images/logo.png') }}" alt="{{ config('app.name', 'Super Jet') }}" style="height: 35px; width: auto;">
+                </a>
+            </div>
+        </nav>
+
         <div class="container mo-view mb-5 mt-3 px-4">
             <div class="row">
                 @yield('mobile-content')
@@ -26,6 +156,8 @@
         </div>
         @include('mobile.layouts.footer')
     </div>
+
+    @include('includes.mobile-sidebar')
     @yield('includes')
 
     <script>
@@ -86,4 +218,5 @@
     @endif
 
     @include('includes.logout-modal')
+
 </body>

@@ -125,8 +125,10 @@
     }
 }
 
-/* Language Dropdown - ROOT FIX for LTR (English) */
-.navbar-dropdown.dropdown-language .dropdown-menu {
+/* Language dropdown: width fits label text (override BS 10rem + old 160px floor) */
+.navbar-dropdown.dropdown-language .dropdown-menu,
+html:not([dir="rtl"]) .navbar-dropdown.dropdown-language .dropdown-menu,
+html[dir="ltr"] .navbar-dropdown.dropdown-language .dropdown-menu {
     position: absolute !important;
     top: calc(100% + 0.25rem) !important;
     left: 50% !important;
@@ -134,27 +136,19 @@
     transform: translateX(-50%) !important;
     margin: 0 !important;
     padding: 0.25rem 0 !important;
-    min-width: 160px !important;
-    width: auto !important;
-    max-width: 220px !important;
+    --bs-dropdown-min-width: 0 !important;
+    --bs-dropdown-item-padding-x: 0.75rem !important;
+    min-width: 0 !important;
+    width: max-content !important;
+    max-width: min(280px, calc(100vw - 2rem)) !important;
     box-sizing: border-box !important;
 }
 
-/* Prevent dropdown from taking full width */
-html:not([dir="rtl"]) .navbar-dropdown.dropdown-language .dropdown-menu,
-html[dir="ltr"] .navbar-dropdown.dropdown-language .dropdown-menu {
-    width: auto !important;
-    max-width: 220px !important;
-    min-width: 160px !important;
-}
-
-/* Mobile - Keep reasonable width */
 @media (max-width: 576px) {
+    .navbar-dropdown.dropdown-language .dropdown-menu,
     html:not([dir="rtl"]) .navbar-dropdown.dropdown-language .dropdown-menu,
     html[dir="ltr"] .navbar-dropdown.dropdown-language .dropdown-menu {
         max-width: calc(100vw - 2rem) !important;
-        min-width: 160px !important;
-        width: auto !important;
     }
 }
 

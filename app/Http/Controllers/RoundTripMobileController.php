@@ -8,6 +8,7 @@ use App\Models\Station;
 use App\Services\ConfirmBookingService;
 use App\Traits\BookingTrait;
 use App\Traits\FawryIntegration;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class RoundTripMobileController extends Controller
@@ -42,6 +43,10 @@ class RoundTripMobileController extends Controller
             'go_date.after_or_equal' => __('Go Date must be today or later')
         ]);
 
+        if (Carbon::parse($request->back_date)->lt(Carbon::parse($request->go_date))) {
+            $request->merge(['back_date' => $request->go_date]);
+        }
+
         $trips = $this->getTrips(
             date: $request->go_date,
             stationFrom_id: $request->station_from_id,
@@ -54,14 +59,25 @@ class RoundTripMobileController extends Controller
         );
 
         $dates = $this->getNextWeekDays($request->go_date);
+        $goCarbon = \Carbon\Carbon::parse($request->go_date);
+        $today = \Carbon\Carbon::today();
+        $returnFloor = $goCarbon->gt($today) ? $goCarbon->format('Y-m-d') : $today->format('Y-m-d');
+        $backDates = $this->getNextWeekDaysWithFloor($request->back_date, $returnFloor);
         return view('mobile.round.trips.go-index', [
             'trips' => $trips,
+            'cities' => City::all(),
             'fromCity' => City::find(request()->city_from_id),
             'toCity' => City::find(request()->city_to_id),
             'fromStation' => Station::find(request()->station_from_id),
             'toStation' => Station::find(request()->station_to_id),
-            'dates' => $dates
-
+            'dates' => $dates,
+            'backDates' => $backDates,
+            'search' => [
+                'from' => City::find(request()->city_from_id),
+                'to' => City::find(request()->city_to_id),
+                'fromStation' => Station::find(request()->station_from_id),
+                'toStation' => Station::find(request()->station_to_id),
+            ]
         ]);
     }
     public function backTrips(Request $request)
@@ -78,6 +94,10 @@ class RoundTripMobileController extends Controller
             'go_trip_id' => 'required|exists:run_trips,id',
         ]);
 
+        if (Carbon::parse($request->back_date)->lt(Carbon::parse($request->go_date))) {
+            $request->merge(['back_date' => $request->go_date]);
+        }
+
         $trips = $this->getTrips(
             date: $request->back_date,
             stationFrom_id: $request->station_to_id,
@@ -89,15 +109,23 @@ class RoundTripMobileController extends Controller
             degrees: $request->degrees
         );
 
-        $dates = $this->getNextWeekDays($request->back_date);
+        $dates = $this->getNextWeekDaysWithFloor($request->back_date, $request->go_date);
+        $goDates = $this->getNextWeekDays($request->go_date);
         return view('mobile.round.trips.back-index', [
             'trips' => $trips,
+            'cities' => City::all(),
             'fromCity' => City::find(request()->city_to_id),
             'toCity' => City::find(request()->city_from_id),
             'fromStation' => Station::find(request()->station_to_id),
             'toStation' => Station::find(request()->station_from_id),
-            'dates' => $dates
-
+            'dates' => $dates,
+            'goDates' => $goDates,
+            'search' => [
+                'from' => City::find(request()->city_from_id),
+                'to' => City::find(request()->city_to_id),
+                'fromStation' => Station::find(request()->station_from_id),
+                'toStation' => Station::find(request()->station_to_id),
+            ]
         ]);
     }
 

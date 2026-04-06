@@ -58,12 +58,12 @@ class OnewayMobileController extends Controller
         $dates = $this->getNextWeekDays($request->go_date);
         return view('mobile.one-way.trips.index', [
             'trips' => $trips,
+            'cities' => City::all(),
             'fromCity' => City::find(request()->city_from_id),
             'toCity' => City::find(request()->city_to_id),
             'fromStation' => Station::find(request()->station_from_id),
             'toStation' => Station::find(request()->station_to_id),
             'dates' => $dates
-
         ]);
     }
 

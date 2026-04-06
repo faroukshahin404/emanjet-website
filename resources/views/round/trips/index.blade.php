@@ -1,4 +1,172 @@
 @extends('layouts.master')
+@push('styles')
+    <style>
+        /* Trip search modal — layout & shell */
+        #searchModal .trip-search-modal__shell {
+            border: none;
+            border-radius: 20px;
+            box-shadow:
+                0 28px 80px rgba(15, 23, 42, 0.14),
+                0 0 0 1px rgba(15, 23, 42, 0.06);
+            overflow: hidden;
+        }
+        #searchModal .trip-search-modal__header {
+            padding: 1rem 1.5rem;
+            background: #fff;
+            border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+        }
+        #searchModal .trip-search-modal__title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #0f172a;
+        }
+        #searchModal .trip-search-modal__body {
+            padding: 1.25rem 1.5rem 1.5rem;
+            background: #fff;
+        }
+        #searchModal .trip-search-modal__fields {
+            margin-bottom: 0;
+        }
+        #searchModal .trip-search-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 0.45rem;
+            line-height: 1.25;
+        }
+        #searchModal .trip-search-label__icon {
+            color: var(--main-color, #f37021);
+            font-size: 0.8rem;
+            width: 1.1em;
+            flex-shrink: 0;
+            opacity: 0.95;
+        }
+        #searchModal .trip-search-input {
+            height: 48px;
+            border-radius: 12px !important;
+            border: 1px solid rgba(15, 23, 42, 0.1) !important;
+            background: #fff !important;
+            padding: 0.5rem 0.9rem;
+            font-weight: 500;
+            color: #0f172a;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+        #searchModal .trip-search-input:focus {
+            border-color: var(--main-color, #f37021) !important;
+            box-shadow: 0 0 0 3px rgba(var(--main-color-rgb), 0.2);
+            outline: none;
+        }
+        #searchModal .trip-search-submit {
+            min-width: 200px;
+            padding: 0.7rem 2.25rem;
+            font-weight: 700;
+            font-size: 1rem;
+            border: none;
+            border-radius: 999px;
+            color: #fff !important;
+            background: linear-gradient(135deg, var(--main-color, #f37021) 0%, var(--main-hover, #e85f10) 100%);
+            box-shadow: 0 10px 28px rgba(var(--main-color-rgb), 0.35);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        #searchModal .trip-search-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 36px rgba(var(--main-color-rgb), 0.42);
+            color: #fff !important;
+        }
+        #searchModal .trip-search-submit:focus-visible {
+            outline: 2px solid var(--main-color, #f37021);
+            outline-offset: 3px;
+        }
+
+        /* Select2 — trip search modal */
+        #searchModal .select2-container {
+            width: 100% !important;
+        }
+        #searchModal .select2-container--bootstrap-5 .select2-selection {
+            min-height: 48px;
+            border-radius: 12px !important;
+            border: 1px solid rgba(15, 23, 42, 0.1) !important;
+            background-color: #fff !important;
+            align-items: center;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+        #searchModal .select2-container--bootstrap-5 .select2-selection--single .select2-selection__rendered {
+            line-height: 46px;
+            padding-inline: 0.9rem 2.65rem;
+            font-weight: 500;
+            color: #0f172a;
+        }
+        #searchModal .select2-container--bootstrap-5 .select2-selection--single .select2-selection__arrow {
+            height: 46px;
+            width: 2.35rem;
+        }
+        #searchModal .select2-container--bootstrap-5 .select2-selection--single .select2-selection__arrow b {
+            border-color: #64748b transparent transparent transparent;
+        }
+        #searchModal .select2-container--bootstrap-5.select2-container--open .select2-selection--single .select2-selection__arrow b {
+            border-color: transparent transparent var(--main-color, #f37021) transparent;
+        }
+        #searchModal .select2-container--bootstrap-5.select2-container--focus .select2-selection,
+        #searchModal .select2-container--bootstrap-5.select2-container--open .select2-selection {
+            border-color: var(--main-color, #f37021) !important;
+            box-shadow: 0 0 0 3px rgba(var(--main-color-rgb), 0.2);
+        }
+        #searchModal .trip-s2-dropdown,
+        #searchModal .select2-dropdown {
+            z-index: 1060 !important;
+        }
+        #searchModal .trip-s2-dropdown {
+            border-radius: 14px !important;
+            border: 1px solid rgba(15, 23, 42, 0.08) !important;
+            box-shadow: 0 20px 50px rgba(15, 23, 42, 0.16) !important;
+            padding: 4px 0;
+            overflow: hidden;
+        }
+        #searchModal .trip-s2-dropdown .select2-search--dropdown {
+            padding: 10px 12px;
+            background: #f8fafc;
+            border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+        }
+        #searchModal .trip-s2-dropdown .select2-search__field {
+            border-radius: 10px !important;
+            border: 1px solid rgba(15, 23, 42, 0.1) !important;
+            padding: 0.55rem 0.75rem !important;
+            font-weight: 500;
+        }
+        #searchModal .trip-s2-dropdown .select2-search__field:focus {
+            border-color: var(--main-color, #f37021) !important;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(var(--main-color-rgb), 0.15);
+        }
+        #searchModal .trip-s2-dropdown .select2-results__option {
+            padding: 0.65rem 1rem;
+            font-weight: 500;
+            color: #334155;
+        }
+        #searchModal .trip-s2-dropdown .select2-results__option--highlighted {
+            background-color: var(--main-color, #f37021) !important;
+            color: #fff !important;
+        }
+        #searchModal .trip-s2-dropdown .select2-results__option[aria-selected="true"] {
+            background-color: rgba(var(--main-color-rgb), 0.12);
+            color: #0f172a;
+        }
+        #searchModal .trip-search-date-text {
+            cursor: pointer;
+            background-color: #fff !important;
+        }
+        .flatpickr-calendar.open {
+            z-index: 1070 !important;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+@endpush
 
 @section('content')
     <div class="reservation-header">
@@ -6,7 +174,8 @@
             <div class="row">
                 <div class="reservation-travel-box px-5 d-flex justify-content-between align-items-center">
 
-                    <div class="reservation-container d-flex justify-content-between align-items-center w-50">
+                    <div
+                        class="reservation-container d-flex flex-wrap justify-content-between align-items-center gap-3 gap-lg-4 w-50">
                         <div class="d-flex flex-column justify-content-between align-items-center">
                             <div>
                                 <i class="fas fa-location-dot text-black"></i>
@@ -34,6 +203,16 @@
                             </div>
                             <div>
                                 {{ request()->go_date }}
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-column justify-content-between align-items-center">
+                            <div>
+                                <i class="fas fa-calendar-check text-black"></i>
+                                <span class="text-black">{{ __('Back Date') }}</span>
+                            </div>
+                            <div>
+                                {{ request()->back_date ?? request()->go_date }}
                             </div>
                         </div>
 
@@ -88,9 +267,16 @@
                                 </div>
                             </div>
 
-                            {{-- التاريخ --}}
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <p class="m-0 text-black">{{ request()->go_date }}</p>
+                            {{-- التواريخ --}}
+                            <div class="mb-2">
+                                <p class="m-0 text-black small">
+                                    <span class="text-muted">{{ __('Travel Date') }}:</span>
+                                    {{ request()->go_date }}
+                                </p>
+                                <p class="m-0 text-black small">
+                                    <span class="text-muted">{{ __('Back Date') }}:</span>
+                                    {{ request()->back_date ?? request()->go_date }}
+                                </p>
                             </div>
 
                             {{-- في حالة عدم اختيار الرحلات --}}
@@ -445,110 +631,103 @@
         </div>
     </div>
     <!-- Search Modal -->
-    <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true"
-        data-bs-backdrop="false">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header d-flex align-items-center">
-                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+    <div class="modal fade trip-search-modal" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel"
+        aria-hidden="true" data-bs-backdrop="false">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content trip-search-modal__shell">
+                <div class="modal-header trip-search-modal__header d-flex align-items-center">
+                    <h5 class="modal-title trip-search-modal__title mb-0" id="searchModalLabel">{{ __('Edit Search') }}
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="{{ __('Close') }}"></button>
                 </div>
 
-                <div class="modal-body">
-                    <form action="">
-                        <input type="hidden" value="{{ request()->tripType ?? 'oneway' }}" name="tripType" />
-                        <div class="container-fluid">
-                            <div class="row gy-3">
-                                <input type="hidden" id="selected_station_from"
-                                    value="{{ request()->station_from_id }}">
-                                <input type="hidden" id="selected_station_to" value="{{ request()->station_to_id }}">
+                <div class="modal-body trip-search-modal__body">
+                    <form action="{{ route('round.trips') }}" method="get">
+                        <input type="hidden" name="tripType" value="round" />
+                        <input type="hidden" id="selected_station_from"
+                            value="{{ request()->station_from_id }}">
+                        <input type="hidden" id="selected_station_to" value="{{ request()->station_to_id }}">
 
-                                <div class="col-lg-3 col-md-12 travel-box">
-                                    <div class="d-flex flex-column align-items-start">
-                                        <div>
-                                            <i class="fas fa-location-dot text-black"></i>
-                                            <span class="text-black">{{ __('Travel From') }}</span>
-                                        </div>
-                                        <select class="form-select" name="city_from_id" id="city_from_id">
-                                            @foreach ($cities as $city)
-                                                <option value="{{ $city->id }}"
-                                                    {{ request()->city_from_id == $city->id ? 'selected' : '' }}>
-                                                    {{ $city->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                        <div class="row g-3 trip-search-modal__fields align-items-end">
+                                <div class="col-lg-3 col-md-6">
+                                    <label class="trip-search-label w-100" for="city_from_id">
+                                        <i class="fas fa-location-dot trip-search-label__icon" aria-hidden="true"></i>
+                                        <span>{{ __('Travel From') }}</span>
+                                    </label>
+                                    <select class="form-select w-100 trip-search-select" name="city_from_id"
+                                        id="city_from_id">
+                                        @foreach ($cities as $city)
+                                            <option value="{{ $city->id }}"
+                                                {{ request()->city_from_id == $city->id ? 'selected' : '' }}>
+                                                {{ $city->name }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
-                                <div class="col-lg-3 col-md-12 travel-box">
-                                    <div class="d-flex flex-column align-items-start">
-                                        <div>
-                                            <i class="fas fa-location-dot text-black"></i>
-                                            <span class="text-black">{{ __('From Station') }}</span>
-                                        </div>
-                                        <select class="form-select" name="station_from_id" id="station_from_id">
-
-                                        </select>
-                                    </div>
+                                <div class="col-lg-3 col-md-6">
+                                    <label class="trip-search-label w-100" for="station_from_id">
+                                        <i class="fas fa-bus trip-search-label__icon" aria-hidden="true"></i>
+                                        <span>{{ __('From Station') }}</span>
+                                    </label>
+                                    <select class="form-select w-100 trip-search-select" name="station_from_id"
+                                        id="station_from_id"></select>
                                 </div>
-
-                                <div class="col-lg-3 col-md-12 travel-box">
-                                    <div class="d-flex flex-column align-items-start">
-                                        <div>
-                                            <i class="fas fa-location-dot text-black"></i>
-                                            <span class="text-black">{{ __('Travel To') }}</span>
-                                        </div>
-                                        <select class="form-select" name="city_to_id" id="city_to_id">
-                                            @foreach ($cities as $city)
-                                                <option value="{{ $city->id }}"
-                                                    {{ request()->city_to_id == $city->id ? 'selected' : '' }}>
-                                                    {{ $city->name }}</option>
-                                            @endforeach
-
-                                        </select>
-                                    </div>
+                                <div class="col-lg-3 col-md-6">
+                                    <label class="trip-search-label w-100" for="city_to_id">
+                                        <i class="fas fa-location-dot trip-search-label__icon" aria-hidden="true"></i>
+                                        <span>{{ __('Travel To') }}</span>
+                                    </label>
+                                    <select class="form-select w-100 trip-search-select" name="city_to_id"
+                                        id="city_to_id">
+                                        @foreach ($cities as $city)
+                                            <option value="{{ $city->id }}"
+                                                {{ request()->city_to_id == $city->id ? 'selected' : '' }}>
+                                                {{ $city->name }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
-                                <div class="col-lg-3 col-md-12 travel-box">
-                                    <div class="d-flex flex-column align-items-start">
-                                        <div>
-                                            <i class="fas fa-location-dot text-black"></i>
-                                            <span class="text-black">{{ __('To Station') }}</span>
-                                        </div>
-                                        <select class="form-select" name="station_to_id" id="station_to_id">
-
-                                        </select>
-                                    </div>
+                                <div class="col-lg-3 col-md-6">
+                                    <label class="trip-search-label w-100" for="station_to_id">
+                                        <i class="fas fa-flag-checkered trip-search-label__icon" aria-hidden="true"></i>
+                                        <span>{{ __('To Station') }}</span>
+                                    </label>
+                                    <select class="form-select w-100 trip-search-select" name="station_to_id"
+                                        id="station_to_id"></select>
                                 </div>
-
-                                <div class="col-lg-3 col-md-12 travel-box">
-                                    <div class="d-flex flex-column align-items-start">
-                                        <div>
-                                            <i class="fas fa-calendar-alt text-black"></i>
-                                            <span class="text-black">{{ __('Date') }}</span>
-                                        </div>
-                                        <input type="date" class="form-control" value="{{ request()->go_date }}"
-                                            name="go_date">
-                                    </div>
+                                <div class="col-md-6 col-lg-4">
+                                    <label class="trip-search-label w-100" for="round_modal_go_text">
+                                        <i class="fas fa-calendar-alt trip-search-label__icon" aria-hidden="true"></i>
+                                        <span>{{ __('Travel Date') }}</span>
+                                    </label>
+                                    <input type="text" id="round_modal_go_text" readonly
+                                        class="form-control trip-search-input trip-search-date-text w-100"
+                                        autocomplete="off">
+                                    <input type="hidden" name="go_date" id="round_modal_go_date"
+                                        value="{{ request()->go_date }}">
                                 </div>
-
-                                <div class="col-lg-3 col-md-12 travel-box">
-                                    <div class="d-flex flex-column align-items-start">
-                                        <label class="fw-bold text-black">
-                                            <i class="fas fa-user mx-1"></i>
-                                            {{ __('Number of Travelers') }}
-                                        </label>
-                                        <div class="d-flex align-items-center rounded px-3 border bg-white py-1">
-                                            <input type="number" value="{{ request()->seats }}" class="form-control"
-                                                name="seats" required />
-
-
-                                        </div>
-                                    </div>
+                                <div class="col-md-6 col-lg-4">
+                                    <label class="trip-search-label w-100" for="round_modal_back_text">
+                                        <i class="fas fa-calendar-check trip-search-label__icon" aria-hidden="true"></i>
+                                        <span>{{ __('Back Date') }}</span>
+                                    </label>
+                                    <input type="text" id="round_modal_back_text" readonly
+                                        class="form-control trip-search-input trip-search-date-text w-100"
+                                        autocomplete="off">
+                                    <input type="hidden" name="back_date" id="round_modal_back_date"
+                                        value="{{ request()->back_date ?? request()->go_date }}">
                                 </div>
-
-                                <div class="col-12 text-center">
-                                    <button class="btn search-trip-btn">{{ __('Search') }}</button>
+                                <div class="col-md-6 col-lg-4">
+                                    <label class="trip-search-label w-100" for="search_modal_seats_round">
+                                        <i class="fas fa-user trip-search-label__icon" aria-hidden="true"></i>
+                                        <span>{{ __('Number of Travelers') }}</span>
+                                    </label>
+                                    <input type="number" id="search_modal_seats_round" value="{{ request()->seats }}"
+                                        class="form-control trip-search-input w-100" name="seats" required min="1">
                                 </div>
+                        </div>
 
-                            </div>
+                        <div class="text-center mt-4 pt-1">
+                            <button type="submit" class="btn trip-search-submit">{{ __('Search') }}</button>
                         </div>
                     </form>
                 </div>
@@ -610,53 +789,212 @@
         });
     </script>
 
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const cityFromSelect = document.getElementById('city_from_id');
-            const stationFromSelect = document.getElementById('station_from_id');
+            if (typeof jQuery === 'undefined' || !jQuery.fn.select2) {
+                return;
+            }
+            const $ = jQuery;
+            const $modal = $('#searchModal');
+            if (!$modal.length) {
+                return;
+            }
 
-            const cityToSelect = document.getElementById('city_to_id');
-            const stationToSelect = document.getElementById('station_to_id');
+            const selectStationPh = @json(__('Select a station'));
+            const selectSearchPh = @json(__('Search...'));
+            const isRtl = document.documentElement.getAttribute('dir') === 'rtl';
 
-            const selectedStationFrom = document.getElementById('selected_station_from')?.value;
-            const selectedStationTo = document.getElementById('selected_station_to')?.value;
+            function tripSelect2Options() {
+                return {
+                    theme: 'bootstrap-5',
+                    width: '100%',
+                    dropdownParent: $modal,
+                    minimumResultsForSearch: 0,
+                    allowClear: false,
+                    dir: isRtl ? 'rtl' : 'ltr',
+                    dropdownCssClass: 'trip-s2-dropdown',
+                };
+            }
+
+            $modal.on('select2:open', function() {
+                requestAnimationFrame(function() {
+                    const input = document.querySelector('#searchModal .select2-search__field');
+                    if (input) {
+                        input.setAttribute('placeholder', selectSearchPh);
+                    }
+                });
+            });
+
+            function bindStationSelect2($select) {
+                if ($select.hasClass('select2-hidden-accessible')) {
+                    $select.select2('destroy');
+                }
+                $select.select2(tripSelect2Options());
+            }
 
             function fetchStations(cityId, stationSelect, selectedStationId = null) {
+                const $station = $(stationSelect);
+                if ($station.hasClass('select2-hidden-accessible')) {
+                    $station.select2('destroy');
+                }
                 if (!cityId) {
-                    stationSelect.innerHTML = '<option value="">{{ __('Select a station') }}</option>';
+                    stationSelect.innerHTML = '<option value="">' + selectStationPh + '</option>';
+                    bindStationSelect2($station);
                     return;
                 }
 
-                fetch(`/get-stations/${cityId}`)
+                fetch('/get-stations/' + encodeURIComponent(cityId))
                     .then(response => response.json())
                     .then(data => {
-                        let options = '<option value="">{{ __('Select a station') }}</option>';
+                        let options = '<option value="">' + selectStationPh + '</option>';
                         data.forEach(station => {
-                            const selected = station.id == selectedStationId ? 'selected' : '';
-                            options +=
-                                `<option value="${station.id}" ${selected}>${station.name}</option>`;
+                            const selected = String(station.id) === String(selectedStationId ?? '') ? ' selected' : '';
+                            options += '<option value="' + station.id + '"' + selected + '>' + station.name +
+                                '</option>';
                         });
                         stationSelect.innerHTML = options;
+                        bindStationSelect2($station);
                     })
                     .catch(error => {
                         console.error('Error fetching stations:', error);
                     });
             }
 
-            cityFromSelect.addEventListener('change', function() {
+            const cityFromSelect = document.getElementById('city_from_id');
+            const stationFromSelect = document.getElementById('station_from_id');
+            const cityToSelect = document.getElementById('city_to_id');
+            const stationToSelect = document.getElementById('station_to_id');
+
+            if (!cityFromSelect || !stationFromSelect || !cityToSelect || !stationToSelect) {
+                return;
+            }
+
+            const selectedStationFrom = document.getElementById('selected_station_from')?.value;
+            const selectedStationTo = document.getElementById('selected_station_to')?.value;
+
+            $(cityFromSelect).select2(tripSelect2Options());
+            $(cityToSelect).select2(tripSelect2Options());
+
+            $(cityFromSelect).on('change', function() {
                 fetchStations(this.value, stationFromSelect);
             });
-
-            cityToSelect.addEventListener('change', function() {
+            $(cityToSelect).on('change', function() {
                 fetchStations(this.value, stationToSelect);
             });
 
             if (cityFromSelect.value) {
                 fetchStations(cityFromSelect.value, stationFromSelect, selectedStationFrom);
+            } else {
+                stationFromSelect.innerHTML = '<option value="">' + selectStationPh + '</option>';
+                bindStationSelect2($(stationFromSelect));
             }
 
             if (cityToSelect.value) {
                 fetchStations(cityToSelect.value, stationToSelect, selectedStationTo);
+            } else {
+                stationToSelect.innerHTML = '<option value="">' + selectStationPh + '</option>';
+                bindStationSelect2($(stationToSelect));
+            }
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/l10n/ar.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof flatpickr === 'undefined') {
+                return;
+            }
+            const goHidden = document.getElementById('round_modal_go_date');
+            const backHidden = document.getElementById('round_modal_back_date');
+            const goText = document.getElementById('round_modal_go_text');
+            const backText = document.getElementById('round_modal_back_text');
+            if (!goHidden || !backHidden || !goText || !backText) {
+                return;
+            }
+
+            const isRtl = document.documentElement.getAttribute('dir') === 'rtl';
+            const localeTag = @json(app()->getLocale()) === 'ar' ? 'ar-EG' : 'en-US';
+            const localeOpts = isRtl ? {
+                locale: 'ar'
+            } : {};
+
+            function formatModalDate(date) {
+                if (!date || !(date instanceof Date) || isNaN(date.getTime())) {
+                    return '';
+                }
+                return date.toLocaleDateString(localeTag, {
+                    weekday: 'short',
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                });
+            }
+
+            const todayYmd = new Date().toISOString().slice(0, 10);
+            if (!goHidden.value) {
+                goHidden.value = todayYmd;
+            }
+            if (!backHidden.value) {
+                backHidden.value = goHidden.value;
+            }
+            if (backHidden.value < goHidden.value) {
+                backHidden.value = goHidden.value;
+            }
+
+            let fpGo = null;
+            let fpBack = null;
+
+            fpBack = flatpickr(backText, Object.assign({
+                dateFormat: 'Y-m-d',
+                minDate: goHidden.value || 'today',
+                maxDate: '2030-12-31',
+                disableMobile: true,
+                allowInput: false,
+                clickOpens: true,
+                appendTo: document.body,
+                defaultDate: backHidden.value || undefined,
+                onChange: function(selectedDates, dateStr) {
+                    backHidden.value = dateStr;
+                    if (selectedDates.length) {
+                        backText.value = formatModalDate(selectedDates[0]);
+                    }
+                },
+            }, localeOpts));
+
+            fpGo = flatpickr(goText, Object.assign({
+                dateFormat: 'Y-m-d',
+                minDate: 'today',
+                maxDate: '2030-12-31',
+                disableMobile: true,
+                allowInput: false,
+                clickOpens: true,
+                appendTo: document.body,
+                defaultDate: goHidden.value || undefined,
+                onChange: function(selectedDates, dateStr) {
+                    goHidden.value = dateStr;
+                    if (selectedDates.length) {
+                        goText.value = formatModalDate(selectedDates[0]);
+                    }
+                    if (fpBack) {
+                        fpBack.set('minDate', dateStr);
+                        if (backHidden.value && backHidden.value < dateStr) {
+                            fpBack.setDate(dateStr, false);
+                            backHidden.value = dateStr;
+                            backText.value = formatModalDate(new Date(dateStr + 'T12:00:00'));
+                        }
+                    }
+                },
+            }, localeOpts));
+
+            if (goHidden.value) {
+                fpGo.setDate(goHidden.value, false);
+                goText.value = formatModalDate(fpGo.selectedDates[0] || new Date(goHidden.value + 'T12:00:00'));
+            }
+            if (backHidden.value) {
+                fpBack.setDate(backHidden.value, false);
+                backText.value = formatModalDate(fpBack.selectedDates[0] || new Date(backHidden.value + 'T12:00:00'));
             }
         });
     </script>

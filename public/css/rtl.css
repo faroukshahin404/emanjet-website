@@ -591,29 +591,22 @@ html[dir="ltr"] .menu .app-brand .layout-menu-toggle {
     transform: translateX(-50%) !important;
     margin: 0 !important;
     padding: 0.25rem 0 !important;
-    min-width: 160px !important;
-    width: auto !important;
-    max-width: calc(100vw - 2rem) !important;
+    --bs-dropdown-min-width: 0 !important;
+    --bs-dropdown-item-padding-x: 0.75rem !important;
+    min-width: 0 !important;
+    width: max-content !important;
+    max-width: min(280px, calc(100vw - 2rem)) !important;
     border-radius: 0.5rem !important;
     box-shadow: var(--bs-box-shadow-lg, 0 0.5rem 1rem rgba(0, 0, 0, 0.15));
 }
 
-/* Mobile - RTL: Keep reasonable width, don't take full page */
 @media (max-width: 576px) {
     [dir="rtl"] .navbar-dropdown.dropdown-language .dropdown-menu,
     [dir="rtl"] .navbar-dropdown.dropdown-language .dropdown-menu.dropdown-menu-end,
-    [dir="rtl"] .navbar-dropdown.dropdown-language .dropdown-menu[data-bs-popper] {
-        max-width: calc(100vw - 2rem) !important;
-        min-width: 160px !important;
-        width: auto !important;
-    }
-
-    /* LTR mobile - same fix */
+    [dir="rtl"] .navbar-dropdown.dropdown-language .dropdown-menu[data-bs-popper],
     html:not([dir="rtl"]) .navbar-dropdown.dropdown-language .dropdown-menu,
     html[dir="ltr"] .navbar-dropdown.dropdown-language .dropdown-menu {
         max-width: calc(100vw - 2rem) !important;
-        min-width: 160px !important;
-        width: auto !important;
     }
 }
 

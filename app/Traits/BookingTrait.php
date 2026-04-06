@@ -153,16 +153,48 @@ trait BookingTrait
     public function getNextWeekDays($date)
     {
         $days = [];
-        $startDate = Carbon::parse($date);
+        $selectedDate = Carbon::parse($date);
+        $today = Carbon::today();
 
-        for ($i = -3; $i <= 4; $i++) {
-            $days[] = $startDate->copy()->addDays($i)->format('Y-m-d');
+        // Target an 8-day window around the selected date
+        // But enforce today as the floor
+        $start = $selectedDate->copy()->subDays(3);
+        if ($start->lt($today)) {
+            $start = $today->copy();
+        }
+
+        for ($i = 0; $i < 8; $i++) {
+            $days[] = $start->copy()->addDays($i)->format('Y-m-d');
         }
 
         return $days;
     }
 
+    /**
+     * Same window as getNextWeekDays but the first day is never before $floorDate (Y-m-d).
+     * Used for return-date pills so dates before departure are not shown.
+     */
+    public function getNextWeekDaysWithFloor(string $date, string $floorDate): array
+    {
+        $selectedDate = Carbon::parse($date);
+        $floor = Carbon::parse($floorDate);
+        $today = Carbon::today();
+        if ($floor->lt($today)) {
+            $floor = $today->copy();
+        }
 
+        $start = $selectedDate->copy()->subDays(3);
+        if ($start->lt($floor)) {
+            $start = $floor->copy();
+        }
+
+        $days = [];
+        for ($i = 0; $i < 8; $i++) {
+            $days[] = $start->copy()->addDays($i)->format('Y-m-d');
+        }
+
+        return $days;
+    }
 
     public function parseAnyDate($input, $formats = ['Y-m-d', 'Y/m/d', 'd-m-Y', 'd/m/Y', 'd-m-Y', 'd/m/Y', 'dmY', 'dmy', 'ymd', 'Ymd'])
     {

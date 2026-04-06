@@ -75,5 +75,11 @@
     "Confirm new password": "Confirm new password",
     "Update password": "Update password",
     "Password updated successfully.": "Password updated successfully.",
-    "Current password": "Current password"
+    "Current password": "Current password",
+    "Route": "Route",
+    "Close": "Close",
+    "Travel Date": "Departure date",
+    "Back Date": "Return date",
+    "Home": "Home",
+    "Back": "Back"
 }
