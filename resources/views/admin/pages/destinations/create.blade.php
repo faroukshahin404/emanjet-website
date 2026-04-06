@@ -3,33 +3,15 @@
 @section('title', isset($item) ? __('Edit Destination') : __('Create Destination'))
 
 @section('breadcrumb')
-    <div class="row">
-        <div class="col-12">
-            <div class="box p-3 mb-3">
-                <nav>
-                    <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="/"><i class="mdi mdi-home-outline"></i></a></li>
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('admin.dashboard.index') }}">{{ __('Dashboard') }}</a>
-                        </li>
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('admin.destinations.index') }}">{{ __('Destinations') }}</a>
-                        </li>
-                        <li class="breadcrumb-item active" aria-current="page">
-                            {{ isset($item) ? __('Edit Destination') : __('Create Destination') }}
-                        </li>
-                    </ol>
-                </nav>
-            </div>
-        </div>
-    </div>
+    <x-admin.page-header
+        :title="isset($item) ? __('Edit Destination') : __('Create Destination')"
+        :parent-url="route('admin.destinations.index')"
+        :parent-label="__('Destinations')" />
 @endsection
 
 @section('content')
-    <div class="row">
-        <div class="col-12">
-            <div class="box">
-                <div class="box-body">
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
                     <form method="POST" action="{{ isset($item) ? route('admin.destinations.update', $item) : route('admin.destinations.store') }}" enctype="multipart/form-data">
                         @csrf
                         @if (isset($item))
@@ -39,30 +21,30 @@
                         <div class="row mb-3">
                             @foreach (['en' => 'English', 'ar' => 'Arabic'] as $lang => $label)
                                 <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="name_{{ $lang }}">{{ __('Name') }} ({{ $label }})</label>
-                                        <input type="text" class="form-control" id="name_{{ $lang }}" name="name[{{ $lang }}]" value="{{ old("name.$lang", $item->name[$lang] ?? '') }}" required>
+                                    <div class="mb-3">
+                                        <label class="form-label" for="name_{{ $lang }}">{{ __('Name') }} ({{ $label }})</label>
+                                        <input type="text" class="form-control" id="name_{{ $lang }}" name="name[{{ $lang }}]" value="{{ old("name.$lang", isset($item) ? ($item->name[$lang] ?? '') : '') }}" required>
                                     </div>
                                 </div>
                             @endforeach
                         </div>
 
-                        <div class="form-group mb-3">
-                            <label for="image">{{ __('Image') }}</label>
+                        <div class="mb-3">
+                            <label class="form-label" for="image">{{ __('Image') }}</label>
                             <input type="file" class="dropify" id="image" name="image" data-default-file="{{ isset($item) && $item->image ? asset($item->image) : '' }}">
                         </div>
 
-                        <div class="form-group mb-3">
-                            <label for="order">{{ __('Order') }}</label>
-                            <input type="number" class="form-control" id="order" name="order" value="{{ old('order', $item->order ?? 0) }}">
+                        <div class="mb-3">
+                            <label class="form-label" for="order">{{ __('Order') }}</label>
+                            <input type="number" class="form-control" id="order" name="order" value="{{ old('order', isset($item) ? $item->order : 0) }}">
                         </div>
 
                         <div class="row mb-3">
                             @foreach (['en' => 'English', 'ar' => 'Arabic'] as $lang => $label)
                                 <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="content_{{ $lang }}">{{ __('Content') }} ({{ $label }})</label>
-                                        <textarea class="form-control" id="content_{{ $lang }}" name="content[{{ $lang }}]" rows="4">{{ old("content.$lang", $item->content[$lang] ?? '') }}</textarea>
+                                    <div class="mb-3">
+                                        <label class="form-label" for="content_{{ $lang }}">{{ __('Content') }} ({{ $label }})</label>
+                                        <textarea class="form-control" id="content_{{ $lang }}" name="content[{{ $lang }}]" rows="4">{{ old("content.$lang", isset($item) ? ($item->content[$lang] ?? '') : '') }}</textarea>
                                     </div>
                                 </div>
                             @endforeach
@@ -73,17 +55,17 @@
                         <div class="row mb-3">
                             @foreach (['en' => 'English', 'ar' => 'Arabic'] as $lang => $label)
                                 <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="meta_title_{{ $lang }}">{{ __('Meta Title') }} ({{ $label }})</label>
-                                        <input type="text" class="form-control" id="meta_title_{{ $lang }}" name="meta_title[{{ $lang }}]" value="{{ old("meta_title.$lang", $item->meta_title[$lang] ?? '') }}">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="meta_title_{{ $lang }}">{{ __('Meta Title') }} ({{ $label }})</label>
+                                        <input type="text" class="form-control" id="meta_title_{{ $lang }}" name="meta_title[{{ $lang }}]" value="{{ old("meta_title.$lang", isset($item) ? ($item->meta_title[$lang] ?? '') : '') }}">
                                     </div>
-                                    <div class="form-group">
-                                        <label for="meta_description_{{ $lang }}">{{ __('Meta Description') }} ({{ $label }})</label>
-                                        <textarea class="form-control" id="meta_description_{{ $lang }}" name="meta_description[{{ $lang }}]" rows="2">{{ old("meta_description.$lang", $item->meta_description[$lang] ?? '') }}</textarea>
+                                    <div class="mb-3">
+                                        <label class="form-label" for="meta_description_{{ $lang }}">{{ __('Meta Description') }} ({{ $label }})</label>
+                                        <textarea class="form-control" id="meta_description_{{ $lang }}" name="meta_description[{{ $lang }}]" rows="2">{{ old("meta_description.$lang", isset($item) ? ($item->meta_description[$lang] ?? '') : '') }}</textarea>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="meta_tags_{{ $lang }}">{{ __('Meta Tags') }} ({{ $label }})</label>
-                                        <input type="text" class="form-control" id="meta_tags_{{ $lang }}" name="meta_tags[{{ $lang }}]" value="{{ old("meta_tags.$lang", is_array($item->meta_tags ?? null) ? implode(',', $item->meta_tags[$lang] ?? []) : '') }}">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="meta_tags_{{ $lang }}">{{ __('Meta Tags') }} ({{ $label }})</label>
+                                        <input type="text" class="form-control" id="meta_tags_{{ $lang }}" name="meta_tags[{{ $lang }}]" value="{{ old("meta_tags.$lang", isset($item) && is_array($item->meta_tags ?? null) ? implode(',', $item->meta_tags[$lang] ?? []) : '') }}">
                                         <small class="text-muted">{{ __('Comma separated') }}</small>
                                     </div>
                                 </div>
@@ -94,8 +76,6 @@
                             {{ isset($item) ? __('Update') : __('Create') }}
                         </button>
                     </form>
-                </div>
-            </div>
         </div>
     </div>
 @endsection

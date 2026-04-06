@@ -3,29 +3,15 @@
 @section('title', isset($category) ? __('Edit Category') : __('Create Category'))
 
 @section('breadcrumb')
-    <div class="row">
-        <div class="col-12">
-            <div class="box p-3 mb-3">
-                <nav>
-                    <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="/"><i class="mdi mdi-home-outline"></i></a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('admin.dashboard.index') }}">{{ __('Dashboard') }}</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('admin.blog-categories.index') }}">{{ __('Blog Categories') }}</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">
-                            {{ isset($category) ? __('Edit Category') : __('Create Category') }}
-                        </li>
-                    </ol>
-                </nav>
-            </div>
-        </div>
-    </div>
+    <x-admin.page-header
+        :title="isset($category) ? __('Edit Category') : __('Create Category')"
+        :parent-url="route('admin.blog-categories.index')"
+        :parent-label="__('Blog Categories')" />
 @endsection
 
 @section('content')
-    <div class="row">
-        <div class="col-12">
-            <div class="box">
-                <div class="box-body">
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
                     <form method="POST" action="{{ isset($category) ? route('admin.blog-categories.update', $category) : route('admin.blog-categories.store') }}">
                         @csrf
                         @if (isset($category))
@@ -37,7 +23,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="name_{{ $lang }}">{{ __('Name') }} ({{ $label }})</label>
-                                        <input type="text" class="form-control" id="name_{{ $lang }}" name="name[{{ $lang }}]" value="{{ old("name.$lang", $category->name[$lang] ?? '') }}" required>
+                                        <input type="text" class="form-control" id="name_{{ $lang }}" name="name[{{ $lang }}]" value="{{ old("name.$lang", isset($category) ? ($category->name[$lang] ?? '') : '') }}" required>
                                     </div>
                                 </div>
                             @endforeach
@@ -45,15 +31,13 @@
 
                         <div class="form-group mb-3">
                             <label for="slug">{{ __('Slug') }}</label>
-                            <input type="text" class="form-control" id="slug" name="slug" value="{{ old('slug', $category->slug ?? '') }}" placeholder="{{ __('Will be generated automatically if empty') }}">
+                            <input type="text" class="form-control" id="slug" name="slug" value="{{ old('slug', isset($category) ? $category->slug : '') }}" placeholder="{{ __('Will be generated automatically if empty') }}">
                         </div>
 
                         <button type="submit" class="btn btn-primary">
                             {{ isset($category) ? __('Update') : __('Create') }}
                         </button>
                     </form>
-                </div>
-            </div>
         </div>
     </div>
 @endsection

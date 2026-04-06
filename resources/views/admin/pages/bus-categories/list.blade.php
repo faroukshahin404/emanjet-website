@@ -1,40 +1,31 @@
-<div class="table-responsive">
-    <table class="table table-bordered table-striped">
-        <thead>
+<table class="table table-hover table-bordered align-middle mb-0">
+    <thead class="table-light">
+        <tr>
+            <th>{{ __('Name Ar') }}</th>
+            <th>{{ __('Name En') }}</th>
+            <th>{{ __('Rate') }}</th>
+            <th>{{ __('Passengers') }}</th>
+            <th class="text-end">{{ __('Actions') }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ($results as $item)
             <tr>
-                <th>{{ __('Name Ar') }}</th>
-                <th>{{ __('Name En') }}</th>
-                <th>{{ __('Rate') }}</th>
-                <th>{{ __('Passengers') }}</th>
-                <th>{{ __('Actions') }}</th>
+                <td>{{ $item->name_ar }}</td>
+                <td>{{ $item->name_en }}</td>
+                <td>{{ $item->rate }}</td>
+                <td>{{ $item->passengers }}</td>
+                <td class="text-end text-nowrap">
+                    <a href="{{ route('admin.bus-categories.edit', $item->id) }}"
+                        class="btn btn-sm btn-outline-primary me-1">{{ __('Edit') }}</a>
+                    <form action="{{ route('admin.bus-categories.destroy', $item->id) }}" method="POST" class="d-inline"
+                        onsubmit="return confirm(@json(__('Are you sure you want to delete this category?')));">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-sm btn-outline-danger">{{ __('Delete') }}</button>
+                    </form>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach ($results as $item)
-                <tr>
-                    <td>{{ $item->name_ar }}</td>
-                    <td>{{ $item->name_en }}</td>
-                    <td>{{ $item->rate }}</td>
-                    <td>{{ $item->passengers }}</td>
-                    <td class="text-center">
-                        <!-- Edit Button -->
-                        <a href="{{ route('admin.bus-categories.edit', $item->id) }}" class="btn btn-primary btn-sm">
-                            {{ __('Edit') }}
-                        </a>
-
-                        <!-- Delete Button -->
-                        <form action="{{ route('admin.bus-categories.destroy', $item->id) }}" method="POST"
-                            style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm"
-                                onclick="return confirm('{{ __('Are you sure you want to delete this category?') }}');">
-                                {{ __('Delete') }}
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
+        @endforeach
+    </tbody>
+</table>

@@ -1,52 +1,20 @@
 @extends('admin.layouts.master')
-@section('title', __(key: 'Bus Categories'))
+
+@section('title', __('Bus Categories'))
+
 @section('breadcrumb')
-    <div class="content-header row">
-        <div class="col-lg-4 d-flex align-items-center">
-            <div class="me-auto">
-                <div class="d-inline-block align-items-center">
-                    <nav>
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="/"><i class="mdi mdi-home-outline"></i></a></li>
-                            <li class="breadcrumb-item" aria-current="page">
-                                <a href="{{ route('admin.dashboard.index') }}">
-                                    {{ __('Dashboard') }}
-                                </a>
-                            </li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ __('Bus Categories') }}</li>
-                        </ol>
-                    </nav>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg d-flex justify-content-end">
-            <div>
-                <a class="waves-effect waves-light btn btn-primary mb-5"
-                    href="{{ route('admin.bus-categories.create') }}">{{ __('Create') }}<i class="fa fa-plus-circle"
-                        style="margin-inline: 5px;"></i></a>
-            </div>
-        </div>
-    </div>
+    <x-admin.page-header :title="__('Bus Categories')" :create-url="route('admin.bus-categories.create')" />
 @endsection
 
 @section('content')
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <div class="box">
-                    <div class="box-body">
-                        <div class="table-responsive">
-                            @include('admin.pages.bus-categories.list')
-                        </div>
-                    </div>
-                    <div class="box-footer">
-                        {{ $results->appends(request()->all())->links() }}
-                    </div>
-                </div>
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                @include('admin.pages.bus-categories.list')
             </div>
+        </div>
+        <div class="card-footer bg-transparent border-0 d-flex justify-content-center pt-0 pb-4">
+            {{ $results->appends(request()->all())->links() }}
         </div>
     </div>
 @endsection
-
-@push('scripts')
-@endpush

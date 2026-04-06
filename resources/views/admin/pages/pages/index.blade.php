@@ -1,5 +1,11 @@
-
 @extends('admin.layouts.master')
+
+@section('title', __('Pages'))
+
+@section('breadcrumb')
+    <x-admin.page-header :title="__('Pages')" :create-url="route('admin.pages.create')" />
+@endsection
+
 @push('css')
     <style>
         /* Enhanced styling for better visual hierarchy and modern design */
@@ -232,7 +238,7 @@
 @endpush
 
 @section('content')
-    <div class="page-container">
+    <div class="page-container px-0">
         @if(session('success'))
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6" role="alert">
                 <strong class="font-bold">Success!</strong>

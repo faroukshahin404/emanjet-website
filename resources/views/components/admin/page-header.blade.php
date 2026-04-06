@@ -3,6 +3,8 @@
     'createUrl' => null,
     'createLabel' => null,
     'homeUrl' => null,
+    'parentUrl' => null,
+    'parentLabel' => null,
 ])
 
 @php
@@ -21,6 +23,11 @@
                         <a href="{{ route('admin.dashboard.index') }}"
                             class="text-decoration-none">{{ __('Dashboard') }}</a>
                     </li>
+                    @if ($parentUrl)
+                        <li class="breadcrumb-item">
+                            <a href="{{ $parentUrl }}" class="text-decoration-none">{{ $parentLabel }}</a>
+                        </li>
+                    @endif
                     <li class="breadcrumb-item active" aria-current="page">{{ $title }}</li>
                 </ol>
             </nav>

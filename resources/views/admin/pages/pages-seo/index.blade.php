@@ -1,5 +1,11 @@
 @extends('admin.layouts.master')
 
+@section('title', __('SEO Sections'))
+
+@section('breadcrumb')
+    <x-admin.page-header :title="__('SEO Sections')" />
+@endsection
+
 @push('css')
     <style>
         .seo-container {
@@ -172,35 +178,45 @@
 @endpush
 
 @section('content')
-    <div class="seo-container">
-        <div class="seo-header">
-            <h1 class="seo-title">{{ __('SEO Sections for:') }}
-                {{ is_array($page->title) ? $page->title['en'] : $page->title }}</h1>
-            <a href="{{ route('admin.pages.index') }}" class="seo-back-btn">Back to Pages</a>
+    <div class="mb-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body d-flex flex-wrap justify-content-between align-items-center gap-3">
+                <div>
+                    <h5 class="mb-1 fw-bold">{{ __('SEO Sections for:') }}</h5>
+                    <p class="mb-0 text-muted">{{ is_array($page->title) ? $page->title['en'] : $page->title }}</p>
+                </div>
+                <a href="{{ route('admin.pages.index') }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i>{{ __('Back to Pages') }}
+                </a>
+            </div>
         </div>
-        <div class="seo-grid">
+    </div>
+    <div class="row g-4">
             @foreach ($page->pageSeos->sortBy('order') as $seo)
-                <div class="seo-card">
-                    <div class="seo-card-header">
-                        <h2 class="seo-card-title">{{ ucfirst(str_replace('-', ' ', $seo->section_type)) }}</h2>
-                    </div>
-                    <div class="seo-card-body">
-                        <div class="seo-meta">
-                            <p>Order: {{ $seo->order }}</p>
-                            <p>Status: <span
-                                    class="seo-status-{{ $seo->status ? 'active' : 'inactive' }}">{{ $seo->status ? 'Active' : 'Inactive' }}</span>
-                            </p>
-                            <p>Last Updated: {{ date('M d, Y', strtotime($seo->updated_at)) }}</p>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-transparent border-bottom py-3">
+                            <h6 class="mb-0 fw-bold">{{ ucfirst(str_replace('-', ' ', $seo->section_type)) }}</h6>
                         </div>
-                        <div>
-                            <a href="{{ route('admin.pages-seo.edit', $seo->id) }}" class="seo-edit-btn">
-                                Edit Section
+                        <div class="card-body">
+                            <ul class="list-unstyled small text-muted mb-3">
+                                <li>{{ __('Order') }}: {{ $seo->order }}</li>
+                                <li>{{ __('Status') }}:
+                                    @if ($seo->status)
+                                        <span class="badge bg-label-success">{{ __('Active') }}</span>
+                                    @else
+                                        <span class="badge bg-label-secondary">{{ __('Inactive') }}</span>
+                                    @endif
+                                </li>
+                                <li>{{ __('Last Updated') }}: {{ $seo->updated_at->format('M d, Y') }}</li>
+                            </ul>
+                            <a href="{{ route('admin.pages-seo.edit', $seo->id) }}" class="btn btn-primary btn-sm">
+                                <i class="bi bi-pencil me-1"></i>{{ __('Edit Section') }}
                             </a>
                         </div>
                     </div>
                 </div>
             @endforeach
-        </div>
     </div>
 
     <script>

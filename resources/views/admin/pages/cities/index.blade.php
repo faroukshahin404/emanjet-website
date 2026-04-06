@@ -1,50 +1,26 @@
 @extends('admin.layouts.master')
 
 @section('title', __('Cities'))
+
 @section('breadcrumb')
-    <div class="row">
-        <div class="col-12">
-            <div class="box p-3 mb-3">
-                <nav>
-                    <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="/"><i class="mdi mdi-home-outline"></i></a></li>
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('admin.dashboard.index') }}">{{ __('Dashboard') }}</a>
-                        </li>
-                        <li class="breadcrumb-item active" aria-current="page">{{ __('Cities') }}</li>
-                    </ol>
-                </nav>
-            </div>
-        </div>
-    </div>
+    <x-admin.page-header :title="__('Cities')" />
 @endsection
+
 @section('content')
-    <div class="row">
-        <div class="col-12">
-            <div class="row mb-3">
-                <div class="col-12">
-                    @include('admin.pages.cities.filters')
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="box">
-                        <div class="box-body">
-                           @include('admin.pages.cities.list')
-                        </div>
-                        <div class="d-flex justify-content-center mt-3">
-                            {{ $results->links() }}
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="mb-4">
+        @include('admin.pages.cities.filters')
+    </div>
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            @include('admin.pages.cities.list')
+        </div>
+        <div class="card-footer bg-transparent border-0 d-flex justify-content-center pt-0 pb-4">
+            {{ $results->links() }}
         </div>
     </div>
 @endsection
 
 @push('css')
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <style>
         .btn-toggle {
@@ -52,27 +28,33 @@
             display: inline-block;
             width: 60px;
             height: 30px;
-            background-color: #e9ecef;
+            background-color: var(--bs-secondary-bg, #e9ecef);
             border-radius: 15px;
+            border: 1px solid var(--bs-border-color, #dee2e6);
             transition: background-color 0.25s;
+            padding: 0;
+            cursor: pointer;
         }
 
-        .btn-toggle:focus,
-        .btn-toggle.focus {
+        .btn-toggle:focus {
             outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb, 105, 108, 255), 0.25);
         }
 
         .btn-toggle.active {
-            background-color: #0d6efd;
+            background-color: var(--bs-primary, #696cff);
+            border-color: var(--bs-primary, #696cff);
         }
 
-        .btn-toggle .toggle-on {
+        .btn-toggle .toggle-on,
+        .btn-toggle .toggle-off {
             position: absolute;
             left: 10px;
-            top: 6px;
-            color: white;
-            font-size: 12px;
-            font-weight: bold;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 11px;
+            font-weight: 700;
+            color: #fff;
             opacity: 0;
         }
 
@@ -80,38 +62,38 @@
             opacity: 1;
         }
 
-        .btn-toggle.active .toggle-off {
-            opacity: 0;
+        .btn-toggle:not(.active) .toggle-off {
+            opacity: 1;
+            color: var(--bs-secondary-color, #6c757d);
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
     </style>
 @endpush
 
 @push('scripts')
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
     <script>
-        const successAvailableMsg = "{{ __(':cityName is now available online') }}";
-        const successUnavailableMsg = "{{ __(':cityName is now unavailable online') }}";
-        const errorMsg = "{{ __('Failed to update status') }}";
+        const successAvailableMsg = @json(__(':cityName is now available online'));
+        const successUnavailableMsg = @json(__(':cityName is now unavailable online'));
+        const errorMsg = @json(__('Failed to update status'));
 
         $(document).ready(function() {
             toastr.options = {
-                "closeButton": true,
-                "progressBar": true,
-                "positionClass": "toast-top-right",
-                "timeOut": "3000"
+                closeButton: true,
+                progressBar: true,
+                positionClass: 'toast-top-right',
+                timeOut: 3000
             };
 
             $('.btn-toggle').on('click', function() {
                 const button = $(this);
-                const cityId = button.data('id');
+                const url = button.data('url');
                 const cityName = button.closest('tr').find('td:eq(1)').text().trim();
                 const currentStatus = button.hasClass('active');
 
                 $.ajax({
-                    url: '/admin/cities/' + cityId + '/toggle-available',
+                    url: url,
                     type: 'POST',
                     data: {
                         _token: '{{ csrf_token() }}'
@@ -121,13 +103,11 @@
                             if (!currentStatus) {
                                 button.addClass('active');
                                 button.attr('aria-pressed', 'true');
-                                toastr.success(successAvailableMsg.replace(':cityName',
-                                    cityName));
+                                toastr.success(successAvailableMsg.replace(':cityName', cityName));
                             } else {
                                 button.removeClass('active');
                                 button.attr('aria-pressed', 'false');
-                                toastr.success(successUnavailableMsg.replace(':cityName',
-                                    cityName));
+                                toastr.success(successUnavailableMsg.replace(':cityName', cityName));
                             }
                         }
                     },

@@ -3,53 +3,32 @@
 @section('title', __('Blog Categories'))
 
 @section('breadcrumb')
-    <div class="row">
-        <div class="col-12">
-            <div class="box p-3 mb-3">
-                <div class="d-flex justify-content-between align-items-center">
-                    <nav>
-                        <ol class="breadcrumb mb-0">
-                            <li class="breadcrumb-item"><a href="/"><i class="mdi mdi-home-outline"></i></a></li>
-                            <li class="breadcrumb-item">
-                                <a href="{{ route('admin.dashboard.index') }}">{{ __('Dashboard') }}</a>
-                            </li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ __('Blog Categories') }}</li>
-                        </ol>
-                    </nav>
-                    <a class="btn btn-default" href="{{ route('admin.blog-categories.create') }}">
-                        {{ __('Create') }}
-                        <i class="fa fa-plus-circle ms-1"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
+    <x-admin.page-header :title="__('Blog Categories')" :create-url="route('admin.blog-categories.create')" />
 @endsection
 
 @section('content')
-    <div class="row">
-        <div class="col-12">
-            <div class="row mb-3">
-                <div class="col-12">
-                    @include('admin.pages.blog-category.filter')
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="box">
-                        <div class="box-body">
-                            @include('admin.pages.blog-category.list')
-                        </div>
-                        <div class="d-flex justify-content-center mt-3">
-                            {{ $results->appends(request()->all())->links() }}
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="mb-4">
+        @include('admin.pages.blog-category.filter')
+    </div>
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            @include('admin.pages.blog-category.list')
+        </div>
+        <div class="card-footer bg-transparent border-0 d-flex justify-content-center pt-0 pb-4">
+            {{ $results->appends(request()->all())->links() }}
         </div>
     </div>
 @endsection
 
 @push('scripts')
-    {{-- Custom scripts if needed --}}
+    <script>
+        $(document).ready(function() {
+            if ($.fn.DataTable && $('#example5').length) {
+                $('#example5').DataTable({
+                    paging: false,
+                    info: false,
+                });
+            }
+        });
+    </script>
 @endpush

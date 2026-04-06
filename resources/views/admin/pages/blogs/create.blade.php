@@ -3,33 +3,15 @@
 @section('title', isset($item) ? __('Edit Blog') : __('Create Blog'))
 
 @section('breadcrumb')
-    <div class="row">
-        <div class="col-12">
-            <div class="box p-3 mb-3">
-                <nav>
-                    <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="/"><i class="mdi mdi-home-outline"></i></a></li>
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('admin.dashboard.index') }}">{{ __('Dashboard') }}</a>
-                        </li>
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('admin.blogs.index') }}">{{ __('Blogs') }}</a>
-                        </li>
-                        <li class="breadcrumb-item active" aria-current="page">
-                            {{ isset($item) ? __('Edit Blog') : __('Create Blog') }}
-                        </li>
-                    </ol>
-                </nav>
-            </div>
-        </div>
-    </div>
+    <x-admin.page-header
+        :title="isset($item) ? __('Edit Blog') : __('Create Blog')"
+        :parent-url="route('admin.blogs.index')"
+        :parent-label="__('Blogs')" />
 @endsection
 
 @section('content')
-    <div class="row">
-        <div class="col-12">
-            <div class="box">
-                <div class="box-body">
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
                     <form method="POST" action="{{ isset($item) ? route('admin.blogs.update', $item) : route('admin.blogs.store') }}" enctype="multipart/form-data">
                         @csrf
                         @if (isset($item))
@@ -41,7 +23,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="title_{{ $lang }}">{{ __('Title') }} ({{ $label }})</label>
-                                        <input type="text" class="form-control" id="title_{{ $lang }}" name="title[{{ $lang }}]" value="{{ old("title.$lang", $item->title[$lang] ?? '') }}" required>
+                                        <input type="text" class="form-control" id="title_{{ $lang }}" name="title[{{ $lang }}]" value="{{ old("title.$lang", isset($item) ? ($item->title[$lang] ?? '') : '') }}" required>
                                     </div>
                                 </div>
                             @endforeach
@@ -112,7 +94,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="meta_tags_{{ $lang }}">{{ __('Meta Tags') }} ({{ $label }})</label>
-                                        <input type="text" class="form-control" id="meta_tags_{{ $lang }}" name="meta_tags[{{ $lang }}]" value="{{ old("meta_tags.$lang", is_array($item->meta_tags ?? null) ? implode(',', $item->meta_tags[$lang] ?? []) : '') }}">
+                                        <input type="text" class="form-control" id="meta_tags_{{ $lang }}" name="meta_tags[{{ $lang }}]" value="{{ old("meta_tags.$lang", isset($item) && is_array($item->meta_tags ?? null) ? implode(',', $item->meta_tags[$lang] ?? []) : '') }}">
                                         <small class="text-muted">{{ __('Comma separated') }}</small>
                                     </div>
                                 </div>
@@ -123,8 +105,6 @@
                             {{ isset($item) ? __('Update') : __('Create') }}
                         </button>
                     </form>
-                </div>
-            </div>
         </div>
     </div>
 @endsection

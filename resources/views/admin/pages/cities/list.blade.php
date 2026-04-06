@@ -1,25 +1,28 @@
-<table id="example5" class="table table-bordered table-striped" style="width:100%">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>{{ __('Name') }}</th>
-            <th>{{ __('Available Online') }}</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($results as $item)
+<div class="table-responsive">
+    <table id="example5" class="table table-hover table-bordered align-middle mb-0" style="width:100%">
+        <thead class="table-light">
             <tr>
-                <td>{{ $loop->iteration }}</td>
-                <td>{{ $item->name }}</td>
-                <td class="text-center">
-                    <button type="button"
-                        class="btn btn-toggle {{ $item->available_online ? 'active' : '' }}"
-                        data-bs-toggle="button" data-id="{{ $item->id }}"
-                        aria-pressed="{{ $item->available_online ? 'true' : 'false' }}" autocomplete="off">
-                        <div class="handle"></div>
-                    </button>
-                </td>
+                <th>#</th>
+                <th>{{ __('Name') }}</th>
+                <th class="text-center">{{ __('Available Online') }}</th>
             </tr>
-        @endforeach
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach ($results as $item)
+                <tr>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $item->name }}</td>
+                    <td class="text-center">
+                        <button type="button"
+                            class="btn btn-toggle {{ $item->available_online ? 'active' : '' }}"
+                            data-url="{{ route('admin.cities.toggle-available', $item) }}"
+                            aria-pressed="{{ $item->available_online ? 'true' : 'false' }}" autocomplete="off">
+                            <span class="toggle-on">{{ __('On') }}</span>
+                            <span class="toggle-off">{{ __('Off') }}</span>
+                        </button>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
