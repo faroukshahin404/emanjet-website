@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\PageSeoController;
 use App\Http\Controllers\Admin\StationController;
+use App\Http\Controllers\Admin\TranslationController;
 use App\Http\Controllers\AdminAuth\LoginController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BusCategoryController;
@@ -19,7 +20,6 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RoundTripController;
 use App\Http\Controllers\RoundTripMobileController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
@@ -177,12 +177,12 @@ Route::group([
         Route::resource('/blogs', BlogController::class)->names('blogs');
         Route::resource('/destinations', DestinationController::class)->names('destinations');
         Route::resource('/faqs', FaqController::class)->names('faqs');
-    });
 
-
-    Route::get('translation', function () {
-        $translations = extractTranslations();
-        dd($translations);
+        Route::prefix('translations')->name('translations.')->group(function () {
+            Route::get('/scan', [TranslationController::class, 'scan'])->name('scan');
+            Route::post('/sync-en', [TranslationController::class, 'syncFromEnglish'])->name('sync-en');
+            Route::post('/append-scanned', [TranslationController::class, 'appendScanned'])->name('append-scanned');
+        });
     });
 
     // routes/web.php
@@ -198,36 +198,4 @@ Route::group([
     })->name('lang.switch');
 
 
-
-
-    Route::get('missing-translations', function () {
-        // Get all PHP files in resources/views
-        $files = File::allFiles(resource_path('views'));
-
-        // Load existing translations
-        $existingTranslations = json_decode(file_get_contents(resource_path('lang/ar.json')), true) ?? [];
-
-        $missingTranslations = [];
-
-        foreach ($files as $file) {
-            $content = file_get_contents($file->getPathname());
-
-            // Find all strings inside __(' ... ')
-            preg_match_all("/__\('([^']+)'\)/", $content, $matches);
-
-            if (!empty($matches[1])) {
-                foreach ($matches[1] as $string) {
-                    // Check if translation exists
-                    if (!array_key_exists($string, $existingTranslations)) {
-                        $missingTranslations[] = $string;
-                    }
-                }
-            }
-        }
-
-        // Remove duplicates
-        $missingTranslations = array_unique($missingTranslations);
-
-        dd($missingTranslations);
-    })->name('missing.translations');
 });
