@@ -11,8 +11,8 @@
                    <div class="confirm-icon-box">
                        <i class="fas fa-check"></i>
                    </div>
-                   <p class="text-black mb-2">تم الغاء الحجز</p>
-                   <h6>سيتم رد المبلغ الي وسيلة الدفع الاصلية خلال 7 ايام عمل</h6>
+                   <p class="text-black mb-2">{{ __('Booking has been cancelled.') }}</p>
+                   <h6>{{ __('Refund will be returned to your original payment method within 7 business days.') }}</h6>
 
                </div>
            </div>

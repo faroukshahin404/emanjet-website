@@ -53,7 +53,7 @@ class AuthService
             throw $e;
         }
         $this->sendOtp($user);
-        return ['success' => true, 'message' => 'تم التسجيل بنجاح'];
+        return ['success' => true, 'message' => __('Registration completed successfully.')];
     }
     public function sendOtp($user)
     {
@@ -104,11 +104,11 @@ class AuthService
             ->where('phone', $phone)
             ->first();
         if (! $otp) {
-            return ['success' => false, 'message' => 'الرمز غير صحيح.'];
+            return ['success' => false, 'message' => __('The verification code is invalid.')];
         }
 
         if ($otp->isExpired()) {
-            return ['success' => false, 'message' => 'الرمز قد انتهت صلاحيته.'];
+            return ['success' => false, 'message' => __('The verification code has expired.')];
         }
 
         return $this->completeOtpVerificationForPhone($phone);
@@ -136,12 +136,12 @@ class AuthService
     protected function completeOtpVerificationForPhone(?string $phone): array
     {
         if ($phone === null || $phone === '') {
-            return ['success' => false, 'message' => 'الرمز غير صحيح.'];
+            return ['success' => false, 'message' => __('The verification code is invalid.')];
         }
 
         $user = User::where('mobile', $phone)->first();
         if (! $user) {
-            return ['success' => false, 'message' => 'الرمز غير صحيح.'];
+            return ['success' => false, 'message' => __('The verification code is invalid.')];
         }
 
         $user->update([
@@ -151,7 +151,7 @@ class AuthService
 
         Otp::where('phone', $phone)->delete();
 
-        return ['success' => true, 'message' => 'تم التحقق بنجاح.'];
+        return ['success' => true, 'message' => __('Phone verified successfully.')];
     }
 
 
@@ -202,9 +202,10 @@ class AuthService
     public function formatWaitTime($minutes)
     {
         if ($minutes < 1) {
-            return number_format($minutes * 60, 0) . ' ثانية';
+            return __(':count seconds', ['count' => number_format($minutes * 60, 0)]);
         }
-        return number_format($minutes, 1) . ' دقيقة';
+
+        return __(':count minutes', ['count' => number_format($minutes, 1)]);
     }
 
     public function sendOtpUsingServiceProvider($receiver, $otp)
@@ -214,7 +215,7 @@ class AuthService
         $password = 'Vodafone.1';
         $secretKey = 'CA7FAB8B6A4146FFB66513E912D1DEF4';
         $senderName = "Super jet";
-        $smsText = "رمز التحقق الخاص بك:$otp";
+        $smsText = __('Your verification code: :code', ['code' => $otp]);
         $stringToHash = "AccountId=$accountId&Password=$password&SenderName=$senderName&ReceiverMSISDN=2$receiver&SMSText=$smsText";
 
         $secureHash = strtoupper(hash_hmac('sha256', $stringToHash, $secretKey));

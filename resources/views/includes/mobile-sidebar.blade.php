@@ -46,11 +46,11 @@
         <h6 class="text-muted small text-uppercase fw-bold mb-3 text-center">{{ __('Language') }}</h6>
         <div class="d-flex justify-content-center gap-3 mb-4">
             <a class="btn {{ session('locale') != 'en' ? 'btn-main' : 'btn-light' }} d-flex flex-column align-items-center gap-1 px-4 py-2 rounded-3 text-decoration-none" href="{{ route('lang.switch', ['locale' => 'ar']) }}">
-                <span class="fw-bold">العربية</span>
+                <span class="fw-bold">{{ __('Arabic') }}</span>
                 @if (session('locale') != 'en') <i class="fas fa-check small"></i> @endif
             </a>
             <a class="btn {{ session('locale') == 'en' ? 'btn-main' : 'btn-light' }} d-flex flex-column align-items-center gap-1 px-4 py-2 rounded-3 text-decoration-none" href="{{ route('lang.switch', ['locale' => 'en']) }}">
-                <span class="fw-bold">English</span>
+                <span class="fw-bold">{{ __('English') }}</span>
                 @if (session('locale') == 'en') <i class="fas fa-check small"></i> @endif
             </a>
         </div>

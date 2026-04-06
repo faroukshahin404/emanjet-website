@@ -196,15 +196,15 @@
                     autocomplete="current-password" required>
             </div>
 
-            <a href="{{ route('contact-us') }}">تواصل بالدعم</a>
+            <a href="{{ route('contact-us') }}">{{ __('Contact support') }}</a>
 
-            <button type="submit">تسجيل دخول</button>
+            <button type="submit">{{ __('Login') }}</button>
         </form>
     </div>
 
     <div class="hello-msg">
-        <h1>مرحبا بك</h1>
-        <p>نتمني لك يوما سعيدا مليئا بالنشاط والحماس</p>
+        <h1>{{ __('Welcome') }}</h1>
+        <p>{{ __('We wish you a pleasant and energetic day.') }}</p>
 
         <svg width="143" height="164" viewBox="0 0 143 164" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path opacity="0.2" d="M142.165 163.72L0.555166 81.9616L142.165 0.203191L142.165 163.72Z" fill="#B27764" />

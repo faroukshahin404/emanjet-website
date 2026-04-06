@@ -91,7 +91,7 @@
                 @csrf
                 <div class="payment-terms-container">
                     <div class="receipt-info">
-                        <h3>تفاصيل الحجز</h3>
+                        <h3>{{ __('Booking details') }}</h3>
                         @php
                             $ticket = $tickets->first();
                         @endphp
@@ -118,7 +118,7 @@
 
                         <div class="agree-section">
                             <input type="checkbox" id="agree" name="agree" onchange="togglePaymentButton()">
-                            <label for="agree">أوافق على الشروط والأحكام</label>
+                            <label for="agree">{{ __('I agree to the terms and conditions') }}</label>
                         </div>
 
                         <button id="pay-now-btn" class="pay-btn" disabled>
@@ -143,7 +143,7 @@
         @csrf
         <div class="payment-terms-container">
             <div class="receipt-info">
-                <h3>تفاصيل الحجز</h3>
+                <h3>{{ __('Booking details') }}</h3>
                 @php
                     $ticket = $tickets->first();
                 @endphp
@@ -170,7 +170,7 @@
 
                 <div class="agree-section">
                     <input type="checkbox" id="agree-mobile" name="agree" onchange="togglePaymentButtonMobile()">
-                    <label for="agree">أوافق على الشروط والأحكام</label>
+                    <label for="agree-mobile">{{ __('I agree to the terms and conditions') }}</label>
                 </div>
 
                 <button id="pay-now-btn-mobile" class="pay-btn" disabled>

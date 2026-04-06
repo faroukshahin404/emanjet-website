@@ -38,10 +38,10 @@
             <div class="dropdown lang-dropdown">
                 <button class="lang-btn dropdown-toggle d-flex align-items-center gap-2" type="button" id="langDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fas fa-globe"></i>
-                    <span>{{ session('locale') == 'en' ? 'English' : 'العربية' }}</span>
+                    <span>{{ session('locale') == 'en' ? __('English') : __('Arabic') }}</span>
                 </button>
                 <ul class="dropdown-menu lang-menu" aria-labelledby="langDropdown">
-                    <li><a class="dropdown-item {{ session('locale') != 'en' ? 'active-lang' : '' }}" href="{{ route('lang.switch', ['locale' => 'ar']) }}">العربية</a></li>
+                    <li><a class="dropdown-item {{ session('locale') != 'en' ? 'active-lang' : '' }}" href="{{ route('lang.switch', ['locale' => 'ar']) }}">{{ __('Arabic') }}</a></li>
                     <li><a class="dropdown-item {{ session('locale') == 'en' ? 'active-lang' : '' }}" href="{{ route('lang.switch', ['locale' => 'en']) }}">English</a></li>
                 </ul>
             </div>

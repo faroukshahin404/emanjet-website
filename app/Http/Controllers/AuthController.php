@@ -108,8 +108,8 @@ class AuthController extends Controller
                     $remainingTime = $waitTime - $timeSinceLastOtp;
                     return response()->json([
                         'success' => false,
-                        'message' => "يرجى المحاولة بعد {$remainingTime} ثانية.",
-                        'remainingTime' => $remainingTime
+                        'message' => __('Please try again in :seconds seconds.', ['seconds' => $remainingTime]),
+                        'remainingTime' => $remainingTime,
                     ], 429);
                 }
             }
@@ -137,18 +137,20 @@ class AuthController extends Controller
         // إذا كان الطلب للتحقق من OTP
         if ($request->has('otp')) {
             $otpNumber = implode('', $request->otp);
-            $message = $this->authService->verifyOtp($otpNumber, $request->phone);
+            $result = $this->authService->verifyOtp($otpNumber, $request->phone);
 
-            if ($message === 'تم التحقق بنجاح.') {
-                // تسجيل دخول المستخدم
+            if (is_array($result) && ! empty($result['success'])) {
                 $user = User::where('mobile', $request->phone)->first();
                 if ($user) {
                     Auth::login($user);
                 }
+
                 return redirect()->route('home')->with('success', __('successfully logged in.'));
             }
 
-            return redirect()->back()->withErrors(['otp' => $message]);
+            $otpError = is_array($result) ? ($result['message'] ?? '') : (string) $result;
+
+            return redirect()->back()->withErrors(['otp' => $otpError]);
         }
 
         // إذا كان الطلب لعرض صفحة إعادة تعيين كلمة المرور
@@ -408,15 +410,15 @@ class AuthController extends Controller
         if (!$phone) {
             return response()->json([
                 'success' => false,
-                'message' => 'غير مسموح بالوصول المباشر إلى صفحة إعادة إرسال الرمز.'
+                'message' => __('Direct access to the resend OTP action is not allowed.'),
             ], 403);
         }
 
         $user = User::where('mobile', $phone)->first();
-        if (!$user) {
+        if (! $user) {
             return response()->json([
                 'success' => false,
-                'message' => 'لم يتم العثور على المستخدم.'
+                'message' => __('User not found'),
             ], 404);
         }
 

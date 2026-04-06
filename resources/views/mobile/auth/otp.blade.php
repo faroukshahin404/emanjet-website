@@ -5,13 +5,13 @@
                 <a href="{{ route('auth.register') }}">
                     <i class="fas fa-arrow-right fs-18 text-black"></i>
                 </a>
-                <p class="m-0 fs-25 text-black">تأكيد رقم الهاتف</p>
+                <p class="m-0 fs-25 text-black">{{ __('Phone Number Verification') }}</p>
                 <div></div>
             </div>
 
             <div class="mt-3 text-center">
                 <p class="m-0">
-                    قم بادخال الرمز الذي أرسلناه إلى رقمك {{ $phone }}
+                    {{ __('Enter the code sent to your number') }} {{ $phone }}
                 </p>
             </div>
 
@@ -45,7 +45,7 @@
 
                 <div class="text-center mt-3">
                     <p class="m-0 text-center">
-                        لم يصلك الرمز؟
+                        {{ __('Didn\'t receive the code?') }}
                         <a id="resendOtpLink" class="text-main" href="javascript:void(0)" onclick="resendOtp()"></a>
                     </p>
                     <p class="mt-2 text-center text-main" id="mobile-timer"></p>
@@ -54,7 +54,7 @@
 
 
                 <div class="form-group mt-4">
-                    <button type="submit" class="btn btn-main w-100 rounded-6">تحقق</button>
+                    <button type="submit" class="btn btn-main w-100 rounded-6">{{ __('Verify') }}</button>
                 </div>
             </form>
         </div>
@@ -72,24 +72,19 @@ const otpExpiresAt = {{ $otp?->expires_at?->timestamp ?? 'null' }} * 1000;
         const inputs = document.querySelectorAll('input[name="otp[]"]');
         const now = Date.now();
         const remainingSeconds = Math.max(0, Math.floor((otpExpiresAt - now) / 1000));
-           // بدء العداد بالوقت المتبقي
-    startTimer(remainingSeconds);
+           startTimer(remainingSeconds);
 
-            // Handle input for each box
             inputs.forEach((input, index) => {
                 input.addEventListener('input', function(e) {
-                    // Remove any non-numeric characters
                     this.value = this.value.replace(/[^0-9]/g, '');
 
                     if (this.value.length === 1) {
-                        // Move to next input if available
                         if (index < inputs.length - 1) {
                             inputs[index + 1].focus();
                         }
                     }
                 });
 
-                // Handle backspace
                 input.addEventListener('keydown', function(e) {
                     if (e.key === 'Backspace' && !this.value && index > 0) {
                         inputs[index - 1].focus();
@@ -97,7 +92,6 @@ const otpExpiresAt = {{ $otp?->expires_at?->timestamp ?? 'null' }} * 1000;
                 });
             });
 
-            // Handle paste for OTP
             document.querySelector('input[name="otp[]"]').addEventListener('paste', function(e) {
                 e.preventDefault();
                 const pastedData = (e.clipboardData || window.clipboardData)
@@ -124,23 +118,23 @@ const otpExpiresAt = {{ $otp?->expires_at?->timestamp ?? 'null' }} * 1000;
             let timer = duration;
             const resendOtpLink = document.getElementById('resendOtpLink');
             const timerElement = document.getElementById('mobile-timer');
+            const waitPrefix = @json(__('Please wait'));
+            const waitSuffix = @json(__('before resending'));
 
             const countdown = setInterval(function() {
                 const minutes = String(Math.floor(timer / 60)).padStart(2, '0');
                 const seconds = String(timer % 60).padStart(2, '0');
 
-                // عرض الوقت في عنصر منفصل
-                timerElement.textContent = `يرجى الانتظار ${minutes}:${seconds} قبل إعادة الإرسال`;
+                timerElement.textContent = `${waitPrefix} ${minutes}:${seconds} ${waitSuffix}`;
 
-                // تعطيل رابط إعادة الإرسال
                 resendOtpLink.textContent = '';
                 resendOtpLink.style.pointerEvents = 'none';
                 resendOtpLink.style.color = '#aaa';
 
                 if (--timer < 0) {
                     clearInterval(countdown);
-                    timerElement.textContent = ''; // إخفاء نص العداد
-                    resendOtpLink.textContent = 'هل تريد إعادة إرساله؟';
+                    timerElement.textContent = '';
+                    resendOtpLink.textContent = @json(__('Would you like to resend it?'));
                     resendOtpLink.style.pointerEvents = 'auto';
                     resendOtpLink.style.color = '';
                 }

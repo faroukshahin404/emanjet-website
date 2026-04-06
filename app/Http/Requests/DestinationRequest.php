@@ -27,7 +27,7 @@ class DestinationRequest extends FormRequest
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp'],
             'latitude' => ['nullable', 'numeric'],
             'longitude' => ['nullable', 'numeric'],
-            'order' => ['nullable', 'integer', 'min:0'], // ⬅️ تمت الإضافة هنا
+            'order' => ['nullable', 'integer', 'min:0'],
         ];
 
         foreach ($languages as $lang) {

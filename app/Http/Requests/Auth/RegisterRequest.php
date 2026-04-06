@@ -19,7 +19,7 @@ class RegisterRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                'regex:/^(01)[0-9]{9}$/',  // التأكد من رقم الهاتف
+                'regex:/^(01)[0-9]{9}$/', // Egyptian mobile format (01 + 9 digits)
                 'unique:users,mobile',
             ],
             "password" => "required|string|min:6|confirmed",
