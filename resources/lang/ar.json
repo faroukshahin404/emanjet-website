@@ -455,5 +455,21 @@
     "Error": "خطأ",
     "Info": "معلومات",
     "You cannot select more than :num seats for the outbound trip": "لا يمكنك اختيار أكثر من :num مقعد للذهاب",
-    "You cannot select more than :num seats for the return trip": "لا يمكنك اختيار أكثر من :num مقعد للعودة"
+    "You cannot select more than :num seats for the return trip": "لا يمكنك اختيار أكثر من :num مقعد للعودة",
+    "Filters": "عوامل التصفية",
+    "Apply Filters": "تطبيق التصفية",
+    "Clear": "مسح",
+    "Last 7 days": "آخر 7 أيام",
+    "Categories in use": "تصنيفات مستخدمة",
+    "With posts": "مع مقالات",
+    "Available online": "متاحة أونلاين",
+    "With SEO sections": "مع أقسام SEO",
+    "Section types": "أنواع الأقسام",
+    "Avg. passengers": "متوسط الركاب",
+    "Ordered entries": "بترتيب",
+    "Total sections": "إجمالي الأقسام",
+    "Active sections": "أقسام نشطة",
+    "All": "الكل",
+    "Search...": "بحث...",
+    "Total FAQs": "إجمالي الأسئلة"
 }

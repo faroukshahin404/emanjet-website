@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\City;
+use App\Services\Admin\AdminListStatistics;
 use Illuminate\Http\Request;
 
 class CityController extends Controller
@@ -17,9 +18,11 @@ class CityController extends Controller
         if ($request->has('status') && $request->status != '') {
             $query->where('available_online', $request->status);
         }
-        $results = $query->paginate();
+        $results = $query->paginate()->withQueryString();
         $cities = City::all();
-        return view('admin.pages.cities.index', compact('results', 'cities'));
+        $stats = AdminListStatistics::cities();
+
+        return view('admin.pages.cities.index', compact('results', 'cities', 'stats'));
     }
 
     public function toggleAvailableOnline(Request $request, City $city)

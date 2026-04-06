@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Page;
+use App\Services\Admin\AdminListStatistics;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Controllers\Controller;
 
 class PageController extends Controller
 {
     public function index()
     {
         $pages = Page::with('pageSeos')->get();
-        return view('admin.pages.pages.index', compact('pages'));
+        $stats = AdminListStatistics::pages();
+
+        return view('admin.pages.pages.index', compact('pages', 'stats'));
     }
 
 

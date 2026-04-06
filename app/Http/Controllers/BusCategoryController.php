@@ -3,15 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\BusCategory;
+use App\Services\Admin\AdminListStatistics;
 use Illuminate\Http\Request;
 
 class BusCategoryController extends Controller
 {
-
-    public function index()
+    public function index(Request $request)
     {
-        $results = BusCategory::paginate();
-        return view('admin.pages.bus-categories.index', compact('results'));
+        $query = BusCategory::query();
+        if ($request->filled('search')) {
+            $s = $request->search;
+            $query->where(function ($q) use ($s) {
+                $q->where('name_en', 'like', '%'.$s.'%')
+                    ->orWhere('name_ar', 'like', '%'.$s.'%');
+            });
+        }
+        $results = $query->latest()->paginate()->withQueryString();
+        $stats = AdminListStatistics::busCategories();
+
+        return view('admin.pages.bus-categories.index', compact('results', 'stats'));
     }
     public function create()
     {

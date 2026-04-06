@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Page;
 use App\Models\PageSeo;
+use App\Services\Admin\AdminListStatistics;
 use Illuminate\Http\Request;
 
 class PageSeoController extends Controller
@@ -13,7 +14,9 @@ class PageSeoController extends Controller
     public function index($pageId)
     {
         $page = Page::with('pageSeos')->findOrFail($pageId);
-        return view('admin.pages.pages-seo.index', compact('page'));
+        $stats = AdminListStatistics::pageSeosForPage($page);
+
+        return view('admin.pages.pages-seo.index', compact('page', 'stats'));
     }
 
     public function edit($id)

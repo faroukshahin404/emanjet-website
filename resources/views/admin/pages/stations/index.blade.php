@@ -3,13 +3,36 @@
 @section('title', __('Stations'))
 
 @section('breadcrumb')
-    <x-admin.page-header :title="__('Stations')" />
+    <x-admin.page-header :title="__('Stations')">
+        <x-slot name="toolbar">
+            <x-admin.index-collapse-toolbar id-prefix="stations" :filter-keys="['station', 'status']" />
+        </x-slot>
+    </x-admin.page-header>
 @endsection
 
 @section('content')
-    <div class="mb-4">
+    <div class="collapse show mb-4" id="stationsSummaryCollapse">
+        <div class="row g-3">
+            <div class="col-sm-6 col-xl-4">
+                <x-admin.stats-widget :title="__('Stations')" :value="number_format($stats['total'])"
+                    icon="bi-pin-map-fill" color="primary" />
+            </div>
+            <div class="col-sm-6 col-xl-4">
+                <x-admin.stats-widget :title="__('Available online')" :value="number_format($stats['available_online'])"
+                    icon="bi-wifi" color="success" />
+            </div>
+            <div class="col-sm-6 col-xl-4">
+                <x-admin.stats-widget :title="__('Last 7 days')" :value="number_format($stats['recent'])"
+                    icon="bi-clock-history" color="info" />
+            </div>
+        </div>
+    </div>
+
+    <div class="collapse mb-4 @if (request()->filled('station') || request()->filled('status')) show @endif"
+        id="stationsFiltersCollapse">
         @include('admin.pages.stations.filters')
     </div>
+
     <div class="card border-0 shadow-sm">
         <div class="card-body">
             @include('admin.pages.stations.list')

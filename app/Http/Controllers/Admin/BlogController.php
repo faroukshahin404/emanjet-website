@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\BlogRequest;
 use App\Models\Blog;
 use App\Models\BlogCategory;
+use App\Services\Admin\AdminListStatistics;
 use App\Traits\UploadFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -26,10 +27,12 @@ class BlogController extends Controller
         if ($request->filled('category')) {
             $query->where('category_id', $request->category);
         }
-        $results = $query->latest()->paginate();
+        $results = $query->latest()->paginate()->withQueryString();
         $blogs = Blog::all();
         $categories = BlogCategory::all();
-        return view('admin.pages.blogs.index', compact('results', 'blogs', 'categories'));
+        $stats = AdminListStatistics::blogs();
+
+        return view('admin.pages.blogs.index', compact('results', 'blogs', 'categories', 'stats'));
     }
 
     /**

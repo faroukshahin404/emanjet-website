@@ -3,7 +3,11 @@
 @section('title', __('SEO Sections'))
 
 @section('breadcrumb')
-    <x-admin.page-header :title="__('SEO Sections')" />
+    <x-admin.page-header :title="__('SEO Sections')" :parent-url="route('admin.pages.index')" :parent-label="__('Pages')">
+        <x-slot name="toolbar">
+            <x-admin.index-collapse-toolbar id-prefix="pageSeo" :show-filters="false" />
+        </x-slot>
+    </x-admin.page-header>
 @endsection
 
 @push('css')
@@ -178,6 +182,23 @@
 @endpush
 
 @section('content')
+    <div class="collapse show mb-4" id="pageSeoSummaryCollapse">
+        <div class="row g-3">
+            <div class="col-sm-6 col-xl-4">
+                <x-admin.stats-widget :title="__('Total sections')" :value="number_format($stats['total'])"
+                    icon="bi-layers-fill" color="primary" />
+            </div>
+            <div class="col-sm-6 col-xl-4">
+                <x-admin.stats-widget :title="__('Active sections')" :value="number_format($stats['active'])"
+                    icon="bi-toggle-on" color="success" />
+            </div>
+            <div class="col-sm-6 col-xl-4">
+                <x-admin.stats-widget :title="__('Section types')" :value="number_format($stats['section_types'])"
+                    icon="bi-grid-1x2-fill" color="info" />
+            </div>
+        </div>
+    </div>
+
     <div class="mb-4">
         <div class="card border-0 shadow-sm">
             <div class="card-body d-flex flex-wrap justify-content-between align-items-center gap-3">

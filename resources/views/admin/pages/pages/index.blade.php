@@ -3,7 +3,11 @@
 @section('title', __('Pages'))
 
 @section('breadcrumb')
-    <x-admin.page-header :title="__('Pages')" :create-url="route('admin.pages.create')" />
+    <x-admin.page-header :title="__('Pages')" :create-url="route('admin.pages.create')">
+        <x-slot name="toolbar">
+            <x-admin.index-collapse-toolbar id-prefix="pages" :show-filters="false" />
+        </x-slot>
+    </x-admin.page-header>
 @endsection
 
 @push('css')
@@ -238,6 +242,23 @@
 @endpush
 
 @section('content')
+    <div class="collapse show mb-4" id="pagesSummaryCollapse">
+        <div class="row g-3">
+            <div class="col-sm-6 col-xl-4">
+                <x-admin.stats-widget :title="__('Pages')" :value="number_format($stats['total'])"
+                    icon="bi-file-earmark-text" color="primary" />
+            </div>
+            <div class="col-sm-6 col-xl-4">
+                <x-admin.stats-widget :title="__('Active')" :value="number_format($stats['active'])"
+                    icon="bi-check-circle-fill" color="success" />
+            </div>
+            <div class="col-sm-6 col-xl-4">
+                <x-admin.stats-widget :title="__('With SEO sections')" :value="number_format($stats['with_sections'])"
+                    icon="bi-diagram-3-fill" color="info" />
+            </div>
+        </div>
+    </div>
+
     <div class="page-container px-0">
         @if(count($pages) > 0)
             <div class="page-grid">

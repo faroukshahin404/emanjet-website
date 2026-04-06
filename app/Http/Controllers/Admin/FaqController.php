@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FaqRequest;
 use App\Models\Faq;
+use App\Services\Admin\AdminListStatistics;
 use Illuminate\Http\Request;
 
 class FaqController extends Controller
@@ -16,13 +17,24 @@ class FaqController extends Controller
     {
         $query = Faq::query();
 
+        if ($request->filled('search')) {
+            $term = '%'.$request->search.'%';
+            $query->where(function ($q) use ($term) {
+                $q->where('question->en', 'like', $term)
+                    ->orWhere('question->ar', 'like', $term)
+                    ->orWhere('answer->en', 'like', $term)
+                    ->orWhere('answer->ar', 'like', $term);
+            });
+        }
+
         if ($request->filled('status')) {
             $query->where('status', $request->boolean('status'));
         }
 
-        $results = $query->ordered()->paginate();
+        $results = $query->ordered()->paginate()->withQueryString();
+        $stats = AdminListStatistics::faqs();
 
-        return view('admin.pages.faqs.index', compact('results'));
+        return view('admin.pages.faqs.index', compact('results', 'stats'));
     }
 
     /**

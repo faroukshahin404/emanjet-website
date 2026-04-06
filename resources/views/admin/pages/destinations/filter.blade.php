@@ -13,13 +13,15 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-6 d-flex flex-wrap gap-2">
+                <div class="col-md-6 d-flex flex-wrap gap-2 align-items-end">
                     <button type="submit" class="btn btn-primary">
-                        <i class="bi bi-search me-1"></i>{{ __('Search') }}
+                        <i class="bi bi-funnel me-1"></i>{{ __('Apply Filters') }}
                     </button>
-                    <a href="{{ route('admin.destinations.index') }}" class="btn btn-outline-secondary">
-                        <i class="bi bi-arrow-counterclockwise me-1"></i>{{ __('Reset') }}
-                    </a>
+                    @if (request()->filled('destination'))
+                        <a href="{{ route('admin.destinations.index') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-lg me-1"></i>{{ __('Clear') }}
+                        </a>
+                    @endif
                 </div>
             </div>
         </div>

@@ -3,13 +3,36 @@
 @section('title', __('Cities'))
 
 @section('breadcrumb')
-    <x-admin.page-header :title="__('Cities')" />
+    <x-admin.page-header :title="__('Cities')">
+        <x-slot name="toolbar">
+            <x-admin.index-collapse-toolbar id-prefix="cities" :filter-keys="['city', 'status']" />
+        </x-slot>
+    </x-admin.page-header>
 @endsection
 
 @section('content')
-    <div class="mb-4">
+    <div class="collapse show mb-4" id="citiesSummaryCollapse">
+        <div class="row g-3">
+            <div class="col-sm-6 col-xl-4">
+                <x-admin.stats-widget :title="__('Cities')" :value="number_format($stats['total'])"
+                    icon="bi-geo-alt-fill" color="primary" />
+            </div>
+            <div class="col-sm-6 col-xl-4">
+                <x-admin.stats-widget :title="__('Available online')" :value="number_format($stats['available_online'])"
+                    icon="bi-wifi" color="success" />
+            </div>
+            <div class="col-sm-6 col-xl-4">
+                <x-admin.stats-widget :title="__('Last 7 days')" :value="number_format($stats['recent'])"
+                    icon="bi-clock-history" color="info" />
+            </div>
+        </div>
+    </div>
+
+    <div class="collapse mb-4 @if (request()->filled('city') || request()->filled('status')) show @endif"
+        id="citiesFiltersCollapse">
         @include('admin.pages.cities.filters')
     </div>
+
     <div class="card border-0 shadow-sm">
         <div class="card-body">
             @include('admin.pages.cities.list')

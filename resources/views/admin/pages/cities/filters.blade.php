@@ -21,13 +21,15 @@
                         <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>{{ __('Unavailable') }}</option>
                     </select>
                 </div>
-                <div class="col-md-4 d-flex flex-wrap gap-2">
+                <div class="col-md-4 d-flex flex-wrap gap-2 align-items-end">
                     <button type="submit" class="btn btn-primary">
-                        <i class="bi bi-search me-1"></i>{{ __('Search') }}
+                        <i class="bi bi-funnel me-1"></i>{{ __('Apply Filters') }}
                     </button>
-                    <a href="{{ route('admin.cities.index') }}" class="btn btn-outline-secondary">
-                        <i class="bi bi-arrow-counterclockwise me-1"></i>{{ __('Reset') }}
-                    </a>
+                    @if (request()->filled('city') || request()->filled('status'))
+                        <a href="{{ route('admin.cities.index') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-lg me-1"></i>{{ __('Clear') }}
+                        </a>
+                    @endif
                 </div>
             </div>
         </div>

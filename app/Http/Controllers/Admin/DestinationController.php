@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DestinationRequest;
 use App\Models\Destination;
+use App\Services\Admin\AdminListStatistics;
 use App\Traits\UploadFile;
 use Illuminate\Http\Request;
 
@@ -22,10 +23,11 @@ class DestinationController extends Controller
             $query->where('id', $request->destination);
         }
 
-        $results = $query->latest()->paginate();
+        $results = $query->latest()->paginate()->withQueryString();
         $destinations = Destination::all();
+        $stats = AdminListStatistics::destinations();
 
-        return view('admin.pages.destinations.index', compact('results', 'destinations'));
+        return view('admin.pages.destinations.index', compact('results', 'destinations', 'stats'));
     }
 
     /**

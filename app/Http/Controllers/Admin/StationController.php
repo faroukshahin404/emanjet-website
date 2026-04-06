@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Station;
+use App\Services\Admin\AdminListStatistics;
 use Illuminate\Http\Request;
 
 class StationController extends Controller
@@ -15,11 +16,13 @@ class StationController extends Controller
             $query->where('id', $request->station);
         }
         if ($request->has('status') && $request->status != '') {
-            $query->where('is_available', $request->status);
+            $query->where('available_online', $request->status);
         }
-        $results = $query->paginate();
+        $results = $query->paginate()->withQueryString();
         $stations = Station::all();
-        return view('admin.pages.stations.index', compact('results', 'stations'));
+        $stats = AdminListStatistics::stations();
+
+        return view('admin.pages.stations.index', compact('results', 'stations', 'stats'));
     }
 
     public function toggleAvailableOnline(Request $request, Station $station)

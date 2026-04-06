@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BlogCategoryRequest;
 use App\Models\BlogCategory;
+use App\Services\Admin\AdminListStatistics;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -19,9 +20,11 @@ class BlogCategoryController extends Controller
         if ($request->filled('category')) {
             $query->where('id', $request->category);
         }
-        $results = $query->paginate(10);
+        $results = $query->paginate(10)->withQueryString();
         $categories = BlogCategory::all();
-        return view('admin.pages.blog-category.index', compact('results', 'categories'));
+        $stats = AdminListStatistics::blogCategories();
+
+        return view('admin.pages.blog-category.index', compact('results', 'categories', 'stats'));
     }
 
 

@@ -29,5 +29,22 @@
     "Warning": "Warning",
     "Info": "Info",
     "You cannot select more than :num seats for the outbound trip": "You cannot select more than :num seats for the outbound trip.",
-    "You cannot select more than :num seats for the return trip": "You cannot select more than :num seats for the return trip."
+    "You cannot select more than :num seats for the return trip": "You cannot select more than :num seats for the return trip.",
+    "Filters": "Filters",
+    "Apply Filters": "Apply Filters",
+    "Clear": "Clear",
+    "Summary": "Summary",
+    "Last 7 days": "Last 7 days",
+    "Categories in use": "Categories in use",
+    "With posts": "With posts",
+    "Available online": "Available online",
+    "With SEO sections": "With SEO sections",
+    "Section types": "Section types",
+    "Avg. passengers": "Avg. passengers",
+    "Ordered entries": "Ordered entries",
+    "Total sections": "Total sections",
+    "Active sections": "Active sections",
+    "All": "All",
+    "Search...": "Search...",
+    "Total FAQs": "Total FAQs"
 }
