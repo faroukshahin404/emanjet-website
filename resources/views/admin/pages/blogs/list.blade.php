@@ -24,7 +24,7 @@
                             <i class="bi bi-pencil"></i>
                         </a>
                         <form action="{{ route('admin.blogs.destroy', $item->id) }}" method="POST" class="d-inline"
-                            onsubmit="return confirm(@json(__('Are you sure you want to delete this category?')));">
+                            onsubmit="return confirmDelete(this, @json(__('Are you sure you want to delete this category?')));">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-sm btn-outline-danger" title="{{ __('Delete') }}">

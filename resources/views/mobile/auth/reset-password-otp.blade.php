@@ -171,17 +171,17 @@
                 .then(data => {
                     if (data.success) {
                         startTimer(120);
-                        alert(data.message);
+                        showAlert('success', data.message, @json(__('Success')));
                     } else {
                         if (data.remainingTime) {
                             startTimer(data.remainingTime);
                         }
-                        alert(data.message);
+                        showAlert('error', data.message, @json(__('Error')));
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('حدث خطأ أثناء إعادة إرسال الرمز');
+                    showAlert('error', @json(__('Error occurred while resending OTP')), @json(__('Error')));
                 });
             }
         </script>

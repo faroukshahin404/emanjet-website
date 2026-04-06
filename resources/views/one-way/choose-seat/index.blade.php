@@ -125,7 +125,6 @@
 @endsection
 
 @push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const checkboxes = document.querySelectorAll('.chair-checkbox');
@@ -145,8 +144,10 @@
 
                     if (this.checked) {
                         if ((count + 1) > numberOfSeats.value) {
-                            alert(
-                                `{{ __('You cannot select more seats than') }} ${numberOfSeats.value}`
+                            showAlert(
+                                'warning',
+                                `{{ __('You cannot select more seats than') }} ${numberOfSeats.value}`,
+                                @json(__('Warning'))
                             );
                             this.checked = false;
                             return;

@@ -21,5 +21,13 @@
     "Arabic": "Arabic",
     "English": "English",
     "FAQs default hero description": "Find answers to common questions about our services and destinations. We are here to help you with everything you need.",
-    "FAQs hero image alt": "Frequently asked questions"
+    "FAQs hero image alt": "Frequently asked questions",
+    "OK": "OK",
+    "Cancel": "Cancel",
+    "Success": "Success",
+    "Error": "Error",
+    "Warning": "Warning",
+    "Info": "Info",
+    "You cannot select more than :num seats for the outbound trip": "You cannot select more than :num seats for the outbound trip.",
+    "You cannot select more than :num seats for the return trip": "You cannot select more than :num seats for the return trip."
 }

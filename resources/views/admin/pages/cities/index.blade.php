@@ -21,7 +21,6 @@
 @endsection
 
 @push('css')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <style>
         .btn-toggle {
             position: relative;
@@ -72,20 +71,12 @@
 @endpush
 
 @push('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
         const successAvailableMsg = @json(__(':cityName is now available online'));
         const successUnavailableMsg = @json(__(':cityName is now unavailable online'));
         const errorMsg = @json(__('Failed to update status'));
 
         $(document).ready(function() {
-            toastr.options = {
-                closeButton: true,
-                progressBar: true,
-                positionClass: 'toast-top-right',
-                timeOut: 3000
-            };
-
             $('.btn-toggle').on('click', function() {
                 const button = $(this);
                 const url = button.data('url');
@@ -103,17 +94,17 @@
                             if (!currentStatus) {
                                 button.addClass('active');
                                 button.attr('aria-pressed', 'true');
-                                toastr.success(successAvailableMsg.replace(':cityName', cityName));
+                                showAlert('success', successAvailableMsg.replace(':cityName', cityName), @json(__('Success')));
                             } else {
                                 button.removeClass('active');
                                 button.attr('aria-pressed', 'false');
-                                toastr.success(successUnavailableMsg.replace(':cityName', cityName));
+                                showAlert('success', successUnavailableMsg.replace(':cityName', cityName), @json(__('Success')));
                             }
                         }
                     },
                     error: function(xhr) {
                         console.error('Error updating availability:', xhr.responseText);
-                        toastr.error(errorMsg);
+                        showAlert('error', errorMsg, @json(__('Error')));
                     }
                 });
             });

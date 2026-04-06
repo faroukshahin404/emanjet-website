@@ -5,32 +5,13 @@
 <script src="{{ asset('vendor/js/menu.js') }}"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<x-swal-init />
 <script src="https://unpkg.com/feather-icons"></script>
 
 <script src="{{ asset('js/main.js') }}"></script>
 <script src="{{ asset('js/dashboards-analytics.js') }}"></script>
 
 <script>
-    window.showAlert = function(type, message, title) {
-        title = title || '';
-        const icons = {
-            'success': 'success',
-            'error': 'error',
-            'warning': 'warning',
-            'info': 'info'
-        };
-        Swal.fire({
-            title: title || (type.charAt(0).toUpperCase() + type.slice(1)),
-            text: message,
-            icon: icons[type] || 'info',
-            confirmButtonText: "{{ __('OK') }}",
-            customClass: {
-                confirmButton: 'btn btn-primary'
-            },
-            buttonsStyling: false
-        });
-    };
-
     document.addEventListener('DOMContentLoaded', function() {
         var layoutMenu = document.getElementById('layout-menu');
         if (layoutMenu && layoutMenu.menuInstance && typeof layoutMenu.menuInstance.update === 'function') {

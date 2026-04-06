@@ -19,7 +19,7 @@
                     <a href="{{ route('admin.bus-categories.edit', $item->id) }}"
                         class="btn btn-sm btn-outline-primary me-1">{{ __('Edit') }}</a>
                     <form action="{{ route('admin.bus-categories.destroy', $item->id) }}" method="POST" class="d-inline"
-                        onsubmit="return confirm(@json(__('Are you sure you want to delete this category?')));">
+                        onsubmit="return confirmDelete(this, @json(__('Are you sure you want to delete this category?')));">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-sm btn-outline-danger">{{ __('Delete') }}</button>

@@ -449,5 +449,11 @@
     "Active": "نشط",
     "Inactive": "غير نشط",
     "FAQs default hero description": "تجد هنا إجابات عن استفساراتك حول خدماتنا ووجهاتنا. نحن هنا لمساعدتك في كل ما تحتاجه.",
-    "FAQs hero image alt": "الأسئلة الشائعة"
+    "FAQs hero image alt": "الأسئلة الشائعة",
+    "Cancel": "إلغاء",
+    "Success": "نجاح",
+    "Error": "خطأ",
+    "Info": "معلومات",
+    "You cannot select more than :num seats for the outbound trip": "لا يمكنك اختيار أكثر من :num مقعد للذهاب",
+    "You cannot select more than :num seats for the return trip": "لا يمكنك اختيار أكثر من :num مقعد للعودة"
 }

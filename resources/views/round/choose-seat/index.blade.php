@@ -120,8 +120,10 @@
     </div>
 @endsection
 @push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        const outboundSeatLimitMsg = @json(__('You cannot select more than :num seats for the outbound trip'));
+        const returnSeatLimitMsg = @json(__('You cannot select more than :num seats for the return trip'));
+
         document.addEventListener("DOMContentLoaded", function() {
             const bookingForm = document.getElementById('bookingForm');
             const goCheckboxes = document.querySelectorAll('.chair-checkbox.go');
@@ -188,7 +190,7 @@
 
                     if (this.checked) {
                         if (selectedGoSeats.length >= numOfSeats) {
-                            alert(`لا يمكنك اختيار أكثر من ${numOfSeats} مقعد للذهاب`);
+                            showAlert('warning', outboundSeatLimitMsg.replace(':num', numOfSeats), @json(__('Warning')));
                             this.checked = false;
                             return;
                         }
@@ -215,7 +217,7 @@
 
                     if (this.checked) {
                         if (selectedReturnSeats.length >= numOfSeats) {
-                            alert(`لا يمكنك اختيار أكثر من ${numOfSeats} مقعد للعودة`);
+                            showAlert('warning', returnSeatLimitMsg.replace(':num', numOfSeats), @json(__('Warning')));
                             this.checked = false;
                             return;
                         }

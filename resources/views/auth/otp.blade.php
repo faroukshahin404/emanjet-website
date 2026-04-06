@@ -145,14 +145,15 @@
                                     .then(response => response.json())
                                     .then(data => {
                                         if (data.success) {
-                                            alert(data.message);
-                                            location.reload();
+                                            showAlert('success', data.message, @json(__('Success'))).then(function() {
+                                                location.reload();
+                                            });
                                         } else {
-                                            alert(data.message);
+                                            showAlert('error', data.message, @json(__('Error')));
                                         }
                                     })
                                     .catch(() => {
-                                        alert('{{ __('Error occurred while resending OTP') }}');
+                                        showAlert('error', @json(__('Error occurred while resending OTP')), @json(__('Error')));
                                     });
                             });
                         }

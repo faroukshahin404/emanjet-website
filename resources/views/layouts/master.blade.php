@@ -8,8 +8,6 @@
     <div id="site-loader">
         <div class="spinner"></div>
     </div>
-    <div class="custom-toastr-container"></div>
-
     <!-- Desktop View -->
     <div class="desktop d-lg-block d-none">
         @include('layouts.header')
@@ -47,22 +45,43 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <x-swal-init />
     @stack('scripts')
     <script src="{{ asset('js/main.js') }}" defer></script>
-    <script src="{{ asset('js/custom-toastr.js') }}"></script>
     @if (session('success'))
         <script>
-            showToast('success', @json(session('success')));
+            document.addEventListener('DOMContentLoaded', function() {
+                showAlert('success', @json(session('success')), @json(__('Success')));
+            });
         </script>
     @endif
     @if (session('error'))
         <script>
-            showToast('error', @json(session('error')));
+            document.addEventListener('DOMContentLoaded', function() {
+                showAlert('error', @json(session('error')), @json(__('Error')));
+            });
+        </script>
+    @endif
+    @if (session('warning'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                showAlert('warning', @json(session('warning')), @json(__('Warning')));
+            });
+        </script>
+    @endif
+    @if (session('info'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                showAlert('info', @json(session('info')), @json(__('Info')));
+            });
         </script>
     @endif
     @if ($errors->any())
         <script>
-            showToast('error', @json($errors->first()));
+            document.addEventListener('DOMContentLoaded', function() {
+                showAlert('error', @json($errors->first()), @json(__('Error')));
+            });
         </script>
     @endif
 

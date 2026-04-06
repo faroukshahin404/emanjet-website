@@ -148,15 +148,15 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            alert(data.message);
+                            showAlert('success', data.message, @json(__('Success')));
                             timeLeft = initialTime;
                             startTimer();
                         } else {
-                            alert(data.message);
+                            showAlert('error', data.message, @json(__('Error')));
                         }
                     })
                     .catch(() => {
-                        alert("حدث خطأ. يرجى المحاولة مرة أخرى.");
+                        showAlert('error', @json(__('Error occurred while resending OTP')), @json(__('Error')));
                     });
             });
         });
