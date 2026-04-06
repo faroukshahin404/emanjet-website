@@ -169,6 +169,48 @@
         });
     </script>
 
+    <script>
+        /**
+         * Close the mobile offcanvas menu when the viewport switches to desktop width.
+         * Bootstrap does not do this automatically on window resize.
+         */
+        (function () {
+            var DESKTOP_BREAKPOINT = 992; // Bootstrap lg breakpoint
+
+            function closeOffcanvasOnDesktop() {
+                if (window.innerWidth >= DESKTOP_BREAKPOINT) {
+                    var offcanvasEl = document.getElementById('offcanvasNavbar');
+                    if (offcanvasEl && offcanvasEl.classList.contains('show')) {
+                        // Use Bootstrap API if available, otherwise force-hide manually
+                        if (typeof bootstrap !== 'undefined' && bootstrap.Offcanvas) {
+                            var instance = bootstrap.Offcanvas.getInstance(offcanvasEl);
+                            if (instance) {
+                                instance.hide();
+                            }
+                        } else {
+                            offcanvasEl.classList.remove('show');
+                            // Remove backdrop if lingering
+                            var backdrop = document.querySelector('.offcanvas-backdrop');
+                            if (backdrop) backdrop.remove();
+                            document.body.classList.remove('offcanvas-open');
+                            document.body.style.overflow = '';
+                        }
+                    }
+                }
+            }
+
+            // Run on resize with debounce to avoid excessive calls
+            var resizeTimer;
+            window.addEventListener('resize', function () {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(closeOffcanvasOnDesktop, 100);
+            });
+
+            // Also run on initial page load in case user starts on desktop
+            document.addEventListener('DOMContentLoaded', closeOffcanvasOnDesktop);
+        })();
+    </script>
+
     <!-- Scripts -->
     {{-- Swiper before @stack: page scripts expect Swiper global after DOMContentLoaded --}}
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>

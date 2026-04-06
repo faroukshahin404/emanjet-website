@@ -15,10 +15,16 @@ class Seat extends Model
 
     public function showType($val)
     {
-        switch ($val){
-            case 1: echo 'متاح'; break;
-            case 2: echo 'غير متاح'; break;
-            case 3: echo 'سائق'; break;
+        switch ($val) {
+            case 1:
+                echo __('Available');
+                break;
+            case 2:
+                echo __('Unavailable');
+                break;
+            case 3:
+                echo __('Driver');
+                break;
         }
     }
 

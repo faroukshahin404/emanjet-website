@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Models\BookingSeat;
+use App\Models\DashSetting;
 use App\Models\Line;
 use App\Models\RunTrip;
 use App\Models\TripSeat;
@@ -16,6 +17,7 @@ trait BookingTrait
     {
         $date = Carbon::createFromFormat('Y-m-d', $date);
         $originalDate = clone $date;
+        $bookingLeadHours = max(0, (int) DashSetting::get('booking_hours_before_departure', 8));
 
         // Subquery to get booked seats
         $seatsSubQuery = DB::table('booking_seats')
@@ -102,7 +104,7 @@ trait BookingTrait
             DB::raw("DATE_ADD(CONCAT(run_trips.startDate, ' ', run_trips.startTime), INTERVAL trip_stations.timeInMinutes MINUTE) as tripTime"),
             DB::raw("DATE_FORMAT(DATE_ADD(CONCAT(run_trips.startDate, ' ', run_trips.startTime), INTERVAL trip_stations.timeInMinutes MINUTE), '%Y-%m-%d') as tripDate")
         ])
-            ->having('tripTime', '>', Carbon::now()->addHours(8)->toDateTimeString())
+            ->having('tripTime', '>', Carbon::now()->addHours($bookingLeadHours)->toDateTimeString())
             ->having('tripDate', '=', $date->format('Y-m-d'))
             ->orderBy('tripTime', 'asc');
 

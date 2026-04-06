@@ -19,11 +19,11 @@ class CheckUserNotVerified
     {
 
         if (!Auth::check()) {
-            return redirect()->route('auth.login')->with('error', 'الرجاء تسجيل الدخول أولاً.');
+            return redirect()->route('auth.login')->with('error', __('Please Login First.'));
         }
         $user = Auth::user();
         if ($user->verified || $user->phone_verified_at) {
-            return redirect()->route('home')->with('error', 'لا يمكنك الوصول إلى هذه الصفحة.');
+            return redirect()->route('home')->with('error', __('You cannot access this page.'));
         }
         return $next($request);
     }

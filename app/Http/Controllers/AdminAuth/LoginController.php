@@ -36,7 +36,7 @@ class LoginController extends Controller
         }
 
         Log::warning('Login failed for admin: ' . $credentials['email']);
-        return back()->withErrors(['email' => 'بيانات تسجيل الدخول غير صحيحة.']);
+        return back()->withErrors(['email' => __('Invalid admin login credentials.')]);
     }
 
 

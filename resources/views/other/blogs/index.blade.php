@@ -118,3 +118,83 @@
 
     <!-- End trip start here -->
 @endsection
+
+@section('mobile-content')
+    {{-- Mobile Blogs: Clean categorized list --}}
+    <div class="py-2">
+        {{-- Header --}}
+        <div class="mb-4 text-center">
+            <h1 class="fw-bold fs-4 text-black mb-1">{{ $heroSection['title'] ?? __('Bus Blogs') }}</h1>
+            @if (!empty($heroSection['description']))
+                <p class="text-muted small">{{ $heroSection['description'] }}</p>
+            @endif
+        </div>
+
+        {{-- Blog Category Tabs --}}
+        @if ($blogsCategories->isNotEmpty())
+            <div class="mb-3">
+                <div class="d-flex gap-2 overflow-auto pb-2" style="scrollbar-width: none;">
+                    @foreach ($blogsCategories as $index => $category)
+                        <button
+                            class="btn btn-sm rounded-pill fw-bold px-3 flex-shrink-0 mo-blog-cat-btn {{ $index === 0 ? 'btn-main text-white' : 'btn-light' }}"
+                            data-target="cat-{{ $index }}"
+                            onclick="switchBlogCat(this, 'cat-{{ $index }}')">
+                            {{ $category->translated_name }}
+                        </button>
+                    @endforeach
+                </div>
+            </div>
+
+            @foreach ($blogsCategories as $index => $category)
+                <div id="cat-{{ $index }}" class="mo-blog-cat-pane {{ $index !== 0 ? 'd-none' : '' }}">
+                    @forelse ($category->blogs as $blog)
+                        <div class="bg-white rounded-4 shadow-sm overflow-hidden mb-3 border border-light-subtle">
+                            @if ($blog->image)
+                                <img src="{{ $blog->image }}" alt="{{ $blog->translated_title }}"
+                                    class="w-100 object-fit-cover" style="height: 160px;">
+                            @endif
+                            <div class="p-3">
+                                <h6 class="fw-bold text-black mb-1">{{ $blog->translated_title }}</h6>
+                                <p class="text-muted small mb-2">
+                                    <i class="fas fa-clock me-1"></i>{{ $blog->reading_time }} {{ __('Minutes') }}
+                                    &nbsp;&middot;&nbsp;
+                                    <i class="fas fa-eye me-1"></i>{{ $blog->views }}
+                                </p>
+                                <p class="text-muted small mb-0">
+                                    {{ Str::limit(strip_tags($blog->translated_content), 120) }}
+                                </p>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="text-center py-4 text-muted small">
+                            {{ __('No blogs available in this category yet. Please check back later.') }}
+                        </div>
+                    @endforelse
+                </div>
+            @endforeach
+        @else
+            <div class="text-center py-5">
+                <i class="fas fa-newspaper fa-3x text-main mb-3"></i>
+                <p class="text-muted">{{ __('No blogs available in this category yet. Please check back later.') }}</p>
+            </div>
+        @endif
+    </div>
+@endsection
+
+@push('scripts')
+    <script>
+        function switchBlogCat(btn, targetId) {
+            // Hide all panes
+            document.querySelectorAll('.mo-blog-cat-pane').forEach(p => p.classList.add('d-none'));
+            // Reset all buttons
+            document.querySelectorAll('.mo-blog-cat-btn').forEach(b => {
+                b.classList.remove('btn-main', 'text-white');
+                b.classList.add('btn-light');
+            });
+            // Show target and activate button
+            document.getElementById(targetId)?.classList.remove('d-none');
+            btn.classList.add('btn-main', 'text-white');
+            btn.classList.remove('btn-light');
+        }
+    </script>
+@endpush

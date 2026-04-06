@@ -322,4 +322,156 @@ class TranslationScanService
 
         return $key;
     }
+
+    /**
+     * True if the string contains any Arabic script character (typical Arabic translation keys wrongly passed to __()).
+     */
+    public function stringContainsArabicScript(string $value): bool
+    {
+        return preg_match('/\p{Arabic}/u', $value) === 1;
+    }
+
+    /**
+     * Unique translation keys used in the project whose key string itself contains Arabic (should be refactored to English keys).
+     *
+     * @return list<string>
+     */
+    public function findArabicScriptKeysInProject(): array
+    {
+        $out = [];
+        foreach ($this->collectKeysFromProject() as $key) {
+            if ($this->stringContainsArabicScript($key)) {
+                $out[] = $key;
+            }
+        }
+        sort($out);
+
+        return $out;
+    }
+
+    /**
+     * Every occurrence of a translation call whose key contains Arabic script, with file and line for refactoring.
+     *
+     * @return list<array{key: string, file: string, line: int}>
+     */
+    public function findArabicScriptKeysWithLocations(): array
+    {
+        $found = [];
+
+        foreach ($this->scanDirectories() as $dir) {
+            if (! is_dir($dir)) {
+                continue;
+            }
+            foreach ($this->iterateProjectFiles($dir) as $file) {
+                $content = File::get($file);
+                $isBlade = str_contains($file, '.blade.php');
+                $relative = str_replace(base_path(), '', $file);
+                $relative = str_replace(DIRECTORY_SEPARATOR, '/', $relative);
+
+                foreach ($this->extractKeysFromContent($content, $isBlade) as $key) {
+                    if (! $this->stringContainsArabicScript($key)) {
+                        continue;
+                    }
+                    $line = $this->findKeyLine($content, $key);
+                    $found[] = [
+                        'key' => $key,
+                        'file' => $relative,
+                        'line' => $line,
+                    ];
+                }
+            }
+        }
+
+        usort($found, function (array $a, array $b): int {
+            return [$a['file'], $a['line'], $a['key']] <=> [$b['file'], $b['line'], $b['key']];
+        });
+
+        return $found;
+    }
+
+    /**
+     * Lines in PHP/Blade (under scan directories) that contain Arabic script anywhere — not only inside __().
+     * Line numbers match the file on disk.
+     *
+     * @param  bool  $includeCommentOnlyLines  When false, skips lines that are only // or block-comment (* /) style lines.
+     * @return list<array{file: string, line: int, snippet: string}>
+     */
+    public function findHardcodedArabicLines(bool $includeCommentOnlyLines = false): array
+    {
+        $found = [];
+
+        foreach ($this->scanDirectories() as $dir) {
+            if (! is_dir($dir)) {
+                continue;
+            }
+            foreach ($this->iterateProjectFiles($dir) as $file) {
+                $content = File::get($file);
+                $relative = str_replace(base_path(), '', $file);
+                $relative = str_replace(DIRECTORY_SEPARATOR, '/', $relative);
+
+                $lines = explode("\n", $content);
+                foreach ($lines as $idx => $line) {
+                    if (! $this->stringContainsArabicScript($line)) {
+                        continue;
+                    }
+                    if (! $includeCommentOnlyLines && $this->isCommentOnlySourceLine($line)) {
+                        continue;
+                    }
+                    $found[] = [
+                        'file' => $relative,
+                        'line' => $idx + 1,
+                        'snippet' => $this->trimSnippetForReport($line),
+                    ];
+                }
+            }
+        }
+
+        usort($found, function (array $a, array $b): int {
+            return [$a['file'], $a['line']] <=> [$b['file'], $b['line']];
+        });
+
+        return $found;
+    }
+
+    /**
+     * True when the line is only a comment marker (no code before Arabic). Lines like "code(); // عربي" are NOT skipped.
+     */
+    private function isCommentOnlySourceLine(string $line): bool
+    {
+        $t = trim($line);
+        if ($t === '' || $t === '*/') {
+            return false;
+        }
+
+        if (preg_match('/^\/\//', $t)) {
+            return true;
+        }
+
+        if (preg_match('/^\/\*\*?$/', $t) || $t === '/*' || preg_match('/^\/\*\s/', $t)) {
+            return true;
+        }
+
+        if (preg_match('/^\*\/\s*$/', $t)) {
+            return true;
+        }
+
+        if (preg_match('/^\*\s/', $t) || $t === '*') {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return string UTF-8 safe trim for table / JSON output
+     */
+    private function trimSnippetForReport(string $line, int $maxChars = 220): string
+    {
+        $s = str_replace(["\r", "\t"], ['', ' '], trim($line));
+        if (mb_strlen($s) > $maxChars) {
+            return mb_substr($s, 0, $maxChars).'…';
+        }
+
+        return $s;
+    }
 }

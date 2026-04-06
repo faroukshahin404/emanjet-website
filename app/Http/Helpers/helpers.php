@@ -51,14 +51,14 @@ function isSeatAvailable($seat_id, $runTrip_id, $tripData_id, $line_id)
 function payment_status($status)
 {
     if ($status == "PAID" || $status == "CAPTURED" || $status == "pending") {
-        return 'مؤكد';
+        return __('Payment confirmed');
     } elseif ($status == "CANCELED") {
-        return 'ملغي';
+        return __('Payment cancelled');
     } elseif ($status == "NEW" || $status == "New") {
-        return "معلق";
-    } else {
-        return "فشل";
+        return __('Payment pending');
     }
+
+    return __('Payment failed');
 }
 
 
@@ -153,7 +153,7 @@ function extractTranslations()
         foreach ($matches as $key) {
             // إضافة المفتاح إذا لم يكن موجودًا مسبقًا
             if (!array_key_exists($key, $existingTranslations)) {
-                $translations[$key] = $key; // يمكن تخصيص القيمة هنا لتكون الترجمة الفارغة أو أي قيمة أخرى
+                $translations[$key] = $key; // Optional: set placeholder value for new keys
             }
         }
     }

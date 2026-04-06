@@ -25,6 +25,18 @@
                 <div class="text-truncate">{{ __('Dashboard') }}</div>
             </a>
         </li>
+        <li class="menu-item {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.settings.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bi bi-gear-fill"></i>
+                <div class="text-truncate">{{ __('Settings') }}</div>
+            </a>
+        </li>
+        <li class="menu-item {{ request()->routeIs('admin.translations.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.translations.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bi bi-translate"></i>
+                <div class="text-truncate">{{ __('Translation Tools') }}</div>
+            </a>
+        </li>
 
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">{{ __('Content Management') }}</span>

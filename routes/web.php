@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\DestinationController;
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\PageSeoController;
+use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\StationController;
 use App\Http\Controllers\Admin\TranslationController;
 use App\Http\Controllers\AdminAuth\LoginController;
@@ -191,9 +192,29 @@ Route::middleware([
         Route::resource('/destinations', DestinationController::class)->names('destinations');
         Route::resource('/faqs', FaqController::class)->names('faqs');
 
+        // Settings management
+        Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+        Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
+
+
         Route::prefix('translations')->name('translations.')->group(function () {
+            Route::get('/', [TranslationController::class, 'index'])->name('index');
             Route::get('/scan', [TranslationController::class, 'scan'])->name('scan');
+            Route::get('/arabic-keys', [TranslationController::class, 'arabicKeys'])->name('arabic-keys');
+            Route::get('/arabic-text', [TranslationController::class, 'arabicText'])->name('arabic-text');
+            Route::get('/sync-en', function () {
+                return redirect()
+                    ->route('admin.translations.index')
+                    ->withFragment('merge-en')
+                    ->with('info', __('Use the form on this page to merge keys from en.json into ar.json.'));
+            })->name('sync-en.landing');
             Route::post('/sync-en', [TranslationController::class, 'syncFromEnglish'])->name('sync-en');
+            Route::get('/append-scanned', function () {
+                return redirect()
+                    ->route('admin.translations.index')
+                    ->withFragment('append-scanned')
+                    ->with('info', __('Use the form on this page to append scanned keys to ar.json.'));
+            })->name('append-scanned.landing');
             Route::post('/append-scanned', [TranslationController::class, 'appendScanned'])->name('append-scanned');
         });
     });

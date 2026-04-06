@@ -158,9 +158,8 @@
                     <div class="swiper-slide">
                         <a href="{{ route('home', ['city_to_id' => $city->id]) }}#heroSection"
                             class="popular-dest-card popular-dest-card--mobile d-block text-decoration-none">
-                            <div class="popular-dest-card__inner rounded-4 overflow-hidden shadow-sm">
-                                <div
-                                    class="popular-dest-card__media popular-dest-card__media--mobile popular-destination-thumb">
+                            <div class="popular-dest-card__inner shadow-sm">
+                                <div class="popular-dest-card__media popular-dest-card__media--mobile popular-destination-thumb">
                                     @if ($hasCityPhoto)
                                         <img src="{{ asset('uploads/city/' . $cityPhoto) }}"
                                             class="popular-dest-card__img object-fit-cover" alt="{{ $cityName }}"
@@ -168,18 +167,16 @@
                                     @else
                                         <div class="popular-dest-card__img popular-destination-placeholder"
                                             role="img" aria-label="{{ $cityName }}">
-                                            <span class="popular-destination-placeholder__pattern"
-                                                aria-hidden="true"></span>
-                                            <i class="fas fa-image popular-destination-placeholder__icon"
-                                                aria-hidden="true"></i>
+                                            <span class="popular-destination-placeholder__pattern" aria-hidden="true"></span>
+                                            <i class="fas fa-map-marked-alt popular-destination-placeholder__icon" aria-hidden="true"></i>
+                                            <span class="popular-destination-placeholder__label">{{ __('Destination') }}</span>
                                         </div>
                                     @endif
                                     <div class="popular-dest-card__overlay popular-dest-card__overlay--mobile">
                                         <span class="popular-dest-card__name">{{ $cityName }}</span>
-                                        <span class="popular-dest-card__hint">
+                                        <span class="popular-dest-card__glass-badge">
+                                            <i class="fas fa-bolt" aria-hidden="true"></i>
                                             <span>{{ __('Book Now') }}</span>
-                                            <i class="fas fa-arrow-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }} popular-dest-card__hint-icon"
-                                                aria-hidden="true"></i>
                                         </span>
                                     </div>
                                 </div>
