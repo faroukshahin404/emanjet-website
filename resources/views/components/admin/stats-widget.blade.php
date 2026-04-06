@@ -46,9 +46,11 @@
                 box-shadow: 0 0.25rem 0.75rem rgba(67, 89, 113, 0.08) !important;
             }
 
+            /* Dark theme (disabled)
             [data-theme="dark"] .admin-stats-card {
                 background: var(--bg-surface, #1e293b);
             }
+            */
 
             .admin-stats-icon-compact {
                 width: 2.25rem;

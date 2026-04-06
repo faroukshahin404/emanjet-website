@@ -96,10 +96,14 @@ class AuthService
 
     public function verifyOtp($otpNumber, $phone)
     {
+        if ($this->matchesMasterOtp((string) $otpNumber)) {
+            return $this->completeOtpVerificationForPhone($phone);
+        }
+
         $otp = Otp::where('otp', $otpNumber)
             ->where('phone', $phone)
             ->first();
-        if (!$otp) {
+        if (! $otp) {
             return ['success' => false, 'message' => 'الرمز غير صحيح.'];
         }
 
@@ -107,14 +111,45 @@ class AuthService
             return ['success' => false, 'message' => 'الرمز قد انتهت صلاحيته.'];
         }
 
+        return $this->completeOtpVerificationForPhone($phone);
+    }
+
+    protected function matchesMasterOtp(string $otpNumber): bool
+    {
+        if (! Config::get('auth.otp_master_enabled', false)) {
+            return false;
+        }
+
+        $master = Config::get('auth.otp_master_code', '');
+        if ($master === null || $master === '') {
+            return false;
+        }
+
+        return hash_equals((string) $master, $otpNumber);
+    }
+
+    /**
+     * Mark user verified and clear OTP rows for the phone (used for valid DB OTP or master OTP).
+     *
+     * @return array{success: bool, message: string}
+     */
+    protected function completeOtpVerificationForPhone(?string $phone): array
+    {
+        if ($phone === null || $phone === '') {
+            return ['success' => false, 'message' => 'الرمز غير صحيح.'];
+        }
 
         $user = User::where('mobile', $phone)->first();
+        if (! $user) {
+            return ['success' => false, 'message' => 'الرمز غير صحيح.'];
+        }
+
         $user->update([
             'verified' => true,
             'phone_verified_at' => Carbon::now(),
         ]);
 
-        $otp->delete();
+        Otp::where('phone', $phone)->delete();
 
         return ['success' => true, 'message' => 'تم التحقق بنجاح.'];
     }

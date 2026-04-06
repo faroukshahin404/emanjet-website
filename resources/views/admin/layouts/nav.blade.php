@@ -43,6 +43,7 @@
                 </ul>
             </li>
 
+            {{-- Dark / light theme toggle (disabled)
             <li class="nav-item">
                 <button type="button" onclick="togglePlanxTheme()"
                     class="nav-link border rounded-circle d-flex align-items-center justify-content-center theme-toggle-btn"
@@ -52,6 +53,7 @@
                     <i class="bi bi-sun-fill icon-light-mode"></i>
                 </button>
             </li>
+            --}}
 
             <li class="nav-item navbar-dropdown dropdown-user dropdown">
                 <a class="nav-link dropdown-toggle hide-arrow d-flex align-items-center gap-2 px-2"
@@ -72,6 +74,12 @@
                     </li>
                     <li>
                         <hr class="dropdown-divider my-1">
+                    </li>
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center gap-2" href="{{ route('admin.profile.edit') }}">
+                            <i class="bi bi-person-gear"></i>
+                            <span>{{ __('Profile') }}</span>
+                        </a>
                     </li>
                     <li>
                         <form action="{{ route('admin.logout') }}" method="POST">

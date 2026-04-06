@@ -29,11 +29,6 @@
                             @endforeach
                         </div>
 
-                        <div class="form-group mb-3">
-                            <label for="slug">{{ __('Slug') }}</label>
-                            <input type="text" class="form-control" id="slug" name="slug" value="{{ old('slug', isset($category) ? $category->slug : '') }}" placeholder="{{ __('Will be generated automatically if empty') }}">
-                        </div>
-
                         <button type="submit" class="btn btn-primary">
                             {{ isset($category) ? __('Update') : __('Create') }}
                         </button>
@@ -41,22 +36,3 @@
         </div>
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const nameEn = document.getElementById('name_en');
-            const slug = document.getElementById('slug');
-
-            nameEn.addEventListener('blur', function () {
-                if (!slug.value) {
-                    fetch('/admin/generate-slug?text=' + encodeURIComponent(nameEn.value))
-                        .then(response => response.json())
-                        .then(data => {
-                            slug.value = data.slug;
-                        });
-                }
-            });
-        });
-    </script>
-@endpush

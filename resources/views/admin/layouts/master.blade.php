@@ -28,6 +28,7 @@
 
     @include('admin.layouts.scripts')
 
+    {{-- Dark theme: restore from localStorage + toggle (disabled)
     <script>
         (function() {
             var savedTheme = localStorage.getItem('planx-theme') || @json(dashboard_setting('theme.default', 'light'));
@@ -45,6 +46,10 @@
                 }
             }));
         }
+    </script>
+    --}}
+    <script>
+        function togglePlanxTheme() {}
     </script>
 </body>
 

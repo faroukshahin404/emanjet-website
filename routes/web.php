@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\CityController;
+use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DestinationController;
 use App\Http\Controllers\Admin\FaqController;
@@ -158,6 +159,8 @@ Route::group([
 
     Route::prefix('admin')->middleware(\App\Http\Middleware\AdminAuth::class)->as('admin.')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+        Route::get('/profile', [AdminProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile/password', [AdminProfileController::class, 'updatePassword'])->name('profile.password.update');
         Route::post('/logout', [\App\Http\Controllers\AdminAuth\LoginController::class, 'logout'])->name('logout');
 
         Route::resource('/pages', PageController::class)->names('pages');

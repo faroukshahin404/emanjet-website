@@ -20,7 +20,7 @@
     <!-- MDB CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css" rel="stylesheet">
     <!-- Favicon -->
-    <link rel="shortcut icon" href="{{ asset('images/logo.png') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('images/logo.png') }}" type="image/png">
     <!-- apple-touch-icon -->
     <link rel="apple-touch-icon" href="{{ asset('images/logo.png') }}">
     <!-- Custom CSS -->

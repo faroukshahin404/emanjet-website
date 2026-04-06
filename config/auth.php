@@ -124,4 +124,15 @@ return [
     'otp_block_duration_minutes' => env('OTP_BLOCK_DURATION_MINUTES', 30),
     'otp_attempt_wait_minutes' => env('OTP_ATTEMPT_WAIT_MINUTES', '0.5,2,5,10,15,30'),
 
+    /*
+    | Master OTP (e.g. 9999): accepted when otp_master_enabled is true.
+    | Defaults to enabled only when APP_DEBUG is true. Set OTP_MASTER_ENABLED=false
+    | to disable even in local, or OTP_MASTER_ENABLED=true in .env for staging tests.
+    */
+    'otp_master_enabled' => filter_var(
+        env('OTP_MASTER_ENABLED', env('APP_DEBUG', false)),
+        FILTER_VALIDATE_BOOLEAN
+    ),
+    'otp_master_code' => env('OTP_MASTER_CODE', '9999'),
+
 ];

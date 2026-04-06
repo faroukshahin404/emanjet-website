@@ -3,11 +3,8 @@
         <a href="{{ route('admin.dashboard.index') }}" class="app-brand-link">
             <span class="app-brand-logo demo">
                 <span class="text-primary">
-                    @php
-                        $sidebarDims = dashboard_logo_dimensions('sidebar');
-                    @endphp
                     <img src="{{ dashboard_logo('sidebar') }}" alt="{{ dashboard_project_name() }}"
-                        width="{{ $sidebarDims['width'] }}" height="{{ $sidebarDims['height'] }}">
+                        class="d-inline-block" style="max-height: 40px; width: auto; height: auto;">
                 </span>
             </span>
         </a>

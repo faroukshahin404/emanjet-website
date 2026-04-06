@@ -386,7 +386,7 @@ if (menuInnerContainer.length > 0 && menuInnerShadow) {
     function getPrimaryColor() {
     const root = document.documentElement;
     const primaryColor = getComputedStyle(root).getPropertyValue('--bs-primary').trim();
-    return primaryColor || '#696cff';
+    return primaryColor || '#D52034';
     }
 
     // Get secondary color from CSS variable

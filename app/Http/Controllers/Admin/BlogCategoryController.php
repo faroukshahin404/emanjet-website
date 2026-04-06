@@ -40,21 +40,15 @@ class BlogCategoryController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(BlogCategoryRequest $request)
-{
-    // dd($request->all());
-    $data = $request->validated();
+    {
+        $data = $request->validated();
+        $data['slug'] = $this->uniqueCategorySlug(Str::slug($data['name']['en'] ?? '') ?: 'category');
 
-    if (empty($data['slug'])) {
-        $data['slug'] = Str::slug($data['name']['en']);
-    } else {
-        $data['slug'] = Str::slug($data['slug']);
+        BlogCategory::create($data);
+
+        return redirect()->route('admin.blog-categories.index')
+            ->with('success', 'Category created successfully');
     }
-    // dd($data);
-    BlogCategory::create($data);
-
-    return redirect()->route('admin.blog-categories.index')
-        ->with('success', 'Category created successfully');
-}
 
     /**
      * Display the specified resource.
@@ -76,22 +70,42 @@ class BlogCategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(BlogCategoryRequest $request,string  $id)
+    public function update(BlogCategoryRequest $request, string $id)
     {
-        // dd($request->all());
         $category = BlogCategory::findOrFail($id);
         $data = $request->validated();
-
-        if (empty($data['slug'])) {
-            $data['slug'] = Str::slug($data['name']['en']);
-        } else {
-            $data['slug'] = Str::slug($data['slug']);
-        }
+        $data['slug'] = $this->uniqueCategorySlug(
+            Str::slug($data['name']['en'] ?? '') ?: 'category',
+            (int) $category->id
+        );
 
         $category->update($data);
 
         return redirect()->route('admin.blog-categories.index')
             ->with('success', 'Category updated successfully');
+    }
+
+    /**
+     * Ensure a unique slug for blog_categories (base from English name).
+     */
+    private function uniqueCategorySlug(string $base, ?int $ignoreId = null): string
+    {
+        $slug = $base !== '' ? $base : 'category';
+        $counter = 0;
+
+        do {
+            $candidate = $counter === 0 ? $slug : $slug . '-' . $counter;
+            $query = BlogCategory::query()->where('slug', $candidate);
+            if ($ignoreId !== null) {
+                $query->where('id', '!=', $ignoreId);
+            }
+            if (! $query->exists()) {
+                return $candidate;
+            }
+            $counter++;
+        } while ($counter < 1000);
+
+        return $slug . '-' . uniqid();
     }
 
     /**

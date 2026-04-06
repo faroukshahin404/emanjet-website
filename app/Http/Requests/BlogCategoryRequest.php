@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class BlogCategoryRequest extends FormRequest
 {
@@ -22,17 +21,9 @@ class BlogCategoryRequest extends FormRequest
      */
     public function rules()
     {
-        $categoryId = $this->route('blog-category') ? $this->route('blog-category')->id : null;
-
         return [
             'name.en' => 'required|string|max:255',
             'name.ar' => 'required|string|max:255',
-            'slug' => [
-                'nullable',
-                'string',
-                'max:255',
-                Rule::unique('blog_categories', 'slug')->ignore($categoryId)
-            ]
         ];
     }
     public function attributes()

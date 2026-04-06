@@ -28,7 +28,6 @@ class PageController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'slug' => 'required|string|max:255|unique:pages,slug,' . $id,
             'title.en' => 'required|string|max:255',
             'title.ar' => 'required|string|max:255',
             'meta_title.en' => 'required|string|max:255',
@@ -137,7 +136,7 @@ class PageController extends Controller
         }
 
         $updateData = [
-            'slug' => $request->slug,
+            'slug' => $page->slug,
             'title' => [
                 'en' => $request->input('title.en'),
                 'ar' => $request->input('title.ar')

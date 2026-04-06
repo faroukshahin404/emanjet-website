@@ -232,9 +232,9 @@ if (!function_exists('dashboard_logo')) {
     function dashboard_logo(string $type = 'sidebar'): string
     {
         $key = "logo.{$type}";
-        $logo = dashboard_setting($key, 'img/brand/logo.svg');
+        $logo = dashboard_setting($key, 'images/logo.png');
 
-        if (is_string($logo) && str_starts_with($logo, 'img/')) {
+        if (is_string($logo) && (str_starts_with($logo, 'img/') || str_starts_with($logo, 'images/'))) {
             return asset($logo);
         }
 
@@ -242,16 +242,16 @@ if (!function_exists('dashboard_logo')) {
             return \Illuminate\Support\Facades\Storage::disk('public')->url($logo);
         }
 
-        return asset('img/brand/logo.svg');
+        return asset('images/logo.png');
     }
 }
 
 if (!function_exists('dashboard_favicon')) {
     function dashboard_favicon(): string
     {
-        $favicon = dashboard_setting('favicon', 'img/brand/logo.svg');
+        $favicon = dashboard_setting('favicon', 'images/favicon/favicon.svg');
 
-        if (is_string($favicon) && str_starts_with($favicon, 'img/')) {
+        if (is_string($favicon) && (str_starts_with($favicon, 'img/') || str_starts_with($favicon, 'images/'))) {
             return asset($favicon);
         }
 
@@ -259,7 +259,27 @@ if (!function_exists('dashboard_favicon')) {
             return \Illuminate\Support\Facades\Storage::disk('public')->url($favicon);
         }
 
-        return asset('img/brand/logo.svg');
+        return asset('images/favicon/favicon.svg');
+    }
+}
+
+if (!function_exists('dashboard_favicon_mime')) {
+    /**
+     * MIME type for the primary favicon link (matches stored path extension).
+     */
+    function dashboard_favicon_mime(): string
+    {
+        $favicon = (string) dashboard_setting('favicon', 'images/favicon/favicon.svg');
+        $lower = strtolower($favicon);
+
+        if (str_ends_with($lower, '.svg')) {
+            return 'image/svg+xml';
+        }
+        if (str_ends_with($lower, '.ico')) {
+            return 'image/x-icon';
+        }
+
+        return 'image/png';
     }
 }
 
@@ -288,17 +308,35 @@ if (!function_exists('dashboard_color')) {
     function dashboard_color(string $colorName): string
     {
         $defaults = [
-            'primary' => '#696cff',
-            'secondary' => '#8592a3',
-            'success' => '#71dd37',
-            'info' => '#03c3ec',
-            'warning' => '#ffab00',
-            'danger' => '#ff3e1d',
+            'primary' => '#D52034',
+            'secondary' => '#3A3A3A',
+            'success' => '#1B7F4F',
+            'info' => '#0C4A6E',
+            'warning' => '#C9A227',
+            'danger' => '#9B1C26',
         ];
 
         $key = "color.{$colorName}";
 
-        return (string) dashboard_setting($key, $defaults[$colorName] ?? '#696cff');
+        return (string) dashboard_setting($key, $defaults[$colorName] ?? '#D52034');
+    }
+}
+
+if (!function_exists('dashboard_color_rgb')) {
+    /**
+     * Comma-separated RGB for CSS (e.g. "213, 32, 52") from stored hex color.
+     */
+    function dashboard_color_rgb(string $colorName): string
+    {
+        $hex = ltrim(dashboard_color($colorName), '#');
+        if (strlen($hex) === 3) {
+            $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+        }
+        if (strlen($hex) !== 6 || ! ctype_xdigit($hex)) {
+            return '213, 32, 52';
+        }
+
+        return hexdec(substr($hex, 0, 2)) . ', ' . hexdec(substr($hex, 2, 2)) . ', ' . hexdec(substr($hex, 4, 2));
     }
 }
 
