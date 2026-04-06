@@ -7,6 +7,7 @@ use App\Models\BlogCategory;
 use App\Models\BusCategory;
 use App\Models\City;
 use App\Models\Contact;
+use App\Models\Faq;
 use App\Models\Page;
 use App\Models\Station;
 use App\Models\Testimonial;
@@ -238,11 +239,11 @@ class HomeController extends Controller
         $page = Page::where('slug', 'faqs')->first();
         $faqsPageSeos = $page ? $page->pageSeos()->get() : collect();
         $heroSection = $this->getSectionContent($faqsPageSeos, 'hero-section', ['title' => __('FAQs'), 'description' => '', 'image' => '']);
-        $faqsList = $this->getSectionContent($faqsPageSeos, 'faq-list', ['faqs' => []]);
+        $faqs = Faq::active()->ordered()->get();
         $seo = $page ? getSeoData($page->toArray()) : $this->getDefaultSeo();
         return view('other.faqs.index')->with([
             'heroSection' => $heroSection,
-            'faqsList' => $faqsList,
+            'faqs' => $faqs,
             'seo' => $seo
         ]);
     }

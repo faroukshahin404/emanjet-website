@@ -1,0 +1,132 @@
+/* ============================================
+   Notifications Styles
+   ============================================ */
+
+/* Badge Notifications */
+.badge-notifications {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 0.65rem;
+  padding: 0.25rem 0.4rem;
+  min-width: 1.2rem;
+  height: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(25%, -25%);
+  z-index: 1;
+}
+
+[dir="rtl"] .badge-notifications {
+  right: auto;
+  left: 0;
+  transform: translate(-25%, -25%);
+}
+
+/* Dropdown Notifications List */
+.dropdown-notifications-list {
+  max-height: 20rem;
+  overflow-y: auto;
+}
+
+.dropdown-notifications-item {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--bs-border-color);
+  transition: background-color 0.15s ease;
+}
+
+.dropdown-notifications-item:hover {
+  background-color: var(--bs-gray-100);
+}
+
+[data-bs-theme="dark"] .dropdown-notifications-item:hover {
+  background-color: #3a3d52;
+}
+
+.dropdown-notifications-item:last-child {
+  border-bottom: none;
+}
+
+.dropdown-notifications-archive-icon {
+  color: var(--bs-secondary);
+  opacity: 0.6;
+  transition: opacity 0.15s ease;
+  text-decoration: none;
+}
+
+.dropdown-notifications-archive-icon:hover {
+  opacity: 1;
+  color: var(--bs-danger);
+}
+
+/* Dropdown Menu Header & Footer */
+.dropdown-menu-header {
+  background-color: var(--bs-gray-50);
+}
+
+[data-bs-theme="dark"] .dropdown-menu-header {
+  background-color: #2d2f44;
+}
+
+.dropdown-menu-footer {
+  background-color: var(--bs-gray-50);
+}
+
+[data-bs-theme="dark"] .dropdown-menu-footer {
+  background-color: #2d2f44;
+}
+
+/* Notification Avatar */
+.dropdown-notifications-item .avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.dropdown-notifications-item .avatar-initial {
+  font-size: 1rem;
+}
+
+/* Notification Text */
+.dropdown-notifications-item h6 {
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+  color: var(--bs-body-color);
+}
+
+.dropdown-notifications-item p {
+  margin-bottom: 0.25rem;
+  font-size: 0.875rem;
+  color: var(--bs-body-secondary);
+}
+
+.dropdown-notifications-item small {
+  font-size: 0.75rem;
+}
+
+/* Scrollbar for notifications list */
+.dropdown-notifications-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dropdown-notifications-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dropdown-notifications-list::-webkit-scrollbar-thumb {
+  background: var(--bs-border-color);
+  border-radius: 3px;
+}
+
+.dropdown-notifications-list::-webkit-scrollbar-thumb:hover {
+  background: var(--bs-secondary);
+}
+
+[data-bs-theme="dark"] .dropdown-notifications-list::-webkit-scrollbar-thumb {
+  background: #3a3d52;
+}
+
+[data-bs-theme="dark"] .dropdown-notifications-list::-webkit-scrollbar-thumb:hover {
+  background: #4a4d62;
+}
+

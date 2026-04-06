@@ -1,0 +1,994 @@
+/* RTL Support Styles */
+
+[dir="rtl"] {
+    direction: rtl;
+    text-align: right;
+}
+
+[dir="rtl"] body {
+    font-family: 'Cairo', 'Tajawal', 'Public Sans', sans-serif;
+}
+
+/* Flip margins and paddings */
+[dir="rtl"] .me-1 { margin-left: 0.25rem !important; margin-right: 0 !important; }
+[dir="rtl"] .me-2 { margin-left: 0.5rem !important; margin-right: 0 !important; }
+[dir="rtl"] .me-3 { margin-left: 1rem !important; margin-right: 0 !important; }
+[dir="rtl"] .me-4 { margin-left: 1.5rem !important; margin-right: 0 !important; }
+[dir="rtl"] .me-auto { margin-left: auto !important; margin-right: 0 !important; }
+
+[dir="rtl"] .ms-1 { margin-right: 0.25rem !important; margin-left: 0 !important; }
+[dir="rtl"] .ms-2 { margin-right: 0.5rem !important; margin-left: 0 !important; }
+[dir="rtl"] .ms-3 { margin-right: 1rem !important; margin-left: 0 !important; }
+[dir="rtl"] .ms-4 { margin-right: 1.5rem !important; margin-left: 0 !important; }
+[dir="rtl"] .ms-auto { margin-right: auto !important; margin-left: 0 !important; }
+
+[dir="rtl"] .ps-1 { padding-left: 0.25rem !important; padding-right: 0 !important; }
+[dir="rtl"] .ps-2 { padding-left: 0.5rem !important; padding-right: 0 !important; }
+[dir="rtl"] .ps-3 { padding-left: 1rem !important; padding-right: 0 !important; }
+
+[dir="rtl"] .pe-1 { padding-right: 0.25rem !important; padding-left: 0 !important; }
+[dir="rtl"] .pe-2 { padding-right: 0.5rem !important; padding-left: 0 !important; }
+[dir="rtl"] .pe-3 { padding-right: 1rem !important; padding-left: 0 !important; }
+
+/* Text alignment */
+[dir="rtl"] .text-start { text-align: right !important; }
+[dir="rtl"] .text-end { text-align: left !important; }
+
+/* Flexbox direction */
+[dir="rtl"] .flex-row { flex-direction: row-reverse !important; }
+
+/* Dropdown menu - handled specifically for language dropdown below */
+
+/* Language Switcher */
+[dir="rtl"] .dropdown-language .dropdown-item {
+    text-align: right;
+}
+
+[dir="rtl"] .dropdown-language .dropdown-item i.bx-flag {
+    margin-right: 0.5rem;
+    margin-left: 0;
+}
+
+[dir="rtl"] .dropdown-language .dropdown-item i.bx-check {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+/* Navbar */
+[dir="rtl"] .navbar-nav-right {
+    margin-left: 0 !important;
+    margin-right: auto !important;
+}
+
+/* Layout menu toggle - basic styles (detailed positioning in RTL Layout Fixes section) */
+[dir="rtl"] .layout-menu-toggle .bx-chevron-left {
+    transform: scaleX(-1);
+}
+
+/* Sidebar - Basic positioning (overridden by media queries below) */
+[dir="rtl"] .layout-menu {
+    right: 0;
+    left: auto;
+    display: block !important;
+    visibility: visible !important;
+}
+
+/* Ensure sidebar is always visible in RTL on large screens */
+@media (min-width: 1200px) {
+    [dir="rtl"] .layout-menu {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+
+    /* Static sidebar positioning */
+    [dir="rtl"] html:not(.layout-menu-fixed):not(.layout-menu-fixed-offcanvas) .layout-menu {
+        position: relative !important;
+        right: auto !important;
+        left: auto !important;
+    }
+}
+
+[dir="rtl"] .menu-link {
+    text-align: right;
+}
+
+[dir="rtl"] .menu-icon {
+    margin-left: 0.75rem;
+    margin-right: 0;
+}
+
+/* Form controls */
+[dir="rtl"] .form-control,
+[dir="rtl"] .form-select {
+    text-align: right;
+}
+
+/* Fix select arrow position in RTL */
+[dir="rtl"] .form-select {
+    background-position: left 0.75rem center;
+    padding-right: 0.75rem;
+    padding-left: 2.5rem;
+}
+
+/* Badge and labels */
+[dir="rtl"] .badge {
+    margin-left: 0.5rem;
+    margin-right: 0;
+}
+
+/* Icons */
+[dir="rtl"] .icon-base {
+    display: inline-block;
+}
+
+/* Buttons */
+[dir="rtl"] .btn i {
+    margin-left: 0.5rem;
+    margin-right: 0;
+}
+
+[dir="rtl"] .btn-group > .btn:not(:first-child) {
+    margin-right: -1px;
+    margin-left: 0;
+}
+
+/* Tables */
+[dir="rtl"] table {
+    text-align: right;
+}
+
+[dir="rtl"] .table th,
+[dir="rtl"] .table td {
+    text-align: right;
+}
+
+/* Cards */
+[dir="rtl"] .card-header {
+    text-align: right;
+}
+
+/* Pagination */
+[dir="rtl"] .pagination {
+    direction: rtl;
+}
+
+/* Input groups */
+[dir="rtl"] .input-group-text {
+    border-left: 0;
+    border-right: 1px solid #d9dee3;
+}
+
+[dir="rtl"] .input-group > .form-control {
+    border-right: 0;
+    border-left: 1px solid #d9dee3;
+}
+
+/* Modal */
+[dir="rtl"] .modal-header .btn-close {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+/* Alert */
+[dir="rtl"] .alert {
+    text-align: right;
+}
+
+/* List group */
+[dir="rtl"] .list-group-item {
+    text-align: right;
+}
+
+/* Breadcrumb */
+[dir="rtl"] .breadcrumb-item + .breadcrumb-item::before {
+    content: "/";
+    float: right !important;
+    padding-right: 0 !important;
+    padding-left: var(--bs-breadcrumb-item-padding-x, 0.5rem) !important;
+}
+
+/* Utilities */
+[dir="rtl"] .float-start { float: right !important; }
+[dir="rtl"] .float-end { float: left !important; }
+
+[dir="rtl"] .text-start { text-align: right !important; }
+[dir="rtl"] .text-end { text-align: left !important; }
+
+/* ============================================
+   RTL Layout Fixes - Sidebar and Container
+   ============================================ */
+
+/* Layout Container - Reverse order for RTL */
+[dir="rtl"] .layout-container {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+/* Sidebar positioning for large screens */
+@media (min-width: 1200px) {
+    /* Fixed sidebar on the right - ensure visibility */
+    [dir="rtl"] .layout-menu-fixed .layout-menu,
+    [dir="rtl"] .layout-menu-fixed-offcanvas .layout-menu {
+        position: fixed !important;
+        inset-inline-start: auto !important;
+        inset-inline-end: 0 !important;
+        left: auto !important;
+        right: 0 !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        transform: translateX(0) !important;
+        z-index: 1030 !important;
+    }
+
+    /* Ensure sidebar is visible when not collapsed */
+    [dir="rtl"] .layout-menu-fixed:not(.layout-menu-collapsed) .layout-menu,
+    [dir="rtl"] .layout-menu-fixed-offcanvas:not(.layout-menu-collapsed) .layout-menu {
+        transform: translateX(0) !important;
+        margin-inline-end: 0 !important;
+        margin-inline-start: 0 !important;
+    }
+
+    /* Page padding should be on the right (start) in RTL */
+    [dir="rtl"] .layout-menu-fixed:not(.layout-menu-collapsed) .layout-page,
+    [dir="rtl"] .layout-menu-fixed-offcanvas:not(.layout-menu-collapsed) .layout-page {
+        padding-inline-start: 0 !important;
+        padding-inline-end: var(--bs-menu-width) !important;
+        padding-right: var(--bs-menu-width) !important;
+        padding-left: 0 !important;
+    }
+
+    /* Collapsed sidebar - page padding */
+    [dir="rtl"] .layout-menu-fixed.layout-menu-collapsed .layout-page {
+        padding-inline-start: 0 !important;
+        padding-inline-end: var(--bs-menu-collapsed-width) !important;
+        padding-right: var(--bs-menu-collapsed-width) !important;
+        padding-left: 0 !important;
+    }
+
+    /* Off-canvas collapsed sidebar - should slide to the right */
+    [dir="rtl"] .layout-menu-collapsed.layout-menu-offcanvas .layout-menu {
+        margin-inline-end: -var(--bs-menu-width) !important;
+        margin-inline-start: 0 !important;
+        transform: translateX(100%) !important;
+    }
+
+    /* Fixed off-canvas collapsed sidebar - only hide if offcanvas */
+    [dir="rtl"] .layout-menu-fixed-offcanvas.layout-menu-collapsed .layout-menu {
+        transform: translateX(100%) !important;
+    }
+
+    /* Fixed sidebar when collapsed - should still be visible but narrow */
+    [dir="rtl"] .layout-menu-fixed.layout-menu-collapsed .layout-menu {
+        transform: translateX(0) !important;
+        margin-inline-end: 0 !important;
+        margin-inline-start: 0 !important;
+        display: block !important;
+        visibility: visible !important;
+    }
+
+    /* Hover collapsed sidebar */
+    [dir="rtl"] .layout-menu-hover.layout-menu-collapsed .layout-menu {
+        margin-inline-end: -calc(var(--bs-menu-width) - var(--bs-menu-collapsed-width)) !important;
+        margin-inline-start: 0 !important;
+    }
+}
+
+/* Small screens - sidebar from right (exactly like English but mirrored) */
+@media (max-width: 1199.98px) {
+    /* Sidebar hidden by default - on the right side in RTL */
+    [dir="rtl"] .layout-menu {
+        position: fixed !important;
+        block-size: 100% !important;
+        inset-block-start: 0 !important;
+        inset-inline-start: auto !important;
+        inset-inline-end: 0 !important;
+        left: auto !important;
+        right: 0 !important;
+        margin-inline: 0 !important;
+        transform: translate3d(100%, 0, 0) !important;
+        will-change: transform, -webkit-transform;
+        z-index: 1100 !important; /* Above navbar (1075) */
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+
+    /* When expanded, show sidebar - same as English but from right */
+    [dir="rtl"] .layout-menu-expanded .layout-menu,
+    [dir="rtl"] html.layout-menu-expanded .layout-menu,
+    [dir="rtl"] body.layout-menu-expanded .layout-menu,
+    [dir="rtl"] .layout-wrapper.layout-menu-expanded .layout-menu,
+    [dir="rtl"] html.layout-menu-expanded .layout-wrapper .layout-menu,
+    [dir="rtl"] body.layout-menu-expanded .layout-wrapper .layout-menu {
+        transform: translate3d(0, 0, 0) !important;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+
+    /* Prevent body scroll when menu is expanded - same as English */
+    [dir="rtl"] .layout-menu-expanded body,
+    [dir="rtl"] html.layout-menu-expanded body,
+    [dir="rtl"] body.layout-menu-expanded {
+        overflow: hidden !important;
+    }
+
+    /* Overlay - same as English, below sidebar */
+    [dir="rtl"] .layout-overlay {
+        position: fixed !important;
+        display: none !important;
+        background: #22303e !important;
+        block-size: 100% !important;
+        cursor: pointer !important;
+        inset-block-start: 0 !important;
+        inset-inline: 0 !important;
+        right: 0 !important;
+        left: 0 !important;
+        opacity: 0.5 !important;
+        z-index: 1099 !important; /* Below sidebar (1100) but above navbar (1075) */
+    }
+
+    /* Ensure navbar is below sidebar when menu is expanded */
+    [dir="rtl"] .layout-menu-expanded .layout-navbar,
+    [dir="rtl"] html.layout-menu-expanded .layout-navbar,
+    [dir="rtl"] body.layout-menu-expanded .layout-navbar,
+    [dir="rtl"] .layout-wrapper.layout-menu-expanded .layout-navbar {
+        z-index: 1075 !important; /* Below sidebar */
+    }
+
+    /* Show overlay when menu is expanded */
+    [dir="rtl"] .layout-menu-expanded .layout-overlay,
+    [dir="rtl"] html.layout-menu-expanded .layout-overlay,
+    [dir="rtl"] body.layout-menu-expanded .layout-overlay,
+    [dir="rtl"] .layout-wrapper.layout-menu-expanded .layout-overlay,
+    [dir="rtl"] html.layout-menu-expanded .layout-wrapper .layout-overlay,
+    [dir="rtl"] body.layout-menu-expanded .layout-wrapper .layout-overlay {
+        display: block !important;
+    }
+
+    /* Ensure sidebar toggle button is visible when menu is expanded */
+    [dir="rtl"] .layout-menu-expanded .menu .app-brand .layout-menu-toggle,
+    [dir="rtl"] html.layout-menu-expanded .menu .app-brand .layout-menu-toggle,
+    [dir="rtl"] body.layout-menu-expanded .menu .app-brand .layout-menu-toggle {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+}
+
+/* Layout wrapper direction */
+[dir="rtl"] .layout-wrapper {
+    direction: rtl;
+}
+
+/* Navbar toggle button position - on the left */
+[dir="rtl"] .layout-navbar .layout-menu-toggle {
+    margin-right: 1rem !important;
+    margin-left: 0 !important;
+    order: 1;
+    cursor: pointer !important;
+    z-index: 1080 !important;
+    pointer-events: auto !important;
+    position: relative !important;
+}
+
+/* Ensure toggle button is clickable in RTL */
+[dir="rtl"] .layout-navbar .layout-menu-toggle a,
+[dir="rtl"] .layout-navbar .layout-menu-toggle .nav-link {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    z-index: 1081 !important;
+    position: relative !important;
+    display: block !important;
+}
+
+/* Ensure toggle button icon is clickable */
+[dir="rtl"] .layout-navbar .layout-menu-toggle i {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+/* Navbar structure - normal order (not reversed) */
+[dir="rtl"] .layout-navbar {
+    flex-direction: row;
+}
+
+[dir="rtl"] .layout-navbar .navbar-nav-right {
+    order: 2;
+    margin-left: 0 !important;
+    margin-right: auto !important;
+}
+
+/* Navbar container alignment - normal order */
+[dir="rtl"] .layout-navbar.container-xxl {
+    flex-direction: row;
+}
+
+/* Navbar nav items alignment - normal order (items from right to left: User, Notifications, Theme, Language) */
+[dir="rtl"] .layout-navbar .navbar-nav {
+    flex-direction: row;
+}
+
+/* Fix for navbar detached layout - normal order */
+[dir="rtl"] .layout-navbar.navbar-detached {
+    flex-direction: row;
+}
+
+/* Navbar menu toggle link spacing */
+[dir="rtl"] .layout-navbar .layout-menu-toggle .nav-link {
+    margin-left: 0 !important;
+    margin-right: 1.5rem !important;
+}
+
+/* Navbar right section - normal order */
+[dir="rtl"] .layout-navbar #navbar-collapse {
+    flex-direction: row;
+}
+
+/* Navbar items list - normal order (User, Notifications, Theme, Language from right to left) */
+[dir="rtl"] .layout-navbar .navbar-nav-right > ul {
+    flex-direction: row;
+}
+
+/* Navbar flex-grow-1 positioning */
+[dir="rtl"] .layout-navbar .navbar-nav-right .flex-grow-1 {
+    order: 1;
+}
+
+/* Navbar nav items container */
+[dir="rtl"] .layout-navbar .navbar-nav-right ul.navbar-nav {
+    order: 2;
+}
+
+/* Fix navbar alignment items */
+[dir="rtl"] .layout-navbar .align-items-center {
+    align-items: center;
+}
+
+/* Navbar detached container - normal order */
+[dir="rtl"] .layout-navbar.navbar-detached .container-xxl {
+    flex-direction: row;
+    display: flex;
+}
+
+/* Ensure navbar nav items are properly aligned - normal order */
+[dir="rtl"] .layout-navbar .navbar-nav.align-items-center {
+    flex-direction: row;
+}
+
+/* App brand in sidebar - ensure proper positioning for RTL */
+[dir="rtl"] .layout-menu .app-brand {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* App brand link positioning - on the left in RTL */
+[dir="rtl"] .layout-menu .app-brand .app-brand-link {
+    flex: 1;
+}
+
+/* Menu toggle link in app brand - on the right in RTL (mirror of left in English) */
+[dir="rtl"] .layout-menu .app-brand .layout-menu-toggle.menu-link {
+    margin-right: 0 !important;
+    margin-left: auto !important;
+}
+
+/* Ensure English (LTR) toggle button works correctly - explicit rule */
+html:not([dir="rtl"]) .menu .app-brand .layout-menu-toggle,
+html[dir="ltr"] .menu .app-brand .layout-menu-toggle {
+    /* Ensure core.css styles are not overridden */
+    position: absolute !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    z-index: 3 !important;
+}
+
+/* Menu toggle icon in sidebar - position on the left edge (north) of sidebar in RTL */
+/* Note: We don't override position:absolute from core.css, only adjust positioning */
+[dir="rtl"] .menu .app-brand .layout-menu-toggle {
+    /* Keep position: absolute from core.css, position on the left edge (north) in RTL */
+    inset-inline-start: -1.5rem !important;
+    inset-inline-end: auto !important;
+    left: -1rem !important;
+    right: auto !important;
+    /* Ensure it's still clickable */
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    z-index: 3 !important;
+}
+
+/* Menu toggle icon rotation in RTL */
+[dir="rtl"] .layout-menu-hover.layout-menu-collapsed .layout-menu .layout-menu-toggle i {
+    transform: rotate(0deg) !important;
+}
+
+/* Content wrapper alignment */
+[dir="rtl"] .content-wrapper {
+    direction: rtl;
+}
+
+/* Container alignment */
+[dir="rtl"] .container-xxl,
+[dir="rtl"] .container-fluid,
+[dir="rtl"] .container {
+    direction: rtl;
+}
+
+/* Fix for layout-page margin in RTL */
+[dir="rtl"] .layout-page {
+    direction: rtl;
+}
+
+/* Navbar direction already set above */
+
+/* App brand in sidebar */
+[dir="rtl"] .app-brand {
+    direction: rtl;
+    text-align: right;
+}
+
+[dir="rtl"] .app-brand-link {
+    direction: rtl;
+}
+
+/* Menu inner */
+[dir="rtl"] .menu-inner {
+    direction: rtl;
+    text-align: right;
+}
+
+/* Menu items alignment */
+[dir="rtl"] .menu-item {
+    direction: rtl;
+}
+
+/* Menu sub items */
+[dir="rtl"] .menu-sub {
+    direction: rtl;
+    text-align: right;
+}
+
+/* Fix for overlay position in RTL */
+[dir="rtl"] .layout-overlay {
+    right: 0;
+    left: 0;
+}
+
+/* Content footer alignment */
+[dir="rtl"] .content-footer {
+    direction: rtl;
+    text-align: right;
+}
+
+/* ============================================
+   Navbar Dropdowns - Optimize Width
+   ============================================ */
+
+/* ============================================
+   Language Dropdown - Centered positioning
+   ============================================ */
+
+.navbar-dropdown.dropdown-language {
+    position: relative;
+}
+
+.navbar-dropdown.dropdown-language .dropdown-menu,
+.navbar-dropdown.dropdown-language .dropdown-menu.dropdown-menu-end,
+[dir="rtl"] .navbar-dropdown.dropdown-language .dropdown-menu,
+[dir="rtl"] .navbar-dropdown.dropdown-language .dropdown-menu.dropdown-menu-end,
+.navbar-dropdown.dropdown-language .dropdown-menu[data-bs-popper],
+.navbar-dropdown.dropdown-language .dropdown-menu.dropdown-menu-end[data-bs-popper] {
+    position: absolute !important;
+    top: calc(100% + 0.25rem) !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    margin: 0 !important;
+    padding: 0.25rem 0 !important;
+    min-width: 160px !important;
+    width: auto !important;
+    max-width: calc(100vw - 2rem) !important;
+    border-radius: 0.5rem !important;
+    box-shadow: var(--bs-box-shadow-lg, 0 0.5rem 1rem rgba(0, 0, 0, 0.15));
+}
+
+/* Mobile - RTL: Keep reasonable width, don't take full page */
+@media (max-width: 576px) {
+    [dir="rtl"] .navbar-dropdown.dropdown-language .dropdown-menu,
+    [dir="rtl"] .navbar-dropdown.dropdown-language .dropdown-menu.dropdown-menu-end,
+    [dir="rtl"] .navbar-dropdown.dropdown-language .dropdown-menu[data-bs-popper] {
+        max-width: calc(100vw - 2rem) !important;
+        min-width: 160px !important;
+        width: auto !important;
+    }
+
+    /* LTR mobile - same fix */
+    html:not([dir="rtl"]) .navbar-dropdown.dropdown-language .dropdown-menu,
+    html[dir="ltr"] .navbar-dropdown.dropdown-language .dropdown-menu {
+        max-width: calc(100vw - 2rem) !important;
+        min-width: 160px !important;
+        width: auto !important;
+    }
+}
+
+/* Language dropdown button - RTL support */
+[dir="rtl"] .navbar-dropdown.dropdown-language .nav-link {
+    direction: rtl;
+}
+
+[dir="rtl"] .navbar-dropdown.dropdown-language .nav-link span {
+    text-align: right;
+}
+
+/* Language dropdown items - Unified for all screens and languages */
+.navbar-dropdown.dropdown-language .dropdown-item,
+[dir="rtl"] .navbar-dropdown.dropdown-language .dropdown-item,
+html:not([dir="rtl"]) .navbar-dropdown.dropdown-language .dropdown-item,
+html[dir="ltr"] .navbar-dropdown.dropdown-language .dropdown-item {
+    padding: 0.5rem 0.75rem !important;
+    font-size: 0.875rem !important;
+    white-space: nowrap !important;
+    min-width: auto !important;
+}
+
+.navbar-dropdown.dropdown-language .dropdown-item i,
+[dir="rtl"] .navbar-dropdown.dropdown-language .dropdown-item i,
+html:not([dir="rtl"]) .navbar-dropdown.dropdown-language .dropdown-item i,
+html[dir="ltr"] .navbar-dropdown.dropdown-language .dropdown-item i {
+    font-size: 0.875rem !important;
+    margin-left: 0.5rem !important;
+    margin-right: 0.5rem !important;
+}
+
+/* Notifications Dropdown - Smaller and responsive */
+.navbar-dropdown.dropdown-notifications .dropdown-menu {
+    width: 18rem !important;
+    max-width: calc(100vw - 2rem) !important;
+    min-width: 240px !important;
+    right: 0 !important;
+    left: auto !important;
+}
+
+@media (max-width: 576px) {
+    .navbar-dropdown.dropdown-notifications .dropdown-menu {
+        width: calc(100vw - 1rem) !important;
+        max-width: calc(100vw - 1rem) !important;
+        min-width: auto !important;
+        right: 0.5rem !important;
+        left: 0.5rem !important;
+    }
+
+    /* Smaller items on mobile */
+    .navbar-dropdown.dropdown-notifications .dropdown-item {
+        padding: 0.5rem 0.75rem !important;
+    }
+
+    .navbar-dropdown.dropdown-notifications .dropdown-notifications-item .d-flex {
+        gap: 0.5rem;
+    }
+
+    .navbar-dropdown.dropdown-notifications .dropdown-notifications-item .flex-shrink-0 {
+        width: 1.75rem;
+        height: 1.75rem;
+    }
+
+    .navbar-dropdown.dropdown-notifications .dropdown-notifications-item .flex-shrink-0 .avatar {
+        width: 1.75rem;
+        height: 1.75rem;
+    }
+
+    .navbar-dropdown.dropdown-notifications .dropdown-notifications-item .flex-shrink-0 .avatar-initial {
+        width: 1.75rem;
+        height: 1.75rem;
+        font-size: 0.6875rem;
+    }
+
+    .navbar-dropdown.dropdown-notifications .dropdown-notifications-item h6 {
+        font-size: 0.75rem !important;
+        margin-bottom: 0.125rem !important;
+    }
+
+    .navbar-dropdown.dropdown-notifications .dropdown-notifications-item p {
+        font-size: 0.6875rem !important;
+        margin-bottom: 0.125rem !important;
+    }
+
+    .navbar-dropdown.dropdown-notifications .dropdown-notifications-item small {
+        font-size: 0.625rem !important;
+    }
+
+    .navbar-dropdown.dropdown-notifications .dropdown-menu-header {
+        padding: 0.5rem 0.75rem !important;
+    }
+
+    .navbar-dropdown.dropdown-notifications .dropdown-menu-header h5 {
+        font-size: 0.8125rem !important;
+    }
+
+    .navbar-dropdown.dropdown-notifications .dropdown-menu-footer .dropdown-item {
+        padding: 0.5rem 0.75rem !important;
+        font-size: 0.75rem !important;
+    }
+}
+
+@media (min-width: 577px) and (max-width: 768px) {
+    .navbar-dropdown.dropdown-notifications .dropdown-menu {
+        width: 16rem !important;
+        max-width: calc(100vw - 2rem) !important;
+        min-width: 240px !important;
+    }
+}
+
+/* RTL: Ensure notifications don't go outside page */
+[dir="rtl"] .navbar-dropdown.dropdown-notifications .dropdown-menu {
+    left: 0 !important;
+    right: auto !important;
+    max-width: calc(100vw - 2rem) !important;
+}
+
+@media (max-width: 576px) {
+    [dir="rtl"] .navbar-dropdown.dropdown-notifications .dropdown-menu {
+        left: 0.5rem !important;
+        right: 0.5rem !important;
+        width: calc(100vw - 1rem) !important;
+        max-width: calc(100vw - 1rem) !important;
+    }
+}
+
+/* Notifications dropdown items - more compact */
+.navbar-dropdown.dropdown-notifications .dropdown-item {
+    padding: 0.625rem 0.875rem !important;
+}
+
+.navbar-dropdown.dropdown-notifications .dropdown-notifications-item .d-flex {
+    gap: 0.625rem;
+}
+
+.navbar-dropdown.dropdown-notifications .dropdown-notifications-item .flex-shrink-0 {
+    width: 2rem;
+    height: 2rem;
+    flex-shrink: 0;
+}
+
+.navbar-dropdown.dropdown-notifications .dropdown-notifications-item .flex-shrink-0 .avatar {
+    width: 2rem;
+    height: 2rem;
+}
+
+.navbar-dropdown.dropdown-notifications .dropdown-notifications-item .flex-shrink-0 .avatar-initial {
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.75rem;
+}
+
+.navbar-dropdown.dropdown-notifications .dropdown-notifications-item h6 {
+    font-size: 0.8125rem !important;
+    margin-bottom: 0.125rem !important;
+    line-height: 1.3;
+}
+
+.navbar-dropdown.dropdown-notifications .dropdown-notifications-item p {
+    font-size: 0.75rem !important;
+    margin-bottom: 0.125rem !important;
+    line-height: 1.4;
+}
+
+.navbar-dropdown.dropdown-notifications .dropdown-notifications-item small {
+    font-size: 0.6875rem !important;
+}
+
+/* Header and footer - more compact */
+.navbar-dropdown.dropdown-notifications .dropdown-menu-header {
+    padding: 0.625rem 0.875rem !important;
+}
+
+.navbar-dropdown.dropdown-notifications .dropdown-menu-header h5 {
+    font-size: 0.875rem !important;
+    margin-bottom: 0 !important;
+}
+
+.navbar-dropdown.dropdown-notifications .dropdown-menu-footer {
+    padding: 0.5rem 0 !important;
+}
+
+.navbar-dropdown.dropdown-notifications .dropdown-menu-footer .dropdown-item {
+    padding: 0.5rem 0.875rem !important;
+    font-size: 0.8125rem !important;
+}
+
+/* User Dropdown - Extra compact size */
+/* Base styles - LTR: align to right */
+.navbar-dropdown.dropdown-user .dropdown-menu,
+html:not([dir="rtl"]) .navbar-dropdown.dropdown-user .dropdown-menu,
+html[dir="ltr"] .navbar-dropdown.dropdown-user .dropdown-menu {
+    min-width: 8rem !important;
+    max-width: 12rem !important;
+    width: auto !important;
+    right: 0 !important;
+    left: auto !important;
+}
+
+/* Base styles - RTL: align to left */
+[dir="rtl"] .navbar-dropdown.dropdown-user .dropdown-menu {
+    min-width: 8rem !important;
+    max-width: 12rem !important;
+    width: auto !important;
+    left: 0 !important;
+    right: auto !important;
+}
+
+@media (max-width: 576px) {
+    /* Mobile - LTR: center or align properly */
+    .navbar-dropdown.dropdown-user .dropdown-menu,
+    html:not([dir="rtl"]) .navbar-dropdown.dropdown-user .dropdown-menu,
+    html[dir="ltr"] .navbar-dropdown.dropdown-user .dropdown-menu {
+        min-width: auto !important;
+        max-width: calc(100vw - 2rem) !important;
+        width: calc(100vw - 2rem) !important;
+        right: 1rem !important;
+        left: 1rem !important;
+    }
+
+    /* Mobile - RTL: center or align properly */
+    [dir="rtl"] .navbar-dropdown.dropdown-user .dropdown-menu {
+        min-width: auto !important;
+        max-width: calc(100vw - 2rem) !important;
+        width: calc(100vw - 2rem) !important;
+        left: 1rem !important;
+        right: 1rem !important;
+    }
+}
+
+.navbar-dropdown.dropdown-user .dropdown-item {
+    padding: 0.5rem 0.625rem !important;
+    font-size: 0.75rem !important;
+}
+
+.navbar-dropdown.dropdown-user .dropdown-item i {
+    font-size: 0.75rem !important;
+    margin-left: 0.5rem !important;
+    margin-right: 0.5rem !important;
+    width: 0.875rem;
+}
+
+.navbar-dropdown.dropdown-user .dropdown-item .d-flex {
+    gap: 0.5rem;
+}
+
+.navbar-dropdown.dropdown-user .dropdown-item .d-flex .flex-shrink-0 {
+    width: 1.75rem;
+    height: 1.75rem;
+}
+
+.navbar-dropdown.dropdown-user .dropdown-item .d-flex .flex-shrink-0 .avatar {
+    width: 1.75rem;
+    height: 1.75rem;
+}
+
+.navbar-dropdown.dropdown-user .dropdown-item .d-flex .flex-shrink-0 .avatar-initial {
+    width: 1.75rem;
+    height: 1.75rem;
+    font-size: 0.6875rem;
+}
+
+.navbar-dropdown.dropdown-user .dropdown-item h6 {
+    font-size: 0.75rem !important;
+    margin-bottom: 0.125rem !important;
+    line-height: 1.2;
+}
+
+.navbar-dropdown.dropdown-user .dropdown-item small {
+    font-size: 0.625rem !important;
+    line-height: 1.2;
+}
+
+/* User dropdown divider - smaller */
+.navbar-dropdown.dropdown-user .dropdown-divider {
+    margin: 0.375rem 0 !important;
+}
+
+/* Dropdown header - compact */
+.navbar-dropdown .dropdown-menu-header {
+    padding: 0.75rem 1rem !important;
+}
+
+.navbar-dropdown .dropdown-menu-header h5 {
+    font-size: 0.875rem !important;
+    margin-bottom: 0 !important;
+}
+
+/* Dropdown footer - compact */
+.navbar-dropdown .dropdown-menu-footer {
+    padding: 0.5rem 0 !important;
+}
+
+.navbar-dropdown .dropdown-menu-footer .dropdown-item {
+    padding: 0.5rem 1rem !important;
+    font-size: 0.875rem !important;
+}
+
+/* RTL specific adjustments for dropdowns */
+/* RTL rules already defined above in User Dropdown section */
+
+/* Ensure dropdowns don't overflow on small screens */
+@media (max-width: 576px) {
+    .navbar-dropdown .dropdown-menu {
+        max-width: calc(100vw - 2rem) !important;
+    }
+
+    [dir="rtl"] .navbar-dropdown .dropdown-menu {
+        max-width: calc(100vw - 2rem) !important;
+    }
+}
+
+/* Tablet adjustments */
+@media (min-width: 577px) and (max-width: 992px) {
+    .navbar-dropdown.dropdown-notifications .dropdown-menu {
+        width: 16rem !important;
+        max-width: calc(100vw - 2rem) !important;
+        min-width: 240px !important;
+    }
+
+    [dir="rtl"] .navbar-dropdown.dropdown-notifications .dropdown-menu {
+        max-width: calc(100vw - 2rem) !important;
+    }
+
+    /* Tablet - LTR: User dropdown */
+    .navbar-dropdown.dropdown-user .dropdown-menu,
+    html:not([dir="rtl"]) .navbar-dropdown.dropdown-user .dropdown-menu,
+    html[dir="ltr"] .navbar-dropdown.dropdown-user .dropdown-menu {
+        min-width: 10rem !important;
+        max-width: 12rem !important;
+        right: 0 !important;
+        left: auto !important;
+    }
+
+    /* Tablet - RTL: User dropdown */
+    [dir="rtl"] .navbar-dropdown.dropdown-user .dropdown-menu {
+        min-width: 10rem !important;
+        max-width: 12rem !important;
+        left: 0 !important;
+        right: auto !important;
+    }
+}
+
+/* Ensure consistent sizing across all languages */
+.navbar-dropdown.dropdown-language .dropdown-item span,
+[dir="rtl"] .navbar-dropdown.dropdown-language .dropdown-item span,
+html:not([dir="rtl"]) .navbar-dropdown.dropdown-language .dropdown-item span,
+html[dir="ltr"] .navbar-dropdown.dropdown-language .dropdown-item span {
+    font-size: 0.875rem !important;
+}
+
+/* All popper positioning already handled in base styles above */
+
+/* Compact scrollable container for notifications */
+.navbar-dropdown.dropdown-notifications .scrollable-container {
+    max-height: 16rem;
+    overflow-y: auto;
+}
+
+@media (max-width: 576px) {
+    .navbar-dropdown.dropdown-notifications .scrollable-container {
+        max-height: 14rem;
+    }
+}
+
+@media (max-height: 600px) {
+    .navbar-dropdown.dropdown-notifications .scrollable-container {
+        max-height: 12rem;
+    }
+}
+
+@media (max-width: 576px) and (max-height: 600px) {
+    .navbar-dropdown.dropdown-notifications .scrollable-container {
+        max-height: 10rem;
+    }
+}
+

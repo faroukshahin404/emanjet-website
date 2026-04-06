@@ -122,6 +122,7 @@ function getSeatInfo($seat_id, $from_id, $to_id, $runTrip_id, $type)
 
 
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Schema;
 
 function extractTranslations()
 {
@@ -182,5 +183,134 @@ if (!function_exists('render_stars')) {
         }
 
         return $starsHtml;
+    }
+}
+
+if (!function_exists('admin_dashboard_setting')) {
+    /**
+     * Get a dashboard (admin UI) setting with safe fallback when table is missing.
+     */
+    function admin_dashboard_setting(string $key, $default = null)
+    {
+        if (! Schema::hasTable('dash_setting')) {
+            return $default;
+        }
+
+        return \App\Models\DashSetting::get($key, $default);
+    }
+}
+
+if (!function_exists('getCurrentLocale')) {
+    function getCurrentLocale(): string
+    {
+        return app()->getLocale();
+    }
+}
+
+if (!function_exists('getDirection')) {
+    function getDirection(): string
+    {
+        return getCurrentLocale() === 'ar' ? 'rtl' : 'ltr';
+    }
+}
+
+if (!function_exists('isRTL')) {
+    function isRTL(): bool
+    {
+        return getDirection() === 'rtl';
+    }
+}
+
+if (!function_exists('dashboard_setting')) {
+    function dashboard_setting(string $key, $default = null)
+    {
+        return admin_dashboard_setting($key, $default);
+    }
+}
+
+if (!function_exists('dashboard_logo')) {
+    function dashboard_logo(string $type = 'sidebar'): string
+    {
+        $key = "logo.{$type}";
+        $logo = dashboard_setting($key, 'img/brand/logo.svg');
+
+        if (is_string($logo) && str_starts_with($logo, 'img/')) {
+            return asset($logo);
+        }
+
+        if (is_string($logo) && $logo !== '') {
+            return \Illuminate\Support\Facades\Storage::disk('public')->url($logo);
+        }
+
+        return asset('img/brand/logo.svg');
+    }
+}
+
+if (!function_exists('dashboard_favicon')) {
+    function dashboard_favicon(): string
+    {
+        $favicon = dashboard_setting('favicon', 'img/brand/logo.svg');
+
+        if (is_string($favicon) && str_starts_with($favicon, 'img/')) {
+            return asset($favicon);
+        }
+
+        if (is_string($favicon) && $favicon !== '') {
+            return \Illuminate\Support\Facades\Storage::disk('public')->url($favicon);
+        }
+
+        return asset('img/brand/logo.svg');
+    }
+}
+
+if (!function_exists('dashboard_project_name')) {
+    function dashboard_project_name(): string
+    {
+        return (string) dashboard_setting('project_name', config('app.name', 'Laravel'));
+    }
+}
+
+if (!function_exists('dashboard_copyright_link')) {
+    function dashboard_copyright_link(): string
+    {
+        return (string) dashboard_setting('copyright.link', (string) config('app.url', '#'));
+    }
+}
+
+if (!function_exists('dashboard_copyright_text')) {
+    function dashboard_copyright_text(): string
+    {
+        return (string) dashboard_setting('copyright.text', config('app.name', 'Laravel'));
+    }
+}
+
+if (!function_exists('dashboard_color')) {
+    function dashboard_color(string $colorName): string
+    {
+        $defaults = [
+            'primary' => '#696cff',
+            'secondary' => '#8592a3',
+            'success' => '#71dd37',
+            'info' => '#03c3ec',
+            'warning' => '#ffab00',
+            'danger' => '#ff3e1d',
+        ];
+
+        $key = "color.{$colorName}";
+
+        return (string) dashboard_setting($key, $defaults[$colorName] ?? '#696cff');
+    }
+}
+
+if (!function_exists('dashboard_logo_dimensions')) {
+    function dashboard_logo_dimensions(string $type): array
+    {
+        $dimensions = [
+            'sidebar' => ['width' => 98, 'height' => 36, 'description' => 'Preferred: 98x36'],
+            'auth' => ['width' => 200, 'height' => 60, 'description' => 'Preferred: 200x60'],
+            'favicon' => ['width' => 32, 'height' => 32, 'description' => 'Preferred: 32x32'],
+        ];
+
+        return $dimensions[$type] ?? ['width' => 120, 'height' => 36, 'description' => 'Logo'];
     }
 }

@@ -1,35 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ getDirection() }}" data-theme="light">
 
 <head>
-    <link rel="stylesheet" href="{{ asset('assets/css/vendors_css.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/horizontal-menu.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/skin_color.css') }}">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/customize_erp.css') }}">
-    @stack('css')
-    <title>@yield('title', 'Dashboard')</title>
+    @include('admin.layouts.head')
 </head>
 
-<body class="hold-transition light-skin sidebar-mini theme-primary fixed">
+<body>
+    <div class="layout-wrapper layout-content-navbar">
+        <div class="layout-container">
+            @include('admin.layouts.sidebar')
 
-    <div class="wrapper">
-        <div id="loader"></div>
-        @include('admin.layouts.header')
+            <div class="layout-page">
+                @include('admin.layouts.nav')
 
-        @include('admin.layouts.side-bar')
-
-        <div class="content-wrapper">
-            <div class="container-full">
-                <section class="content">
-                    @yield('breadcrumb')
-                    @yield('content')
-                </section>
+                <div class="content-wrapper">
+                    <div class="container-xxl flex-grow-1 container-p-y">
+                        @yield('breadcrumb')
+                        @yield('content')
+                    </div>
+                    @include('admin.layouts.footer')
+                    <div class="content-backdrop fade"></div>
+                </div>
             </div>
         </div>
+        <div class="layout-overlay layout-menu-toggle"></div>
     </div>
-    @include('admin.layouts.footer-scripts')
+
+    @include('admin.layouts.scripts')
+
+    <script>
+        (function() {
+            var savedTheme = localStorage.getItem('planx-theme') || @json(dashboard_setting('theme.default', 'light'));
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        })();
+
+        function togglePlanxTheme() {
+            var current = document.documentElement.getAttribute('data-theme') || 'light';
+            var next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('planx-theme', next);
+            window.dispatchEvent(new CustomEvent('themeChanged', {
+                detail: {
+                    theme: next
+                }
+            }));
+        }
+    </script>
 </body>
 
 </html>

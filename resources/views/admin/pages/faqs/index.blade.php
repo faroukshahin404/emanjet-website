@@ -1,6 +1,6 @@
 @extends('admin.layouts.master')
 
-@section('title', __('Destinations'))
+@section('title', __('FAQs'))
 
 @section('breadcrumb')
     <div class="row">
@@ -13,10 +13,10 @@
                             <li class="breadcrumb-item">
                                 <a href="{{ route('admin.dashboard.index') }}">{{ __('Dashboard') }}</a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ __('Destinations') }}</li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ __('FAQs') }}</li>
                         </ol>
                     </nav>
-                    <a class="btn btn-default" href="{{ route('admin.destinations.create') }}">
+                    <a class="btn btn-default" href="{{ route('admin.faqs.create') }}">
                         {{ __('Create') }}
                         <i class="fa fa-plus-circle ms-1"></i>
                     </a>
@@ -33,8 +33,7 @@
                 <div class="col-12">
                     <div class="box">
                         <div class="box-body">
-                            {{-- @include('admin.pages.destinations.filter') --}}
-                            @include('admin.pages.destinations.list')
+                            @include('admin.pages.faqs.list')
                         </div>
                         <div class="d-flex justify-content-center mt-3">
                             {{ $results->appends(request()->all())->links() }}

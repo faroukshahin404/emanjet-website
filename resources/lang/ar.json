@@ -363,7 +363,7 @@
     "Name En": "الاسم بالإنجليزية",
     "Edit Destination": "تعديل الوجهة",
     "Create Destination": "إنشاء وجهة",
-    "Order": "الطلب",
+    "Order": "الترتيب",
     "Destination": "الوجهة",
     "Select Destination": "اختر الوجهة",
     "SEO Sections for:": "أقسام تحسين محركات البحث لـ:",
@@ -436,5 +436,18 @@
     "OK": "موافق",
     "Download Our App": "تحميل تطبيقنا",
     "Get Exclusive Discounts!": "احصل على خصومات خاصه!",
-    "Download the SuperJet app now and enjoy special offers on your trips": "قم بتنزيل تطبيق سوبر جيت الآن واستمتع بعروض خاصة على رحلاتك"
+    "Download the SuperJet app now and enjoy special offers on your trips": "قم بتنزيل تطبيق سوبر جيت الآن واستمتع بعروض خاصة على رحلاتك",
+    "FAQs": "الأسئلة الشائعة",
+    "Create FAQ": "إضافة سؤال شائع",
+    "Edit FAQ": "تعديل سؤال شائع",
+    "Question": "السؤال",
+    "Answer": "الإجابة",
+    "FAQ created successfully.": "تم إنشاء السؤال بنجاح.",
+    "FAQ updated successfully.": "تم تحديث السؤال بنجاح.",
+    "FAQ deleted successfully.": "تم حذف السؤال بنجاح.",
+    "Are you sure you want to delete this item?": "هل أنت متأكد أنك تريد حذف هذا العنصر؟",
+    "Active": "نشط",
+    "Inactive": "غير نشط",
+    "FAQs default hero description": "تجد هنا إجابات عن استفساراتك حول خدماتنا ووجهاتنا. نحن هنا لمساعدتك في كل ما تحتاجه.",
+    "FAQs hero image alt": "الأسئلة الشائعة"
 }

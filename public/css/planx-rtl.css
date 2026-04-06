@@ -1,0 +1,61 @@
+/**
+ * RTL Specific Fixes for plan-x theme in ov-er
+ * Most things are handled by Bootstrap 5 RTL and logical properties in planx-theme.css
+ */
+
+[dir="rtl"] {
+    font-family: 'Cairo', sans-serif !important;
+}
+
+/* Fix dropdown arrow for selects */
+[dir="rtl"] .form-select {
+    background-position: left 0.75rem center;
+    padding-left: 2.25rem;
+    padding-right: 0.875rem;
+}
+
+/* Sidebar RTL icon margins */
+[dir="rtl"] .menu-icon {
+    margin-inline-end: 0.5rem;
+}
+
+/* Stat card RTL alignment */
+[dir="rtl"] .stat-card {
+    text-align: right;
+}
+
+/* Fix icon margins in dropdowns (RTL) */
+[dir="rtl"] .dropdown-item i,
+[dir="rtl"] .dropdown-item .bx {
+    margin-left: 0.5rem;
+    margin-right: 0;
+}
+
+/* Breadcrumb separator RTL */
+[dir="rtl"] .breadcrumb-item + .breadcrumb-item::before {
+    float: right;
+    padding-left: 0.5rem;
+    padding-right: 0;
+}
+
+/* Nav collapse RTL order fix */
+[dir="rtl"] .navbar-nav {
+    padding-right: 0;
+}
+
+/* Badge position RTL */
+[dir="rtl"] .badge-notifications {
+    inset-inline-end: auto !important;
+    inset-inline-start: -4px !important;
+}
+
+/* Sidebar sub-item dots fix (RTL) */
+[dir="rtl"] .menu-vertical .menu-sub .menu-item > .menu-link::before {
+    left: auto !important;
+    right: 1.5rem !important;
+}
+
+[dir="rtl"] .menu-sub .menu-item > .menu-link {
+    padding-right: 2.5rem !important;
+    padding-left: 1rem !important;
+}

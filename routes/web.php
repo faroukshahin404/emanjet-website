@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DestinationController;
+use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\PageSeoController;
 use App\Http\Controllers\Admin\StationController;
@@ -175,6 +176,7 @@ Route::group([
         Route::resource('/blog-categories', BlogCategoryController::class)->names('blog-categories');
         Route::resource('/blogs', BlogController::class)->names('blogs');
         Route::resource('/destinations', DestinationController::class)->names('destinations');
+        Route::resource('/faqs', FaqController::class)->names('faqs');
     });
 
 
