@@ -326,7 +326,8 @@ body {
     transition: var(--transition);
     height: 100vh !important;
     top: 0;
-    overflow-y: auto !important;
+    /* Let PerfectScrollbar on .menu-inner handle scroll; outer overflow breaks submenu expand */
+    overflow: hidden !important;
     z-index: 1075;
     padding-top: 0.5rem;
 }
@@ -375,10 +376,10 @@ body {
     color: var(--primary) !important;
 }
 
-/* Clear all default Sneat indicators and weird circles */
+/* Clear Sneat rail/dot indicators; keep .menu-toggle::after chevron for submenus */
 .menu-vertical .menu-item.active::before,
-.menu-vertical .menu-item.active > .menu-link::after,
-.menu-vertical .menu-item.open > .menu-link::after {
+.menu-vertical .menu-item.active > .menu-link:not(.menu-toggle)::after,
+.menu-vertical .menu-item.open > .menu-link:not(.menu-toggle)::after {
     display: none !important;
 }
 
@@ -430,8 +431,12 @@ body {
 
 /* Sidebar section headers */
 .menu-header {
-    margin: 1.5rem 0 0.5rem !important;
+    margin: 0.85rem 0 0.35rem !important;
     padding: 0 1.25rem !important;
+}
+
+.menu-inner > .menu-header:first-of-type {
+    margin-top: 0.25rem !important;
 }
 
 .menu-header-text {

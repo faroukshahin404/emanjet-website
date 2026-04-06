@@ -16,16 +16,3 @@
         </div>
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        $(document).ready(function() {
-            if ($.fn.DataTable && $('#example5').length) {
-                $('#example5').DataTable({
-                    paging: false,
-                    info: false,
-                });
-            }
-        });
-    </script>
-@endpush

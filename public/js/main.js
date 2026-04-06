@@ -85,7 +85,9 @@ let layoutMenuEl = document.querySelectorAll('#layout-menu');
 layoutMenuEl.forEach(function (element) {
 menu = new Menu(element, {
 orientation: 'vertical',
-closeChildren: false
+closeChildren: false,
+// Height animation + PerfectScrollbar on .menu-inner often clips submenus; class toggle is reliable
+animate: false
 });
 // Change parameter to true if you want scroll animation
 window.Helpers.scrollToActive((animate = false));

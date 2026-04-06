@@ -5,13 +5,10 @@
 <script src="{{ asset('vendor/js/menu.js') }}"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://unpkg.com/feather-icons"></script>
 
 <script src="{{ asset('js/main.js') }}"></script>
 <script src="{{ asset('js/dashboards-analytics.js') }}"></script>
-<script src="{{ asset('js/pages/data-table.js') }}"></script>
 
 <script>
     window.showAlert = function(type, message, title) {
@@ -35,6 +32,22 @@
     };
 
     document.addEventListener('DOMContentLoaded', function() {
+        var layoutMenu = document.getElementById('layout-menu');
+        if (layoutMenu && layoutMenu.menuInstance && typeof layoutMenu.menuInstance.update === 'function') {
+            layoutMenu.addEventListener('click', function(e) {
+                if (!e.target.closest('.menu-toggle')) {
+                    return;
+                }
+                var inst = layoutMenu.menuInstance;
+                requestAnimationFrame(function() {
+                    inst.update();
+                });
+                setTimeout(function() {
+                    inst.update();
+                }, 200);
+            });
+        }
+
         @if (session('success'))
             showAlert('success', @json(session('success')), @json(__('Success')));
         @endif

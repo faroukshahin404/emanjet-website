@@ -34,8 +34,6 @@
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" />
-
 <link rel="stylesheet" href="{{ asset('vendor/fonts/iconify-icons.css') }}" />
 
 <link rel="stylesheet" href="{{ asset('vendor/css/core.css') }}" />
