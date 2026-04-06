@@ -21,6 +21,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RoundTripController;
 use App\Http\Controllers\RoundTripMobileController;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
@@ -28,10 +29,11 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 // routes/web.php
 
-Route::group([
-    'prefix' => LaravelLocalization::setLocale(),
-    'middleware' => ['localize', 'localeSessionRedirect', 'localeViewPath', 'localizationRedirect'],
-], function () {
+Route::middleware([
+    'setLocaleFromSession',
+    'localize',
+    'localeViewPath',
+])->group(function () {
 
 
     /** OTHER PAGES THAT SHOULD NOT BE LOCALIZED **/
@@ -153,6 +155,14 @@ Route::group([
     });
 
     Route::prefix('admin')->group(function () {
+        Route::get('/', function () {
+            if (Auth::guard('admin')->check()) {
+                return redirect()->route('admin.dashboard.index');
+            }
+
+            return redirect()->route('admin.login');
+        });
+
         Route::get('/login', [\App\Http\Controllers\AdminAuth\LoginController::class, 'showLoginForm'])->name('admin.login');
         Route::post('/login', [LoginController::class, 'login'])->name('admin.login.submit');
     });
@@ -188,16 +198,23 @@ Route::group([
         });
     });
 
-    // routes/web.php
     Route::get('lang/{locale}', function ($locale) {
-        // التأكد من أن اللغة المدخلة مدعومة
-        if (array_key_exists($locale, LaravelLocalization::getSupportedLocales())) {
-            // إعادة التوجيه إلى نفس الصفحة باللغة المحددة
-            return redirect(LaravelLocalization::getLocalizedURL($locale, url()->previous()));
+        if (! array_key_exists($locale, LaravelLocalization::getSupportedLocales())) {
+            abort(404);
         }
 
-        // إذا كانت اللغة غير مدعومة
-        abort(404);
+        session(['locale' => $locale]);
+
+        $previous = url()->previous();
+        $fallback = url('/');
+
+        if (! $previous || $previous === url()->current()) {
+            return redirect($fallback);
+        }
+
+        $target = LaravelLocalization::getNonLocalizedURL($previous);
+
+        return redirect()->to($target ?: $fallback);
     })->name('lang.switch');
 
 

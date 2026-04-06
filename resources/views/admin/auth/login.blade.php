@@ -30,12 +30,18 @@
 
         .login-container {
             width: 60%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         #logo {
             display: block;
             width: 300px;
+            max-width: min(300px, 90vw);
+            height: auto;
             padding: 2rem;
+            margin-inline: auto;
         }
 
         form {
@@ -43,6 +49,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            width: 100%;
             padding: 1rem;
             gap: 0.5rem;
         }

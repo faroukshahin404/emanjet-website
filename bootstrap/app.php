@@ -2,6 +2,8 @@
 
 use App\Http\Middleware\CheckUserNotVerified;
 use App\Http\Middleware\CheckUserVerified;
+use App\Http\Middleware\SetLocaleFromSession;
+use App\Http\Middleware\StripWebLocaleFromRequest;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -14,9 +16,14 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->prepend([
+            StripWebLocaleFromRequest::class,
+        ]);
+
         $middleware->alias([
             'checkUserVerified' => CheckUserVerified::class,
             'checkUserNotVerified' => CheckUserNotVerified::class,
+            'setLocaleFromSession' => SetLocaleFromSession::class,
             'localize' => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRoutes::class,
             'localizationRedirect' => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRedirectFilter::class,
             'localeSessionRedirect' => \Mcamara\LaravelLocalization\Middleware\LocaleSessionRedirect::class,
