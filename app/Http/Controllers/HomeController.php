@@ -253,7 +253,10 @@ class HomeController extends Controller
      */
     private function getSectionContent($pageSeos, string $sectionType, array $default = []): array
     {
-        $section = $pageSeos->where('section_type', $sectionType)->first();
+        $section = $pageSeos
+            ->where('section_type', $sectionType)
+            ->where('status', true)
+            ->first();
         if (!$section) {
             return $default;
         }

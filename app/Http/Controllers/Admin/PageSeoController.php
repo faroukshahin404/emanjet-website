@@ -6,27 +6,38 @@ use App\Http\Controllers\Controller;
 use App\Models\Page;
 use App\Models\PageSeo;
 use App\Services\Admin\AdminListStatistics;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class PageSeoController extends Controller
 {
-
-    public function index($pageId)
+    public function toggleStatus(PageSeo $pageSeo): RedirectResponse
     {
-        $page = Page::with('pageSeos')->findOrFail($pageId);
+        $pageSeo->update(['status' => ! $pageSeo->status]);
+
+        return back()->with(
+            'success',
+            $pageSeo->status
+                ? __('Section is now visible on the website.')
+                : __('Section is now hidden on the website.')
+        );
+    }
+
+    public function index(Page $page)
+    {
+        $page->load('pageSeos');
         $stats = AdminListStatistics::pageSeosForPage($page);
 
         return view('admin.pages.pages-seo.index', compact('page', 'stats'));
     }
 
-    public function edit($id)
+    public function edit(PageSeo $pageSeo)
     {
-        $pageSeo = PageSeo::findOrFail($id);
         return view('admin.pages.pages-seo.edit', compact('pageSeo'));
     }
-    public function update(Request $request, $id)
+
+    public function update(Request $request, PageSeo $pageSeo)
     {
-        $pageSeo = PageSeo::findOrFail($id);
 
         $validatedData = $request->validate([
             'section_type' => 'required|string|max:255',
@@ -60,7 +71,7 @@ class PageSeoController extends Controller
                 }
 
                 // Store new image
-                $filename = 'seo_' . $lang . '_' . $id . '_' . time() . '.' . $file->getClientOriginalExtension();
+                $filename = 'seo_' . $lang . '_' . $pageSeo->id . '_' . time() . '.' . $file->getClientOriginalExtension();
                 $file->move(public_path('uploads/seo-images'), $filename);
                 $contentJson[$lang]['image'] = 'uploads/seo-images/' . $filename;
             }
@@ -83,7 +94,7 @@ class PageSeoController extends Controller
                 // Store new images
                 foreach ($request->file("image_uploads.$lang.images") as $upload) {
                     if ($upload) {
-                        $filename = 'seo_' . $lang . '_' . $id . '_' . time() . '_' . rand(1000, 9999) . '.' . $upload->getClientOriginalExtension();
+                        $filename = 'seo_' . $lang . '_' . $pageSeo->id . '_' . time() . '_' . rand(1000, 9999) . '.' . $upload->getClientOriginalExtension();
                         $upload->move(public_path('uploads/seo-images'), $filename);
                         $contentJson[$lang]['images'][] = 'uploads/seo-images/' . $filename;
                     }
@@ -114,7 +125,7 @@ class PageSeoController extends Controller
         ]);
 
         return redirect()
-            ->route('admin.pages-seo.index', $pageSeo->page_id)
-            ->with('success', 'SEO section updated successfully.');
+            ->route('admin.pages.sections.index', ['page' => $pageSeo->page_id])
+            ->with('success', __('Page section updated successfully.'));
     }
 }

@@ -34,7 +34,7 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label" for="answer_{{ $lang }}">{{ __('Answer') }} ({{ $label }})</label>
-                                        <textarea class="form-control" id="answer_{{ $lang }}" name="answer[{{ $lang }}]" rows="4" required>{{ old("answer.$lang", isset($item) ? ($item->answer[$lang] ?? '') : '') }}</textarea>
+                                        <textarea class="form-control" id="answer_{{ $lang }}" name="answer[{{ $lang }}]" rows="10" required>{{ old("answer.$lang", isset($item) ? ($item->answer[$lang] ?? '') : '') }}</textarea>
                                     </div>
                                 </div>
                             @endforeach

@@ -536,3 +536,9 @@
     color: #a8b5c4;
 }
 
+/* Admin: larger textareas site-wide (skip TinyMCE blog body) */
+.layout-page .content-wrapper textarea.form-control:not(.blog-rich-editor) {
+    min-height: 14rem;
+    resize: vertical;
+}
+

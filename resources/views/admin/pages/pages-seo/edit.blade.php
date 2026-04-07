@@ -1,12 +1,12 @@
 @extends('admin.layouts.master')
 
-@section('title', __('Edit SEO Section'))
+@section('title', __('Edit page section'))
 
 @section('breadcrumb')
     <x-admin.page-header
-        :title="__('Edit SEO Section') . ': ' . ucfirst(str_replace('-', ' ', $pageSeo->section_type))"
-        :parent-url="route('admin.pages-seo.index', $pageSeo->page_id)"
-        :parent-label="__('SEO Sections')" />
+        :title="__('Edit page section') . ': ' . ucfirst(str_replace('-', ' ', $pageSeo->section_type))"
+        :parent-url="route('admin.pages.sections.index', ['page' => $pageSeo->page_id])"
+        :parent-label="__('Page sections')" />
 @endsection
 
 @section('content')
@@ -32,9 +32,23 @@
                 </div>
             @endif
 
-            <form action="{{ route('admin.pages-seo.update', $pageSeo->id) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.page-sections.update', $pageSeo) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
+
+                @if ($pageSeo->section_type === 'hero-section')
+                    <div class="alert alert-light border shadow-sm mb-4" role="note">
+                        <div class="d-flex gap-2 align-items-start">
+                            <i class="bi bi-image flex-shrink-0 fs-5 text-primary" aria-hidden="true"></i>
+                            <div>
+                                <strong class="d-block mb-1">{{ __('Page hero / banner') }}</strong>
+                                <p class="small text-muted mb-0">
+                                    {{ __('This section controls what visitors see at the top of the page (title, description, and the large image). Meta / OG images on the Page edit screen are separate and used for SEO & social previews.') }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                @endif
 
                 <h5 class="fw-semibold mb-3 pb-2 border-bottom">{{ __('Section Settings') }}</h5>
 
@@ -81,34 +95,49 @@
                     @endforeach
                 @endif
 
-                <button type="submit" class="btn btn-primary">{{ __('Update SEO Section') }}</button>
+                <button type="submit" class="btn btn-primary">{{ __('Update section') }}</button>
             </form>
         </div>
     </div>
+@endsection
 
+@push('css')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dropify/dist/css/dropify.min.css">
+@endpush
+
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/dropify/dist/js/dropify.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.add-item-btn').forEach(btn => {
+            if (window.jQuery && jQuery.fn.dropify) {
+                jQuery('input.dropify').dropify({
+                    messages: {
+                        default: @json(__('Drag and drop a file here or click')),
+                        replace: @json(__('Drag and drop or click to replace')),
+                        remove: @json(__('Remove')),
+                        error: @json(__('Something went wrong.'))
+                    }
+                });
+            }
+
+            document.querySelectorAll('.add-item-btn').forEach(function(btn) {
                 btn.addEventListener('click', function() {
-                    const containerId = this.getAttribute('data-container');
-                    const container = document.getElementById(containerId);
-                    const type = this.getAttribute('data-type');
+                    var containerId = this.getAttribute('data-container');
+                    var container = document.getElementById(containerId);
+                    var type = this.getAttribute('data-type');
                     if (!container || type !== 'string') return;
 
-                    const parts = containerId.split('_');
-                    const lang = parts[0];
-                    const key = parts.slice(1, -1).join('_');
+                    var parts = containerId.split('_');
+                    var lang = parts[0];
+                    var key = parts.slice(1, -1).join('_');
 
-                    const div = document.createElement('div');
+                    var div = document.createElement('div');
                     div.className = 'seo-item-container border rounded p-2 mb-2 bg-light';
-                    div.innerHTML = `
-                        <div class="d-flex justify-content-between gap-2 align-items-center">
-                            <input type="text" name="content_json[${lang}][${key}][]"
-                                class="form-control${lang === 'ar' ? ' text-end' : ''}"
-                                ${lang === 'ar' ? 'dir="rtl"' : ''}>
-                            <button type="button" class="btn btn-sm btn-outline-danger remove-item-btn flex-shrink-0">{{ __('Remove') }}</button>
-                        </div>
-                    `;
+                    div.innerHTML =
+                        '<div class="d-flex justify-content-between gap-2 align-items-center">' +
+                        '<input type="text" name="content_json[' + lang + '][' + key + '][]" class="form-control' + (lang === 'ar' ? ' text-end' : '') + '" ' + (lang === 'ar' ? 'dir="rtl"' : '') + '>' +
+                        '<button type="button" class="btn btn-sm btn-outline-danger remove-item-btn flex-shrink-0">{{ __('Remove') }}</button>' +
+                        '</div>';
                     container.appendChild(div);
                     div.querySelector('.remove-item-btn').addEventListener('click', function() {
                         div.remove();
@@ -116,35 +145,35 @@
                 });
             });
 
-            document.querySelectorAll('.add-image-btn').forEach(btn => {
+            document.querySelectorAll('.add-image-btn').forEach(function(btn) {
                 btn.addEventListener('click', function() {
-                    const containerId = this.getAttribute('data-container');
-                    const container = document.getElementById(containerId);
+                    var containerId = this.getAttribute('data-container');
+                    var container = document.getElementById(containerId);
                     if (!container) return;
 
-                    const lang = containerId.split('_')[0];
-                    const fileInput = document.createElement('input');
+                    var lang = containerId.split('_')[0];
+                    var fileInput = document.createElement('input');
                     fileInput.type = 'file';
-                    fileInput.name = `image_uploads[${lang}][images][]`;
+                    fileInput.name = 'image_uploads[' + lang + '][images][]';
                     fileInput.className = 'form-control mt-2';
                     fileInput.accept = 'image/*';
                     container.appendChild(fileInput);
                 });
             });
 
-            document.querySelectorAll('.remove-item-btn').forEach(btn => {
+            document.querySelectorAll('.remove-item-btn').forEach(function(btn) {
                 btn.addEventListener('click', function() {
-                    const root = this.closest('.seo-item-container, .image-item');
+                    var root = this.closest('.seo-item-container, .image-item');
                     if (root) root.remove();
                 });
             });
 
-            document.querySelectorAll('.remove-image-btn').forEach(btn => {
+            document.querySelectorAll('.remove-image-btn').forEach(function(btn) {
                 btn.addEventListener('click', function() {
-                    const root = this.closest('.image-item');
+                    var root = this.closest('.image-item');
                     if (root) root.remove();
                 });
             });
         });
     </script>
-@endsection
+@endpush

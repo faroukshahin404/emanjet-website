@@ -44,7 +44,7 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label" for="content_{{ $lang }}">{{ __('Content') }} ({{ $label }})</label>
-                                        <textarea class="form-control" id="content_{{ $lang }}" name="content[{{ $lang }}]" rows="4">{{ old("content.$lang", isset($item) ? ($item->content[$lang] ?? '') : '') }}</textarea>
+                                        <textarea class="form-control" id="content_{{ $lang }}" name="content[{{ $lang }}]" rows="10">{{ old("content.$lang", isset($item) ? ($item->content[$lang] ?? '') : '') }}</textarea>
                                     </div>
                                 </div>
                             @endforeach
@@ -61,7 +61,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label" for="meta_description_{{ $lang }}">{{ __('Meta Description') }} ({{ $label }})</label>
-                                        <textarea class="form-control" id="meta_description_{{ $lang }}" name="meta_description[{{ $lang }}]" rows="2">{{ old("meta_description.$lang", isset($item) ? ($item->meta_description[$lang] ?? '') : '') }}</textarea>
+                                        <textarea class="form-control" id="meta_description_{{ $lang }}" name="meta_description[{{ $lang }}]" rows="8">{{ old("meta_description.$lang", isset($item) ? ($item->meta_description[$lang] ?? '') : '') }}</textarea>
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label" for="meta_tags_{{ $lang }}">{{ __('Meta Tags') }} ({{ $label }})</label>

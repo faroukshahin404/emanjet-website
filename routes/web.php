@@ -174,10 +174,21 @@ Route::middleware([
         Route::put('/profile/password', [AdminProfileController::class, 'updatePassword'])->name('profile.password.update');
         Route::post('/logout', [\App\Http\Controllers\AdminAuth\LoginController::class, 'logout'])->name('logout');
 
+        Route::get('/pages/{page}/sections', [PageSeoController::class, 'index'])->name('pages.sections.index');
+        Route::get('/page-sections/{pageSeo}/edit', [PageSeoController::class, 'edit'])->name('page-sections.edit');
+        Route::post('/page-sections/{pageSeo}/toggle-status', [PageSeoController::class, 'toggleStatus'])->name('page-sections.toggle-status');
+        Route::put('/page-sections/{pageSeo}', [PageSeoController::class, 'update'])->name('page-sections.update');
+
         Route::resource('/pages', PageController::class)->names('pages');
-        Route::get('/pages-seo/{pageId}', [PageSeoController::class, 'index'])->name('pages-seo.index');
-        Route::get('/pages-seo/{id}/edit', [PageSeoController::class, 'edit'])->name('pages-seo.edit');
-        Route::put('/pages-seo/{id}', [PageSeoController::class, 'update'])->name('pages-seo.update');
+
+        Route::get('/pages-seo/{pageId}', function ($pageId) {
+            return redirect()->route('admin.pages.sections.index', ['page' => $pageId], 301);
+        });
+        Route::get('/pages-seo/{id}/edit', function ($id) {
+            $pageSeo = \App\Models\PageSeo::findOrFail($id);
+
+            return redirect()->route('admin.page-sections.edit', $pageSeo, 301);
+        });
 
         Route::resource('bus-categories', BusCategoryController::class)->names('bus-categories');
 
@@ -204,16 +215,14 @@ Route::middleware([
             Route::get('/arabic-text', [TranslationController::class, 'arabicText'])->name('arabic-text');
             Route::get('/sync-en', function () {
                 return redirect()
-                    ->route('admin.translations.index')
-                    ->withFragment('merge-en')
-                    ->with('info', __('Use the form on this page to merge keys from en.json into ar.json.'));
+                    ->route('admin.dashboard.index')
+                    ->with('info', __('Use POST :url with Accept: application/json, or `php artisan translations:manage`.', ['url' => url('/admin/translations/sync-en')]));
             })->name('sync-en.landing');
             Route::post('/sync-en', [TranslationController::class, 'syncFromEnglish'])->name('sync-en');
             Route::get('/append-scanned', function () {
                 return redirect()
-                    ->route('admin.translations.index')
-                    ->withFragment('append-scanned')
-                    ->with('info', __('Use the form on this page to append scanned keys to ar.json.'));
+                    ->route('admin.dashboard.index')
+                    ->with('info', __('Use POST :url with confirm=1 and Accept: application/json, or `php artisan translations:manage`.', ['url' => url('/admin/translations/append-scanned')]));
             })->name('append-scanned.landing');
             Route::post('/append-scanned', [TranslationController::class, 'appendScanned'])->name('append-scanned');
         });

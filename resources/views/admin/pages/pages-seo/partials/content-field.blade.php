@@ -15,21 +15,16 @@
 
         @if ($key === 'image')
             <div class="image-upload-container">
-                @if (is_string($value) && ! empty($value))
-                    <div class="current-image mb-2">
-                        <img src="{{ asset($value) }}" alt="" class="img-thumbnail" style="max-height: 100px;">
-                        <input type="hidden" name="content_json[{{ $lang }}][{{ $key }}]" value="{{ $value }}">
-                    </div>
-                @endif
                 <input type="file" name="image_uploads[{{ $lang }}][{{ $key }}]" id="content_{{ $lang }}_{{ $key }}"
-                    class="form-control" accept="image/*">
+                    class="dropify" accept="image/*"
+                    data-default-file="{{ is_string($value) && ! empty($value) ? publicMediaUrl($value) : '' }}">
             </div>
         @elseif ($key === 'images')
             <div class="multi-image-container" id="{{ $lang }}_images_container">
                 @if (is_array($value))
                     @foreach ($value as $index => $imagePath)
                         <div class="image-item mb-2">
-                            <img src="{{ asset($imagePath) }}" alt="" class="img-thumbnail" style="max-height: 100px;">
+                            <img src="{{ publicMediaUrl($imagePath) }}" alt="" class="img-thumbnail" style="max-height: 100px;">
                             <input type="hidden" name="content_json[{{ $lang }}][images][]" value="{{ $imagePath }}">
                             <button type="button" class="btn btn-sm btn-outline-danger remove-image-btn ms-1">{{ __('Remove') }}</button>
                         </div>
@@ -62,7 +57,7 @@
             @endif
         @else
             @if (is_string($value) && strlen($value) > 100)
-                <textarea name="content_json[{{ $lang }}][{{ $key }}]" id="content_{{ $lang }}_{{ $key }}" rows="4" class="form-control @if ($lang === 'ar') text-end @endif" @if ($lang === 'ar') dir="rtl" @endif>{{ old('content_json.'.$lang.'.'.$key, $value) }}</textarea>
+                <textarea name="content_json[{{ $lang }}][{{ $key }}]" id="content_{{ $lang }}_{{ $key }}" rows="10" class="form-control @if ($lang === 'ar') text-end @endif" @if ($lang === 'ar') dir="rtl" @endif>{{ old('content_json.'.$lang.'.'.$key, $value) }}</textarea>
             @else
                 <input type="text" name="content_json[{{ $lang }}][{{ $key }}]" id="content_{{ $lang }}_{{ $key }}"
                     value="{{ old('content_json.'.$lang.'.'.$key, $value) }}" class="form-control @if ($lang === 'ar') text-end @endif" @if ($lang === 'ar') dir="rtl" @endif>

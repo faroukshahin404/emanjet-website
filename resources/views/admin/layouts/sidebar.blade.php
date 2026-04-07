@@ -31,20 +31,14 @@
                 <div class="text-truncate">{{ __('Settings') }}</div>
             </a>
         </li>
-        <li class="menu-item {{ request()->routeIs('admin.translations.*') ? 'active' : '' }}">
-            <a href="{{ route('admin.translations.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bi bi-translate"></i>
-                <div class="text-truncate">{{ __('Translation Tools') }}</div>
-            </a>
-        </li>
 
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">{{ __('Content Management') }}</span>
         </li>
-        <li class="menu-item {{ request()->routeIs('admin.pages.*') ? 'active' : '' }}">
+        <li class="menu-item {{ request()->routeIs('admin.pages.*', 'admin.page-sections.*') ? 'active' : '' }}">
             <a href="{{ route('admin.pages.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bi bi-file-text"></i>
-                <div class="text-truncate">{{ __('Pages') }}</div>
+                <div class="text-truncate">{{ __('Page Content') }}</div>
             </a>
         </li>
         <li class="menu-item {{ request()->routeIs('admin.faqs.*') ? 'active' : '' }}">

@@ -1,4 +1,4 @@
-<!-- مقاعد الذهاب -->
+<!-- Outbound seats -->
 <div class="col-md-6 mb-4">
     <h5 class="text-center text-black">{{ __('Departure Seats') }}</h5>
     <div class="d-flex justify-content-center align-items-center gap-3 mb-2">

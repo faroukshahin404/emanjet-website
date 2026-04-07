@@ -1,9 +1,9 @@
 @extends('admin.layouts.master')
 
-@section('title', __('SEO Sections'))
+@section('title', __('Page sections'))
 
 @section('breadcrumb')
-    <x-admin.page-header :title="__('SEO Sections')" :parent-url="route('admin.pages.index')" :parent-label="__('Pages')">
+    <x-admin.page-header :title="__('Page sections')" :parent-url="route('admin.pages.index')" :parent-label="__('Pages')">
         <x-slot name="toolbar">
             <x-admin.index-collapse-toolbar id-prefix="pageSeo" :show-filters="false" />
         </x-slot>
@@ -203,7 +203,7 @@
         <div class="card border-0 shadow-sm">
             <div class="card-body d-flex flex-wrap justify-content-between align-items-center gap-3">
                 <div>
-                    <h5 class="mb-1 fw-bold">{{ __('SEO Sections for:') }}</h5>
+                    <h5 class="mb-1 fw-bold">{{ __('Page sections for:') }}</h5>
                     <p class="mb-0 text-muted">{{ is_array($page->title) ? $page->title['en'] : $page->title }}</p>
                 </div>
                 <a href="{{ route('admin.pages.index') }}" class="btn btn-outline-secondary">
@@ -216,22 +216,32 @@
             @foreach ($page->pageSeos->sortBy('order') as $seo)
                 <div class="col-md-6 col-lg-4">
                     <div class="card border-0 shadow-sm h-100">
-                        <div class="card-header bg-transparent border-bottom py-3">
+                        <div class="card-header bg-transparent border-bottom py-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
                             <h6 class="mb-0 fw-bold">{{ ucfirst(str_replace('-', ' ', $seo->section_type)) }}</h6>
+                            @if ($seo->section_type === 'hero-section')
+                                <span class="badge bg-label-primary text-wrap text-start">{{ __('Hero: title, text & main image') }}</span>
+                            @endif
                         </div>
                         <div class="card-body">
+                            <form action="{{ route('admin.page-sections.toggle-status', $seo) }}" method="POST"
+                                class="mb-3 pb-3 border-bottom">
+                                @csrf
+                                <div class="d-flex align-items-center justify-content-between gap-2 flex-wrap">
+                                    <span class="small fw-semibold text-body mb-0">{{ __('Show on website') }}</span>
+                                    <div class="form-check form-switch form-switch-lg mb-0">
+                                        <input class="form-check-input" type="checkbox" role="switch"
+                                            id="section_visible_{{ $seo->id }}"
+                                            {{ $seo->status ? 'checked' : '' }}
+                                            onchange="this.form.requestSubmit ? this.form.requestSubmit() : this.form.submit();"
+                                            aria-label="{{ __('Toggle section visibility on the website') }}">
+                                    </div>
+                                </div>
+                            </form>
                             <ul class="list-unstyled small text-muted mb-3">
                                 <li>{{ __('Order') }}: {{ $seo->order }}</li>
-                                <li>{{ __('Status') }}:
-                                    @if ($seo->status)
-                                        <span class="badge bg-label-success">{{ __('Active') }}</span>
-                                    @else
-                                        <span class="badge bg-label-secondary">{{ __('Inactive') }}</span>
-                                    @endif
-                                </li>
                                 <li>{{ __('Last Updated') }}: {{ $seo->updated_at->format('M d, Y') }}</li>
                             </ul>
-                            <a href="{{ route('admin.pages-seo.edit', $seo->id) }}" class="btn btn-primary btn-sm">
+                            <a href="{{ route('admin.page-sections.edit', $seo) }}" class="btn btn-primary btn-sm">
                                 <i class="bi bi-pencil me-1"></i>{{ __('Edit Section') }}
                             </a>
                         </div>

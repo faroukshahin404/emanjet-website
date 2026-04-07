@@ -16,7 +16,7 @@
                 </div>
                 <div class="col-md-6">
 
-                    <img class="img-fluid" src="{{ asset($heroSection['image']) }}" alt="about-page">
+                    <img class="img-fluid" src="{{ publicMediaUrl($heroSection['image'] ?? '') }}" alt="about-page">
 
                 </div>
             </div>
@@ -64,7 +64,7 @@
                 <p class="text-muted small">{{ $heroSection['description'] }}</p>
             @endif
             @if (!empty($heroSection['image']))
-                <img src="{{ asset($heroSection['image']) }}" alt="{{ $heroSection['title'] }}"
+                <img src="{{ publicMediaUrl($heroSection['image'] ?? '') }}" alt="{{ $heroSection['title'] }}"
                     class="img-fluid rounded-4 mt-3 shadow-sm" style="max-height: 200px; object-fit: cover; width: 100%;">
             @endif
         </div>

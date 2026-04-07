@@ -40,7 +40,7 @@
                                 <span>{{ __('Logout') }}</span>
                             </button>
                             {{-- <button class="logout" data-bs-toggle="modal" data-bs-target="#cancelModal">
-                                مودال الغاء الحجز
+                                {{ __('Cancel booking modal') }}
                             </button> --}}
                         </div>
 

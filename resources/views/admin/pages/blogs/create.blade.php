@@ -97,7 +97,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="meta_description_{{ $lang }}">{{ __('Meta Description') }} ({{ $label }})</label>
-                                        <textarea class="form-control" id="meta_description_{{ $lang }}" name="meta_description[{{ $lang }}]" rows="2">{{ old("meta_description.$lang", isset($item) ? ($item->meta_description[$lang] ?? '') : '') }}</textarea>
+                                        <textarea class="form-control" id="meta_description_{{ $lang }}" name="meta_description[{{ $lang }}]" rows="8">{{ old("meta_description.$lang", isset($item) ? ($item->meta_description[$lang] ?? '') : '') }}</textarea>
                                     </div>
                                     <div class="form-group">
                                         <label for="meta_tags_{{ $lang }}">{{ __('Meta Tags') }} ({{ $label }})</label>

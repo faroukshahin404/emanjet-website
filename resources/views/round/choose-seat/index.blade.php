@@ -9,7 +9,7 @@
 
                 @include('round.choose-seat.seats')
 
-                <!-- تفاصيل الرحلة والدفع -->
+                <!-- Trip details and payment -->
                 <div class="col-md-12 col-lg-4 mx-auto"
                     style="position: sticky; top: 120px; height: fit-content; z-index: 100;">
 
@@ -123,6 +123,14 @@
     <script>
         const outboundSeatLimitMsg = @json(__('You cannot select more than :num seats for the outbound trip'));
         const returnSeatLimitMsg = @json(__('You cannot select more than :num seats for the return trip'));
+        const seatRowLabel = @json(__('Seat :number'));
+        const egpShort = @json(__('EGP short'));
+        const chooseSeatsLabel = @json(__('Choose Seats'));
+        const bookSeatsTemplate = @json(__('Book :count seats for :total'));
+        const alertTitle = @json(__('Alert!'));
+        const termsMustAcceptMsg = @json(__('You must accept the terms and conditions before completing the booking.'));
+        const pickSeatsMsg = @json(__('You must select :count seats for outbound and :count seats for return.'));
+        const okayLabel = @json(__('Okay'));
 
         document.addEventListener("DOMContentLoaded", function() {
             const bookingForm = document.getElementById('bookingForm');
@@ -139,49 +147,50 @@
             let selectedReturnSeats = [];
 
             function updateUI() {
-                // تحديث جدول مقاعد الذهاب
+                // Update outbound seats table
                 goTableBody.innerHTML = '';
                 selectedGoSeats.forEach(seat => {
                     const row = document.createElement('tr');
-                    row.innerHTML = `<td>مقعد رقم: ${seat.name}</td>
+                    row.innerHTML = `<td>${seatRowLabel.replace(':number', seat.name)}</td>
                     <input type="hidden" class="seat-id" name="go_seat_id[]" value="${seat.id}"/>
-                    <td>${seat.price.toFixed(2)} جنيه</td>`;
+                    <td>${seat.price.toFixed(2)} ${egpShort}</td>`;
                     goTableBody.appendChild(row);
                 });
 
-                // تحديث جدول مقاعد العودة
+                // Update return seats table
                 returnTableBody.innerHTML = '';
                 selectedReturnSeats.forEach(seat => {
                     const row = document.createElement('tr');
-                    row.innerHTML = `<td>مقعد رقم: ${seat.name}</td>
+                    row.innerHTML = `<td>${seatRowLabel.replace(':number', seat.name)}</td>
                     <input type="hidden" class="seat-id" name="round_seat_id[]" value="${seat.id}"/>
-                    <td>${seat.price.toFixed(2)} جنيه</td>`;
+                    <td>${seat.price.toFixed(2)} ${egpShort}</td>`;
                     returnTableBody.appendChild(row);
                 });
 
-                // حساب الإجمالي
+                // Total price
                 total = [...selectedGoSeats, ...selectedReturnSeats].reduce((sum, seat) => sum + seat.price, 0);
 
-                // تحديث عرض السعر
+                // Update price display and pay button
                 if (total > 0 && selectedGoSeats.length === numOfSeats && selectedReturnSeats.length ===
                     numOfSeats) {
-                    totalDisplay.textContent = total.toFixed(2) + ' جنيه';
+                    totalDisplay.textContent = total.toFixed(2) + ' ' + egpShort;
                     btnPay.className = "btn-pay";
+                    const seatCount = selectedGoSeats.length + selectedReturnSeats.length;
                     btnPay.innerHTML = `<div class="d-flex justify-content-around align-items-center">
-                        <p class="m-0">احجز ${selectedGoSeats.length + selectedReturnSeats.length} مقاعد مقابل ${total.toFixed(2)} جنيه</p>
+                        <p class="m-0">${bookSeatsTemplate.replace(':count', String(seatCount)).replace(':total', total.toFixed(2))}</p>
                     </div>`;
                     btnPay.disabled = false;
                 } else {
-                    totalDisplay.textContent = 'اختر المقاعد';
+                    totalDisplay.textContent = chooseSeatsLabel;
                     btnPay.className = "btn-pay-disabled";
                     btnPay.innerHTML = `<div class="d-flex justify-content-around align-items-center">
-                        <p class="m-0">اختر المقاعد</p>
+                        <p class="m-0">${chooseSeatsLabel}</p>
                     </div>`;
                     btnPay.disabled = true;
                 }
             }
 
-            // أحداث مقاعد الذهاب
+            // Outbound seat checkbox handlers
             goCheckboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', function() {
                     const seatName = this.getAttribute('data-name');
@@ -208,7 +217,7 @@
                 });
             });
 
-            // أحداث مقاعد العودة
+            // Return seat checkbox handlers
             returnCheckboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', function() {
                     const seatName = this.getAttribute('data-name');
@@ -248,10 +257,10 @@
     // Check terms and conditions
     if (!termsCheckbox.checked) {
         Swal.fire({
-            title: 'تنبيه!',
-            text: 'يجب الموافقة على الشروط والأحكام قبل إتمام الحجز.',
+            title: alertTitle,
+            text: termsMustAcceptMsg,
             icon: 'warning',
-            confirmButtonText: 'حسناً',
+            confirmButtonText: okayLabel,
             confirmButtonColor: '#3085d6',
             customClass: {
                 title: 'swal-title',
@@ -265,10 +274,10 @@
     // Check seat selection
     else if (selectedGoSeats.length !== numOfSeats || selectedReturnSeats.length !== numOfSeats) {
         Swal.fire({
-            title: 'تنبيه!',
-            text: `يجب اختيار ${numOfSeats} مقاعد للذهاب و ${numOfSeats} مقاعد للعودة`,
+            title: alertTitle,
+            text: pickSeatsMsg.replaceAll(':count', String(numOfSeats)),
             icon: 'warning',
-            confirmButtonText: 'حسناً',
+            confirmButtonText: okayLabel,
             confirmButtonColor: '#3085d6',
             customClass: {
                 title: 'swal-title',

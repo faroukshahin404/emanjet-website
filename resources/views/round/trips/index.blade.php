@@ -241,7 +241,7 @@
                         style="position: sticky; top: 120px; height: fit-content; z-index: 100;">
                         <div class="border rounded-9 px-3">
 
-                            {{-- المدن والمحطات --}}
+                            {{-- Cities and stations --}}
                             <div class="d-flex justify-content-center align-items-center gap-4 my-4" style="direction: rtl;">
                                 <div class="d-flex align-items-center gap-2 travel-direction-box">
                                     <div>
@@ -267,7 +267,7 @@
                                 </div>
                             </div>
 
-                            {{-- التواريخ --}}
+                            {{-- Dates --}}
                             <div class="mb-2">
                                 <p class="m-0 text-black small">
                                     <span class="text-muted">{{ __('Travel Date') }}:</span>
@@ -279,17 +279,17 @@
                                 </p>
                             </div>
 
-                            {{-- في حالة عدم اختيار الرحلات --}}
+                            {{-- When no trips are selected --}}
                             <div id="no-selected-trip" style="text-align: center;">
                                 <i class="fas fa-ticket-alt" style="font-size: 50px;"></i>
                                 <br>
                                 <label>{{ __('Choose Your Trip From the Trip Table') }}</label>
                             </div>
 
-                            {{-- تفاصيل الرحلة بعد الاختيار --}}
+                            {{-- Trip details after selection --}}
                             <div id="trip-details" style="display: none;">
                                 <form action="{{ route('round.choose-seat') }}">
-                                    {{-- بيانات الرحلة --}}
+                                    {{-- Trip payload --}}
                                     <input type="hidden" name="tripType" value="{{ request()->tripType }}" />
                                     <input type="hidden" name="city_from_id" value="{{ request()->city_from_id }}" />
                                     <input type="hidden" name="city_to_id" value="{{ request()->city_to_id }}" />
@@ -307,7 +307,7 @@
                                     <input type="hidden" name="selected_back_trip_id" id="selected-back-trip-id">
                                     <input type="hidden" id="selected-back-trip-price" value="">
 
-                                    {{-- أسعار الرحلات --}}
+                                    {{-- Trip prices --}}
                                     <div class="d-flex justify-content-between align-items-center">
                                         <p class="m-0 text-black">{{ __('Outbound Ticket Price') }}</p>
                                         <p id="selected-go-trip-price-p" class="m-0 text-black">--</p>
@@ -317,7 +317,7 @@
                                         <p id="selected-back-trip-price-p" class="m-0 text-black">--</p>
                                     </div>
 
-                                    {{-- عدد التذاكر --}}
+                                    {{-- Ticket count --}}
                                     <div class="d-flex justify-content-between align-items-center">
                                         <p class="m-0 text-black">{{ __('Number of Travelers') }}</p>
                                         <p class="m-0 text-black">{{ request()->seats }} {{ __('Tickets') }}</p>
@@ -325,13 +325,13 @@
 
                                     <hr>
 
-                                    {{-- الإجمالي --}}
+                                    {{-- Total --}}
                                     <div class="d-flex justify-content-between align-items-center">
                                         <p class="m-0 text-black">{{ __('Total') }}</p>
                                         <p id="total-p" class="m-0 text-black">-- {{ __('EGP') }}</p>
                                     </div>
 
-                                    {{-- زر الحجز --}}
+                                    {{-- Book button --}}
                                     <div class="mt-4 pb-4 d-flex justify-content-center">
                                         <button class="reserve-btn">{{ __('Book') }} {{ request()->seats }}
                                             {{ __('Seat') }}</button>

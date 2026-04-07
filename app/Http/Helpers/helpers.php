@@ -61,9 +61,24 @@ function payment_status($status)
     return __('Payment failed');
 }
 
+if (! function_exists('publicMediaUrl')) {
+    /**
+     * Build a public URL for CMS media: pass through http(s) URLs; otherwise use asset() for app-relative paths.
+     */
+    function publicMediaUrl(?string $path): string
+    {
+        if ($path === null || $path === '') {
+            return '';
+        }
 
+        $path = trim($path);
+        if (preg_match('#^https?://#i', $path)) {
+            return $path;
+        }
 
-
+        return asset($path);
+    }
+}
 
 
 if (!function_exists('getSeoData')) {

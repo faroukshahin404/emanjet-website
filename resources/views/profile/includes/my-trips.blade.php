@@ -89,17 +89,17 @@
 
                     {{-- <div class="d-flex justify-content-center gap-3 align-items-center mt-4">
             <div>
-                <span class="text-black">تعديل والغاء الحجز يتطلب رسوم 10 جنيه</span>
+                <span class="text-black">{{ __('Modifying and cancelling a booking requires a fee of 10 EGP') }}</span>
             </div>
             <div>
                 <button class="btn-reserve">
-                    تعديل الحجز
+                    {{ __('Modify booking') }}
                     <i class="fas fa-pen-to-square"></i>
                 </button>
             </div>
             <div>
                 <button class="btn-reserve btn-cancel">
-                    الغاء الحجز
+                    {{ __('Cancel booking') }}
                     <i class="fas fa-pen-to-square"></i>
                 </button>
             </div>
@@ -187,17 +187,17 @@
                     {{--
                 <div class="d-flex justify-content-center gap-3 align-items-center mt-4">
                     <div>
-                        <span class="text-black">تعديل والغاء الحجز يتطلب رسوم 10 جنيه</span>
+                        <span class="text-black">{{ __('Modifying and cancelling a booking requires a fee of 10 EGP') }}</span>
                     </div>
                     <div>
                         <button class="btn-reserve">
-                            تعديل الحجز
+                            {{ __('Modify booking') }}
                             <i class="fas fa-pen-to-square"></i>
                         </button>
                     </div>
                     <div>
                         <button class="btn-reserve btn-cancel">
-                            الغاء الحجز
+                            {{ __('Cancel booking') }}
                             <i class="fas fa-pen-to-square"></i>
                         </button>
                     </div>

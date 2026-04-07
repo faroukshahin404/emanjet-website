@@ -117,7 +117,7 @@
                         <div>
                             <a href="edit-tickets.html">
                                 <button class="btn btn-success rounded-6">
-                                    <span>تعديل</span>
+                                    <span>{{ __('Edit') }}</span>
                                     <i class="fas fa-pen-to-square mx-1"></i>
                                 </button>
                             </a>
@@ -125,7 +125,7 @@
                         <div>
                             <a href="cancel-tickets.html">
                                 <button class="btn btn-outline-danger rounded-6">
-                                    <span>الغاء</span>
+                                    <span>{{ __('Cancel') }}</span>
                                     <i class="fas fa-xmark mx-1"></i>
                                 </button>
                             </a>
@@ -140,7 +140,7 @@
 @if ($tickets->where('is_past', true)->count() > 0)
     <div class="mt-3">
         <h2 class="text-black">
-            التذاكر الأخيرة
+            {{ __('Recent Tickets') }}
         </h2>
     </div>
 
@@ -182,7 +182,7 @@
                     {{-- <div class="mb-2 d-flex justify-content-end align-items-center gap-2">
                         <div>
                             <button class="btn btn-main rounded-6">
-                                <span>اعادة حجز</span>
+                                <span>{{ __('Rebook') }}</span>
                                 <i class="fa-solid fa-arrows-rotate mx-1"></i>
                             </button>
                         </div>

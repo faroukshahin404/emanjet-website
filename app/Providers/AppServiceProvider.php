@@ -26,16 +26,16 @@ class AppServiceProvider extends ServiceProvider
 
         view()->composer('*', function ($view) {
             $generalPage = Page::where('slug', 'general')->first();
-            $generalPageSeos = $generalPage->pageSeos;
-            $contactUs = $generalPageSeos->where('section_type', 'contact-us')->first();
-            $socialMedia = $generalPageSeos->where('section_type', 'social-media')->first();
+            $generalPageSeos = $generalPage ? $generalPage->pageSeos : collect();
+            $contactUs = $generalPageSeos->where('section_type', 'contact-us')->where('status', true)->first();
+            $socialMedia = $generalPageSeos->where('section_type', 'social-media')->where('status', true)->first();
             $apps = $this->appLinksFromDashSettings();
             $pageSeo = $view->getData()['seo'] ?? null;
-            $generalSeo = getSeoData($generalPage->first());
+            $generalSeo = $generalPage ? getSeoData($generalPage->toArray()) : [];
             $seo = isset($pageSeo) ? $pageSeo : $generalSeo;
             $view->with([
-                'contactUs' => $contactUs->translated_content_json,
-                'socialMedia' => $socialMedia->translated_content_json,
+                'contactUs' => $contactUs?->translated_content_json ?? [],
+                'socialMedia' => $socialMedia?->translated_content_json ?? [],
                 'apps' => $apps,
                 'seo' => $seo,
             ]);

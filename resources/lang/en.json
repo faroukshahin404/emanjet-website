@@ -108,5 +108,18 @@
     "Outbound trip": "Outbound trip",
     "Total seats": "Total seats",
     ":count outbound seats": ":count outbound seats",
-    ":count return seats": ":count return seats"
+    ":count return seats": ":count return seats",
+    "Alert!": "Alert!",
+    "Book :count seats for :total": "Book :count seats for :total EGP",
+    "EGP short": "EGP",
+    "Okay": "Okay",
+    "Recent Tickets": "Recent Tickets",
+    "Seat :number": "Seat No. :number",
+    "You must accept the terms and conditions before completing the booking.": "You must accept the terms and conditions before completing the booking.",
+    "You must select :count seats for outbound and :count seats for return.": "You must select :count seats for outbound and :count seats for return.",
+    "Rebook": "Rebook",
+    "Modifying and cancelling a booking requires a fee of 10 EGP": "Modifying and cancelling a booking requires a fee of 10 EGP",
+    "Modify booking": "Modify booking",
+    "Cancel booking": "Cancel booking",
+    "Cancel booking modal": "Cancel booking modal"
 }

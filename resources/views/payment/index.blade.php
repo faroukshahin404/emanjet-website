@@ -38,7 +38,7 @@
             max-height: 100px;
             overflow-y: auto;
             padding-right: 10px;
-            /* عشان يظهر السكرول بشكل لطيف */
+            /* Smoother scrollbar appearance in this panel */
         }
 
         .agree-section {

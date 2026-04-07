@@ -4,7 +4,7 @@
     position: relative;
 }
 .input-wrapper input {
-    padding-inline-end: 40px; /* بدل padding-right علشان يدعم RTL و LTR تلقائي */
+    padding-inline-end: 40px; /* Uses logical property for RTL/LTR */
 }
 .input-wrapper .toggle-password {
     position: absolute;
@@ -14,13 +14,13 @@
     color: #6c757d;
 }
 
-/* لما تكون الصفحة RTL (عربي) */
+/* When the page is RTL (Arabic) */
 html:dir(rtl) .input-wrapper .toggle-password {
     left: 10px;
     right: auto;
 }
 
-/* لما تكون الصفحة LTR (إنجليزي) */
+/* When the page is LTR (English) */
 html:dir(ltr) .input-wrapper .toggle-password {
     right: 10px;
     left: auto;
@@ -39,7 +39,7 @@ html:dir(ltr) .input-wrapper .toggle-password {
             <div class="col-md-8 border rounded-5 px-4 py-4 bg-white shadow-sm">
 
                 <div class="row">
-                    <!-- الاسم بالكامل -->
+                    <!-- Full name -->
                     <div class="col-md-6 mb-3">
                         <label class="text-black mb-2" for="name">
                             <i class="fa fa-user text-black me-1"></i> {{ __('Full Name') }}
@@ -48,7 +48,7 @@ html:dir(ltr) .input-wrapper .toggle-password {
                             placeholder="{{ __('Full Name') }}" value="{{ old('name', auth()->user()->name) }}">
                     </div>
 
-                    <!-- رقم الهاتف -->
+                    <!-- Phone number -->
                     <div class="col-md-6 mb-3">
                         <label class="text-black mb-2" for="mobile">
                             <i class="fa fa-phone text-black me-1"></i> {{ __('Phone Number') }}
@@ -57,7 +57,7 @@ html:dir(ltr) .input-wrapper .toggle-password {
                             placeholder="01*******" value="{{ old('mobile', auth()->user()->mobile) }}">
                     </div>
 
-                    <!-- النوع -->
+                    <!-- Gender -->
                     <div class="col-md-6 mb-3">
                         <label class="text-black mb-2" for="gender">
                             <i class="fa-solid fa-mars text-black me-1"></i> {{ __('Gender (Optional)') }}
@@ -73,7 +73,7 @@ html:dir(ltr) .input-wrapper .toggle-password {
                         </select>
                     </div>
 
-                    <!-- تاريخ الميلاد -->
+                    <!-- Birth date -->
                     <div class="col-md-6 mb-3">
                         <label class="text-black mb-2" for="birthdate">
                             <i class="fa fa-calendar text-black me-1"></i> {{ __('Birth Date (Optional)') }}

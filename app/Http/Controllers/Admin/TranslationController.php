@@ -7,10 +7,9 @@ use App\Services\TranslationScanService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 
 /**
- * Admin translation utilities: scan project strings vs ar.json, list Arabic-in-code keys, merge tools.
+ * Admin translation utilities: JSON APIs to scan project strings vs ar.json, list Arabic-in-code keys, merge tools.
  */
 class TranslationController extends Controller
 {
@@ -19,24 +18,22 @@ class TranslationController extends Controller
     ) {}
 
     /**
-     * HTML hub: Arabic keys report + forms for POST actions.
+     * GET /admin/translations — JSON index of available endpoints (no HTML UI).
      */
-    public function index(): View
+    public function index(): JsonResponse
     {
-        set_time_limit(300);
-
-        $arabicKeys = $this->scanner->findArabicScriptKeysInProject();
-        $arabicLocations = $this->scanner->findArabicScriptKeysWithLocations();
-        $hardcodedArabicLines = $this->scanner->findHardcodedArabicLines(false);
-        $hardcodedArabicTotal = count($hardcodedArabicLines);
-        $hardcodedArabicPreview = array_slice($hardcodedArabicLines, 0, 500);
-
-        return view('admin.pages.translations.index', [
-            'arabicKeys' => $arabicKeys,
-            'arabicLocations' => $arabicLocations,
-            'hardcodedArabicPreview' => $hardcodedArabicPreview,
-            'hardcodedArabicTotal' => $hardcodedArabicTotal,
-            'hardcodedArabicTruncated' => $hardcodedArabicTotal > 500,
+        return response()->json([
+            'message' => 'Translation tools are JSON/CLI only. Send Accept: application/json on POST to receive JSON.',
+            'get' => [
+                'scan' => route('admin.translations.scan'),
+                'arabic_keys' => route('admin.translations.arabic-keys'),
+                'arabic_text' => route('admin.translations.arabic-text'),
+            ],
+            'post' => [
+                'sync_en' => route('admin.translations.sync-en'),
+                'append_scanned' => route('admin.translations.append-scanned'),
+            ],
+            'cli' => 'php artisan translations:manage',
         ]);
     }
 
@@ -111,7 +108,7 @@ class TranslationController extends Controller
         }
 
         return redirect()
-            ->route('admin.translations.index')
+            ->route('admin.dashboard.index')
             ->with('success', __('Merged :count keys from en.json into ar.json.', ['count' => $result['added']]));
     }
 
@@ -128,9 +125,8 @@ class TranslationController extends Controller
             }
 
             return redirect()
-                ->route('admin.translations.index')
-                ->withFragment('append-scanned')
-                ->with('warning', __('Submit the form with confirmation to append placeholders to ar.json.'));
+                ->route('admin.dashboard.index')
+                ->with('warning', __('POST with confirm=1 and Accept: application/json to append placeholders to ar.json, or use php artisan translations:manage.'));
         }
 
         $result = $this->scanner->appendScannedMissingUsingKeyAsPlaceholder();
@@ -144,7 +140,7 @@ class TranslationController extends Controller
         }
 
         return redirect()
-            ->route('admin.translations.index')
+            ->route('admin.dashboard.index')
             ->with('success', __('Appended :count placeholder keys to ar.json.', ['count' => $result['added']]));
     }
 
