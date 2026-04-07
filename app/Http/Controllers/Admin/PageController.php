@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Page;
 use App\Services\Admin\AdminListStatistics;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class PageController extends Controller
@@ -73,66 +76,54 @@ class PageController extends Controller
             ]
         ];
 
-        // Process image uploads
+        try {
+            $uploadDirectory = $this->ensurePagesUploadDirectory();
+            $timestamp = now()->timestamp;
 
-        // Handle English image upload
-        if ($request->hasFile('meta_tags_image_en')) {
-            // Delete old file if exists
-            if (isset($page->meta_tags['en']['image']) && !empty($page->meta_tags['en']['image'])) {
-                $oldImagePath = public_path($page->meta_tags['en']['image']);
-                if (file_exists($oldImagePath)) {
-                    unlink($oldImagePath);
-                }
+            if ($request->hasFile('meta_tags_image_en')) {
+                $metaTags['en']['image'] = $this->replaceMetaImage(
+                    file: $request->file('meta_tags_image_en'),
+                    oldRelativePath: $page->meta_tags['en']['image'] ?? null,
+                    uploadDirectory: $uploadDirectory,
+                    filenamePrefix: "page_{$id}_en_{$timestamp}"
+                );
             }
 
-            $file = $request->file('meta_tags_image_en');
-            $filename = 'page_' . $id . '_en_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/pages'), $filename);
-            $metaTags['en']['image'] = 'uploads/pages/' . $filename;
-        }
-
-        if ($request->hasFile('meta_tags_og_image_en')) {
-            // Delete old file if exists
-            if (isset($page->meta_tags['en']['og_image']) && !empty($page->meta_tags['en']['og_image'])) {
-                $oldImagePath = public_path($page->meta_tags['en']['og_image']);
-                if (file_exists($oldImagePath)) {
-                    unlink($oldImagePath);
-                }
+            if ($request->hasFile('meta_tags_og_image_en')) {
+                $metaTags['en']['og_image'] = $this->replaceMetaImage(
+                    file: $request->file('meta_tags_og_image_en'),
+                    oldRelativePath: $page->meta_tags['en']['og_image'] ?? null,
+                    uploadDirectory: $uploadDirectory,
+                    filenamePrefix: "page_{$id}_en_og_{$timestamp}"
+                );
             }
 
-            $file = $request->file('meta_tags_og_image_en');
-            $filename = 'page_' . $id . '_en_og_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/pages'), $filename);
-            $metaTags['en']['og_image'] = 'uploads/pages/' . $filename;
-        }
-
-        if ($request->hasFile('meta_tags_image_ar')) {
-            if (isset($page->meta_tags['ar']['image']) && !empty($page->meta_tags['ar']['image'])) {
-                $oldImagePath = public_path($page->meta_tags['ar']['image']);
-                if (file_exists($oldImagePath)) {
-                    unlink($oldImagePath);
-                }
+            if ($request->hasFile('meta_tags_image_ar')) {
+                $metaTags['ar']['image'] = $this->replaceMetaImage(
+                    file: $request->file('meta_tags_image_ar'),
+                    oldRelativePath: $page->meta_tags['ar']['image'] ?? null,
+                    uploadDirectory: $uploadDirectory,
+                    filenamePrefix: "page_{$id}_ar_{$timestamp}"
+                );
             }
 
-            $file = $request->file('meta_tags_image_ar');
-            $filename = 'page_' . $id . '_ar_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/pages'), $filename);
-            $metaTags['ar']['image'] = 'uploads/pages/' . $filename;
-        }
-
-        if ($request->hasFile('meta_tags_og_image_ar')) {
-            // Delete old file if exists
-            if (isset($page->meta_tags['ar']['og_image']) && !empty($page->meta_tags['ar']['og_image'])) {
-                $oldImagePath = public_path($page->meta_tags['ar']['og_image']);
-                if (file_exists($oldImagePath)) {
-                    unlink($oldImagePath);
-                }
+            if ($request->hasFile('meta_tags_og_image_ar')) {
+                $metaTags['ar']['og_image'] = $this->replaceMetaImage(
+                    file: $request->file('meta_tags_og_image_ar'),
+                    oldRelativePath: $page->meta_tags['ar']['og_image'] ?? null,
+                    uploadDirectory: $uploadDirectory,
+                    filenamePrefix: "page_{$id}_ar_og_{$timestamp}"
+                );
             }
+        } catch (\Throwable $exception) {
+            Log::error('Failed to upload page meta image.', [
+                'page_id' => $id,
+                'message' => $exception->getMessage(),
+            ]);
 
-            $file = $request->file('meta_tags_og_image_ar');
-            $filename = 'page_' . $id . '_ar_og_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/pages'), $filename);
-            $metaTags['ar']['og_image'] = 'uploads/pages/' . $filename;
+            return redirect()->back()
+                ->withInput()
+                ->with('error', __('Unable to upload image. Please check uploads/pages directory permissions.'));
         }
 
         $updateData = [
@@ -157,5 +148,47 @@ class PageController extends Controller
 
         return redirect()->route('admin.pages.index')->with('success', 'Page updated successfully');
     }
-  
+
+    private function ensurePagesUploadDirectory(): string
+    {
+        $directory = public_path('uploads/pages');
+
+        if (!File::exists($directory)) {
+            File::makeDirectory($directory, 0755, true);
+        }
+
+        if (!is_writable($directory)) {
+            throw new \RuntimeException('uploads/pages directory is not writable.');
+        }
+
+        return $directory;
+    }
+
+    private function replaceMetaImage(
+        UploadedFile $file,
+        ?string $oldRelativePath,
+        string $uploadDirectory,
+        string $filenamePrefix
+    ): string {
+        $this->deleteOldImage($oldRelativePath);
+
+        $extension = $file->getClientOriginalExtension();
+        $filename = $filenamePrefix . '.' . $extension;
+        $file->move($uploadDirectory, $filename);
+
+        return 'uploads/pages/' . $filename;
+    }
+
+    private function deleteOldImage(?string $relativePath): void
+    {
+        if (empty($relativePath)) {
+            return;
+        }
+
+        $fullPath = public_path($relativePath);
+        if (File::exists($fullPath)) {
+            File::delete($fullPath);
+        }
+    }
+
 }
