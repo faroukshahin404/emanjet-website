@@ -568,9 +568,23 @@
         let currentTargetInput = null;
         let currentTargetHidden = null;
 
-        const monthsAr = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر",
-            "نوفمبر", "ديسمبر"
-        ];
+        @php
+            $wheelMonthsLocalized = [
+                __('January'),
+                __('February'),
+                __('March'),
+                __('April'),
+                __('May'),
+                __('June'),
+                __('July'),
+                __('August'),
+                __('September'),
+                __('October'),
+                __('November'),
+                __('December'),
+            ];
+        @endphp
+        const monthsLocalized = @json($wheelMonthsLocalized);
         const monthsEn = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
         function initWheelColumns() {
@@ -578,7 +592,7 @@
             const monthCol = document.getElementById('monthColumn');
             const yearCol = document.getElementById('yearColumn');
             const isRTL = document.documentElement.dir === 'rtl';
-            const months = isRTL ? monthsAr : monthsEn;
+            const months = isRTL ? monthsLocalized : monthsEn;
 
             const addSpacers = (col) => {
                 col.innerHTML += '<div class="wheel-item spacer"></div><div class="wheel-item spacer"></div>';

@@ -190,7 +190,7 @@
 
             form.addEventListener('submit', function(e) {
                 if (!termsCheckbox.checked) {
-                    e.preventDefault(); // تمنع الإرسال
+                    e.preventDefault(); // prevent submit
                     Swal.fire({
                         icon: 'warning',
                         title: '{{ __('Warning') }}',

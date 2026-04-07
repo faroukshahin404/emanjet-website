@@ -3,7 +3,7 @@
 @section('mobile-content')
     <div class="d-flex justify-content-between align-items-center">
         <i class="fas fa-arrow-right fs-25 text-black" onclick="window.history.back()"></i>
-        <p class="m-0 fs-25 text-black">ملخص</p>
+        <p class="m-0 fs-25 text-black">{{ __('Summary') }}</p>
         <div></div>
     </div>
 
@@ -35,7 +35,7 @@
         <div class="border rounded-7 p-3">
             <div>
                 <h6 class="text-black">
-                    الاسم
+                    {{ __('Name') }}
                 </h6>
                 <p>
                     {{ auth()->user()->name }}
@@ -43,7 +43,7 @@
             </div>
             <div>
                 <h6 class="text-black">
-                    رقم الهاتف
+                    {{ __('Phone') }}
                 </h6>
                 <p>
                     {{ auth()->user()->mobile }}
@@ -53,7 +53,7 @@
             <!-- Go Trip Details -->
             <div class="summary-circle mt-3">
                 <h6 class="text-black">
-                    رحلة الذهاب
+                    {{ __('Outbound trip') }}
                 </h6>
                 <div class="d-flex align-items-center gap-2">
                     <div class="d-flex flex-column align-items-center">
@@ -68,7 +68,7 @@
                 </div>
                 <div class="mt-2">
                     <h6 class="text-black">
-                        رقم المقعد
+                        {{ __('Seat number') }}
                     </h6>
                     <p>
                         @foreach ($goSeats as $seat)
@@ -82,7 +82,7 @@
             <!-- Back Trip Details -->
             <div class="summary-circle mt-3">
                 <h6 class="text-black">
-                    رحلة العودة
+                    {{ __('Return trip') }}
                 </h6>
                 <div class="d-flex align-items-center gap-2">
                     <div class="d-flex flex-column align-items-center">
@@ -97,7 +97,7 @@
                 </div>
                 <div class="mt-2">
                     <h6 class="text-black">
-                        رقم المقعد
+                        {{ __('Seat number') }}
                     </h6>
                     <p>
                         @foreach ($backSeats as $seat)
@@ -109,7 +109,7 @@
             <hr>
             <div class="mt-2">
                 <h6 class="text-black">
-                    اجمالي المقاعد
+                    {{ __('Total seats') }}
                 </h6>
                 <p>
                     {{ count($goSeats) + count($backSeats) }}
@@ -121,20 +121,20 @@
     <div class="mt-3">
         <div class="border rounded-7 p-3">
             <div class="d-flex justify-content-between align-items-center text-black">
-                <p>تفاصيل الدفع</p>
-                <p>جنية مصري</p>
+                <p>{{ __('Payment details') }}</p>
+                <p>{{ __('EGP') }}</p>
             </div>
             <div class="d-flex justify-content-between align-items-center text-half-gray">
-                <p>{{ count($goSeats) }} مقاعد ذهاب </p>
+                <p>{{ __(':count outbound seats', ['count' => count($goSeats)]) }}</p>
                 <p>{{ array_sum(array_column($goSeats, 'price')) }}</p>
             </div>
             <div class="d-flex justify-content-between align-items-center text-half-gray">
-                <p>{{ count($backSeats) }} مقاعد عودة </p>
+                <p>{{ __(':count return seats', ['count' => count($backSeats)]) }}</p>
                 <p>{{ array_sum(array_column($backSeats, 'price')) }}</p>
             </div>
 
             <div class="d-flex justify-content-between align-items-center text-black">
-                <p>المجموع</p>
+                <p>{{ __('Total') }}</p>
                 <p>{{ array_sum(array_column($goSeats, 'price')) + array_sum(array_column($backSeats, 'price')) }}</p>
             </div>
         </div>
@@ -143,7 +143,7 @@
     <form action="{{ route('round.confirm-booking') }}" method="POST">
         <div class="mt-3">
             <div class="border rounded-8 px-3 py-3 mt-2">
-                <h4 class="text-black">أختر وسيلة الدفع</h4>
+                <h4 class="text-black">{{ __('Choose Payment Method') }}</h4>
                 <div class="form-check">
                     <input class="form-check-input form-check-input-pay" type="radio" name="payment_method"
                         value="qnb" id="qnb" checked>
@@ -188,7 +188,7 @@
 
 
                 <button type="submit" class="login">
-                    دفع
+                    {{ __('Pay') }}
                 </button>
             </div>
         </div>

@@ -498,7 +498,7 @@
                                                 @php
                                                 $time = \Carbon\Carbon::parse($trip->tripTime);
                                                 $formattedTime = $time->format('h:i');
-                                                $meridiem = app()->getLocale() == 'ar' ? ($time->format('a') == 'am' ? 'ص' : 'م') : $time->format('a');
+                                                $meridiem = strtolower($time->format('a')) === 'am' ? __('Time AM') : __('Time PM');
                                             @endphp
 
                                             <h6>{{ $formattedTime }} {{ $meridiem }}</h6>
@@ -711,6 +711,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const chooseButtons = document.querySelectorAll('.trip-choose-btn');
+            const egpLabel = @json(__('EGP'));
 
             chooseButtons.forEach(button => {
                 button.addEventListener('click', function() {
@@ -731,11 +732,10 @@
                     // 5. Set selected trip id in hidden input
                     document.getElementById('selected-trip-id').value = tripId;
                     document.getElementById('selected-trip-price').value = tripPrice;
-                    document.getElementById('selected-trip-price-p').textContent = tripPrice + ' ' +
-                        ' جنيه';
+                    document.getElementById('selected-trip-price-p').textContent = tripPrice + ' ' + egpLabel;
                     var numOfSeats = document.getElementById('num-of-seats').value;
                     document.getElementById('total-p').textContent = (numOfSeats * tripPrice) +
-                        ' ' + ' جنيه';
+                        ' ' + egpLabel;
 
                 });
             });

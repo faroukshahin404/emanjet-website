@@ -5,7 +5,7 @@
         <a href="javascript:history.back()">
             <i class="fas fa-arrow-right fs-25 text-black"></i>
         </a>
-        <p class="m-0 fs-25 text-black">اختر مقعدك</p>
+        <p class="m-0 fs-25 text-black">{{ __('Choose your seat') }}</p>
         <div></div>
     </div>
     @include('mobile.one-way.choose-seat.seat')
@@ -30,10 +30,10 @@
                         <div class="chair-number-pay">
                             <p class="m-0" id="selected-seats-count">0</p>
                         </div>
-                        <p class="m-0 fs-20">احجز الان</p>
+                        <p class="m-0 fs-20">{{ __('Book now') }}</p>
                     </div>
                     <div class="money-account" id="total-price">
-                        0 جنية مصري
+                        0 {{ __('EGP') }}
                     </div>
                 </div>
             </button>
@@ -45,6 +45,8 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        const seatLimitTemplate = @json(__('You cannot select more than :count seats'));
+        const egpLabel = @json(__('EGP'));
         const checkboxes = document.querySelectorAll('.chair-checkbox');
         const selectedSeatsInput = document.getElementById('selected-seats-input');
         const seatsCountElement = document.getElementById('selected-seats-count');
@@ -68,10 +70,10 @@
 
         function showSeatLimitAlert() {
             Swal.fire({
-                title: 'عذراً',
-                text: `لا يمكنك اختيار أكثر من ${maxSeats} مقاعد`,
+                title: @json(__('Sorry')),
+                text: seatLimitTemplate.replace(':count', String(maxSeats)),
                 icon: 'warning',
-                confirmButtonText: 'حسناً',
+                confirmButtonText: @json(__('OK')),
                 confirmButtonColor: '#F3B12B',
                 customClass: {
                     title: 'swal-title',
@@ -113,7 +115,7 @@
                 
                 // Update the UI
                 seatsCountElement.textContent = selectedSeats.length;
-                totalPriceElement.textContent = totalPrice + ' جنية مصري';
+                totalPriceElement.textContent = totalPrice + ' ' + egpLabel;
                 
                 // Update button state
                 updateButtonState();

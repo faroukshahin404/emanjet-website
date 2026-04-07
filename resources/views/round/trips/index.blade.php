@@ -405,7 +405,7 @@
                                                 @php
                                                 $time = \Carbon\Carbon::parse($trip->tripTime);
                                                 $formattedTime = $time->format('h:i');
-                                                $meridiem = app()->getLocale() == 'ar' ? ($time->format('a') == 'am' ? 'ص' : 'م') : $time->format('a');
+                                                $meridiem = strtolower($time->format('a')) === 'am' ? __('Time AM') : __('Time PM');
                                             @endphp
 
                                             <h6>{{ $formattedTime }} {{ $meridiem }}</h6>
@@ -739,43 +739,44 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const chooseButtons = document.querySelectorAll('.trip-choose-btn');
+            const egpLabel = @json(__('EGP'));
 
             chooseButtons.forEach(button => {
                 button.addEventListener('click', function() {
                     const tripType = this.dataset.tripType;
 
-                    // إزالة التحديد من نفس نوع الرحلة فقط
+                    // Clear selection for the same trip type only
                     chooseButtons.forEach(btn => {
                         if (btn.dataset.tripType === tripType) {
                             btn.classList.remove('selected-trip-button');
                         }
                     });
 
-                    // تحديد الرحلة المختارة
+                    // Mark selected trip
                     this.classList.add('selected-trip-button');
 
-                    // جلب البيانات
+                    // Read row data
                     const tripId = this.closest('.col-lg-4').querySelector('.trip-id').value;
                     const tripPrice = this.closest('.col-lg-4').querySelector('.trip-price').value;
 
-                    // عرض التفاصيل
+                    // Show trip details panel
                     document.getElementById('trip-details').style.display = 'block';
                     document.getElementById('no-selected-trip').style.display = 'none';
 
-                    // تخزين القيم حسب نوع الرحلة
+                    // Store values by leg
                     if (tripType === 'go') {
                         document.getElementById('selected-go-trip-id').value = tripId;
                         document.getElementById('selected-go-trip-price').value = tripPrice;
                         document.getElementById('selected-go-trip-price-p').textContent =
-                            tripPrice + ' جنيه';
+                            tripPrice + ' ' + egpLabel;
                     } else {
                         document.getElementById('selected-back-trip-id').value = tripId;
                         document.getElementById('selected-back-trip-price').value = tripPrice;
                         document.getElementById('selected-back-trip-price-p').textContent =
-                            tripPrice + ' جنيه';
+                            tripPrice + ' ' + egpLabel;
                     }
 
-                    // حساب السعر الكلي
+                    // Total price
                     const numOfSeats = document.getElementById('num-of-seats').value || 1;
                     const goPrice = parseFloat(document.getElementById('selected-go-trip-price')
                         .value || 0);
@@ -783,7 +784,7 @@
                         .value || 0);
                     const total = (goPrice + backPrice) * numOfSeats;
 
-                    document.getElementById('total-p').textContent = total + ' جنيه';
+                    document.getElementById('total-p').textContent = total + ' ' + egpLabel;
                 });
             });
         });

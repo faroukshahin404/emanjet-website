@@ -227,13 +227,13 @@
                     <img class="" src="{{ $anyWhereSection['image'] }}" alt="map">
                     <div>
                         <div class="circle-alex"></div>
-                        <div class="title-alex">الاسكندرية</div>
+                        <div class="title-alex">{{ __('Alexandria') }}</div>
                         <div class="circle-cairo"></div>
-                        <div class="title-cairo">القاهرة</div>
+                        <div class="title-cairo">{{ __('Cairo') }}</div>
                         <div class="circle-sharm"></div>
-                        <div class="title-sharm">شرم الشيخ</div>
+                        <div class="title-sharm">{{ __('Sharm El Sheikh') }}</div>
                         <div class="circle-her"></div>
-                        <div class="title-her">الغردقة</div>
+                        <div class="title-her">{{ __('Hurghada') }}</div>
                     </div>
                 </div>
             </div>
@@ -828,7 +828,7 @@
                     dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
                 });
 
-                // إغلاق القائمة عند النقر خارجها
+                // Close dropdown on outside click
                 document.addEventListener('click', function() {
                     dropdown.style.display = 'none';
                 });
@@ -970,7 +970,15 @@
     <!-- stations  -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // عناصر DOM
+            const stationUi = {
+                chooseStation: @json(__('Choose station')),
+                loading: @json(__('Loading...')),
+                backToCities: @json(__('Back to cities')),
+                chooseStationIn: @json(__('Choose station in')),
+                noStationsAvailable: @json(__('No stations available')),
+            };
+
+            // DOM elements
             const fromInput = document.getElementById('fromInput');
             const toInput = document.getElementById('toInput');
             const fromStations = document.getElementById('from-stations');
@@ -1061,7 +1069,7 @@
                     setTimeout(() => this.setAttribute('readonly', true), 200);
                 });
 
-                // إغلاق القوائم عند النقر خارجها
+                // Close dropdowns on outside click
                 document.addEventListener('click', function() {
                     toggleDropdown('from-stations', false);
                     toggleDropdown('from-sub-stations', false);
@@ -1081,22 +1089,22 @@
                 });
             }
 
-            // تهيئة قائمة منسدلة واحدة
+            // Initialize one station dropdown
             async function initDropdown(type, cities) {
                 const mainMenu = document.getElementById(`${type}-stations`);
                 const subMenu = document.getElementById(`${type}-sub-stations`);
 
-                // تفريغ القوائم
+                // Clear menus
                 mainMenu.innerHTML = '';
                 subMenu.innerHTML = '';
 
-                // إضافة عنصر العنوان
+                // Header row
                 const titleItem = document.createElement('li');
                 titleItem.className = 'dropdown-header py-2 px-3';
-                titleItem.textContent = 'اختر المحطة';
+                titleItem.textContent = stationUi.chooseStation;
                 mainMenu.appendChild(titleItem);
 
-                // إضافة المدن الرئيسية
+                // Top-level cities
                 cities.forEach(city => {
                     const item = document.createElement('li');
                     item.className =
@@ -1111,22 +1119,22 @@
                     item.addEventListener('click', async (e) => {
                         e.stopPropagation();
 
-                        // حط ID المدينة في الـ hidden input المناسب
+                        // Set selected city id on hidden input
                         const cityInputId = type === 'from' ? 'city_from_id' : 'city_to_id';
                         document.getElementById(cityInputId).value = city.id;
 
-                        // عرض حالة التحميل
+                        // Loading state
                         const loadingItem = document.createElement('li');
                         loadingItem.className = 'dropdown-item py-2 px-3 text-center';
                         loadingItem.innerHTML =
-                            '<i class="fas fa-spinner fa-spin"></i> جاري التحميل...';
+                            '<i class="fas fa-spinner fa-spin"></i> ' + stationUi.loading;
                         subMenu.innerHTML = '';
                         subMenu.appendChild(loadingItem);
 
                         toggleDropdown(`${type}-stations`, false);
                         toggleDropdown(`${type}-sub-stations`, true);
 
-                        // تحميل المحطات
+                        // Load stations
                         const stations = await loadStations(city.id);
                         setTimeout(() => {
                             populateSubMenu(`${type}-sub-stations`, stations,
@@ -1139,17 +1147,17 @@
                 });
             }
 
-            // تعبئة القائمة الفرعية
+            // Populate sub-menu with stations
             function populateSubMenu(subMenuId, stations, mainMenuId, cityName, type) {
                 const subMenu = document.getElementById(subMenuId);
                 subMenu.innerHTML = '';
 
-                // زر الرجوع
+                // Back to cities
                 const backItem = document.createElement('li');
                 backItem.className = 'dropdown-item back-item d-flex align-items-center py-2 px-3';
                 backItem.innerHTML = `
                 <i class="fas fa-arrow-right me-2"></i>
-                <span class="fw-bold">رجوع للمدن</span>
+                <span class="fw-bold">${stationUi.backToCities}</span>
                 `;
                 backItem.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -1158,17 +1166,17 @@
                 });
                 subMenu.appendChild(backItem);
 
-                // العنوان
+                // Sub-menu title
                 const titleItem = document.createElement('li');
                 titleItem.className = 'dropdown-header py-2 px-3';
-                titleItem.textContent = `اختر محطة في ${cityName}`;
+                titleItem.textContent = stationUi.chooseStationIn + ' ' + cityName;
                 subMenu.appendChild(titleItem);
 
-                // المحطات الفرعية
+                // Station rows
                 if (stations.length === 0) {
                     const noStationsItem = document.createElement('li');
                     noStationsItem.className = 'dropdown-item py-2 px-3 text-muted';
-                    noStationsItem.textContent = 'لا توجد محطات متاحة';
+                    noStationsItem.textContent = stationUi.noStationsAvailable;
                     subMenu.appendChild(noStationsItem);
                 } else {
                     stations.forEach(station => {
@@ -1180,7 +1188,7 @@
                             const hiddenId = subMenuId.includes('from') ? 'station_from_id' :
                                 'station_to_id';
                             document.getElementById(inputId).value = station.name;
-                            document.getElementById(hiddenId).value = station.id; // ✅ حفظ ID المحطة
+                            document.getElementById(hiddenId).value = station.id;
                             toggleDropdown(subMenuId, false);
                         });
                         subMenu.appendChild(item);
@@ -1244,7 +1252,7 @@
                 }
             });
 
-            // تبديل حالة القائمة المنسدلة
+            // Toggle dropdown visibility
             function toggleDropdown(menuId, show) {
                 const menu = document.getElementById(menuId);
                 if (menu) {

@@ -6,7 +6,7 @@
     position: relative;
 }
 .input-wrapper input {
-    padding-inline-end: 40px; /* بدل padding-right علشان يدعم RTL و LTR تلقائي */
+    padding-inline-end: 40px; /* logical inline padding for RTL/LTR */
 }
 .input-wrapper .toggle-password {
     position: absolute;
@@ -16,13 +16,13 @@
     color: #6c757d;
 }
 
-/* لما تكون الصفحة RTL (عربي) */
+/* RTL layout */
 html:dir(rtl) .input-wrapper .toggle-password {
     left: 10px;
     right: auto;
 }
 
-/* لما تكون الصفحة LTR (إنجليزي) */
+/* LTR layout */
 html:dir(ltr) .input-wrapper .toggle-password {
     right: 10px;
     left: auto;
@@ -42,7 +42,7 @@ html:dir(ltr) .input-wrapper .toggle-password {
                     <form action="{{ route('auth.postRegister') }}" method="POST" class="w-75 m-auto d-flex flex-column">
                         @csrf
 
-                        {{-- الاسم --}}
+                        {{-- Name --}}
                         <div class="position-relative mb-3">
                             <i class="fa fa-user position-absolute top-50 translate-middle-y {{ app()->getLocale() == 'ar' ? 'end-0' : 'start-0' }} px-2"></i>
                             <input
@@ -57,7 +57,7 @@ html:dir(ltr) .input-wrapper .toggle-password {
                             >
                         </div>
 
-                        {{-- رقم الهاتف --}}
+                        {{-- Phone --}}
                         <div class="position-relative mb-3">
                             <i class="fa fa-phone position-absolute top-50 translate-middle-y {{ app()->getLocale() == 'ar' ? 'end-0' : 'start-0' }} px-2"></i>
                             <input
@@ -72,7 +72,7 @@ html:dir(ltr) .input-wrapper .toggle-password {
                             >
                         </div>
 
-                       {{-- كلمة المرور --}}
+                       {{-- Password --}}
 <div class="position-relative mb-3 input-wrapper">
     <i class="fa fa-key position-absolute top-50 translate-middle-y {{ app()->getLocale() == 'ar' ? 'end-0' : 'start-0' }} px-2"></i>
     <input
@@ -87,7 +87,7 @@ html:dir(ltr) .input-wrapper .toggle-password {
     <i class="fa fa-eye toggle-password" toggle="#password"></i>
 </div>
 
-{{-- تأكيد كلمة المرور --}}
+{{-- Confirm password --}}
 <div class="position-relative mb-3 input-wrapper">
     <i class="fa fa-key position-absolute top-50 translate-middle-y {{ app()->getLocale() == 'ar' ? 'end-0' : 'start-0' }} px-2"></i>
     <input

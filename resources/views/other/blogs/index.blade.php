@@ -83,13 +83,13 @@
 
     <!-- start trip start here -->
     @php
-        $tripStart = $tripStartSection; // المتغير اللي جاي من الكنترولر
+        $tripStart = $tripStartSection; // from controller
     @endphp
 
     <div class="trip-start my-5 py-5">
         <div class="container">
             <div class="row">
-                <!-- الصور -->
+                <!-- Images -->
                 <div class="col-md-6">
                     <div class="d-flex justify-content-center align-items-end gap-1 flex-lg-row flex-column">
                         <img class="img-1" src="{{asset($tripStart['images'][0]) ?? '' }}" alt="trip">
@@ -102,13 +102,13 @@
                     </div>
                 </div>
 
-                <!-- النصوص -->
+                <!-- Copy -->
                 <div class="col-md-6 trip-start-caption pt-3">
-                    <h2>{{ $tripStart['title'] ?? 'رحلاتك تبدأ هنا' }}</h2>
+                    <h2>{{ $tripStart['title'] ?? __('Your journeys start here') }}</h2>
                     <p>{{ $tripStart['description'] ?? '' }}</p>
 
                     <button onclick="window.location.href='{{ route('home') }}'">
-                        {{ $tripStart['button-text'] ?? 'ابحث عن رحلتك' }}
+                        {{ $tripStart['button-text'] ?? __('Search for your trip') }}
                     </button>
 
                 </div>

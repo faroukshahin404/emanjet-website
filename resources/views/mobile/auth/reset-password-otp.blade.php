@@ -8,13 +8,13 @@
                     <a href="{{ route('auth.login') }}">
                         <i class="fas fa-arrow-right fs-18 text-black"></i>
                     </a>
-                    <p class="m-0 fs-25 text-black">التحقق من رقمك</p>
+                    <p class="m-0 fs-25 text-black">{{ __('Verify your number') }}</p>
                     <div></div>
                 </div>
 
                 <div class="mt-3 text-center">
                     <p class="m-0">
-                        أدخل الرمز الذي أرسلناه إلى رقمك {{ $phone }}
+                        {{ __('Enter the code sent to your number') }} {{ $phone }}
                     </p>
                 </div>
 
@@ -57,14 +57,14 @@
                         </p>
                         <div id="resend-section" class="{{ $remainingTime > 0 ? 'd-none' : '' }}">
                             <p>
-                                لم يصلك الرمز؟
-                                <a class="text-main" href="javascript:void(0)" onclick="resendOtp()">هل تريد إعادة إرساله؟</a>
+                                {{ __('Didn\'t receive the code?') }}
+                                <a class="text-main" href="javascript:void(0)" onclick="resendOtp()">{{ __('Would you like to resend it?') }}</a>
                             </p>
                         </div>
                     </div>
 
                     <div class="form-group mt-4">
-                        <button type="submit" class="btn btn-main w-100 rounded-6">تحقق</button>
+                        <button type="submit" class="btn btn-main w-100 rounded-6">{{ __('Verify') }}</button>
                     </div>
                 </form>
             </div>

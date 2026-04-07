@@ -1,6 +1,4 @@
-@extends('layouts.master')
-
-@section('content')
+{{-- Included from show-reset-password; do not use @extends here --}}
     <!-- start reset password verification -->
     <div class="otp-desktop">
         <div class="container-fluid">
@@ -62,7 +60,6 @@
         </div>
     </div>
     <!-- end reset password verification -->
-@endsection
 
 @push('scripts')
     <script>
@@ -73,30 +70,44 @@
             const initialTime = 120;
             let timeLeft = initialTime;
 
+            const waitPrefix = @json(__('Please wait'));
+            const waitSuffix = @json(__('before resending'));
+            const waitingLabel = @json(__('waiting...'));
+            const resendLabel = @json(__('Would you like to resend it?'));
+
             const startTimer = () => {
                 const interval = setInterval(() => {
                     if (timeLeft > 0) {
                         const minutes = Math.floor(timeLeft / 60);
                         const seconds = timeLeft % 60;
-                        timerElement.textContent =
-                            `يرجى الانتظار ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} قبل إعادة الإرسال`;
-
-                        resendOtpLink.style.pointerEvents = 'none';
-                        resendOtpLink.style.color = '#aaa';
-                        resendOtpLink.textContent = 'جاري الانتظار...';
+                        const clock = minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+                        if (timerElement) {
+                            timerElement.textContent = waitPrefix + ' ' + clock + ' ' + waitSuffix;
+                        }
+                        if (resendOtpLink) {
+                            resendOtpLink.style.pointerEvents = 'none';
+                            resendOtpLink.style.color = '#aaa';
+                            resendOtpLink.textContent = waitingLabel;
+                        }
 
                         timeLeft--;
                     } else {
                         clearInterval(interval);
-                        timerElement.textContent = '';
-                        resendOtpLink.style.pointerEvents = 'auto';
-                        resendOtpLink.style.color = '';
-                        resendOtpLink.textContent = 'هل تريد إعادة إرساله؟';
+                        if (timerElement) {
+                            timerElement.textContent = '';
+                        }
+                        if (resendOtpLink) {
+                            resendOtpLink.style.pointerEvents = 'auto';
+                            resendOtpLink.style.color = '';
+                            resendOtpLink.textContent = resendLabel;
+                        }
                     }
                 }, 1000);
             };
 
-            startTimer();
+            if (timerElement && resendOtpLink) {
+                startTimer();
+            }
 
             const inputs = document.querySelectorAll('.otp-box');
             inputs.forEach((input, index) => {
@@ -134,31 +145,33 @@
                 });
             });
 
-            resendOtpLink.addEventListener('click', function() {
-                fetch("{{ route('auth.resendOtp') }}", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                        },
-                        body: JSON.stringify({
-                            phone: "{{ $phone }}"
+            if (resendOtpLink) {
+                resendOtpLink.addEventListener('click', function() {
+                    fetch("{{ route('auth.resendOtp') }}", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                            },
+                            body: JSON.stringify({
+                                phone: "{{ $phone }}"
+                            })
                         })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            showAlert('success', data.message, @json(__('Success')));
-                            timeLeft = initialTime;
-                            startTimer();
-                        } else {
-                            showAlert('error', data.message, @json(__('Error')));
-                        }
-                    })
-                    .catch(() => {
-                        showAlert('error', @json(__('Error occurred while resending OTP')), @json(__('Error')));
-                    });
-            });
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                showAlert('success', data.message, @json(__('Success')));
+                                timeLeft = initialTime;
+                                startTimer();
+                            } else {
+                                showAlert('error', data.message, @json(__('Error')));
+                            }
+                        })
+                        .catch(() => {
+                            showAlert('error', @json(__('Error occurred while resending OTP')), @json(__('Error')));
+                        });
+                });
+            }
         });
     </script>
 @endpush

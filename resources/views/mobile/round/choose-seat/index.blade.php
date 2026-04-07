@@ -3,7 +3,7 @@
 @section('mobile-content')
     <div class="d-flex justify-content-between align-items-center mb-2">
         <i class="fas fa-arrow-right fs-25 text-black" onclick="window.history.back()"></i>
-        <p class="m-0 fs-25 text-black">اختر مقعدك</p>
+        <p class="m-0 fs-25 text-black">{{ __('Choose your seat') }}</p>
         <div></div>
     </div>
 
@@ -28,7 +28,7 @@
         <div id="scroll-indicator" class="scroll-indicator">
             <div class="scroll-indicator-content">
                 <i class="fas fa-chevron-down"></i>
-                <span>اضغط هنا للانتقال للأسفل</span>
+                <span>{{ __('Tap to scroll down') }}</span>
             </div>
         </div>
 
@@ -39,10 +39,10 @@
                         <div class="chair-number-pay">
                             <p class="m-0" id="selected-seats-count">0</p>
                         </div>
-                        <p class="m-0 fs-20">احجز الان</p>
+                        <p class="m-0 fs-20">{{ __('Book now') }}</p>
                     </div>
                     <div class="money-account" id="total-price">
-                        0 جنية مصري
+                        0 {{ __('EGP') }}
                     </div>
                 </div>
             </button>
@@ -97,6 +97,9 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const outboundLimitTemplate = @json(__('You cannot select more than :count seats for outbound'));
+            const returnLimitTemplate = @json(__('You cannot select more than :count seats for return'));
+            const egpLabel = @json(__('EGP'));
             const checkboxes = document.querySelectorAll('.chair-checkbox');
             const goSeatsContainer = document.getElementById('go-seats-container');
             const backSeatsContainer = document.getElementById('back-seats-container');
@@ -145,10 +148,10 @@
 
             function showSeatLimitAlert(message) {
                 Swal.fire({
-                    title: 'عذراً',
+                    title: @json(__('Sorry')),
                     text: message,
                     icon: 'warning',
-                    confirmButtonText: 'حسناً',
+                    confirmButtonText: @json(__('OK')),
                     confirmButtonColor: '#F3B12B',
                     customClass: {
                         title: 'swal-title',
@@ -191,7 +194,7 @@
                 totalPrice = calculateTotalPrice();
                 
                 seatsCountElement.textContent = totalSelectedSeats;
-                totalPriceElement.textContent = totalPrice + ' جنية مصري';
+                totalPriceElement.textContent = totalPrice + ' ' + egpLabel;
                 
                 updateButtonState();
             }
@@ -207,7 +210,7 @@
                         if (this.checked) {
                             if (goSeats.length >= maxSeats) {
                                 this.checked = false;
-                                showSeatLimitAlert(`لا يمكنك اختيار أكثر من ${maxSeats} مقاعد للذهاب`);
+                                showSeatLimitAlert(outboundLimitTemplate.replace(':count', String(maxSeats)));
                                 return;
                             }
                             const seat = {
@@ -223,7 +226,7 @@
                         if (this.checked) {
                             if (backSeats.length >= maxSeats) {
                                 this.checked = false;
-                                showSeatLimitAlert(`لا يمكنك اختيار أكثر من ${maxSeats} مقاعد للعودة`);
+                                showSeatLimitAlert(returnLimitTemplate.replace(':count', String(maxSeats)));
                                 return;
                             }
                             const seat = {

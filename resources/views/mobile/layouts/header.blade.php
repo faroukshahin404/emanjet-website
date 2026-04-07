@@ -15,18 +15,18 @@
               </div>
               <div class="notifications-dropdown">
                   <div class="notification-header">
-                      <h5>الإشعارات</h5>
+                      <h5>Notifications</h5>
                   </div>
                   <div class="notification-list">
                       <div class="notification-item unread">
-                          <span class="notification-time">لديك رسالة جديدة</span>
+                          <span class="notification-time">You have a new message</span>
                       </div>
                       <div class="notification-item">
-                          <span class="notification-time">تمت الموافقة على طلبك</span>
+                          <span class="notification-time">Your request was approved</span>
                       </div>
                   </div>
                   <div class="notification-footer">
-                      <a href="#">عرض جميع الإشعارات</a>
+                      <a href="#">View all notifications</a>
                   </div>
               </div>
           </div>

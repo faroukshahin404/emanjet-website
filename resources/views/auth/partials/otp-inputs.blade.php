@@ -21,7 +21,7 @@
 </div>
 
 <div class="countdown text-center mt-3" id="timer">
-    <!-- سيتم تحديث العد التنازلي هنا -->
+    <!-- Countdown timer target -->
 </div>
 
 <script>
@@ -31,7 +31,7 @@
         let countdown = calculateRemainingTime();
         let timer;
 
-        // دالة لحساب الوقت المتبقي
+        // Remaining time from session
         function calculateRemainingTime() {
             const expiresAt = new Date('{{ session("otp_expires_at") }}');
             const now = new Date();
@@ -39,7 +39,7 @@
             return Math.max(0, diff);
         }
 
-        // تحديث العد التنازلي
+        // Countdown tick
         function updateTimer() {
             if (countdown > 0) {
                 const minutes = Math.floor(countdown / 60);
@@ -52,7 +52,7 @@
             }
         }
 
-        // بدء العد التنازلي
+        // Start countdown
         updateTimer();
     });
     document.addEventListener('DOMContentLoaded', function () {

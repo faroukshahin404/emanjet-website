@@ -8,13 +8,13 @@
                     <a href="{{ route('auth.login') }}">
                         <i class="fas fa-arrow-right fs-18 text-black"></i>
                     </a>
-                    <p class="m-0 fs-25 text-black">التحقق من رقمك</p>
+                    <p class="m-0 fs-25 text-black">{{ __('Verify your number') }}</p>
                     <div></div>
                 </div>
 
                 <div class="mt-3 text-center">
                     <p class="m-0">
-                        أدخل الرمز الذي أرسلناه إلى رقمك{{ $phone }}
+                        {{ __('Enter the code sent to your number') }}{{ $phone }}
                     </p>
                 </div>
 
@@ -57,35 +57,35 @@
                         </p>
                         <div id="resend-section" class="{{ $remainingTime > 0 ? 'd-none' : '' }}">
                             <p>
-                                لم يصلك الرمز؟
-                                <a class="text-main" href="javascript:void(0)" onclick="resendOtp()">هل تريد إعادة إرساله؟</a>
+                                {{ __('Didn\'t receive the code?') }}
+                                <a class="text-main" href="javascript:void(0)" onclick="resendOtp()">{{ __('Would you like to resend it?') }}</a>
                             </p>
                         </div>
                     </div>
 
                     <div class="form-group mt-3">
-                        <label for="password" class="form-label">كلمة المرور الجديدة</label>
+                        <label for="password" class="form-label">{{ __('New Password') }}</label>
                         <input type="password"
                                class="form-control rounded-6 @error('password') is-invalid @enderror"
                                id="password"
                                name="password"
-                               placeholder="أدخل كلمة المرور الجديدة">
+                               placeholder="{{ __('Enter new password') }}">
                         @error('password')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
 
                     <div class="form-group mt-3">
-                        <label for="password_confirmation" class="form-label">تأكيد كلمة المرور</label>
+                        <label for="password_confirmation" class="form-label">{{ __('Confirm Password') }}</label>
                         <input type="password"
                                class="form-control rounded-6"
                                id="password_confirmation"
                                name="password_confirmation"
-                               placeholder="أدخل كلمة المرور مرة أخرى">
+                               placeholder="{{ __('Re-enter your password') }}">
                     </div>
 
                     <div class="form-group mt-4">
-                        <button type="submit" class="btn btn-main w-100 rounded-6">إعادة تعيين كلمة المرور</button>
+                        <button type="submit" class="btn btn-main w-100 rounded-6">{{ __('Reset Password') }}</button>
                     </div>
 
                 </form>

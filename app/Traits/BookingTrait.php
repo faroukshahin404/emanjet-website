@@ -200,8 +200,8 @@ trait BookingTrait
 
     public function parseAnyDate($input, $formats = ['Y-m-d', 'Y/m/d', 'd-m-Y', 'd/m/Y', 'd-m-Y', 'd/m/Y', 'dmY', 'dmy', 'ymd', 'Ymd'])
     {
-        // Step 1: Normalize Arabic numbers to Western
-        $arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+        // Step 1: Normalize Arabic-Indic digits (U+0660–U+0669) to Western — use codepoints so source stays ASCII-only
+        $arabic = array_map(static fn (int $cp) => mb_chr($cp, 'UTF-8'), range(0x0660, 0x0669));
         $western = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
         $input = str_replace($arabic, $western, $input);
 

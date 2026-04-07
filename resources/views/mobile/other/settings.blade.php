@@ -78,7 +78,7 @@
                 <div class="d-flex justify-content-start align-items-center gap-3 mb-2">
                     <i class="fa-solid fa-language"></i>
                     @if (session('locale') == 'en')
-                        <p class="m-0"> العربية </p>
+                        <p class="m-0">{{ __('Arabic') }}</p>
                     @else
                         <p class="m-0"> English </p>
                     @endif

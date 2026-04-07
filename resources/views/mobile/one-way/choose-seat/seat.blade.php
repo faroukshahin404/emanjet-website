@@ -1,15 +1,15 @@
 <div class="col-md-6 mb-3 chairs">
     <div class="d-flex justify-content-center align-items-center gap-3">
         <div class="d-flex align-items-center gap-2">
-            <span class="chair-label">كرسيك</span>
+            <span class="chair-label">{{ __('Your Seat') }}</span>
             <div class="your-chair"></div>
         </div>
         <div class="d-flex align-items-center gap-2">
-            <span class="chair-label">متاح</span>
+            <span class="chair-label">{{ __('Available') }}</span>
             <div class="available-chair"></div>
         </div>
         <div class="d-flex align-items-center gap-2">
-            <span class="chair-label">محجوز</span>
+            <span class="chair-label">{{ __('Reserved') }}</span>
             <div class="reserved-chair"></div>
         </div>
     </div>

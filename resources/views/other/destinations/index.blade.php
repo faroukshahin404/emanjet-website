@@ -38,7 +38,7 @@
 
     .search-wrapper input[type="search"] {
         width: 100%;
-        padding: 10px 55px 10px 55px; /* تعديل المسافة لزيادة البُعد عن الأيقونات */
+        padding: 10px 55px 10px 55px; /* extra horizontal padding for icons */
         border: 1px solid #ccc;
         border-radius: 30px;
         font-size: 16px;
@@ -48,7 +48,7 @@
         box-sizing: border-box;
     }
 
-    /* إخفاء زر المسح الافتراضي للمتصفح */
+    /* Hide browser default search clear control */
     .search-wrapper input[type="search"]::-webkit-search-cancel-button {
         -webkit-appearance: none;
         appearance: none;
@@ -59,7 +59,7 @@
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
-        left: 20px; /* إبعاد الأيقونة لليسار */
+        left: 20px; /* offset search icon */
         cursor: pointer;
         font-size: 18px;
         color: #555;
@@ -70,18 +70,18 @@
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
-        right: 20px; /* إبعاد أيقونة المسح لليمين */
+        right: 20px; /* offset clear icon */
         cursor: pointer;
         font-size: 18px;
         color: #555;
         display: none;
     }
 
-    /* دعم RTL للغة العربية */
+    /* RTL layout */
     html[dir="rtl"] .search-wrapper input[type="search"] {
         text-align: right;
         direction: rtl;
-        padding: 10px 55px 10px 55px; /* عكس المسافات، والاحتفاظ بنفس البُعد */
+        padding: 10px 55px 10px 55px; /* mirror padding, same spacing */
     }
 
     html[dir="rtl"] .search-wrapper .search-icon {
