@@ -215,6 +215,7 @@
     <div class="row g-4">
             @foreach ($page->pageSeos->sortBy('order') as $seo)
                 @continue($seo->section_type === 'apps')
+                @continue($seo->section_type === 'contact-us')
                 <div class="col-md-6 col-lg-4">
                     <div class="card border-0 shadow-sm h-100">
                         <div class="card-header bg-transparent border-bottom py-3 d-flex flex-wrap align-items-center justify-content-between gap-2">

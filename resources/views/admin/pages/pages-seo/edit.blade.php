@@ -72,8 +72,25 @@
 
                 <h5 class="fw-semibold mb-3 pb-2 border-bottom">{{ __('Content') }}</h5>
 
-                @if ($pageSeo->section_type === 'social-media')
-                    @include('admin.pages.pages-seo.partials.social-links-editor', ['enContent' => $enContent])
+                @if ($pageSeo->section_type === 'contact-us')
+                    @php
+                        $generalPageForContact = \App\Models\Page::where('slug', 'general')->first();
+                        $socialSectionForContact = $generalPageForContact?->pageSeos
+                            ?->firstWhere('section_type', 'social-media');
+                    @endphp
+                    <div class="alert alert-warning border-0 shadow-sm mb-4" role="note">
+                        <i class="bi bi-info-circle me-2" aria-hidden="true"></i>
+                        {{ __('Phone, WhatsApp, email and complaints email are now edited under the Social media section on the General page.') }}
+                        @if ($socialSectionForContact)
+                            <a href="{{ route('admin.page-sections.edit', $socialSectionForContact) }}"
+                                class="alert-link fw-semibold ms-1">{{ __('Open Social media') }}</a>
+                        @endif
+                    </div>
+                @elseif ($pageSeo->section_type === 'social-media')
+                    @include('admin.pages.pages-seo.partials.social-links-editor', [
+                        'enContent' => $enContent,
+                        'arContent' => $arContent,
+                    ])
                 @elseif (count($contentKeys) === 0)
                     <p class="text-muted">{{ __('No translatable fields for this section.') }}</p>
                 @else

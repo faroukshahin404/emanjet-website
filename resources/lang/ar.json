@@ -773,5 +773,13 @@
     "Preview": "معاينة",
     "Add link": "إضافة رابط",
     "Social link": "رابط سوشيال",
-    "Visible": "ظاهر"
+    "Visible": "ظاهر",
+    "Contact details": "بيانات التواصل",
+    "Shown on the contact page and footer. One icon per field; Arabic and English values can differ. Toggle visibility to hide without clearing text.": "تظهر في صفحة اتصل بنا والتذييل. أيقونة لكل حقل؛ يمكن اختلاف النص العربي عن الإنجليزي. عطّل الظهور لإخفاء الحقل دون مسح النص.",
+    "Phone, WhatsApp, email and complaints email are now edited under the Social media section on the General page.": "الهاتف وواتساب والبريد وبريد الشكاوى أصبح تعديلها من قسم السوشيال ميديا في صفحة الإعدادات العامة (General).",
+    "Open Social media": "فتح قسم السوشيال ميديا",
+    "Social networks": "شبكات التواصل",
+    "Headset / complaints": "سماعة / شكاوى",
+    "WhatsApp": "واتساب",
+    "Complaints email": "بريد الشكاوى"
 }

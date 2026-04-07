@@ -28,15 +28,31 @@ class AppServiceProvider extends ServiceProvider
         view()->composer('*', function ($view) {
             $generalPage = Page::where('slug', 'general')->first();
             $generalPageSeos = $generalPage ? $generalPage->pageSeos : collect();
-            $contactUs = $generalPageSeos->where('section_type', 'contact-us')->where('status', true)->first();
+            $legacyContactSeo = $generalPageSeos->where('section_type', 'contact-us')->where('status', true)->first();
             $socialMediaSeo = $generalPageSeos->where('section_type', 'social-media')->where('status', true)->first();
+            $socialFullJson = is_array($socialMediaSeo?->content_json)
+                ? $socialMediaSeo->content_json
+                : [];
+            $locale = app()->getLocale();
+            $socialLocaleBranch = $socialFullJson[$locale] ?? $socialFullJson['en'] ?? [];
+            $legacyFlat = [];
+            if ($legacyContactSeo && is_array($legacyContactSeo->content_json)) {
+                $legacyFlat = $legacyContactSeo->content_json[$locale]
+                    ?? $legacyContactSeo->content_json['en']
+                    ?? [];
+                $legacyFlat = is_array($legacyFlat) ? $legacyFlat : [];
+            }
+            $contactUs = SocialMediaLinks::contactForPublic(
+                is_array($socialLocaleBranch) ? $socialLocaleBranch : [],
+                $legacyFlat
+            );
             $socialMediaBranch = $socialMediaSeo?->translated_content_json ?? [];
             $apps = $this->appLinksFromDashSettings();
             $pageSeo = $view->getData()['seo'] ?? null;
             $generalSeo = $generalPage ? getSeoData($generalPage->toArray()) : [];
             $seo = isset($pageSeo) ? $pageSeo : $generalSeo;
             $view->with([
-                'contactUs' => $contactUs?->translated_content_json ?? [],
+                'contactUs' => $contactUs,
                 'socialMedia' => SocialMediaLinks::forFooter($socialMediaBranch),
                 'apps' => $apps,
                 'seo' => $seo,

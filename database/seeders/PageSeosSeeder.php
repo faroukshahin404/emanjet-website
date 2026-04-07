@@ -18,52 +18,34 @@ class PageSeosSeeder extends Seeder
         PageSeo::truncate();  // حذف جميع السجلات من جدول الشهادات
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');  // تفعيل التحقق من القيود
 
-        $generalSeos = [
-            [
-                'page_slug' => 'general',
-                'section_type' => 'contact-us',
-                'content_json' => [
+        $contactDefault = [
+            'email' => ['value' => 'Info@superje', 'visible' => true, 'icon_class' => 'fa-solid fa-envelope'],
+            'phone' => ['value' => '010000000', 'visible' => true, 'icon_class' => 'fa-solid fa-phone'],
+            'whatsapp' => ['value' => '01000000', 'visible' => true, 'icon_class' => 'fa-brands fa-whatsapp'],
+            'complaints_email' => ['value' => 'customer-complaints@superjet-eg.com', 'visible' => true, 'icon_class' => 'fa-solid fa-headset'],
+        ];
+        $linksSeed = [
+            ['icon_class' => 'fa-brands fa-facebook-f', 'url' => 'https://www.facebook.com/superjet', 'visible' => true],
+            ['icon_class' => 'fa-brands fa-x-twitter', 'url' => 'https://twitter.com/superjet', 'visible' => true],
+            ['icon_class' => 'fa-brands fa-instagram', 'url' => 'https://www.instagram.com/superjet', 'visible' => true],
+            ['icon_class' => 'fa-brands fa-linkedin-in', 'url' => 'https://www.linkedin.com/company/superjet', 'visible' => true],
+        ];
 
-                    'ar' => [
-                        'phone' => '010000000',
-                        'whatsapp' => '01000000',
-                        'email' => 'Info@superje',
-                        'complaints_email' => 'customer-complaints@superjet-eg.com',
-                    ],
-                    'en' => [
-                        'phone' => '010000000',
-                        'whatsapp' => '01000000',
-                        'email' => 'Info@superje',
-                        'complaints_email' => 'customer-complaints@superjet-eg.com',
-                    ],
-                ],
-                'order' => 1,
-                'status' => true,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+        $generalSeos = [
             [
                 'page_slug' => 'general',
                 'section_type' => 'social-media',
                 'content_json' => [
                     'ar' => [
-                        'links' => [
-                            ['icon_class' => 'fa-brands fa-facebook-f', 'url' => 'https://www.facebook.com/superjet', 'visible' => true],
-                            ['icon_class' => 'fa-brands fa-x-twitter', 'url' => 'https://twitter.com/superjet', 'visible' => true],
-                            ['icon_class' => 'fa-brands fa-instagram', 'url' => 'https://www.instagram.com/superjet', 'visible' => true],
-                            ['icon_class' => 'fa-brands fa-linkedin-in', 'url' => 'https://www.linkedin.com/company/superjet', 'visible' => true],
-                        ],
+                        'links' => json_decode(json_encode($linksSeed), true),
+                        'contact' => json_decode(json_encode($contactDefault), true),
                     ],
                     'en' => [
-                        'links' => [
-                            ['icon_class' => 'fa-brands fa-facebook-f', 'url' => 'https://www.facebook.com/superjet', 'visible' => true],
-                            ['icon_class' => 'fa-brands fa-x-twitter', 'url' => 'https://twitter.com/superjet', 'visible' => true],
-                            ['icon_class' => 'fa-brands fa-instagram', 'url' => 'https://www.instagram.com/superjet', 'visible' => true],
-                            ['icon_class' => 'fa-brands fa-linkedin-in', 'url' => 'https://www.linkedin.com/company/superjet', 'visible' => true],
-                        ],
+                        'links' => json_decode(json_encode($linksSeed), true),
+                        'contact' => json_decode(json_encode($contactDefault), true),
                     ],
                 ],
-                'order' => 2,
+                'order' => 1,
                 'status' => true,
                 'created_at' => now(),
                 'updated_at' => now(),

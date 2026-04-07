@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Page;
 use App\Models\PageSeo;
 use App\Services\Admin\AdminListStatistics;
+use App\Support\SocialMediaLinks;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
@@ -57,6 +58,10 @@ class PageSeoController extends Controller
                 'social_links' => 'nullable|array',
                 'social_links.*.icon_class' => 'nullable|string|max:191',
                 'social_links.*.url' => 'nullable|string|max:2048',
+                'contact' => 'nullable|array',
+                'contact.*.icon_class' => 'nullable|string|max:191',
+                'contact.*.en' => 'nullable|string|max:500',
+                'contact.*.ar' => 'nullable|string|max:500',
             ]);
 
             $links = collect($request->input('social_links', []))
@@ -73,10 +78,35 @@ class PageSeoController extends Controller
                 ->values()
                 ->all();
 
-            $payload = ['links' => $links];
+            $contactInput = $request->input('contact', []);
+            $contactEn = SocialMediaLinks::emptyContactStructure();
+            $contactAr = SocialMediaLinks::emptyContactStructure();
+
+            foreach (SocialMediaLinks::contactFieldKeys() as $key) {
+                $block = is_array($contactInput[$key] ?? null) ? $contactInput[$key] : [];
+                $icon = trim((string) ($block['icon_class'] ?? ''));
+                if ($icon === '') {
+                    $icon = SocialMediaLinks::defaultIconForContactField($key);
+                }
+                $visible = filter_var($block['visible'] ?? false, FILTER_VALIDATE_BOOL);
+                $valEn = trim((string) ($block['en'] ?? ''));
+                $valAr = trim((string) ($block['ar'] ?? ''));
+
+                $contactEn[$key] = [
+                    'value' => $valEn,
+                    'visible' => $visible,
+                    'icon_class' => $icon,
+                ];
+                $contactAr[$key] = [
+                    'value' => $valAr,
+                    'visible' => $visible,
+                    'icon_class' => $icon,
+                ];
+            }
+
             $contentJson = [
-                'en' => $payload,
-                'ar' => $payload,
+                'en' => ['links' => $links, 'contact' => $contactEn],
+                'ar' => ['links' => $links, 'contact' => $contactAr],
             ];
 
             $pageSeo->update([
