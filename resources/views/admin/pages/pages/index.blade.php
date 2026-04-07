@@ -3,11 +3,7 @@
 @section('title', __('Pages'))
 
 @section('breadcrumb')
-    <x-admin.page-header :title="__('Pages')" :create-url="route('admin.pages.create')">
-        <x-slot name="toolbar">
-            <x-admin.index-collapse-toolbar id-prefix="pages" :show-filters="false" />
-        </x-slot>
-    </x-admin.page-header>
+    <x-admin.page-header :title="__('Pages')" />
 @endsection
 
 @push('css')
@@ -243,7 +239,7 @@
 @endpush
 
 @section('content')
-    <div class="collapse show mb-4" id="pagesSummaryCollapse">
+    <div class="mb-4">
         <div class="row g-3">
             <div class="col-sm-6 col-xl-4">
                 <x-admin.stats-widget :title="__('Pages')" :value="number_format($stats['total'])"

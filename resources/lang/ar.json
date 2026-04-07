@@ -763,5 +763,15 @@
     "Modifying and cancelling a booking requires a fee of 10 EGP": "تعديل وإلغاء الحجز يتطلب رسوم 10 جنيه مصري",
     "Modify booking": "تعديل الحجز",
     "Cancel booking": "إلغاء الحجز",
-    "Cancel booking modal": "مودال إلغاء الحجز"
+    "Cancel booking modal": "مودال إلغاء الحجز",
+    "Pick a preset or type a Font Awesome 6 class (e.g. fa-brands fa-facebook-f). Preview updates as you type.": "اختر أيقونة جاهزة أو اكتب صنف Font Awesome 6 (مثل fa-brands fa-facebook-f). المعاينة تتحدث أثناء الكتابة.",
+    "Add or remove social links. Rows need both URL and icon. Use Visible to hide a link from the footer without deleting it.": "أضف أو احذف روابط السوشيال. كل صف يحتاج رابطًا وأيقونة. فعّل «ظاهر» لإخفاء الرابط من التذييل دون حذفه.",
+    "Icon preset": "أيقونة جاهزة",
+    "Choose…": "اختر…",
+    "Custom class": "صنف مخصص",
+    "Icon CSS class": "صنف أيقونة CSS",
+    "Preview": "معاينة",
+    "Add link": "إضافة رابط",
+    "Social link": "رابط سوشيال",
+    "Visible": "ظاهر"
 }

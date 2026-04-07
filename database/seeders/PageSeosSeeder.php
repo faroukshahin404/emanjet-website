@@ -4,9 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\Page;
 use App\Models\PageSeo;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class PageSeosSeeder extends Seeder
 {
@@ -36,7 +35,7 @@ class PageSeosSeeder extends Seeder
                         'whatsapp' => '01000000',
                         'email' => 'Info@superje',
                         'complaints_email' => 'customer-complaints@superjet-eg.com',
-                    ]
+                    ],
                 ],
                 'order' => 1,
                 'status' => true,
@@ -48,41 +47,27 @@ class PageSeosSeeder extends Seeder
                 'section_type' => 'social-media',
                 'content_json' => [
                     'ar' => [
-                        'facebook' => 'https://www.facebook.com/superjet',
-                        'twitter' => 'https://twitter.com/superjet',
-                        'instagram' => 'https://www.instagram.com/superjet',
-                        'linkedin' => 'https://www.linkedin.com/company/superjet',
+                        'links' => [
+                            ['icon_class' => 'fa-brands fa-facebook-f', 'url' => 'https://www.facebook.com/superjet', 'visible' => true],
+                            ['icon_class' => 'fa-brands fa-x-twitter', 'url' => 'https://twitter.com/superjet', 'visible' => true],
+                            ['icon_class' => 'fa-brands fa-instagram', 'url' => 'https://www.instagram.com/superjet', 'visible' => true],
+                            ['icon_class' => 'fa-brands fa-linkedin-in', 'url' => 'https://www.linkedin.com/company/superjet', 'visible' => true],
+                        ],
                     ],
                     'en' => [
-                        'facebook' => 'https://www.facebook.com/superjet',
-                        'twitter' => 'https://twitter.com/superjet',
-                        'instagram' => 'https://www.instagram.com/superjet',
-                        'linkedin' => 'https://www.linkedin.com/company/superjet',
-                    ]
+                        'links' => [
+                            ['icon_class' => 'fa-brands fa-facebook-f', 'url' => 'https://www.facebook.com/superjet', 'visible' => true],
+                            ['icon_class' => 'fa-brands fa-x-twitter', 'url' => 'https://twitter.com/superjet', 'visible' => true],
+                            ['icon_class' => 'fa-brands fa-instagram', 'url' => 'https://www.instagram.com/superjet', 'visible' => true],
+                            ['icon_class' => 'fa-brands fa-linkedin-in', 'url' => 'https://www.linkedin.com/company/superjet', 'visible' => true],
+                        ],
+                    ],
                 ],
                 'order' => 2,
                 'status' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            [
-                'page_slug' => 'general',
-                'section_type' => 'apps',
-                'content_json' => [
-                    'ar' => [
-                        'android' => 'https://play.google.com/store/apps/details?id=com.superjet',
-                        'ios' => 'https://apps.apple.com/app/superjet/id1234567890',
-                    ],
-                    'en' => [
-                        'android' => 'https://play.google.com/store/apps/details?id=com.superjet',
-                        'ios' => 'https://apps.apple.com/app/superjet/id1234567890',
-                    ]
-                ],
-                'order' => 3,
-                'status' => true,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]
         ];
 
         $homeSeos = [
@@ -101,7 +86,7 @@ class PageSeosSeeder extends Seeder
                         'image' => 'https://placehold.co/1675x700',
                         'caption-title' => 'We are here to help you',
                         'caption-description' => 'Book your trip with Super Jet and pay with your credit card instantly!',
-                    ]
+                    ],
                 ],
                 'order' => 1,
                 'status' => true,
@@ -121,7 +106,7 @@ class PageSeosSeeder extends Seeder
                         'title' => 'Super Jet is with you anywhere',
                         'description' => 'But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful.',
                         'image' => 'https://placehold.co/745x677',
-                    ]
+                    ],
                 ],
                 'order' => 2,
                 'status' => true,
@@ -153,14 +138,14 @@ class PageSeosSeeder extends Seeder
                             'https://placehold.co/170x60',
                             'https://placehold.co/170x60',
                         ],
-                    ]
+                    ],
                 ],
                 'order' => 3,
                 'status' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            //Make table for bus types (bus Categories)
+            // Make table for bus types (bus Categories)
             // [
             //     'page_slug' => 'home',
             //     'section_type' => 'bus-types',
@@ -258,13 +243,13 @@ class PageSeosSeeder extends Seeder
                         'title' => 'Head to the magic of Egypt\'s stunning beaches and enjoy the turquoise waters and refreshing atmosphere!',
                         'description' => 'But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful.',
                         'image' => 'https://placehold.co/1657x550',
-                    ]
+                    ],
                 ],
                 'order' => 5,
                 'status' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ]
+            ],
         ];
 
         $destinationSeos = [
@@ -279,7 +264,7 @@ class PageSeosSeeder extends Seeder
                     'en' => [
                         'search-title' => 'Where are you traveling to?',
                         'image' => 'https://placehold.co/1657x600',
-                    ]
+                    ],
                 ],
                 'order' => 1,
                 'status' => true,
@@ -299,7 +284,7 @@ class PageSeosSeeder extends Seeder
                         'title' => 'Try it now',
                         'description' => 'Book now and enjoy a unique experience',
                         'image' => 'https://placehold.co/805x475',
-                    ]
+                    ],
                 ],
                 'order' => 1,
                 'status' => true,
@@ -319,13 +304,13 @@ class PageSeosSeeder extends Seeder
                         'title' => 'Our App',
                         'description' => 'Download our app now and enjoy a unique experience',
                         'image' => 'https://placehold.co/450x577',
-                    ]
+                    ],
                 ],
                 'order' => 2,
                 'status' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ]
+            ],
         ];
 
         $blogsSeos = [
@@ -342,7 +327,7 @@ class PageSeosSeeder extends Seeder
                         'title' => 'Our Destinations',
                         'description' => 'Explore a variety of distinctive destinations we provide through our widespread lines across the republic. Whether you\'re looking for a quick business trip or a relaxing vacation, we offer multiple options to suit all your needs. We guarantee you a comfortable and safe travel experience, while adhering to the highest standards of quality and professionalism. Discover your next destination with Super Jet!',
                         'image' => 'https://placehold.co/805x668',
-                    ]
+                    ],
                 ],
                 'order' => 1,
                 'status' => true,
@@ -362,7 +347,7 @@ class PageSeosSeeder extends Seeder
                             'https://placehold.co/209x127',
                             'https://placehold.co/209x292',
                             'https://placehold.co/209x127',
-                        ]
+                        ],
                     ],
                     'en' => [
                         'title' => 'Start Your Journey',
@@ -374,14 +359,14 @@ class PageSeosSeeder extends Seeder
                             'https://placehold.co/209x127',
                             'https://placehold.co/209x292',
                             'https://placehold.co/209x127',
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 'order' => 2,
                 'status' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ]
+            ],
         ];
 
         $aboutSeos = [
@@ -398,7 +383,7 @@ class PageSeosSeeder extends Seeder
                         'title' => 'About Us',
                         'description' => 'At Super Jet, we believe in the importance of comfort and safety for our customers, and we always strive to provide a distinguished travel experience that combines professionalism and quality. Thanks to years of experience in the field of transportation and travel, we work hard to continuously improve our services to meet and exceed our customers\' expectations. Our team is committed to providing the best amenities, 24/7 customer support, and innovative solutions that make your journey easier from start to finish.',
                         'image' => 'https://placehold.co/805x668',
-                    ]
+                    ],
                 ],
                 'order' => 1,
                 'status' => true,
@@ -425,12 +410,12 @@ class PageSeosSeeder extends Seeder
                         'routes' => 'Super Jet Routes: Our vision is to provide distinguished services that exceed the needs and expectations of our customers to become the easiest and safest solution. We always strive to become a leading company in passenger transportation services using all modern technologies to provide comfort and luxury to our customers.',
                         'payment_methods' => 'Payment Methods: Our vision is to provide distinguished services that exceed the needs and expectations of our customers to become the easiest and safest solution. We always strive to become a leading company in passenger transportation services using all modern technologies to provide comfort and luxury to our customers.',
                         'safety_and_comfort' => 'Safety and Comfort: Our vision is to provide distinguished services that exceed the needs and expectations of our customers to become the easiest and safest solution. We always strive to become a leading company in passenger transportation services using all modern technologies to provide comfort and luxury to our customers.',
-                    ]
+                    ],
                 ],
                 'order' => 2,
                 'status' => true,
                 'created_at' => now(),
-            ]
+            ],
         ];
 
         $contactSeos = [
@@ -449,12 +434,12 @@ class PageSeosSeeder extends Seeder
                         'description' => 'Please fill out the form below and we will get back to you as soon as possible.',
                         'image' => 'https://placehold.co/805x668',
                         'button-text' => 'Send',
-                    ]
+                    ],
                 ],
                 'order' => 1,
                 'status' => true,
                 'created_at' => now(),
-            ]
+            ],
         ];
 
         $privacySeos = [
@@ -473,12 +458,12 @@ class PageSeosSeeder extends Seeder
                         'description' => 'Privacy Policy of SuperJet At SuperJet, your privacy is important to us. This Privacy Policy outlines how we collect, use, share, and protect your information when you use our services. Information We Collect Personal information such as name, phone number, email, ID number, when creating an account or booking online Travel details such as trip schedules, destinations, and ticket numbers Geolocation data if enabled Technical data like device type, operating system, browser, and IP address How We Use the Information To confirm bookings and process payments To contact you about your trips, updates, or promotions To improve our services and user experience To comply with legal and regulatory requirements Information Sharing We do not share your personal data with third parties, except With trusted partners for operational purposes e.g., payment processors When required by law In case of a security threat to users or the service Data Security We use the latest encryption and security technologies to protect your information Data is stored on secure servers with restricted access Cookies We use cookies to enhance user experience and analyze website usage. You can disable cookies in your browser settings User Rights You have the right to request, modify, or delete your data You can withdraw your consent for data usage at any time Changes to the Privacy Policy We may update this policy occasionally. Any changes will be posted on this page',
                         'image' => 'https://placehold.co/805x668',
                         'button-text' => 'Agree',
-                    ]
+                    ],
                 ],
                 'order' => 1,
                 'status' => true,
                 'created_at' => now(),
-            ]
+            ],
         ];
         $usageTermsSeos = [
             [
@@ -496,12 +481,12 @@ class PageSeosSeeder extends Seeder
                         'description' => 'Please read these terms carefully before using the website or app of SuperJet. By using any of our services, you agree to be bound by the following terms: 1. Acceptance of Terms By using our platform, you confirm that you have read, understood, and agreed to these terms. If you do not agree, please do not use the service. 2. Use of the Service The service must be used only for lawful purposes, such as booking or checking trips. Unauthorized commercial use, manipulation, or fraud is strictly prohibited. 3. Accounts and Information You are responsible for the accuracy of the information you provide. Your account must not be used by others without your permission. We reserve the right to suspend or terminate accounts used in violation of our policies. 4. Intellectual Property All content text, images, logos, trademarks is owned by Arab Union for Land Transport or its licensors. Reuse or reproduction of any part of the website/app without prior written consent is prohibited. 5. Limitation of Liability While we strive for accuracy, we do not guarantee that the site will be error-free or uninterrupted. We are not liable for any loss resulting from the use of the service or reliance on displayed information. 6. Changes to the Terms We reserve the right to update these terms at any time. Changes will be posted on the website. 7. Governing Law These terms are governed by the laws of the Arab Republic of Egypt. The courts of Cairo shall have exclusive jurisdiction over any disputes.',
                         'image' => 'https://placehold.co/805x668',
                         'button-text' => 'Agree',
-                    ]
+                    ],
                 ],
                 'order' => 1,
                 'status' => true,
                 'created_at' => now(),
-            ]
+            ],
         ];
 
         $faqsSeos = [
@@ -518,15 +503,13 @@ class PageSeosSeeder extends Seeder
                         'title' => 'Frequently Asked Questions',
                         'description' => 'In this section, we have collected the most prominent questions that may be on your mind about our services, reservations, amenities, and various travel policies. Our goal is to provide an easy and clear experience for all our customers, so we always strive to answer every inquiry accurately and clearly. If you don\'t find your answer here, feel free to contact us and we\'ll be happy to help you.',
                         'image' => 'https://placehold.co/805x668',
-                    ]
+                    ],
                 ],
                 'order' => 1,
                 'status' => true,
                 'created_at' => now(),
             ],
         ];
-
-
 
         $seos = array_merge($generalSeos, $homeSeos, $aboutSeos, $contactSeos, $destinationSeos, $blogsSeos, $faqsSeos, $privacySeos, $usageTermsSeos);
 

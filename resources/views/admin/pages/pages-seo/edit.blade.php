@@ -72,7 +72,9 @@
 
                 <h5 class="fw-semibold mb-3 pb-2 border-bottom">{{ __('Content') }}</h5>
 
-                @if (count($contentKeys) === 0)
+                @if ($pageSeo->section_type === 'social-media')
+                    @include('admin.pages.pages-seo.partials.social-links-editor', ['enContent' => $enContent])
+                @elseif (count($contentKeys) === 0)
                     <p class="text-muted">{{ __('No translatable fields for this section.') }}</p>
                 @else
                     @foreach ($contentKeys as $key)

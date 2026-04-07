@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\DashSetting;
 use App\Models\Page;
+use App\Support\SocialMediaLinks;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
@@ -28,14 +29,15 @@ class AppServiceProvider extends ServiceProvider
             $generalPage = Page::where('slug', 'general')->first();
             $generalPageSeos = $generalPage ? $generalPage->pageSeos : collect();
             $contactUs = $generalPageSeos->where('section_type', 'contact-us')->where('status', true)->first();
-            $socialMedia = $generalPageSeos->where('section_type', 'social-media')->where('status', true)->first();
+            $socialMediaSeo = $generalPageSeos->where('section_type', 'social-media')->where('status', true)->first();
+            $socialMediaBranch = $socialMediaSeo?->translated_content_json ?? [];
             $apps = $this->appLinksFromDashSettings();
             $pageSeo = $view->getData()['seo'] ?? null;
             $generalSeo = $generalPage ? getSeoData($generalPage->toArray()) : [];
             $seo = isset($pageSeo) ? $pageSeo : $generalSeo;
             $view->with([
                 'contactUs' => $contactUs?->translated_content_json ?? [],
-                'socialMedia' => $socialMedia?->translated_content_json ?? [],
+                'socialMedia' => SocialMediaLinks::forFooter($socialMediaBranch),
                 'apps' => $apps,
                 'seo' => $seo,
             ]);

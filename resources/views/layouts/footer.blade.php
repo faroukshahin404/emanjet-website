@@ -100,24 +100,14 @@
             </div>
         </div>
 
-        @if (!empty($socialMedia) && collect($socialMedia)->filter()->isNotEmpty())
+        @if (!empty($socialMedia))
             <div class="d-flex flex-lg-row flex-column justify-content-center align-items-center mt-lg-5 mt-4">
                 <div class="social d-flex justify-content-center align-items-center gap-4 mb-lg-0 mb-2">
-                    @php
-                        $icons = [
-                            'twitter' => 'fab fa-twitter',
-                            'instagram' => 'fab fa-instagram',
-                            'linkedin' => 'fab fa-linkedin-in',
-                            'facebook' => 'fab fa-facebook-f',
-                        ];
-                    @endphp
-
-                    @foreach ($icons as $key => $icon)
-                        @if (!empty($socialMedia[$key]))
-                            <a href="{{ $socialMedia[$key] }}" target="_blank">
-                                <i class="{{ $icon }}"></i>
-                            </a>
-                        @endif
+                    @foreach ($socialMedia as $link)
+                        <a href="{{ $link['url'] }}" target="_blank" rel="noopener noreferrer"
+                            aria-label="{{ parse_url($link['url'], PHP_URL_HOST) ?? __('Social link') }}">
+                            <i class="{{ $link['icon_class'] }}" aria-hidden="true"></i>
+                        </a>
                     @endforeach
                 </div>
             </div>
