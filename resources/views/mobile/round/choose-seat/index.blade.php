@@ -32,22 +32,23 @@
             </div>
         </div>
 
-        <div class="mt-3">
-            <button type="submit" id="confirm-booking" class="disabled-button" disabled>
-                <div class="d-flex justify-content-around align-items-center">
-                    <div class="d-flex justify-content-between align-items-center gap-2">
-                        <div class="chair-number-pay">
-                            <p class="m-0" id="selected-seats-count">0</p>
+        <div class="mt-4">
+            <button type="submit" id="confirm-booking" class="btn-pay-disabled" disabled>
+                <div class="d-flex justify-content-between align-items-center w-100 px-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="bg-white text-dark rounded-circle d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;">
+                            <span class="fw-bold small" id="selected-seats-count">0</span>
                         </div>
-                        <p class="m-0 fs-20">{{ __('Book now') }}</p>
+                        <span class="fw-bold">{{ __('Book now') }}</span>
                     </div>
-                    <div class="money-account" id="total-price">
+                    <div class="fw-bold fs-5" id="total-price">
                         0 {{ __('EGP') }}
                     </div>
                 </div>
             </button>
         </div>
     </form>
+
 
     <style>
         .scroll-indicator {
@@ -133,18 +134,19 @@
 
             function updateButtonState() {
                 const totalSelectedSeats = goSeats.length + backSeats.length;
-                const isSeatsComplete = totalSelectedSeats === (maxSeats *2);
+                const isSeatsComplete = totalSelectedSeats === (maxSeats * 2);
                 
                 confirmButton.disabled = !isSeatsComplete;
                 
                 if (confirmButton.disabled) {
-                    confirmButton.classList.remove('login');
-                    confirmButton.classList.add('disabled-button');
+                    confirmButton.classList.remove('btn-pay');
+                    confirmButton.classList.add('btn-pay-disabled');
                 } else {
-                    confirmButton.classList.add('login');
-                    confirmButton.classList.remove('disabled-button');
+                    confirmButton.classList.add('btn-pay');
+                    confirmButton.classList.remove('btn-pay-disabled');
                 }
             }
+
 
             function showSeatLimitAlert(message) {
                 Swal.fire({

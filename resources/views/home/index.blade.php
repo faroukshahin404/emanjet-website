@@ -22,12 +22,19 @@
 
     <!-- start hero section  -->
     <div class="hero-section" id="heroSection">
-        <div class="container-fluid px-5 box">
-            <div class="row">
-                <div class="col-lg-5 col-md-12 m-auto">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title text-center mb-4">{{ $heroSection['card-title'] }}</h5>
+        {{-- Decorative Glows --}}
+        <div class="position-absolute top-0 start-50 translate-middle-x w-100 h-100 overflow-hidden pointer-events-none" style="z-index: 0;">
+            <div class="position-absolute top-0 start-0 w-100 h-100" style="background: radial-gradient(circle at 50% 10%, rgba(var(--main-color-rgb), 0.1), transparent 70%);"></div>
+        </div>
+
+        <div class="container-fluid px-lg-5 box position-relative" style="z-index: 1;">
+            <div class="row align-items-center">
+                <div class="col-lg-5 col-md-12 wow animate__animated animate__fadeInLeft">
+                    <div class="card home-glass-card border-0">
+                        <div class="card-body p-4 p-lg-5">
+                            <h2 class="card-title text-center mb-4 fw-800" style="font-size: 1.75rem; color: #111;">
+                                {{ $heroSection['card-title'] }}
+                            </h2>
                             <form id="tripForm" action="{{ route('one-way.trips') }}" method="GET">
                                 <!-- Choice of trip type -->
                                 <div class="text-center">
@@ -52,8 +59,9 @@
 
                                 <!-- start from to  -->
                                 <div class="station-group mb-4">
-                                    <div class="row g-2">
-                                        <div class="col-md-6">
+                                    <div class="d-flex flex-column flex-md-row align-items-center gap-2 gap-md-0 position-relative">
+                                        {{-- From Wrapper --}}
+                                        <div class="flex-grow-1 w-100">
                                             <div class="input-with-icon">
                                                 <i class="fas fa-location-dot"></i>
                                                 <input type="text" class="modern-input from-input"
@@ -65,7 +73,15 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-6">
+                                        {{-- Swap Button Container --}}
+                                        <div class="swap-btn-wrapper px-md-2 py-2 py-md-0">
+                                            <button type="button" class="swap-btn-floating swap-btn">
+                                                <i class="fas fa-exchange-alt"></i>
+                                            </button>
+                                        </div>
+
+                                        {{-- To Wrapper --}}
+                                        <div class="flex-grow-1 w-100">
                                             <div class="input-with-icon">
                                                 <i class="fas fa-circle-dot text-success"></i>
                                                 <input type="text" class="modern-input to-input"
@@ -88,10 +104,6 @@
                                         value="{{ $stations->get(0)?->id ?? '' }}">
                                     <input type="hidden" name="station_to_id" id="station_to_id"
                                         value="{{ request()->city_to_id ? ($stations->where('city_id', request()->city_to_id)->first()?->id ?? '') : ($stations->get(1)?->id ?? '') }}">
-
-                                    <button type="button" class="swap-btn-floating swap-btn">
-                                        <i class="fas fa-exchange-alt"></i>
-                                    </button>
                                 </div>
 
                                 <div class="row g-3 mb-4">
@@ -210,6 +222,57 @@
         </div>
     </div>
     <!-- End hero section  -->
+    
+    <!-- start why choose us  -->
+    <div class="why-choose-us py-5 mt-lg-5">
+        <div class="container">
+            <div class="home-section-head text-center wow animate__animated animate__fadeInUp">
+                <p class="pre-title mb-2">
+                    <i class="fa-solid fa-star me-2"></i>
+                    {{ __('THE SUPER JET ADVANTAGE') }}
+                </p>
+                <h2>{{ __('Why Choose Super Jet?') }}</h2>
+                <div class="section-divider mx-auto"></div>
+                <p class="mt-3 opacity-75">{{ __('We provide a travel experience that combines safety, comfort, and state-of-the-art technology to ensure your journey is perfect.') }}</p>
+            </div>
+
+            <div class="row g-4">
+                {{-- Advantage 1 --}}
+                <div class="col-lg-4 wow animate__animated animate__fadeInUp" data-wow-delay="0.1s">
+                    <div class="advantage-card">
+                        <div class="advantage-icon">
+                            <i class="fa-solid fa-shield-heart"></i>
+                        </div>
+                        <h4>{{ __('Safety & Comfort') }}</h4>
+                        <p>{{ __('Our fleet is maintained to the highest international standards with professional drivers for your peace of mind.') }}</p>
+                    </div>
+                </div>
+
+                {{-- Advantage 2 --}}
+                <div class="col-lg-4 wow animate__animated animate__fadeInUp" data-wow-delay="0.2s">
+                    <div class="advantage-card">
+                        <div class="advantage-icon">
+                            <i class="fa-solid fa-bus-simple"></i>
+                        </div>
+                        <h4>{{ __('Modern Fleet') }}</h4>
+                        <p>{{ __('Travel in our latest-model buses equipped with Wi-Fi, air conditioning, and ergonomic seating for a premium experience.') }}</p>
+                    </div>
+                </div>
+
+                {{-- Advantage 3 --}}
+                <div class="col-lg-4 wow animate__animated animate__fadeInUp" data-wow-delay="0.3s">
+                    <div class="advantage-card">
+                        <div class="advantage-icon">
+                            <i class="fa-solid fa-ticket-simple"></i>
+                        </div>
+                        <h4>{{ __('Easy Booking') }}</h4>
+                        <p>{{ __('Book your trips in seconds through our website or mobile app with multiple secure payment options.') }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End why choose us  -->
 
     <!-- start any where  -->
     {{-- <div class="any-where py-5 bg-white px-4">
@@ -242,16 +305,20 @@
     <!-- End any where  -->
 
 
-    <!-- start Popular Destinations -->
-    <div class="popular-destinations py-5">
+    <!-- start popular destinations  -->
+    <div class="popular-destinations py-5 mt-5">
         <div class="container-fluid px-3 px-md-4 px-xl-5">
-            <header class="popular-destinations__head text-center mb-4 mb-lg-5">
-                <h2 class="popular-destinations__title h3 fw-bold mb-2">{{ $popularDestinationsSection['title'] }}</h2>
+            <div class="home-section-head text-center wow animate__animated animate__fadeInUp">
+                <p class="pre-title mb-2">
+                    <i class="fa-solid fa-map-location-dot me-2"></i>
+                    {{ __('EXPLORE EGYPT') }}
+                </p>
+                <h2>{{ $popularDestinationsSection['title'] }}</h2>
+                <div class="section-divider mx-auto"></div>
                 @if (filled($popularDestinationsSection['description'] ?? null))
-                    <p class="popular-destinations__lead text-muted mb-0 mx-auto" style="max-width: 36rem;">
-                        {{ $popularDestinationsSection['description'] }}</p>
+                    <p class="mt-3 opacity-75">{{ $popularDestinationsSection['description'] }}</p>
                 @endif
-            </header>
+            </div>
 
             <div class="popular-destinations__carousel-wrap position-relative">
                 <div class="swiper mySwiperPopular popular-destinations-swiper">
@@ -310,7 +377,14 @@
     <!-- start pay  -->
     <div class="pay py-3 mt-5">
         <div class="container">
-            <h2 class="text-center">{{ $paymentMethodsSection['title'] }}</h2>
+            <div class="home-section-head text-center wow animate__animated animate__fadeInUp mb-4">
+                <p class="pre-title mb-2">
+                    <i class="fa-solid fa-credit-card me-2"></i>
+                    {{ __('SECURE PAYMENTS') }}
+                </p>
+                <h2>{{ $paymentMethodsSection['title'] }}</h2>
+                <div class="section-divider mx-auto"></div>
+            </div>
             <div class="d-flex flex-lg-row flex-column justify-content-between align-items-center mt-4">
                 @foreach ($paymentMethodsSection['images'] as $image)
                     <img src="{{ $image }}" alt="pay">
@@ -322,11 +396,18 @@
 
     <!-- start bus type  -->
     @if($busTypesSection->isNotEmpty())
-    <div class="bus-type">
+    <div class="bus-type mt-5">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-12">
-                    <h2 class="text-center mb-5">{{ __('Bus Types') }}</h2>
+                <div class="col-md-12 wow animate__animated animate__fadeIn">
+                    <div class="home-section-head text-center mb-5">
+                        <p class="pre-title mb-2 text-white opacity-75">
+                            <i class="fa-solid fa-bus me-2"></i>
+                            {{ __('PREMIUM FLEET') }}
+                        </p>
+                        <h2 class="text-white">{{ __('Our Modern Fleet') }}</h2>
+                        <div class="section-divider mx-auto" style="background: rgba(255,255,255,0.3)"></div>
+                    </div>
                 </div>
                 <div class="swiper mySwiper">
                     <div class="swiper-wrapper">
@@ -370,101 +451,82 @@
     @endif
     <!-- End bus type  -->
 
-    <!-- start testimonials  -->
-    <div class="testimonials py-5 px-3 " id="testimonials">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <h2 class="text-center text-black">
-                        {{ __('Testimonials') }}
-                    </h2>
-                </div>
 
-                @foreach ($testimonials as $testimonial)
-                    <div class="col-md-4 mb-3">
-                        <div class='cardSection card p-3'>
-                            <div class="card-body py-2">
-                                <div class="d-flex justify-content-end">
-                                    <i class="fas fa-quote-left fs-25"></i>
-                                </div>
-                                <p class='text-gray'>
-                                    {{ $testimonial->translated_name }}
-                                </p>
-                                <div class='d-flex justify-content-end align-items-center gap-2'>
-                                    <p class="m-0">{{ $testimonial->translated_content }}</p>
-                                    <div class="testimonial-avatar">
-                                        @if(!empty($testimonial->image))
-                                            <img src="{{ Str::startsWith($testimonial->image, ['http://', 'https://']) ? $testimonial->image : asset($testimonial->image) }}"
-                                                alt="{{ $testimonial->translated_name }}">
-                                        @else
-                                            <span class="testimonial-avatar-placeholder">{{ mb_substr($testimonial->translated_name, 0, 1) }}</span>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+    <!-- start stats section  -->
+    <div class="home-stats-section">
+        <div class="container">
+            <div class="row g-4 justify-content-center">
+                <div class="col-lg-3 col-md-6 wow animate__animated animate__fadeInUp" data-wow-delay="0.1s">
+                    <div class="premium-stats-card">
+                        <i class="fa-solid fa-calendar-check stat-icon"></i>
+                        <span class="stat-number">30+</span>
+                        <span class="stat-label">{{ __('Years of Excellence') }}</span>
                     </div>
-                @endforeach
-
-
-
-            </div>
-        </div>
-    </div>
-    <!-- End testimonials  -->
-
-    <!-- start reservation  -->
-    <div class="">
-        <div class="reservation">
-            <h2>
-                {{ $reservationSection['title'] }}
-            </h2>
-            <p>
-                {{ $reservationSection['description'] }}
-            </p>
-            <a href="#heroSection">
-                {{ __('Book Now') }}
-            </a>
-        </div>
-    </div>
-
-    <!-- End reservation  -->
-
-    <!-- start blogs  -->
-    <div class="blogs py-5 ">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <h2 class="text-center">{{ __('Our Story') }}</h2>
                 </div>
-                <div class="row">
-                    @foreach ($blogs as $blog)
-                        <div class="col-md-4 mb-4 px-3">
-                            <div class="cardSection card text-center rounded-bottom-4">
-                                <img class="img-fluid rounded-top-4" src="{{ $blog->image }}" alt="blogs" />
-                                <div class="cardbody card-body py-2">
-                                    <h5>{{ $blog->translated_title }}</h5>
-                                    <div class='cardBody'>
-                                        <p>
-                                            {{ $blog->created_at->format('F d, Y') }} -
-                                            <i class="fa fa-clock"></i> {{ $blog->reading_time }} min read -
-                                            <i class="fa fa-eye"></i> {{ $blog->views }} -
-                                            <i class="fa fa-thumbs-up"></i> {{ $blog->likes }}
-                                        </p>
-                                        <h6>
-                                            {{ \Str::limit(strip_tags($blog->translated_content), 90) }}
-                                        </h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
+                <div class="col-lg-3 col-md-6 wow animate__animated animate__fadeInUp" data-wow-delay="0.2s">
+                    <div class="premium-stats-card">
+                        <i class="fa-solid fa-city stat-icon"></i>
+                        <span class="stat-number">50+</span>
+                        <span class="stat-label">{{ __('Cities Covered') }}</span>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 wow animate__animated animate__fadeInUp" data-wow-delay="0.3s">
+                    <div class="premium-stats-card">
+                        <i class="fa-solid fa-users-viewfinder stat-icon"></i>
+                        <span class="stat-number">2M+</span>
+                        <span class="stat-label">{{ __('Happy Travelers') }}</span>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 wow animate__animated animate__fadeInUp" data-wow-delay="0.4s">
+                    <div class="premium-stats-card">
+                        <i class="fa-solid fa-shield-halved stat-icon"></i>
+                        <span class="stat-number">100%</span>
+                        <span class="stat-label">{{ __('Safety Record') }}</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <!-- End stats section  -->
 
-    <!-- End blogs  -->
+    <!-- start quality commitment  -->
+    <div class="quality-commitment py-5 my-5">
+        <div class="container py-lg-5">
+            <div class="home-section-head text-center wow animate__animated animate__fadeInUp mb-5">
+                <p class="pre-title mb-2">
+                    <i class="fa-solid fa-award me-2"></i>
+                    {{ __('OUR COMMITMENT') }}
+                </p>
+                <h2>{{ __('Your Comfort is Our Priority') }}</h2>
+                <div class="section-divider mx-auto"></div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-4 wow animate__animated animate__fadeInLeft">
+                    <div class="quality-card text-center">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        <h4 class="fw-800 mb-3">{{ __('Punctuality') }}</h4>
+                        <p class="text-muted">{{ __('We value your time. Our trips are scheduled with Swiss precision to ensure you reach your destination exactly when expected.') }}</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 wow animate__animated animate__fadeInUp">
+                    <div class="quality-card text-center shadow-sm" style="border-top: 4px solid var(--main-color);">
+                        <i class="fa-solid fa-hand-holding-heart"></i>
+                        <h4 class="fw-800 mb-3">{{ __('Superior Service') }}</h4>
+                        <p class="text-muted">{{ __('From local support to professional onboard staff, we provide a hospitable environment that makes every mile a pleasure.') }}</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 wow animate__animated animate__fadeInRight">
+                    <div class="quality-card text-center">
+                        <i class="fa-solid fa-snowflake"></i>
+                        <h4 class="fw-800 mb-3">{{ __('Premium Amenities') }}</h4>
+                        <p class="text-muted">{{ __('Enjoy high-speed Wi-Fi, refreshing climate control, and ergonomic seating designed for the longest Egyptian journeys.') }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End quality commitment  -->
     @if (!empty($apps['android']) || !empty($apps['ios']))
         <div class="modal fade" id="appDownloadModal" tabindex="-1" aria-labelledby="appDownloadModalLabel"
             aria-hidden="true">
@@ -1258,15 +1320,9 @@
                 if (menu) {
                     menu.style.display = show ? 'block' : 'none';
                     if (show) {
-                        // Ensure it's above other elements but below navbar if navbar is fixed
-                        const rect = menu.getBoundingClientRect();
-                        if (rect.bottom > window.innerHeight) {
-                            menu.style.top = 'auto';
-                            menu.style.bottom = '100%';
-                        } else {
-                            menu.style.top = 'calc(100% + 10px)';
-                            menu.style.bottom = 'auto';
-                        }
+                        // Consistently open downwards for better UX on the hero section
+                        menu.style.top = 'calc(100% + 5px)';
+                        menu.style.bottom = 'auto';
                     }
                 }
             }

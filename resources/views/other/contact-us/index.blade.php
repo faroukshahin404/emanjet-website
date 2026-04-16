@@ -1,136 +1,202 @@
 @extends('layouts.master')
-@section('content')
-    <!-- start about-us caption  -->
-    <div class="contact-us mb-5">
-        <div class="container-fluid">
-            <div class="row rounded-bottom-4 box-shadow">
-                <div class="col-md-6 text-center pt-3 d-flex flex-column justify-content-center align-items-center">
-                    <h2>
-                        {{ $contactForm['title'] }} </h2>
-                    <p>
-                        {{ $contactForm['description'] }}
-                    </p>
-                    <form action="{{ route('submit-contact-form') }}" method="POST" class="w-100">
-                        @csrf
-                        <div class="input-box">
-                            <input type="text" name="name" id="" placeholder="{{ __('Name') }}" required>
-                            <i class="fas fa-user"></i>
-                        </div>
-                        <div class="input-box">
-                            <input type="text" name="phone" id=""
-                                placeholder="{{ __('Phone Number') }}"required>
-                            <i class="fas fa-phone"></i>
-                        </div>
-                        <div class="input-box">
-                            <i class="fas fa-envelope"></i>
-                            <textarea class="form-control" name="message" id="" placeholder="{{ __('Send Us a Message') }}" required></textarea>
-                        </div>
 
-                        <div class="mt-3">
-                            <button type="submit" class="contact-btn">
-                                {{ __('Send') }}
-                            </button>
-                        </div>
-                    </form>
-                </div>
-                <div class="col-md-6">
-                    <img class="img-fluid" src="{{ asset($contactForm['image']) }}" alt="about-page">
+@section('content')
+    {{-- ════════════════════════════════════════════════════════ --}}
+    {{-- HERO SECTION                                            --}}
+    {{-- ════════════════════════════════════════════════════════ --}}
+    <section class="contact-hero">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 contact-hero-content wow fadeInUp" data-wow-delay="0.1s">
+                    <h1>{{ $contactForm['title'] ?? __('Contact Us') }}</h1>
+                    @if(!empty($contactForm['description']))
+                        <p>{{ $contactForm['description'] }}</p>
+                    @endif
                 </div>
             </div>
+        </div>
+    </section>
 
-            <div class="row">
-                <div class="col-md-12 need-help mt-5">
-                    <h2>{{ __('Need More Help') }}:</h2>
+    {{-- ════════════════════════════════════════════════════════ --}}
+    {{-- MAIN CONTENT GRID                                       --}}
+    {{-- ════════════════════════════════════════════════════════ --}}
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row g-5">
+                
+                {{-- Left: Contact Form --}}
+                <div class="col-lg-7 wow fadeInLeft" data-wow-delay="0.2s">
+                    <div class="contact-card">
+                        <h4 class="fw-bold mb-4">{{ __('Send Us a Message') }}</h4>
+                        <form action="{{ route('submit-contact-form') }}" method="POST">
+                            @csrf
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="contact-form-label">{{ __('Name') }}</label>
+                                    <div class="contact-input-wrapper">
+                                        <i class="fa-solid fa-user"></i>
+                                        <input type="text" name="name" class="contact-control" 
+                                               placeholder="{{ __('Enter your name') }}" 
+                                               value="{{ auth()->check() ? auth()->user()->name : '' }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="contact-form-label">{{ __('Phone Number') }}</label>
+                                    <div class="contact-input-wrapper">
+                                        <i class="fa-solid fa-phone"></i>
+                                        <input type="text" name="phone" class="contact-control" 
+                                               placeholder="{{ __('Enter phone number') }}" 
+                                               value="{{ auth()->check() ? auth()->user()->mobile : '' }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-12 mb-4">
+                                    <label class="contact-form-label">{{ __('Message') }}</label>
+                                    <div class="contact-input-wrapper">
+                                        <i class="fa-solid fa-envelope"></i>
+                                        <textarea name="message" class="contact-control" rows="5" 
+                                                  placeholder="{{ __('How can we help you?') }}" required></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="contact-submit-btn">
+                                        {{ __('Submit Message') }}
+                                        <i class="fa-solid fa-paper-plane"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
 
-                    @if (!empty($contactUs['phone']))
-                        <div>
-                            <span>{{ __('Contact us at') }}: </span>
-                            <a href="tel:{{ $contactUs['phone'] }}">{{ $contactUs['phone'] }}</a>
-                        </div>
-                    @endif
-
-                    @if (!empty($contactUs['whatsapp']))
-                        <div>
-                            <span>{{ __('Contact us via WhatsApp') }}: </span>
-                            <a href="https://api.whatsapp.com/send?phone={{ $contactUs['whatsapp'] }}" target="_blank">
-                                {{ $contactUs['whatsapp'] }}
+                {{-- Right: Contact Info --}}
+                <div class="col-lg-5 wow fadeInRight" data-wow-delay="0.3s">
+                    <div class="ps-lg-4">
+                        <h4 class="fw-bold mb-4">{{ __('Quick Contact') }}</h4>
+                        
+                        {{-- Phone --}}
+                        @if (!empty($contactUs['phone']))
+                            <a href="tel:{{ $contactUs['phone'] }}" class="info-action-card">
+                                <div class="info-icon-box">
+                                    <i class="fa-solid fa-phone-volume"></i>
+                                </div>
+                                <div class="info-text-box">
+                                    <span class="label">{{ __('Call Us') }}</span>
+                                    <span class="value">{{ $contactUs['phone'] }}</span>
+                                </div>
                             </a>
-                        </div>
-                    @endif
+                        @endif
 
-                    @if (!empty($contactUs['email']))
-                        <div>
-                            <span>{{ __('Or send an email to') }}</span>
-                            <a href="mailto:{{ $contactUs['email'] }}">{{ $contactUs['email'] }}</a>
-                        </div>
-                    @endif
+                        {{-- WhatsApp --}}
+                        @if (!empty($contactUs['whatsapp']))
+                            <a href="https://api.whatsapp.com/send?phone={{ $contactUs['whatsapp'] }}" target="_blank" class="info-action-card">
+                                <div class="info-icon-box">
+                                    <i class="fa-brands fa-whatsapp"></i>
+                                </div>
+                                <div class="info-text-box">
+                                    <span class="label">{{ __('WhatsApp') }}</span>
+                                    <span class="value">{{ $contactUs['whatsapp'] }}</span>
+                                </div>
+                            </a>
+                        @endif
 
-                    @if (!empty($contactUs['complaints_email']))
-                        <div>
-                            <span>{{ __('For complaints, please contact us at') }}</span>
-                            <a href="mailto:{{ $contactUs['complaints_email'] }}">{{ $contactUs['complaints_email'] }}</a>
-                        </div>
-                    @endif
+                        {{-- Email --}}
+                        @if (!empty($contactUs['email']))
+                            <a href="mailto:{{ $contactUs['email'] }}" class="info-action-card">
+                                <div class="info-icon-box">
+                                    <i class="fa-solid fa-at"></i>
+                                </div>
+                                <div class="info-text-box">
+                                    <span class="label">{{ __('Email Us') }}</span>
+                                    <span class="value">{{ $contactUs['email'] }}</span>
+                                </div>
+                            </a>
+                        @endif
+
+                        {{-- Complaints Banner --}}
+                        @if (!empty($contactUs['complaints_email']))
+                            <div class="complaints-banner">
+                                <i class="fa-solid fa-headset corner-icon"></i>
+                                <h5>{{ __('Complaints & Feedback') }}</h5>
+                                <p>{{ __('Experience any issues? We are here to listen and improve our service.') }}</p>
+                                <a href="mailto:{{ $contactUs['complaints_email'] }}">
+                                    {{ $contactUs['complaints_email'] }}
+                                </a>
+                            </div>
+                        @endif
+                    </div>
                 </div>
 
             </div>
         </div>
-    </div>
+    </section>
 @endsection
+
 @section('mobile-content')
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="w-100 py-3">
+        {{-- Mobile Header --}}
+        <div class="d-flex align-items-center gap-3 mb-4">
+            <button onclick="window.history.back()" class="btn btn-outline-light border-0 text-black p-0">
+                <i class="fa-solid fa-arrow-{{ app()->getLocale() == 'ar' ? 'right' : 'left' }} fs-4"></i>
+            </button>
+            <h1 class="fw-bold fs-3 mb-0">{{ __('Contact Us') }}</h1>
+        </div>
 
-        @if (app()->getLocale() == 'ar')
-            <i class="fas fa-arrow-right fs-18 text-black" onclick="window.history.back()"></i>
-        @else
-            <i class="fas fa-arrow-left fs-18 text-black" onclick="window.history.back()"></i>
-        @endif
-
-        <p class="m-0 fs-25 text-black">{{ __('Contact Us') }}</p>
-        <div></div>
-    </div>
-
-    <div class="mt-3">
-        <h6 class="text-black mb-4">
-            {{ $contactForm['description'] }}
-        </h6>
-        <form action="{{ route('submit-contact-form') }}" method="POST" class="login-form">
-            @csrf
-            @if (!auth()->check())
-                <div class="position-relative mb-3">
-                    <i class="fa fa-user position-absolute top-50 translate-middle-y"></i>
-                    <input class="form-control rounded-6 ps-4" type="text" name="name" id=""
-                        placeholder="{{ __('Name') }}">
+        {{-- Form Section --}}
+        <div class="bg-white rounded-5 shadow-sm p-4 mb-4 border border-light-subtle">
+            <h5 class="fw-bold mb-3">{{ __('Send a Message') }}</h5>
+            <form action="{{ route('submit-contact-form') }}" method="POST">
+                @csrf
+                <div class="contact-input-wrapper mb-3">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" name="name" class="contact-control" 
+                           placeholder="{{ __('Name') }}" 
+                           value="{{ auth()->check() ? auth()->user()->name : '' }}" required>
                 </div>
-
-                <div class="position-relative mb-3">
-                    <i class="fa fa-phone position-absolute top-50 translate-middle-y"></i>
-                    <input class="form-control rounded-6 ps-4" type="text" name="phone" id=""
-                        placeholder="{{ __('Phone Number') }}">
+                <div class="contact-input-wrapper mb-3">
+                    <i class="fa-solid fa-phone"></i>
+                    <input type="text" name="phone" class="contact-control" 
+                           placeholder="{{ __('Phone Number') }}" 
+                           value="{{ auth()->check() ? auth()->user()->mobile : '' }}" required>
                 </div>
-            @else
-                <div class="position-relative mb-3">
-                    <i class="fa fa-user position-absolute top-50 translate-middle-y"></i>
-                    <input class="form-control rounded-6 ps-4" type="text" value="{{ auth()->user()->name }}"
-                        name="name" id="" placeholder="{{ __('Name') }}">
+                <div class="contact-input-wrapper mb-4">
+                    <i class="fa-solid fa-message"></i>
+                    <textarea name="message" class="contact-control" rows="4" 
+                              placeholder="{{ __('Message') }}" required></textarea>
                 </div>
+                <button type="submit" class="contact-submit-btn">
+                    {{ __('Submit') }}
+                </button>
+            </form>
+        </div>
 
-                <div class="position-relative mb-3">
-                    <i class="fa fa-phone position-absolute top-50 translate-middle-y"></i>
-                    <input class="form-control rounded-6 ps-4" value="{{ auth()->user()->mobile }}" type="text"
-                        name="phone" id="" placeholder="{{ __('Phone Number') }}">
+        {{-- Info Grid --}}
+        <div class="row g-3">
+            @if (!empty($contactUs['phone']))
+                <div class="col-6">
+                    <a href="tel:{{ $contactUs['phone'] }}" class="bg-white rounded-4 p-3 text-center d-block border border-light-subtle shadow-xs h-100">
+                        <i class="fa-solid fa-phone text-main fs-4 mb-2"></i>
+                        <span class="d-block small text-muted">{{ __('Call') }}</span>
+                    </a>
                 </div>
             @endif
-
-            <div class="position-relative">
-                <i class="fa fa-envelope position-absolute"></i>
-                <textarea name="message" id="" class="form-control rounded-6 ps-4"
-                    placeholder="{{ __('Send Us a Message') }}"></textarea>
-            </div>
-
-            <div class="col-md-12 d-flex justify-content-center align-items-center my-3">
-                <a class="login" href="">{{ __('Submit') }}</a>
-            </div>
-        </form>
+            @if (!empty($contactUs['whatsapp']))
+                <div class="col-6">
+                    <a href="https://api.whatsapp.com/send?phone={{ $contactUs['whatsapp'] }}" class="bg-white rounded-4 p-3 text-center d-block border border-light-subtle shadow-xs h-100">
+                        <i class="fa-brands fa-whatsapp text-success fs-4 mb-2"></i>
+                        <span class="d-block small text-muted">{{ __('WhatsApp') }}</span>
+                    </a>
+                </div>
+            @endif
+            @if (!empty($contactUs['email']))
+                <div class="col-12">
+                    <a href="mailto:{{ $contactUs['email'] }}" class="bg-white rounded-4 p-3 d-flex align-items-center gap-3 border border-light-subtle shadow-xs">
+                        <div class="info-icon-box bg-light-subtle" style="width: 40px; height: 40px;">
+                            <i class="fa-solid fa-envelope text-main"></i>
+                        </div>
+                        <span class="small text-muted text-truncate">{{ $contactUs['email'] }}</span>
+                    </a>
+                </div>
+            @endif
+        </div>
     </div>
 @endsection

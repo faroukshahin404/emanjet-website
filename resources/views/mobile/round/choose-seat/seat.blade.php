@@ -1,53 +1,77 @@
-<div class="col-md-6 mb-3 chairs">
-    <div class="d-flex justify-content-center align-items-center gap-3">
-        <div class="d-flex align-items-center gap-2">
-            <span class="chair-label">{{ __('Your Seat') }}</span>
+<div class="col-12 mb-3 chairs">
+    <div class="d-flex justify-content-center flex-wrap gap-3 mb-4">
+        <div class="legend-item">
             <div class="your-chair"></div>
+            <span class="small">{{ __('Your Seat') }}</span>
         </div>
-        <div class="d-flex align-items-center gap-2">
-            <span class="chair-label">{{ __('Available') }}</span>
+        <div class="legend-item">
             <div class="available-chair"></div>
+            <span class="small">{{ __('Available') }}</span>
         </div>
-        <div class="d-flex align-items-center gap-2">
-            <span class="chair-label">{{ __('Reserved') }}</span>
+        <div class="legend-item">
             <div class="reserved-chair"></div>
+            <span class="small">{{ __('Reserved') }}</span>
         </div>
     </div>
-    <div class="d-flex justify-content-center align-items-center">
-        <div class="row mt-3 justify-content-center chairs" style="width: {{(@$busType->width??5) * 50}}px;">
+
+    <!-- Outbound Bus Cabin -->
+    <h6 class="text-center text-black fw-bold mb-3 small">{{ __('Departure trip') }}</h6>
+    <div class="bus-cabin mb-5" style="padding: 20px 10px 10px;">
+        <div class="bus-front" style="padding-bottom: 10px; margin-bottom: 15px;">
+            <svg class="steering-icon" viewBox="0 0 100 100" style="width: 25px; height: 25px;">
+                <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="5" />
+                <circle cx="50" cy="50" r="10" fill="currentColor" />
+                <line x1="50" y1="5" x2="50" y2="40" stroke="currentColor" stroke-width="5" />
+                <line x1="10" y1="75" x2="42" y2="58" stroke="currentColor" stroke-width="5" />
+                <line x1="90" y1="75" x2="58" y2="58" stroke="currentColor" stroke-width="5" />
+            </svg>
+        </div>
+
+        <div class="row g-0 justify-content-center" style="max-width: {{(@$busType->width??4) * 60}}px;">
             @foreach ($goSeats as $seat)
                 @if ($seat['type'] == 1)
-                    <div class="chair-number">
+                    <div class="chair-number" style="width: 44px; height: 44px; margin: 5px;">
                         <input type="checkbox" data-price="{{ $seat['price'] }}" data-type="go"
                             data-name="{{ $seat['name'] }}" data-seat-id="{{ $seat['tripSeat_id'] }}"
-                            id="chair{{ $seat['tripSeat_id'] }}" class="chair-checkbox"
+                            id="chair-go-{{ $seat['tripSeat_id'] }}" class="chair-checkbox"
                             {{ $seat['available'] ? '' : 'disabled' }}>
-                        <label for="chair{{ $seat['tripSeat_id'] }}">{{ $seat['name'] }}</label>
+                        <label for="chair-go-{{ $seat['tripSeat_id'] }}" style="border-radius: 10px; font-size: 11px;">{{ $seat['name'] }}</label>
                     </div>
                 @else
-                    <div style="width: 50px;"></div>
+                    <div style="width: 54px; height: 54px;"></div>
                 @endif
             @endforeach
         </div>
     </div>
-    <hr>
-    <h6 class="text-center">{{ __('Return trip') }}</h6>
 
-    <div class="d-flex justify-content-center align-items-center">
-        <div class="row mt-3 justify-content-center chairs" style="width: {{(@$busType->width??5) * 50}}px;">
+    <!-- Return Bus Cabin -->
+    <h6 class="text-center text-black fw-bold mb-3 small">{{ __('Return trip') }}</h6>
+    <div class="bus-cabin" style="padding: 20px 10px 10px;">
+        <div class="bus-front" style="padding-bottom: 10px; margin-bottom: 15px;">
+            <svg class="steering-icon" viewBox="0 0 100 100" style="width: 25px; height: 25px;">
+                <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="5" />
+                <circle cx="50" cy="50" r="10" fill="currentColor" />
+                <line x1="50" y1="5" x2="50" y2="40" stroke="currentColor" stroke-width="5" />
+                <line x1="10" y1="75" x2="42" y2="58" stroke="currentColor" stroke-width="5" />
+                <line x1="90" y1="75" x2="58" y2="58" stroke="currentColor" stroke-width="5" />
+            </svg>
+        </div>
+
+        <div class="row g-0 justify-content-center" style="max-width: {{(@$busType->width??4) * 60}}px;">
             @foreach ($returnSeats as $seat)
                 @if ($seat['type'] == 1)
-                    <div class="chair-number">
+                    <div class="chair-number" style="width: 44px; height: 44px; margin: 5px;">
                         <input type="checkbox" data-price="{{( $seat['round_price']-$seat['price'] )}}"
                             data-name="{{ $seat['name'] }}" data-type="back" data-seat-id="{{ $seat['tripSeat_id'] }}"
-                            id="chair{{ $seat['tripSeat_id'] }}" class="chair-checkbox"
+                            id="chair-ret-{{ $seat['tripSeat_id'] }}" class="chair-checkbox"
                             {{ $seat['available'] ? '' : 'disabled' }}>
-                        <label for="chair{{ $seat['tripSeat_id'] }}">{{ $seat['name'] }}</label>
+                        <label for="chair-ret-{{ $seat['tripSeat_id'] }}" style="border-radius: 10px; font-size: 11px;">{{ $seat['name'] }}</label>
                     </div>
                 @else
-                    <div style="width: 50px;"></div>
+                    <div style="width: 54px; height: 54px;"></div>
                 @endif
             @endforeach
         </div>
     </div>
 </div>
+

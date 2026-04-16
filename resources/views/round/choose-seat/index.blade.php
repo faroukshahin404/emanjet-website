@@ -10,9 +10,7 @@
                 @include('round.choose-seat.seats')
 
                 <!-- Trip details and payment -->
-                <div class="col-md-12 col-lg-4 mx-auto"
-                    style="position: sticky; top: 120px; height: fit-content; z-index: 100;">
-
+                <div class="col-md-5">
                     <form id="bookingForm" action="{{ route('round.confirm-booking') }}" method="post">
                         @csrf
                         <input type="hidden" name="city_from_id" value="{{ request()->city_from_id }}" />
@@ -25,96 +23,122 @@
                         <input type="hidden" name="go_trip_id" value="{{ request()->selected_go_trip_id }}">
                         <input type="hidden" name="back_trip_id" value="{{ request()->selected_back_trip_id }}">
                         <input type="hidden" name="tripType" value="round">
-                        <div class="trip-desc rounded-8 px-3 py-3">
-                            <div class="d-flex justify-content-center align-items-center gap-4 my-4">
-                                <div class="d-flex align-items-center gap-2 travel-direction-box">
-                                    <i class="fa fa-bus text-black"></i>
-                                    <div class="d-flex flex-column align-items-center">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <h6 class="m-0 text-black">{{ $fromCity->name }}</h6>
-                                            <i class="fa fa-arrow-left text-black"></i>
-                                        </div>
-                                        <p class="m-0">{{ $fromStation->name }}</p>
-                                    </div>
+
+                        <div class="booking-summary-card">
+                            <h4 class="text-black mb-4 fw-bold">{{ __('Round Trip Summary') }}</h4>
+
+                            <!-- Departure Route -->
+                            <div class="summary-route mb-3">
+                                <div class="d-flex flex-column align-items-center gap-1">
+                                    <div class="route-dot"></div>
+                                    <div style="width: 2px; height: 20px; background: #ddd;"></div>
+                                    <div class="route-dot" style="border-color: #333;"></div>
                                 </div>
-                                <div class="d-flex flex-column align-items-center travel-direction-box">
-                                    <h6 class="m-0 text-black">{{ $toCity->name }}</h6>
-                                    <p class="m-0">{{ $toStation->name }}</p>
+                                <div class="d-flex flex-column gap-2 flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h6 class="m-0 text-black fw-bold">{{ $fromCity->name }} <i class="fa fa-long-arrow-right mx-1 small text-muted"></i> {{ $toCity->name }}</h6>
+                                        <span class="badge bg-main small">{{ $tripTime->format('h:i a') }}</span>
+                                    </div>
+                                    <small class="text-muted">{{ $fromStation->name }} → {{ $toStation->name }}</small>
                                 </div>
                             </div>
 
-                            <div class="d-flex gap-2 mt-2">
-                                <p class="m-0 text-black">{{ __('Departure time') }}:</p>
-                                <p class="m-0">{{ $tripTime->format('Y-m-d h:i a') }}</p>
+                            <!-- Return Route -->
+                            <div class="summary-route mb-4" style="background: #fdfae6; border-left: 3px solid var(--main-color);">
+                                <div class="d-flex flex-column align-items-center gap-1">
+                                    <div class="route-dot" style="border-color: #333;"></div>
+                                    <div style="width: 2px; height: 20px; background: #ddd;"></div>
+                                    <div class="route-dot"></div>
+                                </div>
+                                <div class="d-flex flex-column gap-2 flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h6 class="m-0 text-black fw-bold">{{ $toCity->name }} <i class="fa fa-long-arrow-right mx-1 small text-muted"></i> {{ $fromCity->name }}</h6>
+                                        <span class="badge bg-dark small">{{ \Carbon\Carbon::parse(request()->back_date)->format('h:i a') }}</span>
+                                    </div>
+                                    <small class="text-muted">{{ $toStation->name }} → {{ $fromStation->name }}</small>
+                                </div>
                             </div>
 
                             <input type="hidden" id="number-of-seats-go" value="{{ request()->seats }}">
                             <input type="hidden" id="number-of-seats-return" value="{{ request()->seats }}">
 
-                            <div class="go-seats-table mb-3">
-                                <h5 class="text-black mb-2">{{ __('Outbound Seats') }}</h5>
-                                <table id="selectedGoSeatsTable" class="table">
-                                    <tbody></tbody>
+                            <!-- Departure Seats Section -->
+                            <div class="selected-seats-container mb-3">
+                                <h6 class="text-black fw-bold mb-2 small"><i class="fa fa-ticket text-main me-1"></i>{{ __('DEPARTURE SEATS') }}</h6>
+                                <table id="selectedGoSeatsTable" class="table table-borderless table-sm">
+                                    <tbody class="border-top">
+                                        {{-- Populated by JS --}}
+                                    </tbody>
                                 </table>
                             </div>
 
-                            <div class="return-seats-table">
-                                <h5 class="text-black mb-2">{{ __('Return Seats') }}</h5>
-                                <table id="selectedReturnSeatsTable" class="table">
-                                    <tbody></tbody>
+                            <!-- Return Seats Section -->
+                            <div class="selected-seats-container mb-4">
+                                <h6 class="text-black fw-bold mb-2 small"><i class="fa fa-ticket text-dark me-1"></i>{{ __('RETURN SEATS') }}</h6>
+                                <table id="selectedReturnSeatsTable" class="table table-borderless table-sm">
+                                    <tbody class="border-top">
+                                        {{-- Populated by JS --}}
+                                    </tbody>
                                 </table>
                             </div>
-                        </div>
 
-                        <div class="total-price rounded-8 px-3 py-3">
-                            <div class="d-flex justify-content-between align-items-center mt-2">
-                                <span class="text-black">{{ __('Total') }}:</span>
-                                <p class="m-0" id="totalPrice">{{ __('Choose Seats') }}</p>
-                            </div>
-                        </div>
-
-                        <div class="border rounded-8 px-3 py-3 mt-2">
-                            <h4 class="text-black">{{ __('Choose Payment Method') }}</h4>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="payment_method" value="qnb" id="qnb" checked>
-                                <label class="form-check-label" for="qnb">
-                                    Debit/Credit card
-                                    <img src="{{ asset('images/pay/master.png') }}" alt="Mastercard" style="height: 30px;">
-                                    <img src="{{ asset('images/pay/visa.png') }}" alt="Mastercard" style="height: 30px;">
-                                
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="payment_method" value="fawry"  id="fawry">
-                                <label class="form-check-label" for="fawry">
-                                    Fawry
-                                    <img src="{{ asset('images/pay/fawry.svg') }}" alt="Fawry" style="height: 30px;">
-
-                                </label>
+                            <!-- Total -->
+                            <div class="d-flex justify-content-between align-items-center py-3 mb-4 border-top border-bottom">
+                                <span class="text-black fw-bold fs-5">{{ __('Total Amount') }}</span>
+                                <span class="text-main fw-bold fs-4" id="totalPrice">0.00 {{ __('EGP') }}</span>
                             </div>
 
-                        </div>
+                            <!-- Payment Methods -->
+                            <div class="mb-4">
+                                <h6 class="text-black fw-bold mb-3">{{ __('Payment Method') }}</h6>
+                                <div class="payment-methods-grid">
+                                    <label class="payment-method-card active" for="qnb">
+                                        <input type="radio" name="payment_method" value="qnb" id="qnb" checked>
+                                        <div class="custom-radio"></div>
+                                        <div class="flex-grow-1">
+                                            <span class="d-block fw-bold text-black">{{ __('Credit / Debit Card') }}</span>
+                                            <div class="d-flex gap-2 mt-1">
+                                                <img src="{{ asset('images/pay/master.png') }}" height="20" alt="Mastercard">
+                                                <img src="{{ asset('images/pay/visa.png') }}" height="20" alt="Visa">
+                                            </div>
+                                        </div>
+                                    </label>
 
-                        <div class="mt-2 checkbox-rules">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" checked id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    {{ __('I Agree To The') }} <a
-                                        href="{{ route('usage-terms') }}">{{ __('Terms And Conditions') }}</a>
-
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="mt-4">
-                            <button type="submit" class="btn-pay-disabled" id="btn-pay">
-                                <div class="d-flex justify-content-around align-items-center">
-                                    <p class="m-0">{{ __('Choose Seats') }}</p>
+                                    <label class="payment-method-card" for="fawry">
+                                        <input type="radio" name="payment_method" value="fawry" id="fawry">
+                                        <div class="custom-radio"></div>
+                                        <div class="flex-grow-1">
+                                            <span class="d-block fw-bold text-black">{{ __('Fawry Pay') }}</span>
+                                            <div class="mt-1">
+                                                <img src="{{ asset('images/pay/fawry.svg') }}" height="20" alt="Fawry">
+                                            </div>
+                                        </div>
+                                    </label>
                                 </div>
-                            </button>
+                            </div>
+
+                            <!-- Terms -->
+                            <div class="mb-4">
+                                <div class="form-check custom-checkbox">
+                                    <input class="form-check-input" type="checkbox" checked id="flexCheckDefault">
+                                    <label class="form-check-label text-muted small" for="flexCheckDefault">
+                                        {{ __('I agree to the terms and conditions') }} 
+                                        <a href="{{ route('usage-terms') }}" class="text-main text-decoration-underline">{{ __('terms and conditions') }}</a>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Pay Button -->
+                            <div class="mt-4">
+                                <button type="submit" class="btn-pay-disabled" id="btn-pay">
+                                    <span>{{ __('Choose Seats') }}</span>
+                                    <i class="fa fa-arrow-right"></i>
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>
+
             </div>
         </div>
     </div>

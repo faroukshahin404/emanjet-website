@@ -175,7 +175,7 @@
                                     <div class="popular-dest-card__overlay popular-dest-card__overlay--mobile">
                                         <span class="popular-dest-card__name">{{ $cityName }}</span>
                                         <span class="popular-dest-card__glass-badge">
-                                            <i class="fas fa-bolt" aria-hidden="true"></i>
+                                            <i class="fas fa-ticket-alt" aria-hidden="true"></i>
                                             <span>{{ __('Book Now') }}</span>
                                         </span>
                                     </div>

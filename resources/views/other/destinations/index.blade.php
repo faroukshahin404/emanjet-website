@@ -114,13 +114,16 @@ html[dir="ltr"] .search-wrapper .clear-icon {
 
 @section('content')
 <!-- start hero section  -->
-<div class="hero-section-destination">
-    <div class="container box-destination">
-        <div class="row">
-            <div class="col-md-6">
+<div class="hero-section-destination d-flex align-items-center justify-content-center">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+                <h1 class="text-white fw-bold mb-4 display-4">{{ __('Discover Your Next Adventure') }}</h1>
+                <p class="text-white-50 mb-5 fs-5">{{ __('Explore the best destinations across the country with Superjet') }}</p>
+                
                 <form action="{{ route('destinations') }}" method="GET" class="destination-search-form">
-                    <div class="search-wrapper">
-                        <input type="search" name="search" class="destination-search-input" placeholder="{{ $heroSection['search-title'] }}" value="{{ old('search', request()->input('search')) }}" autocomplete="off">
+                    <div class="search-wrapper mx-auto" style="max-width: 600px;">
+                        <input type="search" name="search" class="destination-search-input py-3" placeholder="{{ $heroSection['search-title'] }}" value="{{ old('search', request()->input('search')) }}" autocomplete="off">
                         <i class="fa fa-search search-icon" aria-hidden="true"></i>
                         <i class="fa fa-times clear-icon" role="button" tabindex="0" aria-label="{{ __('Clear search') }}"></i>
                     </div>
@@ -132,27 +135,45 @@ html[dir="ltr"] .search-wrapper .clear-icon {
 <!-- End hero section  -->
 
 <!-- start popular -->
-<div class="popular pt-5 px-5">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12 mb-4">
-                <h2 class="text-right text-black">
-                    {{ __('Explore the Most Popular Destinations ') }}
-                </h2>
+<div class="popular py-5">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-md-12">
+                <div class="d-flex justify-content-between align-items-end">
+                    <div>
+                        <span class="text-main fw-bold text-uppercase letter-spacing-1 small d-block mb-2">{{ __('TRAVEL THE COUNTRY') }}</span>
+                        <h2 class="text-black fw-bold display-6">
+                            {{ __('Explore Popular Destinations') }}
+                        </h2>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="row" id="cards-container">
+        <div class="row g-4" id="cards-container">
             @foreach ($cities as $city)
-            <div class="col-md-4 mb-4 px-3">
-                <div class='cardSection card text-center rounded-bottom-4 pb-3'>
-                    <img class="img-fluid rounded-top-4" src="{{ $city->image }}" alt="blogs" />
-                    <div class="cardbody card-body py-2">
-                        <div class='cardBody mb-3 d-flex justify-content-between align-items-center'>
-                            <p class="m-0 popular-title">{{ $city->getTranslation('name', app()->getLocale()) }}</p>
+            <div class="col-md-6 col-lg-4">
+                <div class='cardSection card border-0'>
+                    <!-- Hot Badge -->
+                    <div class="destination-badge">
+                        <i class="fa fa-arrow-trend-up me-1"></i>
+                        {{ __('Most Visited') }}
+                    </div>
+                    
+                    <img class="img-fluid" src="{{ $city->image }}" alt="{{ $city->getTranslation('name', app()->getLocale()) }}" />
+                    
+                    <div class="cardbody card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h3 class="popular-title m-0">{{ $city->getTranslation('name', app()->getLocale()) }}</h3>
                         </div>
-                        <div class='cardBody d-flex justify-content-between align-items-center'>
+                        
+                        <p class="text-muted small mb-4">
+                            {{ __('Enjoy a comfortable and safe journey to') }} {{ $city->getTranslation('name', app()->getLocale()) }} {{ __('with our premium bus services.') }}
+                        </p>
+                        
+                        <div class="mt-4">
                             <a href="{{ route('home', ['city_to_id' => $city->id]) }}#heroSection" class="reserve">
+                                <i class="fas fa-ticket-alt"></i>
                                 {{ __('Book Now') }}
                             </a>
                         </div>
@@ -167,15 +188,19 @@ html[dir="ltr"] .search-wrapper .clear-icon {
 <!-- End popular -->
 
 <!-- start try -->
-<div class="try">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-6 try-caption">
-                <h6>{{ $trySection['title'] }}</h6>
-                <p class="m-0">{{ $trySection['description'] }}</p>
+<div class="try py-5 my-5 bg-light rounded-5 mx-4">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6 try-caption p-5">
+                <span class="badge bg-main mb-3">{{ __('QUICK BOOKING') }}</span>
+                <h2 class="display-5 fw-bold text-black mb-4">{{ $trySection['title'] }}</h2>
+                <p class="text-muted fs-5 mb-5">{{ $trySection['description'] }}</p>
+                <a href="{{ route('home') }}" class="btn btn-main btn-lg px-5 py-3 rounded-pill fw-bold">
+                    {{ __('Find a Trip') }}
+                </a>
             </div>
-            <div class="col-md-6">
-                <img class="try-img" src="{{ asset($trySection['image']) }}" alt="bus">
+            <div class="col-md-6 text-center">
+                <img class="img-fluid rounded-4 shadow-lg" src="{{ asset($trySection['image']) }}" alt="bus" style="max-height: 400px;">
             </div>
         </div>
     </div>
@@ -185,22 +210,20 @@ html[dir="ltr"] .search-wrapper .clear-icon {
 
 @section('mobile-content')
     <div class="col-12">
-        <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex justify-content-between align-items-center mb-4">
             @if (app()->getLocale() == 'ar')
                 <i class="fas fa-arrow-right fs-18 text-black" role="button" tabindex="0" aria-label="{{ __('Back') }}" onclick="window.history.back()"></i>
             @else
                 <i class="fas fa-arrow-left fs-18 text-black" role="button" tabindex="0" aria-label="{{ __('Back') }}" onclick="window.history.back()"></i>
             @endif
-            <p class="m-0 fs-25 text-black fw-semibold">{{ __('Destinations') }}</p>
+            <p class="m-0 fs-20 text-black fw-bold">{{ __('Destinations') }}</p>
             <div class="invisible" aria-hidden="true"><i class="fas fa-arrow-left fs-18"></i></div>
         </div>
 
-        @php
-            $heroBg = !empty($heroSection['image']) ? asset($heroSection['image']) : asset('images/hero-section.png');
-        @endphp
-        <div class="destinations-mobile-hero mb-3" style="background-image: url('{{ $heroBg }}');">
-            <div class="destinations-mobile-hero__inner p-3 d-flex align-items-end" style="min-height: 140px;">
-                <form action="{{ route('destinations') }}" method="GET" class="destination-search-form w-100">
+        <div class="hero-section-destination rounded-4 d-flex align-items-center mb-4" style="height: 200px;">
+            <div class="container py-3 px-4">
+                <h2 class="text-white fw-bold fs-4 mb-3">{{ __('Explore Best Cities') }}</h2>
+                <form action="{{ route('destinations') }}" method="GET" class="destination-search-form">
                     <div class="search-wrapper">
                         <input type="search" name="search" class="destination-search-input" placeholder="{{ $heroSection['search-title'] }}" value="{{ old('search', request()->input('search')) }}" autocomplete="off">
                         <i class="fa fa-search search-icon" aria-hidden="true"></i>
@@ -210,21 +233,27 @@ html[dir="ltr"] .search-wrapper .clear-icon {
             </div>
         </div>
 
-        <h2 class="h5 text-black mb-3 text-start">
-            {{ __('Explore the Most Popular Destinations ') }}
+        <h2 class="h5 text-black fw-bold mb-4">
+            {{ __('Most Popular Destinations') }}
         </h2>
 
-        <div class="row g-3 mb-4">
+        <div class="row g-4 mb-5">
             @foreach ($cities as $city)
                 <div class="col-12">
-                    <div class="cardSection card text-center rounded-bottom-4 pb-3">
-                        <img class="img-fluid rounded-top-4" src="{{ $city->image }}" alt="{{ $city->getTranslation('name', app()->getLocale()) }}">
-                        <div class="cardbody card-body py-2">
-                            <div class="cardBody mb-3 d-flex justify-content-between align-items-center">
-                                <p class="m-0 popular-title">{{ $city->getTranslation('name', app()->getLocale()) }}</p>
-                            </div>
-                            <div class="cardBody d-flex justify-content-between align-items-center">
-                                <a href="{{ route('home', ['city_to_id' => $city->id]) }}#heroSection" class="reserve">
+                    <div class="cardSection card border-0">
+                        <div class="destination-badge">
+                            <i class="fa fa-arrow-trend-up me-1"></i>
+                            {{ __('Most Visited') }}
+                        </div>
+                        <img class="img-fluid" src="{{ $city->image }}" alt="{{ $city->getTranslation('name', app()->getLocale()) }}">
+                        <div class="cardbody card-body">
+                            <h3 class="popular-title m-0 fs-5">{{ $city->getTranslation('name', app()->getLocale()) }}</h3>
+                            <p class="text-muted small my-3">
+                                {{ __('Discover the beauty of') }} {{ $city->getTranslation('name', app()->getLocale()) }} {{ __('with Superjet.') }}
+                            </p>
+                            <div class="mt-4">
+                                <a href="{{ route('home', ['city_to_id' => $city->id]) }}#heroSection" class="reserve px-4">
+                                    <i class="fas fa-ticket-alt"></i>
                                     {{ __('Book Now') }}
                                 </a>
                             </div>
@@ -235,16 +264,20 @@ html[dir="ltr"] .search-wrapper .clear-icon {
         </div>
 
         @if (!empty($trySection['title']) || !empty($trySection['description']) || !empty($trySection['image']))
-            <div class="rounded-4 overflow-hidden bg-light p-3 mb-4">
+            <div class="rounded-5 overflow-hidden bg-white shadow-sm p-4 mb-4 border border-light">
+                <span class="badge bg-main mb-2 small">{{ __('QUICK BOOK') }}</span>
                 @if (!empty($trySection['title']))
-                    <h3 class="h6 text-black mb-2">{{ $trySection['title'] }}</h3>
+                    <h3 class="h5 text-black fw-bold mb-2">{{ $trySection['title'] }}</h3>
                 @endif
                 @if (!empty($trySection['description']))
-                    <p class="text-muted small mb-3 mb-md-0">{{ $trySection['description'] }}</p>
+                    <p class="text-muted small mb-4">{{ $trySection['description'] }}</p>
                 @endif
                 @if (!empty($trySection['image']))
-                    <img class="img-fluid rounded-3 w-100 mt-2" src="{{ asset($trySection['image']) }}" alt="">
+                    <img class="img-fluid rounded-4 w-100 shadow-sm" src="{{ asset($trySection['image']) }}" alt="try">
                 @endif
+                <div class="mt-4">
+                    <a href="{{ route('home') }}" class="btn btn-main rounded-pill w-100 py-2 fw-bold">{{ __('Find a Trip') }}</a>
+                </div>
             </div>
         @endif
     </div>

@@ -56,8 +56,18 @@
                 <p class="text-muted small mb-0">{{ __('This field type is not editable in this form.') }}</p>
             @endif
         @else
-            @if (is_string($value) && strlen($value) > 100)
-                <textarea name="content_json[{{ $lang }}][{{ $key }}]" id="content_{{ $lang }}_{{ $key }}" rows="10" class="form-control @if ($lang === 'ar') text-end @endif" @if ($lang === 'ar') dir="rtl" @endif>{{ old('content_json.'.$lang.'.'.$key, $value) }}</textarea>
+            @if (is_string($value) && (strlen($value) > 100 || $key === 'description'))
+                <textarea 
+                    name="content_json[{{ $lang }}][{{ $key }}]" 
+                    id="content_{{ $lang }}_{{ $key }}" 
+                    rows="10" 
+                    class="form-control @if ($lang === 'ar') text-end @endif @if($key === 'description') rich-text-editor @endif" 
+                    @if ($lang === 'ar') dir="rtl" @endif
+                    @if($key === 'description')
+                        data-editor-dir="{{ $lang === 'ar' ? 'rtl' : 'ltr' }}"
+                        data-editor-lang="{{ $lang === 'ar' ? 'ar' : 'en' }}"
+                    @endif
+                >{{ old('content_json.'.$lang.'.'.$key, $value) }}</textarea>
             @else
                 <input type="text" name="content_json[{{ $lang }}][{{ $key }}]" id="content_{{ $lang }}_{{ $key }}"
                     value="{{ old('content_json.'.$lang.'.'.$key, $value) }}" class="form-control @if ($lang === 'ar') text-end @endif" @if ($lang === 'ar') dir="rtl" @endif>
