@@ -3,168 +3,103 @@
 @extends('layouts.master')
 
 @section('mobile-content')
-    <div class="mobile d-lg-none d-block" dir='{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}'>
-        <div class="container mo-view mb-5 mt-3 px-4">
-            <div class="row">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    @if (app()->getLocale() == 'ar')
-                    <i class="fas fa-arrow-right fs-25 text-black" onclick="window.history.back()"></i>
-                    @else
-                    <i class="fas fa-arrow-left fs-25 text-black" onclick="window.history.back()"></i>
-                    @endif
-                    <p class="m-0 fs-25 text-black">{{ __('Edit Profile') }}</p>
-                    <div></div>
-                </div>
-
-                <div class="mt-3">
-                    <form action="{{ route('profile.update') }}" method="POST"
-                        class="profile-edit-form d-flex flex-column align-items-center login-form">
-                        @csrf
-
-                        <div class="edit-profile-container text-center">
-                            <div class="input-wrapper mb-3">
-                                <input class="form-control text-end" type="text" name="name"
-                                    value="{{ old('name', auth()->user()->name) }}">
-                                <i class="fa fa-user"></i>
-                            </div>
-
-                            <div class="input-wrapper mb-3">
-                                <input class="form-control text-end" type="text" name="mobile"
-                                    value="{{ old('mobile', auth()->user()->mobile) }}">
-                                <i class="fa fa-phone"></i>
-                            </div>
-
-                            <div class="input-wrapper mb-3">
-                                <select class="form-control text-end" name="gender">
-                                    <option value="">{{ __('Select Gender') }}</option>
-                                    <option value="male" {{ auth()->user()->gender === 'male' ? 'selected' : '' }}>
-                                        {{ __('Male') }}
-                                    </option>
-                                    <option value="female" {{ auth()->user()->gender === 'female' ? 'selected' : '' }}>
-                                        {{ __('Female') }}
-                                    </option>
-                                </select>
-                                <i class="fa-solid fa-venus-mars"></i>
-                            </div>
-
-                            <div class="input-wrapper mb-3">
-                                <input class="form-control text-end" type="date" name="birthdate"
-                                    value="{{ old('birthdate', auth()->user()->birthdate) }}">
-                                <i class="fa fa-calendar"></i>
-                            </div>
-
-                            <div class="input-wrapper mb-3">
-                                <input class="form-control text-end" type="password" name="current_password"
-                                    placeholder="{{ __('Current Password (Optional)') }}">
-                                <i class="fa fa-lock"></i>
-                            </div>
-
-                            <div class="input-wrapper mb-3">
-                                <input class="form-control text-end" type="password" name="password"
-                                    placeholder="{{ __('New Password (Optional)') }}">
-                                <i class="fa fa-lock"></i>
-                            </div>
-
-                            <div class="input-wrapper mb-3">
-                                <input class="form-control text-end" type="password" name="password_confirmation"
-                                    placeholder="{{ __('Confirm New Password (Optional)') }}">
-                                <i class="fa fa-lock"></i>
-                            </div>
-
-                            <button type="submit" class="btn save-changes-btn w-100">{{ __('SAVE CHANGES') }}</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <div class="bottom-navigation">
-            <div class="nav-item">
-                <i class="fa fa-home"></i>
-                <span>{{ __('Home') }}</span>
-            </div>
-            <div class="nav-item">
-                <i class="fa fa-ticket"></i>
-                <span>{{ __('Tickets') }}</span>
-            </div>
-            <div class="nav-item active">
-                <i class="fa fa-cog"></i>
-                <span>{{ __('Settings') }}</span>
-            </div>
-        </div>
-
+    <div class="d-flex justify-content-between align-items-center mb-4 wow animate__animated animate__fadeIn">
+        <button type="button" onclick="window.history.back()" class="bg-white shadow-sm rounded-circle d-flex align-items-center justify-content-center border-light-subtle" style="width: 40px; height: 40px; border: 1px solid #eee;">
+            @if (app()->getLocale() == 'ar')
+                <i class="fas fa-arrow-right fs-16 text-black"></i>
+            @else
+                <i class="fas fa-arrow-left fs-16 text-black"></i>
+            @endif
+        </button>
+        <h5 class="m-0 fw-800 text-black">{{ __('Edit Profile') }}</h5>
+        <div style="width: 40px;"></div>
     </div>
-    @push('styles')
-        <style>
-            .edit-profile-container {
-                background-color: white;
-                border-radius: 15px;
-                padding: 30px 20px;
-                width: 100%;
-                max-width: 100%;
-                margin: 0 auto;
-            }
 
-            .edit-profile-container h2 {
-                font-size: 18px;
-                font-weight: 600;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
+    <div class="wow animate__animated animate__fadeInUp">
+        <div class="bg-white rounded-5 shadow-premium border border-light-subtle p-4 mb-4">
+            <div class="text-center mb-4">
+                <div class="position-relative d-inline-block">
+                    <div class="bg-light text-main rounded-circle d-flex align-items-center justify-content-center mx-auto shadow-sm" style="width: 80px; height: 80px; border: 4px solid #fff;">
+                        <i class="fa fa-user fs-30"></i>
+                    </div>
+                    <div class="position-absolute bottom-0 end-0 bg-main text-white rounded-circle d-flex align-items-center justify-content-center border border-white" style="width: 24px; height: 24px;">
+                        <i class="fa fa-pencil fs-10"></i>
+                    </div>
+                </div>
+                <h6 class="mt-3 mb-1 fw-900 text-black">{{ auth()->user()->name }}</h6>
+                <p class="text-muted fw-800 small mb-0">{{ auth()->user()->mobile }}</p>
+            </div>
 
-            .input-wrapper {
-                position: relative;
-            }
+            <form action="{{ route('profile.update') }}" method="POST" class="row g-3">
+                @csrf
+                
+                <div class="col-12">
+                    <label class="text-muted fw-800 overline-text mb-2 px-1 d-block" style="font-size: 9px;">{{ __('FULL NAME') }}</label>
+                    <div class="input-group-premium">
+                        <i class="fa fa-user icon"></i>
+                        <input type="text" name="name" class="form-control-premium" value="{{ old('name', auth()->user()->name) }}" placeholder="{{ __('Enter your name') }}">
+                    </div>
+                </div>
 
-            .form-control {
-                height: 50px;
-                border-radius: 10px;
-                border: 1px solid #e0e0e0;
-                padding: 10px 40px 10px 15px;
-                font-size: 14px;
-            }
+                <div class="col-12">
+                    <label class="text-muted fw-800 overline-text mb-2 px-1 d-block" style="font-size: 9px;">{{ __('MOBILE NUMBER') }}</label>
+                    <div class="input-group-premium">
+                        <i class="fa fa-phone icon"></i>
+                        <input type="text" name="mobile" class="form-control-premium" value="{{ old('mobile', auth()->user()->mobile) }}" placeholder="{{ __('Enter your mobile') }}">
+                    </div>
+                </div>
 
-            .input-wrapper i {
-                position: absolute;
-                right: 15px;
-                top: 50%;
-                transform: translateY(-50%);
-                color: #666;
-            }
+                <div class="col-12">
+                    <label class="text-muted fw-800 overline-text mb-2 px-1 d-block" style="font-size: 9px;">{{ __('GENDER') }}</label>
+                    <div class="input-group-premium">
+                        <i class="fa-solid fa-venus-mars icon"></i>
+                        <select class="form-control-premium select-arrow" name="gender">
+                            <option value="">{{ __('Select Gender') }}</option>
+                            <option value="male" {{ auth()->user()->gender === 'male' ? 'selected' : '' }}>{{ __('Male') }}</option>
+                            <option value="female" {{ auth()->user()->gender === 'female' ? 'selected' : '' }}>{{ __('Female') }}</option>
+                        </select>
+                    </div>
+                </div>
 
-            .save-changes-btn {
-                background-color: #F4B41A;
-                color: white;
-                font-weight: bold;
-                height: 50px;
-                border-radius: 10px;
-                margin-top: 10px;
-                text-transform: uppercase;
-            }
+                <div class="col-12">
+                    <label class="text-muted fw-800 overline-text mb-2 px-1 d-block" style="font-size: 9px;">{{ __('BIRTHDATE') }}</label>
+                    <div class="input-group-premium">
+                        <i class="fa fa-calendar icon"></i>
+                        <input type="date" name="birthdate" class="form-control-premium text-uppercase" value="{{ old('birthdate', auth()->user()->birthdate) }}">
+                    </div>
+                </div>
 
-            .bottom-navigation {
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                width: 100%;
-                display: flex;
-                justify-content: space-around;
-                background: white;
-                padding: 10px 0;
-                box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-            }
+                <div class="col-12 mt-4 pt-3 border-top border-light-subtle">
+                    <label class="text-muted fw-800 overline-text mb-3 px-1 d-block" style="font-size: 9px;">{{ __('SECURITY') }}</label>
+                    
+                    <div class="mb-3">
+                        <div class="input-group-premium">
+                            <i class="fa fa-lock icon"></i>
+                            <input type="password" name="current_password" class="form-control-premium" placeholder="{{ __('Current Password') }}">
+                        </div>
+                    </div>
 
-            .nav-item {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                font-size: 12px;
-            }
+                    <div class="mb-3">
+                        <div class="input-group-premium">
+                            <i class="fa fa-lock icon"></i>
+                            <input type="password" name="password" class="form-control-premium" placeholder="{{ __('New Password') }}">
+                        </div>
+                    </div>
 
-            .nav-item.active {
-                color: #F4B41A;
-            }
-        </style>
-    @endpush
+                    <div class="mb-3">
+                        <div class="input-group-premium">
+                            <i class="fa fa-lock icon"></i>
+                            <input type="password" name="password_confirmation" class="form-control-premium" placeholder="{{ __('Confirm New Password') }}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 mt-4">
+                    <button type="submit" class="btn btn-main w-100 py-3 rounded-pill fw-800 shadow-premium">
+                        {{ __('SAVE CHANGES') }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 @endsection

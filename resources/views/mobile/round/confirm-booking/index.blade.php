@@ -1,10 +1,16 @@
 @extends('layouts.master')
 
 @section('mobile-content')
-    <div class="d-flex justify-content-between align-items-center">
-        <i class="fas fa-arrow-right fs-25 text-black" onclick="window.history.back()"></i>
-        <p class="m-0 fs-25 text-black">{{ __('Summary') }}</p>
-        <div></div>
+    <div class="d-flex justify-content-between align-items-center mb-4 wow animate__animated animate__fadeIn">
+        <button type="button" onclick="window.history.back()" class="bg-white shadow-sm rounded-circle d-flex align-items-center justify-content-center border-light-subtle" style="width: 40px; height: 40px; border: 1px solid #eee;">
+            @if (app()->getLocale() == 'ar')
+                <i class="fas fa-arrow-right fs-16 text-black"></i>
+            @else
+                <i class="fas fa-arrow-left fs-16 text-black"></i>
+            @endif
+        </button>
+        <h5 class="m-0 fw-800 text-black">{{ __('Booking Summary') }}</h5>
+        <div style="width: 40px;"></div>
     </div>
 
     @php
@@ -28,169 +34,148 @@
                 'back',
             );
         }
-
     @endphp
 
-    <div class="mt-3">
-        <div class="border rounded-7 p-3">
-            <div>
-                <h6 class="text-black">
-                    {{ __('Name') }}
-                </h6>
-                <p>
-                    {{ auth()->user()->name }}
-                </p>
-            </div>
-            <div>
-                <h6 class="text-black">
-                    {{ __('Phone') }}
-                </h6>
-                <p>
-                    {{ auth()->user()->mobile }}
-                </p>
-            </div>
-            <hr>
-            <!-- Go Trip Details -->
-            <div class="summary-circle mt-3">
-                <h6 class="text-black">
-                    {{ __('Outbound trip') }}
-                </h6>
-                <div class="d-flex align-items-center gap-2">
-                    <div class="d-flex flex-column align-items-center">
-                        <div class="green-circle-mobile"></div>
-                        <div class="line-mobile"></div>
-                        <div class="red-circle-mobile"></div>
-                    </div>
-                    <div class="d-flex flex-column justify-content-between">
-                        <p class="m-0">{{ $fromStation->name }}</p>
-                        <p class="m-0">{{ $toStation->name }}</p>
-                    </div>
+    <!-- Outbound Trip Card -->
+    <div class="bg-white rounded-5 shadow-premium border border-light-subtle p-3 mb-4 wow animate__animated animate__fadeInUp">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="text-muted fw-800 overline-text" style="font-size: 9px;">{{ __('OUTBOUND TRIP') }}</span>
+            <span class="badge bg-success-subtle text-success rounded-pill px-2 py-1 fw-800" style="font-size: 8px;">{{ __('CONFIRMED') }}</span>
+        </div>
+        <div class="mb-3 pb-3 border-bottom border-light-subtle">
+            <div class="d-flex align-items-center gap-3">
+                <div class="d-flex flex-column align-items-center">
+                    <div class="bg-success rounded-circle" style="width: 8px; height: 8px;"></div>
+                    <div class="bg-light" style="width: 2px; height: 20px;"></div>
+                    <div class="bg-main rounded-circle" style="width: 8px; height: 8px;"></div>
                 </div>
-                <div class="mt-2">
-                    <h6 class="text-black">
-                        {{ __('Seat number') }}
-                    </h6>
-                    <p>
-                        @foreach ($goSeats as $seat)
-                            {{ $seat['name'] }}
-                        @endforeach
-                    </p>
-
+                <div class="d-flex flex-column gap-1">
+                    <span class="fw-800 text-black small" style="font-size: 11px;">{{ $fromStation->name }}</span>
+                    <span class="fw-800 text-black small" style="font-size: 11px;">{{ $toStation->name }}</span>
                 </div>
             </div>
-            <hr>
-            <!-- Back Trip Details -->
-            <div class="summary-circle mt-3">
-                <h6 class="text-black">
-                    {{ __('Return trip') }}
-                </h6>
-                <div class="d-flex align-items-center gap-2">
-                    <div class="d-flex flex-column align-items-center">
-                        <div class="green-circle-mobile"></div>
-                        <div class="line-mobile"></div>
-                        <div class="red-circle-mobile"></div>
-                    </div>
-                    <div class="d-flex flex-column justify-content-between">
-                        <p class="m-0">{{ $toStation->name }}</p>
-                        <p class="m-0">{{ $fromStation->name }}</p>
-                    </div>
-                </div>
-                <div class="mt-2">
-                    <h6 class="text-black">
-                        {{ __('Seat number') }}
-                    </h6>
-                    <p>
-                        @foreach ($backSeats as $seat)
-                            {{ $seat['name'] }}
-                        @endforeach
-                    </p>
-                </div>
+        </div>
+        <div class="row g-2">
+            <div class="col-6">
+                <span class="text-muted fw-800 d-block mb-1" style="font-size: 8px;">{{ __('SEATS') }}</span>
+                <span class="text-black fw-800 small d-block" style="font-size: 11px;">
+                    @foreach ($goSeats as $seat)
+                        {{ $seat['name'] }}{{ !$loop->last ? ', ' : '' }}
+                    @endforeach
+                </span>
             </div>
-            <hr>
-            <div class="mt-2">
-                <h6 class="text-black">
-                    {{ __('Total seats') }}
-                </h6>
-                <p>
-                    {{ count($goSeats) + count($backSeats) }}
-                </p>
+            <div class="col-6 text-end">
+                <span class="text-muted fw-800 d-block mb-1" style="font-size: 8px;">{{ __('PRICE') }}</span>
+                <span class="text-black fw-800 small d-block" style="font-size: 11px;">{{ array_sum(array_column($goSeats, 'price')) }} {{ __('EGP') }}</span>
             </div>
         </div>
     </div>
 
-    <div class="mt-3">
-        <div class="border rounded-7 p-3">
-            <div class="d-flex justify-content-between align-items-center text-black">
-                <p>{{ __('Payment details') }}</p>
-                <p>{{ __('EGP') }}</p>
+    <!-- Return Trip Card -->
+    <div class="bg-white rounded-5 shadow-premium border border-light-subtle p-3 mb-4 wow animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="text-muted fw-800 overline-text" style="font-size: 9px;">{{ __('RETURN TRIP') }}</span>
+            <span class="badge bg-main-light text-main rounded-pill px-2 py-1 fw-800" style="font-size: 8px;">{{ __('CONFIRMED') }}</span>
+        </div>
+        <div class="mb-3 pb-3 border-bottom border-light-subtle">
+            <div class="d-flex align-items-center gap-3">
+                <div class="d-flex flex-column align-items-center">
+                    <div class="bg-success rounded-circle" style="width: 8px; height: 8px;"></div>
+                    <div class="bg-light" style="width: 2px; height: 20px;"></div>
+                    <div class="bg-main rounded-circle" style="width: 8px; height: 8px;"></div>
+                </div>
+                <div class="d-flex flex-column gap-1">
+                    <span class="fw-800 text-black small" style="font-size: 11px;">{{ $toStation->name }}</span>
+                    <span class="fw-800 text-black small" style="font-size: 11px;">{{ $fromStation->name }}</span>
+                </div>
             </div>
-            <div class="d-flex justify-content-between align-items-center text-half-gray">
-                <p>{{ __(':count outbound seats', ['count' => count($goSeats)]) }}</p>
-                <p>{{ array_sum(array_column($goSeats, 'price')) }}</p>
+        </div>
+        <div class="row g-2">
+            <div class="col-6">
+                <span class="text-muted fw-800 d-block mb-1" style="font-size: 8px;">{{ __('SEATS') }}</span>
+                <span class="text-black fw-800 small d-block" style="font-size: 11px;">
+                    @foreach ($backSeats as $seat)
+                        {{ $seat['name'] }}{{ !$loop->last ? ', ' : '' }}
+                    @endforeach
+                </span>
             </div>
-            <div class="d-flex justify-content-between align-items-center text-half-gray">
-                <p>{{ __(':count return seats', ['count' => count($backSeats)]) }}</p>
-                <p>{{ array_sum(array_column($backSeats, 'price')) }}</p>
-            </div>
-
-            <div class="d-flex justify-content-between align-items-center text-black">
-                <p>{{ __('Total') }}</p>
-                <p>{{ array_sum(array_column($goSeats, 'price')) + array_sum(array_column($backSeats, 'price')) }}</p>
+            <div class="col-6 text-end">
+                <span class="text-muted fw-800 d-block mb-1" style="font-size: 8px;">{{ __('PRICE') }}</span>
+                <span class="text-black fw-800 small d-block" style="font-size: 11px;">{{ array_sum(array_column($backSeats, 'price')) }} {{ __('EGP') }}</span>
             </div>
         </div>
     </div>
 
-    <form action="{{ route('round.confirm-booking') }}" method="POST">
-        <div class="mt-3">
-            <div class="border rounded-8 px-3 py-3 mt-2">
-                <h4 class="text-black">{{ __('Choose Payment Method') }}</h4>
-                <div class="form-check">
-                    <input class="form-check-input form-check-input-pay" type="radio" name="payment_method"
-                        value="qnb" id="qnb" checked>
-                    <label class="form-check-label" for="qnb">
-                        Debit/Credit card
-                        <img src="{{ asset('images/pay/master.png') }}" alt="Mastercard" style="height: 30px;">
-                        <img src="{{ asset('images/pay/visa.png') }}" alt="Mastercard" style="height: 30px;">
-                    
+    <!-- Payment Details -->
+    <div class="bg-white rounded-5 shadow-premium border border-light-subtle p-3 mb-4 wow animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+        <span class="text-muted fw-800 overline-text d-block mb-3" style="font-size: 9px;">{{ __('PAYMENT BREAKDOWN') }}</span>
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="text-muted fw-800 small">{{ __('Outbound trip total') }}</span>
+            <span class="text-black fw-800 small">{{ array_sum(array_column($goSeats, 'price')) }} {{ __('EGP') }}</span>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="text-muted fw-800 small">{{ __('Return trip total') }}</span>
+            <span class="text-black fw-800 small">{{ array_sum(array_column($backSeats, 'price')) }} {{ __('EGP') }}</span>
+        </div>
+        <div class="d-flex justify-content-between align-items-center pt-2 mt-2 border-top border-light-subtle">
+            <span class="text-black fw-800">{{ __('Final Total') }}</span>
+            <span class="text-main fw-900 fs-18">{{ array_sum(array_column($goSeats, 'price')) + array_sum(array_column($backSeats, 'price')) }} {{ __('EGP') }}</span>
+        </div>
+    </div>
+
+    <form action="{{ route('round.confirm-booking') }}" method="POST" class="wow animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
+        @csrf
+        <div class="bg-white rounded-5 shadow-premium border border-light-subtle p-3 mb-4">
+            <span class="text-muted fw-800 overline-text d-block mb-3" style="font-size: 9px;">{{ __('SELECT PAYMENT METHOD') }}</span>
+            
+            <div class="d-flex flex-column gap-3">
+                <div class="payment-option">
+                    <input class="form-check-input d-none" type="radio" name="payment_method" value="qnb" id="qnb" checked>
+                    <label class="d-flex align-items-center justify-content-between p-3 rounded-4 border border-light-subtle w-100 mb-0" for="qnb" style="cursor: pointer; transition: all 0.3s ease;">
+                        <div class="d-flex align-items-center gap-3">
+                            <i class="fa-solid fa-credit-card text-main fs-20"></i>
+                            <span class="fw-800 text-black small">Debit/Credit Card</span>
+                        </div>
+                        <div class="d-flex gap-1">
+                            <img src="{{ asset('images/pay/visa.png') }}" alt="Visa" style="height: 18px;">
+                            <img src="{{ asset('images/pay/master.png') }}" alt="Mastercard" style="height: 18px;">
+                        </div>
                     </label>
                 </div>
-                <br>
-                <div class="form-check">
-                    <input class="form-check-input form-check-input-pay" type="radio" name="payment_method"
-                        value="fawry" id="flexRadioDefault1">
-                    <label class="form-check-label" for="flexRadioDefault1">
-                        Fawry
-                        <img src="{{ asset('images/pay/fawry.svg') }}" alt="Fawry" style="height: 30px;">
+
+                <div class="payment-option">
+                    <input class="form-check-input d-none" type="radio" name="payment_method" value="fawry" id="fawry">
+                    <label class="d-flex align-items-center justify-content-between p-3 rounded-4 border border-light-subtle w-100 mb-0" for="fawry" style="cursor: pointer; transition: all 0.3s ease;">
+                        <div class="d-flex align-items-center gap-3">
+                            <i class="fa-solid fa-money-bill-transfer text-success fs-20"></i>
+                            <span class="fw-800 text-black small">Fawry</span>
+                        </div>
+                        <img src="{{ asset('images/pay/fawry.svg') }}" alt="Fawry" style="height: 22px;">
                     </label>
                 </div>
-                
             </div>
+        </div>
 
-            <div class="mt-4">
-                @csrf
-                <input type="hidden" name="tripType" value="{{ request()->tripType }}" />
-                <input type="hidden" name="city_from_id" value="{{ request()->city_from_id }}" />
-                <input type="hidden" name="city_to_id" value="{{ request()->city_to_id }}" />
-                <input type="hidden" name="go_date" value="{{ request()->go_date }}" />
-                <input type="hidden" name="back_date" value="{{ request()->back_date }}" />
-                <input type="hidden" name="seats" value="{{ request()->seats }}" />
-                <input type="hidden" name="station_from_id" value="{{ request()->station_from_id }}" />
-                <input type="hidden" name="station_to_id" value="{{ request()->station_to_id }}" />
-                <input type="hidden" name="go_trip_id" value="{{ request()->go_trip_id }}" />
-                <input type="hidden" name="back_trip_id" value="{{ request()->back_trip_id }}" />
-                @foreach (request()->go_seat_id as $key => $seat_id)
-                    <input type="hidden" name="go_seat_id[]" value="{{ $seat_id }}" />
-                @endforeach
-                @foreach (request()->back_seat_id as $key => $seat_id)
-                    <input type="hidden" name="round_seat_id[]" value="{{ $seat_id }}" />
-                @endforeach
-
-
-
-                <button type="submit" class="login">
-                    {{ __('Pay') }}
-                </button>
-            </div>
+        <div class="mt-4 mb-5">
+            <input type="hidden" name="tripType" value="{{ request()->tripType }}" />
+            <input type="hidden" name="city_from_id" value="{{ request()->city_from_id }}" />
+            <input type="hidden" name="city_to_id" value="{{ request()->city_to_id }}" />
+            <input type="hidden" name="go_date" value="{{ request()->go_date }}" />
+            <input type="hidden" name="back_date" value="{{ request()->back_date }}" />
+            <input type="hidden" name="seats" value="{{ request()->seats }}" />
+            <input type="hidden" name="station_from_id" value="{{ request()->station_from_id }}" />
+            <input type="hidden" name="station_to_id" value="{{ request()->station_to_id }}" />
+            <input type="hidden" name="go_trip_id" value="{{ request()->go_trip_id }}" />
+            <input type="hidden" name="back_trip_id" value="{{ request()->back_trip_id }}" />
+            @foreach (request()->go_seat_id as $key => $seat_id)
+                <input type="hidden" name="go_seat_id[]" value="{{ $seat_id }}" />
+            @endforeach
+            @foreach (request()->back_seat_id as $key => $seat_id)
+                <input type="hidden" name="round_seat_id[]" value="{{ $seat_id }}" />
+            @endforeach
+            <button type="submit" class="btn btn-main w-100 py-3 rounded-pill fw-800 shadow-premium">
+                {{ __('Confirm & Pay') }}
+            </button>
         </div>
     </form>
     <script>

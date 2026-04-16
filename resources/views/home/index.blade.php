@@ -59,7 +59,7 @@
 
                                 <!-- start from to  -->
                                 <div class="station-group mb-4">
-                                    <div class="d-flex flex-column flex-md-row align-items-center gap-2 gap-md-0 position-relative">
+                                    <div class="d-flex flex-column flex-md-row align-items-center gap-2 gap-md-0">
                                         {{-- From Wrapper --}}
                                         <div class="flex-grow-1 w-100">
                                             <div class="input-with-icon">
@@ -67,8 +67,8 @@
                                                 <input type="text" class="modern-input from-input"
                                                     placeholder="{{ __('From') }}" readonly aria-expanded="false"
                                                     value="{{ $stations->get(0)?->name ?? '' }}" id="fromInput">
-                                                <ul class="dropdown-menu p-0 main-stations shadow" id="from-stations"></ul>
-                                                <ul class="dropdown-menu p-0 sub-stations-dropdown shadow"
+                                                <ul class="station-results-container p-0 shadow" id="from-stations"></ul>
+                                                <ul class="station-results-container p-0 shadow"
                                                     id="from-sub-stations"></ul>
                                             </div>
                                         </div>
@@ -88,8 +88,8 @@
                                                     placeholder="{{ __('To') }}" readonly aria-expanded="false"
                                                     id="toInput"
                                                     value="{{ request()->city_to_id ? ($stations->where('city_id', request()->city_to_id)->first()?->name ?? '') : ($stations->get(1)?->name ?? '') }}">
-                                                <ul class="dropdown-menu p-0 main-stations shadow" id="to-stations"></ul>
-                                                <ul class="dropdown-menu p-0 sub-stations-dropdown shadow"
+                                                <ul class="station-results-container p-0 shadow" id="to-stations"></ul>
+                                                <ul class="station-results-container p-0 shadow"
                                                     id="to-sub-stations"></ul>
                                             </div>
                                         </div>
@@ -1320,9 +1320,9 @@
                 if (menu) {
                     menu.style.display = show ? 'block' : 'none';
                     if (show) {
-                        // Consistently open downwards for better UX on the hero section
-                        menu.style.top = 'calc(100% + 5px)';
-                        menu.style.bottom = 'auto';
+                        // Position strictly under the parent .input-with-icon
+                        // The CSS .station-results-container already handles width: 100% and position: absolute
+                        menu.style.top = '100.5%';
                     }
                 }
             }

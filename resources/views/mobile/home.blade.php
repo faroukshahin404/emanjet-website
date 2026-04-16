@@ -1,64 +1,73 @@
 @section('mobile-content')
-    @include('mobile.layouts.header')
+    <div class="row align-items-center mb-4 wow animate__animated animate__fadeIn">
+        <div class="col-8">
+            @if (auth()->check())
+                <span class="text-muted small fw-bold d-block">{{ __('Hello') }}</span>
+                <h5 class="fw-800 text-black mb-0">{{ auth()->user()->name }}</h5>
+            @else
+                <span class="text-muted small fw-bold d-block">{{ __('Welcome to') }}</span>
+                <h5 class="fw-800 text-black mb-0">Superjet</h5>
+            @endif
+        </div>
+        <div class="col-4 text-end">
+            <div class="bg-white shadow-sm rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 45px; height: 45px; border: 1px solid #f0f0f0;">
+                <i class="fa-solid fa-bell text-main"></i>
+            </div>
+        </div>
+    </div>
 
-    <div class="search-trip px-3 mt-3">
+    <div class="search-trip mt-3 wow animate__animated animate__fadeInUp">
         <form action="{{ route('mobile.one-way.trips') }}" method="get" id="search-form"
-            class="bg-white rounded-5 shadow-sm p-3">
+            class="bg-white rounded-5 shadow-premium p-4 border border-light-subtle">
             <!-- start trip type -->
             <div class="text-center mb-4">
-                <div class="trip-type-tabs nav nav-pills d-inline-flex w-100 p-1 mo-trip-type-container">
-                    <div class="nav-item flex-fill" role="presentation">
-                        <button class="nav-link active w-100 py-2 fw-bold mo-trip-type-nav-link" id="pills-oneway-tab-mo"
-                            data-bs-toggle="pill" type="button" role="tab"
-                            onclick="document.getElementById('oneWayRadio').click()">{{ __('One Way Trip') }}</button>
-                    </div>
-                    <div class="nav-item flex-fill" role="presentation">
-                        <button class="nav-link w-100 py-2 fw-bold mo-trip-type-nav-link" id="pills-round-tab-mo"
-                            data-bs-toggle="pill" type="button" role="tab"
-                            onclick="document.getElementById('roundTripRadio').click()">{{ __('Round Trip') }}</button>
-                    </div>
-                    <!-- Hidden radios for JS compatibility -->
+                <div class="nav nav-pills d-flex p-1 bg-light rounded-pill" style="border: 1px solid #eee;">
+                    <button class="nav-link active flex-fill py-2 rounded-pill fw-800 fs-13 mo-trip-type-nav-link" id="pills-oneway-tab-mo"
+                        data-bs-toggle="pill" type="button" role="tab"
+                        onclick="document.getElementById('oneWayRadio').click()">{{ __('One Way') }}</button>
+                    <button class="nav-link flex-fill py-2 rounded-pill fw-800 fs-13 mo-trip-type-nav-link" id="pills-round-tab-mo"
+                        data-bs-toggle="pill" type="button" role="tab"
+                        onclick="document.getElementById('roundTripRadio').click()">{{ __('Round Trip') }}</button>
+                    
                     <input class="d-none" type="radio" name="tripType" id="oneWayRadio" value="oneway" checked>
                     <input class="d-none" type="radio" name="tripType" id="roundTripRadio" value="round">
                 </div>
             </div>
-            <!-- End trip type -->
 
             <!-- start from to  -->
-            <div class="station-group mb-4">
-                <div class="form-to border-0 rounded-4 px-3 py-3 mo-station-group-bg">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="flex-grow-1">
-                            <div class="d-flex align-items-center gap-4 py-3" id="from-container" style="cursor: pointer;">
-                                <div
-                                    class="bg-white rounded-circle shadow-sm d-flex align-items-center justify-content-center mo-location-icon-box">
-                                    <i class="fas fa-location-dot text-main"></i>
-                                </div>
-                                <div>
-                                    <div class="text-muted small mb-1">{{ __('From') }}</div>
-                                    <span class="selected-location fw-bold fs-6" id="from-location">
-                                        {{ $cities->get(0)?->stations?->first()?->name ?? '' }}
-                                    </span>
-                                </div>
-                            </div>
-                            <hr class="my-0 opacity-10">
-                            <div class="d-flex align-items-center gap-4 py-3" id="to-container" style="cursor: pointer;">
-                                <div
-                                    class="bg-white rounded-circle shadow-sm d-flex align-items-center justify-content-center mo-location-icon-box">
-                                    <i class="fas fa-circle-dot text-success"></i>
-                                </div>
-                                <div>
-                                    <div class="text-muted small mb-1">{{ __('To') }}</div>
-                                    <span class="selected-location fw-bold fs-6" id="to-location">
-                                        {{ $cities->get(1)?->stations?->first()?->name ?? '' }}
-                                    </span>
-                                </div>
+            <div class="station-group mb-4 position-relative">
+                <div class="p-3 bg-light rounded-5 border border-light-subtle">
+                    <div class="d-flex align-items-center gap-3 py-2 px-1" id="from-container" style="cursor: pointer;">
+                        <div class="bg-white rounded-circle shadow-premium d-flex align-items-center justify-content-center border-main-subtle" style="min-width: 40px; height: 40px; border: 2px solid rgba(var(--main-color-rgb), 0.2);">
+                            <i class="fa-solid fa-location-arrow text-main small"></i>
+                        </div>
+                        <div class="flex-grow-1 overflow-hidden">
+                            <label class="text-muted overline-text mb-0" style="font-size: 10px; font-weight: 800; opacity: 0.7;">{{ __('DEPARTURE FROM') }}</label>
+                            <div class="selected-location fw-800 text-black text-truncate" id="from-location" style="font-size: 14px;">
+                                {{ $cities->get(0)?->stations?->first()?->name ?? __('Select Station') }}
                             </div>
                         </div>
+                    </div>
+                    
+                    <div class="position-relative py-1">
+                        <hr class="my-0 opacity-10">
                         <button type="button" id="swap-btn"
-                            class="mo-swap-btn bg-white shadow-sm border rounded-circle d-flex align-items-center justify-content-center ms-3">
-                            <i class="fas fa-exchange-alt fa-rotate-90"></i>
+                            class="position-absolute top-50 start-50 translate-middle bg-white shadow-premium border-light-subtle rounded-circle d-flex align-items-center justify-content-center"
+                            style="width: 32px; height: 32px; z-index: 5; border: 1px solid #eee;">
+                            <i class="fa-solid fa-right-left fa-rotate-90 text-main" style="font-size: 10px;"></i>
                         </button>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-3 py-2 px-1" id="to-container" style="cursor: pointer;">
+                        <div class="bg-white rounded-circle shadow-premium d-flex align-items-center justify-content-center" style="min-width: 40px; height: 40px; border: 2px solid rgba(40, 167, 69, 0.2);">
+                            <i class="fa-solid fa-location-dot text-success small"></i>
+                        </div>
+                        <div class="flex-grow-1 overflow-hidden">
+                            <label class="text-muted overline-text mb-0" style="font-size: 10px; font-weight: 800; opacity: 0.7;">{{ __('ARRIVAL AT') }}</label>
+                            <div class="selected-location fw-800 text-black text-truncate" id="to-location" style="font-size: 14px;">
+                                {{ $cities->get(1)?->stations?->first()?->name ?? __('Select Station') }}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -70,114 +79,107 @@
             <input type="hidden" id="from-station" name="station_from_id" value="{{ $cities->get(0)?->stations?->first()?->id ?? '' }}">
             <input type="hidden" id="to-station" name="station_to_id" value="{{ $cities->get(1)?->stations?->first()?->id ?? '' }}">
 
-            <!-- Start date and passenger number (must stay inside one .row for Bootstrap grid) -->
-            <div class="date-passenger mt-3">
-                <div class="row g-3 align-items-end" id="tripLayoutContainer">
-                    <div class="col-12" id="departureDateCol">
-                        <label class="small text-muted mb-1 d-block" for="departureDateDisplay">{{ __('Departure date') }}</label>
-                        <input class="form-control border-0 rounded-4 py-2 mo-bg-gray" type="text" readonly
-                            id="departureDateDisplay" value="{{ date('d / m / Y') }}"
-                            onclick="openDateWheelPicker('departureDateDisplay', 'departureDate')">
+            <!-- Start date and passenger number -->
+            <div class="row g-3">
+                <div class="col-12" id="departureDateCol">
+                    <div class="bg-light rounded-4 p-3 border border-light-subtle" onclick="openDateWheelPicker('departureDateDisplay', 'departureDate')">
+                        <label class="text-muted overline-text d-block mb-1" style="font-size: 10px; font-weight: 800;">{{ __('DATE') }}</label>
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-calendar-days text-main opacity-50"></i>
+                            <input class="form-control border-0 bg-transparent p-0 fw-800 text-black shadow-none" type="text" readonly
+                                id="departureDateDisplay" value="{{ date('d / m / Y') }}" style="font-size: 14px;">
+                        </div>
                         <input type="hidden" name="go_date" id="departureDate" value="{{ date('Y-m-d') }}">
                     </div>
+                </div>
 
-            <div class="col-12 col-sm-6" id="passengersColSide">
-                <label class="small text-muted mb-1">{{ __('Passengers') }}</label>
-                <div class="d-flex justify-content-between align-items-center rounded-4 py-1 px-2 mo-bg-gray">
-                    <button type="button" class="btn btn-sm btn-white shadow-sm rounded-circle p-0 mo-passenger-count-btn"
-                        onclick="decrementPassengers()"
-                        aria-label="{{ __('Decrease number of travelers') }}">
-                        <i class="fa fa-minus x-small" aria-hidden="true"></i>
-                    </button>
-                    <span class="fw-bold" id="passengerCount">1</span>
-                    <input type="hidden" id="passenger-count" name="seats" value="1">
-                    <button type="button"
-                        class="btn btn-sm btn-white shadow-sm rounded-circle p-0 mo-passenger-count-btn"
-                        onclick="incrementPassengers()"
-                        aria-label="{{ __('Increase number of travelers') }}">
-                        <i class="fa fa-plus x-small" aria-hidden="true"></i>
-                    </button>
+                <div class="col-12 d-none" id="returnDateCol">
+                    <div class="bg-light rounded-4 p-3 border border-light-subtle" onclick="openDateWheelPicker('returnDateDisplay', 'returnDate')">
+                        <label class="text-muted overline-text d-block mb-1" style="font-size: 10px; font-weight: 800;">{{ __('RETURN DATE') }}</label>
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-calendar-check text-success opacity-50"></i>
+                            <input class="form-control border-0 bg-transparent p-0 fw-800 text-black shadow-none" type="text" readonly
+                                id="returnDateDisplay" value="{{ date('d / m / Y', strtotime('+1 day')) }}" style="font-size: 14px;">
+                        </div>
+                        <input type="hidden" name="back_date" id="returnDate"
+                            value="{{ date('Y-m-d', strtotime('+1 day')) }}">
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="bg-light rounded-4 p-3 border border-light-subtle">
+                        <label class="text-muted overline-text d-block mb-2" style="font-size: 10px; font-weight: 800;">{{ __('PASSENGERS') }}</label>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="fa-solid fa-user-group text-main opacity-50"></i>
+                                <span class="fw-800 text-black" style="font-size: 14px;" id="passengerDisplay">1 {{ __('Person') }}</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-3">
+                                <button type="button" class="btn btn-white shadow-premium rounded-circle d-flex align-items-center justify-content-center p-0"
+                                    style="width:32px; height:32px;" onclick="decrementPassengers()">
+                                    <i class="fa-solid fa-minus text-main small"></i>
+                                </button>
+                                <span class="fw-800 fs-5 mx-1" id="passengerCount">1</span>
+                                <input type="hidden" id="passenger-count" name="seats" value="1">
+                                <button type="button" class="btn btn-white shadow-premium rounded-circle d-flex align-items-center justify-content-center p-0"
+                                    style="width:32px; height:32px;" onclick="incrementPassengers()">
+                                    <i class="fa-solid fa-plus text-main small"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="col-12 col-sm-6 d-none" id="returnDateCol">
-                <label class="small text-muted mb-1 d-block" for="returnDateDisplay">{{ __('Return Date') }}</label>
-                <input class="form-control border-0 rounded-4 py-2 mo-bg-gray" type="text" readonly
-                    id="returnDateDisplay" value="{{ date('d / m / Y', strtotime('+1 day')) }}"
-                    onclick="openDateWheelPicker('returnDateDisplay', 'returnDate')">
-                <input type="hidden" name="back_date" id="returnDate"
-                    value="{{ date('Y-m-d', strtotime('+1 day')) }}">
+            <div class="mt-4">
+                <button type="submit" class="btn btn-main w-100 rounded-pill py-3 fw-800 shadow-premium">
+                    <i class="fa-solid fa-magnifying-glass me-2"></i>
+                    {{ __('Find Your Trip') }}
+                </button>
             </div>
-
-            <div class="col-12 d-none" id="passengersColBottom">
-                <label class="small text-muted mb-1">{{ __('Passengers') }}</label>
-                <div class="d-flex justify-content-between align-items-center rounded-4 py-2 px-3 mo-bg-gray">
-                    <button type="button" class="btn btn-white shadow-sm rounded-circle mo-btn-32"
-                        onclick="decrementPassengers2()"
-                        aria-label="{{ __('Decrease number of travelers') }}">
-                        <i class="fa fa-minus" aria-hidden="true"></i>
-                    </button>
-                    <span class="fw-bold fs-5" id="passengerCount2">1</span>
-                    <input type="hidden" id="passenger-count2" name="seats" value="1">
-                    <button type="button" class="btn btn-white shadow-sm rounded-circle mo-btn-32"
-                        onclick="incrementPassengers2()"
-                        aria-label="{{ __('Increase number of travelers') }}">
-                        <i class="fa fa-plus" aria-hidden="true"></i>
-                    </button>
-                </div>
-            </div>
-
-                </div>
-            </div>
-
-    <div class="mt-4">
-        <button type="submit" class="hero-btn w-100 rounded-4 py-3 border-0">
-            <i class="fas fa-search me-2"></i>
-            {{ __('Search For Trips') }}
-        </button>
-    </div>
-    </form>
+        </form>
     </div>
 
     <!-- End promo  -->
 
-    <!-- start new places (Explore the Most Popular Destinations) -->
-    <div class="new-places new-places-mobile mt-3 pb-5 mb-5">
-        <h2 class="new-places-title text-black mb-3">
-            {{ $popularDestinationsSection['title'] }}
-        </h2>
+    <!-- start popular destinations -->
+    <div class="new-places px-2 mt-4 wow animate__animated animate__fadeInUp">
+        <div class="d-flex justify-content-between align-items-center mb-3 px-1">
+            <h5 class="fw-800 text-black mb-0">{{ $popularDestinationsSection['title'] }}</h5>
+            <a href="{{ route('destinations') }}" class="text-main small fw-800 text-decoration-none">{{ __('View All') }}</a>
+        </div>
+        
         <div class="swiper new-places-swiper" id="newPlacesSwiperMobile">
             <div class="swiper-wrapper">
                 @foreach ($cities as $city)
                     @php
                         $cityPhoto = $city->getRawOriginal('image');
-                        $hasCityPhoto =
-                            filled($cityPhoto) && is_file(public_path('uploads/city/' . $cityPhoto));
+                        $hasCityPhoto = filled($cityPhoto) && is_file(public_path('uploads/city/' . $cityPhoto));
                         $cityName = $city->getTranslation('name', app()->getLocale());
                     @endphp
-                    <div class="swiper-slide">
+                    <div class="swiper-slide h-auto">
                         <a href="{{ route('home', ['city_to_id' => $city->id]) }}#heroSection"
-                            class="popular-dest-card popular-dest-card--mobile d-block text-decoration-none">
-                            <div class="popular-dest-card__inner shadow-sm">
-                                <div class="popular-dest-card__media popular-dest-card__media--mobile popular-destination-thumb">
+                            class="d-block text-decoration-none h-100">
+                            <div class="bg-white rounded-5 shadow-sm border border-light-subtle overflow-hidden h-100 p-2">
+                                <div class="position-relative rounded-4 overflow-hidden mb-2" style="height: 140px;">
                                     @if ($hasCityPhoto)
                                         <img src="{{ asset('uploads/city/' . $cityPhoto) }}"
-                                            class="popular-dest-card__img object-fit-cover" alt="{{ $cityName }}"
+                                            class="w-100 h-100 object-fit-cover" alt="{{ $cityName }}"
                                             loading="lazy">
                                     @else
-                                        <div class="popular-dest-card__img popular-destination-placeholder"
-                                            role="img" aria-label="{{ $cityName }}">
-                                            <span class="popular-destination-placeholder__pattern" aria-hidden="true"></span>
-                                            <i class="fas fa-map-marked-alt popular-destination-placeholder__icon" aria-hidden="true"></i>
-                                            <span class="popular-destination-placeholder__label">{{ __('Destination') }}</span>
+                                        <div class="w-100 h-100 bg-light d-flex align-items-center justify-content-center">
+                                            <i class="fa-solid fa-mountain-sun text-muted opacity-50"></i>
                                         </div>
                                     @endif
-                                    <div class="popular-dest-card__overlay popular-dest-card__overlay--mobile">
-                                        <span class="popular-dest-card__name">{{ $cityName }}</span>
-                                        <span class="popular-dest-card__glass-badge">
-                                            <i class="fas fa-ticket-alt" aria-hidden="true"></i>
-                                            <span>{{ __('Book Now') }}</span>
-                                        </span>
+                                    <div class="position-absolute bottom-0 start-0 w-100 p-2" style="background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);">
+                                        <span class="text-white fw-800 fs-12">{{ $cityName }}</span>
+                                    </div>
+                                </div>
+                                <div class="px-1 pb-1">
+                                    <div class="d-flex align-items-center gap-2 mb-2">
+                                        <div class="bg-main-light text-main rounded-pill px-2 py-0 fw-800 fs-10" style="font-size: 9px;">
+                                            <i class="fa-solid fa-ticket-simple me-1"></i> {{ __('BOOK NOW') }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>

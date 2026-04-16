@@ -141,7 +141,7 @@
     </div>
 
     <div class="mobile d-lg-none d-block">
-        <nav class="mobile-header navbar navbar-light bg-white border-bottom sticky-top shadow-sm py-2">
+        <nav class="mobile-header navbar navbar-light bg-white border-bottom sticky-top shadow-sm py-2 d-none">
             <div class="container-fluid d-flex justify-content-center">
                 <a class="navbar-brand p-0 m-0" href="{{ route('home') }}">
                     <img src="{{ asset('images/logo.png') }}" alt="{{ config('app.name', 'Super Jet') }}" style="height: 35px; width: auto;">

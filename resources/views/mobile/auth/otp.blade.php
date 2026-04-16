@@ -1,66 +1,92 @@
-<div class="mobile d-block" dir='rtl'>
+<div class="mobile d-block" dir='{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}'>
     <div class="container mo-view mb-5 mt-3 px-4">
         <div class="row">
-            <div class="d-flex justify-content-between align-items-center">
-                <a href="{{ route('auth.register') }}">
-                    <i class="fas fa-arrow-right fs-18 text-black"></i>
-                </a>
-                <p class="m-0 fs-25 text-black">{{ __('Phone Number Verification') }}</p>
-                <div></div>
+            <div class="d-flex justify-content-between align-items-center mb-4 wow animate__animated animate__fadeIn">
+                <button type="button" onclick="window.history.back()" class="bg-white shadow-sm rounded-circle d-flex align-items-center justify-content-center border-light-subtle" style="width: 40px; height: 40px; border: 1px solid #eee;">
+                    @if (app()->getLocale() == 'ar')
+                        <i class="fas fa-arrow-right fs-16 text-black"></i>
+                    @else
+                        <i class="fas fa-arrow-left fs-16 text-black"></i>
+                    @endif
+                </button>
+                <h5 class="m-0 fw-800 text-black">{{ __('OTP Verification') }}</h5>
+                <div style="width: 40px;"></div>
             </div>
 
-            <div class="mt-3 text-center">
-                <p class="m-0">
-                    {{ __('Enter the code sent to your number') }} {{ $phone }}
+            <div class="text-center mt-3 mb-5 wow animate__animated animate__fadeIn">
+                <div class="bg-main-light text-main rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 80px; height: 80px;">
+                    <i class="fas fa-mobile-alt fs-30"></i>
+                </div>
+                <h4 class="fw-900 text-black mb-1">{{ __('Verify Your Phone') }}</h4>
+                <p class="text-muted fw-800 small mb-0 px-3">
+                    {{ __('Enter the code sent to your number') }}
+                    <span class="text-black fw-900 d-block mt-1">{{ $phone }}</span>
                 </p>
             </div>
 
-            <div class="mt-5 d-flex justify-content-center align-items-center my-5">
-                <img src="{{ asset('images/mobile/phone-chat.png') }}" alt="phone">
-            </div>
-
-            <form action="{{ route('auth.postOtp') }}" method="POST" class="login-form">
+            <form action="{{ route('auth.postOtp') }}" method="POST" class="wow animate__animated animate__fadeInUp">
                 @csrf
-                <div class="d-flex justify-content-center align-items-center gap-3" dir="ltr">
+                <div class="d-flex justify-content-center align-items-center gap-3 mb-4" dir="ltr">
                     @for ($i = 0; $i < 4; $i++)
                         <input type="text"
-                            class="form-control text-center otp-box @error('otp') is-invalid @enderror" name="otp[]"
+                            class="form-control text-center otp-box-premium @error('otp') is-invalid @enderror" name="otp[]"
                             maxlength="1" pattern="[0-9]" inputmode="numeric"
-                            style="
-                        width: 50px;
-                        height: 50px;
-                        font-size: 24px;
-                        background-color: #eee;
-                        border-radius: 8px;
-                        padding: 0;
-                        text-align: center;
-                        line-height: 50px;
-                    "
                             required>
                     @endfor
                 </div>
+                
                 @error('otp')
-                    <div class="invalid-feedback text-center">{{ $message }}</div>
+                    <div class="text-danger text-center fw-800 mb-3" style="font-size: 11px;">{{ $message }}</div>
                 @enderror
 
-                <div class="text-center mt-3">
-                    <p class="m-0 text-center">
+                <div class="text-center mb-5">
+                    <p class="text-muted fw-800 small mb-1">
                         {{ __('Didn\'t receive the code?') }}
-                        <a id="resendOtpLink" class="text-main" href="javascript:void(0)" onclick="resendOtp()"></a>
                     </p>
-                    <p class="mt-2 text-center text-main" id="mobile-timer"></p>
-
+                    <a id="resendOtpLink" class="text-main fw-900 text-decoration-none" href="javascript:void(0)" onclick="resendOtp()"></a>
+                    <p class="mt-2 text-main fw-800" id="mobile-timer" style="font-size: 11px;"></p>
                 </div>
 
-
-                <div class="form-group mt-4">
-                    <button type="submit" class="btn btn-main w-100 rounded-6">{{ __('Verify') }}</button>
+                <div class="mb-5 pt-2">
+                    <button type="submit" class="btn btn-main w-100 py-3 rounded-pill fw-800 shadow-premium">
+                        {{ __('Verify & Continue') }}
+                    </button>
+                    <div class="text-center mt-4">
+                        <a href="{{ route('auth.register') }}" class="text-muted fw-800 text-decoration-none small">
+                            <i class="fas fa-chevron-{{ app()->getLocale() == 'ar' ? 'right' : 'left' }} me-1" style="font-size: 8px;"></i>
+                            {{ __('Back to Registration') }}
+                        </a>
+                    </div>
                 </div>
             </form>
         </div>
     </div>
     @include('mobile.layouts.footer')
 </div>
+
+@push('styles')
+<style>
+    .otp-box-premium {
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+        font-weight: 900;
+        color: #000;
+        background-color: #f8f9fa;
+        border: 2px solid #eee;
+        border-radius: 16px;
+        transition: all 0.3s ease;
+        padding: 0;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    }
+    .otp-box-premium:focus {
+        background-color: #fff;
+        border-color: var(--main-color);
+        box-shadow: var(--shadow-premium);
+        transform: translateY(-2px);
+    }
+</style>
+@endpush
 
 @push('scripts')
 <script>
@@ -92,26 +118,29 @@ const otpExpiresAt = {{ $otp?->expires_at?->timestamp ?? 'null' }} * 1000;
                 });
             });
 
-            document.querySelector('input[name="otp[]"]').addEventListener('paste', function(e) {
-                e.preventDefault();
-                const pastedData = (e.clipboardData || window.clipboardData)
-                    .getData('text')
-                    .replace(/[^0-9]/g, '')
-                    .substring(0, 4)
-                    .split('');
+            const firstInput = document.querySelector('input[name="otp[]"]');
+            if(firstInput) {
+                firstInput.addEventListener('paste', function(e) {
+                    e.preventDefault();
+                    const pastedData = (e.clipboardData || window.clipboardData)
+                        .getData('text')
+                        .replace(/[^0-9]/g, '')
+                        .substring(0, 4)
+                        .split('');
 
-                inputs.forEach((input, index) => {
-                    if (pastedData[index]) {
-                        input.value = pastedData[index];
+                    inputs.forEach((input, index) => {
+                        if (pastedData[index]) {
+                            input.value = pastedData[index];
+                        }
+                    });
+
+                    if (pastedData.length < 4) {
+                        inputs[pastedData.length].focus();
+                    } else {
+                        inputs[3].focus();
                     }
                 });
-
-                if (pastedData.length < 4) {
-                    inputs[pastedData.length].focus();
-                } else {
-                    inputs[3].focus();
-                }
-            });
+            }
         });
 
         function startTimer(duration) {
@@ -125,18 +154,24 @@ const otpExpiresAt = {{ $otp?->expires_at?->timestamp ?? 'null' }} * 1000;
                 const minutes = String(Math.floor(timer / 60)).padStart(2, '0');
                 const seconds = String(timer % 60).padStart(2, '0');
 
-                timerElement.textContent = `${waitPrefix} ${minutes}:${seconds} ${waitSuffix}`;
+                if(timerElement) {
+                    timerElement.textContent = `${waitPrefix} ${minutes}:${seconds} ${waitSuffix}`;
+                }
 
-                resendOtpLink.textContent = '';
-                resendOtpLink.style.pointerEvents = 'none';
-                resendOtpLink.style.color = '#aaa';
+                if(resendOtpLink) {
+                    resendOtpLink.textContent = '';
+                    resendOtpLink.style.pointerEvents = 'none';
+                    resendOtpLink.style.color = '#aaa';
+                }
 
                 if (--timer < 0) {
                     clearInterval(countdown);
-                    timerElement.textContent = '';
-                    resendOtpLink.textContent = @json(__('Would you like to resend it?'));
-                    resendOtpLink.style.pointerEvents = 'auto';
-                    resendOtpLink.style.color = '';
+                    if(timerElement) timerElement.textContent = '';
+                    if(resendOtpLink) {
+                        resendOtpLink.textContent = @json(__('Resend Code'));
+                        resendOtpLink.style.pointerEvents = 'auto';
+                        resendOtpLink.style.color = '';
+                    }
                 }
             }, 1000);
         }

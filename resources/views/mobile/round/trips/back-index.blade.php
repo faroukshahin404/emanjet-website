@@ -3,309 +3,293 @@
 @section('mobile-content')
     @php
         $isRtl = app()->getLocale() === 'ar';
-        $journeyDirIcon = $isRtl ? 'fa-chevron-left' : 'fa-chevron-right';
-        $navBackIcon = $isRtl ? 'fa-chevron-right' : 'fa-chevron-left';
+        $navBackIcon = $isRtl ? 'fa-arrow-right' : 'fa-arrow-left';
     @endphp
-    <div class="row g-3">
-        <!-- Modernized Journey Summary Card -->
-        <div class="col-12 px-0">
-            <div class="mobile-journey-card text-center position-relative overflow-hidden">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <button type="button" onclick="window.history.back()"
-                        class="btn btn-link text-dark p-0 border-0"
-                        aria-label="{{ __('Back') }}">
-                        <i class="fas {{ $navBackIcon }} fs-4" aria-hidden="true"></i>
-                    </button>
-                    <span class="badge bg-main-light text-main rounded-pill px-3 py-2 fw-bold small">
-                        {{ __('Return Trip') }}
-                    </span>
-                    <button class="btn btn-sm btn-light rounded-circle shadow-sm" data-bs-toggle="modal"
-                        data-bs-target="#searchModal">
-                        <i class="fas fa-pencil-alt text-main"></i>
-                    </button>
-                </div>
+    <div class="wow animate__animated animate__fadeIn">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <button type="button" onclick="window.history.back()" class="bg-white shadow-sm rounded-circle d-flex align-items-center justify-content-center border-light-subtle" style="width: 40px; height: 40px; border: 1px solid #eee;">
+                <i class="fas {{ $navBackIcon }} fs-16 text-black"></i>
+            </button>
+            <div class="text-center">
+                <h5 class="m-0 fw-800 text-black">{{ __('Return Trip') }}</h5>
+                <span class="text-muted fw-800" style="font-size: 10px; opacity: 0.7;">{{ __('Round Trip') }}</span>
+            </div>
+            <button class="btn btn-white shadow-premium rounded-circle d-flex align-items-center justify-content-center border-light-subtle" style="width: 40px; height: 40px; border: 1px solid #eee;" data-bs-toggle="modal" data-bs-target="#searchModal">
+                <i class="fa-solid fa-sliders text-main"></i>
+            </button>
+        </div>
 
-                <div class="row align-items-center g-0">
-                    <div class="col-5">
-                        <span class="city d-block fw-900 fs-18 mb-1">{{ $search['from']->name }}</span>
-                        <span class="station text-muted small text-truncate d-block">{{ $search['fromStation']->name ?? __('All Stations') }}</span>
-                    </div>
-                    <div class="col-2 journey-arrow">
-                        <div class="position-relative w-100 d-flex align-items-center justify-content-center">
-                            <div class="arrow-line"></div>
-                            <div class="arrow-head" aria-hidden="true"><i
-                                    class="fas {{ $journeyDirIcon }} text-main small"></i></div>
-                        </div>
-                    </div>
-                    <div class="col-5">
-                        <span class="city d-block fw-900 fs-18 mb-1">{{ $search['to']->name }}</span>
-                        <span class="station text-muted small text-truncate d-block">{{ $search['toStation']->name ?? __('All Stations') }}</span>
-                    </div>
+        <!-- Journey Summary Card -->
+        <div class="bg-white rounded-5 shadow-premium p-3 mb-4 border border-light-subtle position-relative overflow-hidden">
+            <div class="row align-items-center g-0">
+                <div class="col-5 text-center">
+                    <span class="text-muted overline-text d-block mb-1" style="font-size: 9px; font-weight: 800;">{{ __('FROM') }}</span>
+                    <span class="fw-800 text-black d-block text-truncate small">{{ $search['from']->name }}</span>
                 </div>
+                <div class="col-2 text-center">
+                    <i class="fa-solid fa-plane-up text-main opacity-25 fs-14"></i>
+                </div>
+                <div class="col-5 text-center">
+                    <span class="text-muted overline-text d-block mb-1" style="font-size: 9px; font-weight: 800;">{{ __('TO') }}</span>
+                    <span class="fw-800 text-black d-block text-truncate small">{{ $search['to']->name }}</span>
+                </div>
+            </div>
 
-                <div class="d-flex justify-content-center gap-3 mt-3 pt-3 border-top border-light-subtle">
-                    <div class="date-badge px-2 py-1">
-                        <span class="label d-block text-muted text-uppercase mb-1">{{ __('Departure') }}</span>
-                        <span class="value d-block text-dark fw-bold small">{{ \Carbon\Carbon::parse(request()->go_date)->format('d M, Y') }}</span>
-                    </div>
-                    <div class="vr opacity-10"></div>
-                    <div class="date-badge px-2 py-1">
-                        <span class="label d-block text-muted text-uppercase mb-1">{{ __('Return') }}</span>
-                        <span class="value d-block text-dark fw-bold small">{{ \Carbon\Carbon::parse(request()->back_date)->format('d M, Y') }}</span>
-                    </div>
+            <div class="d-flex justify-content-center gap-4 mt-3 pt-3 border-top border-light-subtle">
+                <div class="text-center">
+                    <span class="text-muted fw-800 d-block mb-1" style="font-size: 9px;">{{ __('OUTBOUND') }}</span>
+                    <span class="text-black fw-800 small">{{ \Carbon\Carbon::parse(request()->go_date)->format('d M, Y') }}</span>
+                </div>
+                <div class="vr opacity-10"></div>
+                <div class="text-center">
+                    <span class="text-muted fw-800 d-block mb-1" style="font-size: 9px;">{{ __('RETURN') }}</span>
+                    <span class="text-black fw-800 small">{{ \Carbon\Carbon::parse(request()->back_date)->format('d M, Y') }}</span>
                 </div>
             </div>
         </div>
 
-        <!-- Date scrollers: departure (re-search outbound) + return -->
-        <div class="col-12 px-0 mb-2">
-            <div class="px-2 mb-1">
-                <span class="mo-trip-date-section-label">{{ __('Travel Date') }}</span>
+        <!-- Travel Date Selector -->
+        <div class="mb-4 wow animate__animated animate__fadeInUp">
+            <div class="px-1 mb-2">
+                <h6 class="fw-800 text-black mb-0">{{ __('Departure Date') }}</h6>
             </div>
-            <div class="tabs-container">
-                <div class="tabs-wrapper px-2" id="date-slider-go" data-date-slider>
-                    <div class="d-flex gap-2">
-                        @foreach ($goDates as $date)
-                            @php
-                                $carbonDate = \Carbon\Carbon::parse($date);
-                                $dayName = $carbonDate->isToday() ? __('Today') : (app()->getLocale() == 'ar' ? $carbonDate->locale('ar')->dayName : $carbonDate->format('l'));
-                                $dayNum = $carbonDate->format('d');
-                                $monthName = app()->getLocale() == 'ar' ? $carbonDate->locale('ar')->monthName : $carbonDate->format('M');
-                                $isActive = request()->go_date == $date;
-                            @endphp
+            <div class="tabs-wrapper" id="date-slider-go" data-date-slider style="background: rgba(255,255,255,0.5); padding: 5px 0;">
+                <div class="d-flex gap-2">
+                    @foreach ($goDates as $date)
+                        @php
+                            $carbonDate = \Carbon\Carbon::parse($date);
+                            $dayName = $carbonDate->isToday() ? __('Today') : (app()->getLocale() == 'ar' ? $carbonDate->locale('ar')->dayName : $carbonDate->format('D'));
+                            $dayNum = $carbonDate->format('d');
+                            $monthName = app()->getLocale() == 'ar' ? $carbonDate->locale('ar')->monthName : $carbonDate->format('M');
+                            $isActive = request()->go_date == $date;
+                        @endphp
 
-                            <form action="{{ route('mobile.round.trips') }}" method="get" class="m-0">
-                                <input type="hidden" name="tripType" value="{{ request()->tripType }}" />
-                                <input type="hidden" name="city_from_id" value="{{ request()->city_from_id }}" />
-                                <input type="hidden" name="city_to_id" value="{{ request()->city_to_id }}" />
-                                <input type="hidden" name="station_from_id" value="{{ request()->station_from_id }}" />
-                                <input type="hidden" name="station_to_id" value="{{ request()->station_to_id }}" />
-                                <input type="hidden" name="seats" value="{{ request()->seats }}" />
-                                <input type="hidden" name="back_date" value="{{ request()->back_date }}" />
-                                <input type="hidden" name="go_date" value="{{ $date }}" />
-                                <button type="submit"
-                                    class="date-pill {{ $isActive ? 'active' : '' }} d-flex flex-column align-items-center justify-content-center">
-                                    <span class="day-name">{{ $dayName }}</span>
-                                    <span class="day-num">{{ $dayNum }}</span>
-                                    <span class="month-name">{{ $monthName }}</span>
-                                </button>
-                            </form>
-                        @endforeach
-                    </div>
+                        <form action="{{ route('mobile.round.trips') }}" method="get" class="m-0">
+                            <input type="hidden" name="tripType" value="{{ request()->tripType }}" />
+                            <input type="hidden" name="city_from_id" value="{{ request()->city_from_id }}" />
+                            <input type="hidden" name="city_to_id" value="{{ request()->city_to_id }}" />
+                            <input type="hidden" name="station_from_id" value="{{ request()->station_from_id }}" />
+                            <input type="hidden" name="station_to_id" value="{{ request()->station_to_id }}" />
+                            <input type="hidden" name="seats" value="{{ request()->seats }}" />
+                            <input type="hidden" name="back_date" value="{{ request()->back_date }}" />
+                            <input type="hidden" name="go_date" value="{{ $date }}" />
+                            <button type="submit"
+                                class="nav-link border-0 text-nowrap rounded-4 px-3 py-2 d-flex flex-column align-items-center {{ $isActive ? 'active btn-main shadow-premium' : 'bg-light text-muted opacity-75' }}"
+                                style="min-width: 75px; transition: all 0.3s ease;">
+                                <span class="fw-800" style="font-size: 10px;">{{ $dayName }}</span>
+                                <span class="fw-800" style="font-size: 14px;">{{ $dayNum }} {{ $monthName }}</span>
+                            </button>
+                        </form>
+                    @endforeach
                 </div>
             </div>
         </div>
 
-        <div class="col-12 px-0 mb-2">
-            <div class="px-2 mb-1">
-                <span class="mo-trip-date-section-label">{{ __('Back Date') }}</span>
+        <div class="mb-4 wow animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
+            <div class="px-1 mb-2">
+                <h6 class="fw-800 text-black mb-0">{{ __('Back Date') }}</h6>
             </div>
-            <div class="tabs-container">
-                <div class="tabs-wrapper px-2" id="date-slider-back" data-date-slider>
-                    <div class="d-flex gap-2">
-                        @foreach ($dates as $date)
-                            @php
-                                $carbonDate = \Carbon\Carbon::parse($date);
-                                $dayName = $carbonDate->isToday() ? __('Today') : (app()->getLocale() == 'ar' ? $carbonDate->locale('ar')->dayName : $carbonDate->format('l'));
-                                $dayNum = $carbonDate->format('d');
-                                $monthName = app()->getLocale() == 'ar' ? $carbonDate->locale('ar')->monthName : $carbonDate->format('M');
-                                $isActive = request()->back_date == $date;
-                            @endphp
+            <div class="tabs-wrapper" id="date-slider-back" data-date-slider style="background: rgba(255,255,255,0.5); padding: 5px 0;">
+                <div class="d-flex gap-2">
+                    @foreach ($dates as $date)
+                        @php
+                            $carbonDate = \Carbon\Carbon::parse($date);
+                            $dayName = $carbonDate->isToday() ? __('Today') : (app()->getLocale() == 'ar' ? $carbonDate->locale('ar')->dayName : $carbonDate->format('D'));
+                            $dayNum = $carbonDate->format('d');
+                            $monthName = app()->getLocale() == 'ar' ? $carbonDate->locale('ar')->monthName : $carbonDate->format('M');
+                            $isActive = request()->back_date == $date;
+                        @endphp
 
-                            <form action="{{ route('mobile.round.back-trips') }}" method="get" class="m-0">
-                                <input type="hidden" name="tripType" value="{{ request()->tripType }}" />
-                                <input type="hidden" name="city_from_id" value="{{ request()->city_from_id }}" />
-                                <input type="hidden" name="city_to_id" value="{{ request()->city_to_id }}" />
-                                <input type="hidden" name="station_from_id" value="{{ request()->station_from_id }}" />
-                                <input type="hidden" name="station_to_id" value="{{ request()->station_to_id }}" />
-                                <input type="hidden" name="seats" value="{{ request()->seats }}" />
-                                <input type="hidden" name="go_date" value="{{ request()->go_date }}" />
-                                <input type="hidden" name="go_trip_id" value="{{ request()->go_trip_id }}" />
-                                <input type="hidden" name="back_date" value="{{ $date }}" />
-                                <button type="submit"
-                                    class="date-pill {{ $isActive ? 'active' : '' }} d-flex flex-column align-items-center justify-content-center">
-                                    <span class="day-name">{{ $dayName }}</span>
-                                    <span class="day-num">{{ $dayNum }}</span>
-                                    <span class="month-name">{{ $monthName }}</span>
-                                </button>
-                            </form>
-                        @endforeach
-                    </div>
+                        <form action="{{ route('mobile.round.back-trips') }}" method="get" class="m-0">
+                            <input type="hidden" name="tripType" value="{{ request()->tripType }}" />
+                            <input type="hidden" name="city_from_id" value="{{ request()->city_from_id }}" />
+                            <input type="hidden" name="city_to_id" value="{{ request()->city_to_id }}" />
+                            <input type="hidden" name="station_from_id" value="{{ request()->station_from_id }}" />
+                            <input type="hidden" name="station_to_id" value="{{ request()->station_to_id }}" />
+                            <input type="hidden" name="seats" value="{{ request()->seats }}" />
+                            <input type="hidden" name="go_date" value="{{ request()->go_date }}" />
+                            <input type="hidden" name="go_trip_id" value="{{ request()->go_trip_id }}" />
+                            <input type="hidden" name="back_date" value="{{ $date }}" />
+                            <button type="submit"
+                                class="nav-link border-0 text-nowrap rounded-4 px-3 py-2 d-flex flex-column align-items-center {{ $isActive ? 'active btn-main shadow-premium' : 'bg-light text-muted opacity-75' }}"
+                                style="min-width: 75px; transition: all 0.3s ease;">
+                                <span class="fw-800" style="font-size: 10px;">{{ $dayName }}</span>
+                                <span class="fw-800" style="font-size: 14px;">{{ $dayNum }} {{ $monthName }}</span>
+                            </button>
+                        </form>
+                    @endforeach
                 </div>
             </div>
         </div>
 
         <!-- Trip List -->
-        <div class="col-12 px-0">
-            <div class="px-1">
-                @if ($trips->count() > 0)
-                    @foreach ($trips as $trip)
-                        @php
-                            $time = \Carbon\Carbon::parse($trip->tripTime)->format('h:i a');
-                        @endphp
-                        <a href="{{ route('mobile.round.choose-seat', array_merge(request()->all(), ['back_trip_id' => $trip->id])) }}"
-                            class="text-decoration-none">
-                            <div class="bus-card premium-trip-card mb-4 overflow-hidden border-0 shadow-sm p-3">
-                                <div class="d-flex justify-content-between align-items-start border-bottom pb-3 mb-3">
-                                    <div class="d-flex gap-3">
-                                        <div class="bus-icon-wrapper rounded-4 shadow-sm">
-                                            <i class="fas fa-bus text-main"></i>
-                                        </div>
-                                        <div>
-                                            <h5 class="fw-bold text-black mb-1 fs-16">{{ $time }}</h5>
-                                            <span class="badge bg-main-light text-main rounded-pill px-2 py-1 fs-10">
-                                                {{ $trip->degree }}
-                                            </span>
-                                        </div>
+        <div class="mt-2">
+            @if ($trips->count() > 0)
+                @foreach ($trips as $trip)
+                    @php
+                        $time = \Carbon\Carbon::parse($trip->tripTime)->format('h:i a');
+                    @endphp
+                    <a href="{{ route('mobile.round.choose-seat', array_merge(request()->all(), ['back_trip_id' => $trip->id])) }}"
+                        class="text-decoration-none d-block wow animate__animated animate__fadeInUp">
+                        <div class="bg-white rounded-5 shadow-premium border border-light-subtle p-3 mb-3 position-relative overflow-hidden">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="bg-light text-main rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                        <i class="fa-solid fa-bus-simple fs-20"></i>
                                     </div>
-                                    <div class="text-end">
-                                        <div class="fw-black text-main fs-18">{{ $trip->price }}</div>
-                                        <div class="text-muted fs-10">{{ __('EGP') }} / {{ __('per seat') }}</div>
+                                    <div>
+                                        <div class="d-flex align-items-center gap-2 mb-1">
+                                            <span class="fw-800 text-black fs-18">{{ $time }}</span>
+                                            <span class="bg-main-light text-main text-uppercase fw-800 px-2 rounded-pill" style="font-size: 10px; padding-top: 2px;">{{ $trip->degree }}</span>
+                                        </div>
+                                        <p class="text-muted fw-800 mb-0" style="font-size: 11px;">
+                                            <i class="fa-solid fa-circle-dot text-main me-1 opacity-50"></i> {{ $trip->fromStation }}
+                                        </p>
                                     </div>
                                 </div>
-
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="journey-track d-flex align-items-center gap-3">
-                                        <div class="d-flex flex-column align-items-center">
-                                            <span class="dot-start shadow-sm"></span>
-                                            <span class="dot-line"></span>
-                                            <span class="dot-end shadow-sm"></span>
-                                        </div>
-                                        <div class="d-flex flex-column gap-2">
-                                            <span class="text-dark fw-semibold fs-12 text-truncate"
-                                                style="max-width: 140px;">{{ $trip->fromStation }}</span>
-                                            <span class="text-muted fs-12 text-truncate"
-                                                style="max-width: 140px;">{{ $trip->toStation }}</span>
-                                        </div>
+                                <div class="text-end">
+                                    <div class="mb-0">
+                                        <span class="fs-18 fw-800 text-black">{{ $trip->price }}</span>
+                                        <span class="text-muted fw-800" style="font-size: 10px;">{{ __('EGP') }}</span>
                                     </div>
-
-                                    <div class="text-end">
-                                        <span class="d-block text-success fw-bold fs-11 mb-2">
-                                            <i class="fas fa-chair me-1"></i> {{ $trip->available_seats }} {{ __('Available') }}
-                                        </span>
-                                        <button class="btn btn-main btn-sm rounded-pill px-4 py-2 fs-12 fw-bold shadow-sm">
-                                            {{ __('Book') }}
-                                        </button>
-                                    </div>
+                                    <span class="text-success fw-800 d-block" style="font-size: 10px;">
+                                        <i class="fa-solid fa-chair me-1"></i> {{ $trip->available_seats }} {{ __('Seats') }}
+                                    </span>
                                 </div>
                             </div>
-                        </a>
-                    @endforeach
-                @else
-                    <div class="empty-state-card mt-4 rounded-5 bg-white shadow-sm border p-5">
-                        <div class="empty-state-icon-wrapper">
-                            <i class="fas fa-bus-alt"></i>
-                        </div>
-                        <h4 class="fw-bold text-black mb-2">{{ __('No Trips Found') }}</h4>
-                        <p class="text-muted mb-4">{{ __('We couldn\'t find any trips for this date. Try another date or reach out to us.') }}</p>
-                        
-                        <div class="d-grid gap-3">
-                            <button class="hero-btn w-100 py-3" data-bs-toggle="modal" data-bs-target="#searchModal">
-                                <i class="fas fa-search-plus me-2"></i> {{ __('Modify Search') }}
-                            </button>
                             
-                            <a href="tel:{{ @$contactUs['phone'] ?? '16123' }}" class="btn btn-outline-dark rounded-pill py-2">
-                                <i class="fas fa-phone-alt me-2"></i> {{ __('Call For Support') }}
-                            </a>
+                            <div class="d-flex align-items-center justify-content-between pt-3 border-top border-light-subtle">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="text-muted fw-800" style="font-size: 11px;">{{ __('Arrival') }}:</span>
+                                    <span class="text-black fw-800 text-truncate" style="font-size: 11px; max-width: 150px;">{{ $trip->toStation }}</span>
+                                </div>
+                                <span class="text-main fw-800" style="font-size: 12px;">{{ __('Confirm Selection') }} <i class="fas fa-chevron-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }} small ms-1"></i></span>
+                            </div>
                         </div>
+                    </a>
+                @endforeach
+            @else
+                <div class="empty-state bg-white rounded-5 shadow-premium p-5 text-center mt-5 border border-light-subtle wow animate__animated animate__zoomIn">
+                    <div class="bg-light text-main rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                        <i class="fa-solid fa-bus-simple fa-3x opacity-25"></i>
                     </div>
-                @endif
-            </div>
+                    <h4 class="fw-800 text-black mb-2">{{ __('No Trips Found') }}</h4>
+                    <p class="text-muted fw-800 small mb-4 opacity-75">{{ __('We couldn\'t find any trips for this date. Try another date or reach out to us.') }}</p>
+                    
+                    <div class="d-grid gap-3">
+                        <button class="btn btn-main py-3 rounded-pill fw-800 shadow-premium" data-bs-toggle="modal" data-bs-target="#searchModal">
+                            <i class="fa-solid fa-rotate me-2"></i> {{ __('Modify Search') }}
+                        </button>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 
     <!-- Search Modal Mobile -->
-    <div class="modal fade trip-search-modal" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel"
-        aria-hidden="true" data-bs-backdrop="false">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content trip-search-modal__shell shadow-lg rounded-5 overflow-hidden border-0">
-                <div class="modal-header trip-search-modal__header bg-white border-bottom py-3 px-4">
-                    <h5 class="modal-title trip-search-modal__title fw-bold text-black mb-0" id="searchModalLabel">{{ __('Edit Search') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('Close') }}"></button>
+    <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true" data-bs-backdrop="false">
+        <div class="modal-dialog modal-fullscreen-sm-down modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-5 overflow-hidden">
+                <div class="modal-header border-0 pb-0">
+                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="{{ __('Close') }}"></button>
                 </div>
+                <div class="modal-body p-4 pt-0">
+                    <div class="text-center mb-4">
+                        <div class="bg-light text-main rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <i class="fa-solid fa-sliders fa-xl"></i>
+                        </div>
+                        <h4 class="fw-800 text-black mb-1">{{ __('Adjust Trip') }}</h4>
+                        <p class="text-muted small fw-800">{{ __('Modify your search criteria') }}</p>
+                    </div>
 
-                <div class="modal-body trip-search-modal__body p-3 bg-light">
                     <form action="">
                         <input type="hidden" value="{{ request()->tripType ?? 'oneway' }}" name="tripType" />
                         <input type="hidden" id="selected_station_from" value="{{ request()->station_from_id }}">
                         <input type="hidden" id="selected_station_to" value="{{ request()->station_to_id }}">
 
-                        <div class="row g-0">
-                            <!-- From Section -->
+                        <div class="row g-3">
                             <div class="col-12">
-                                <div class="premium-mobile-input-card">
-                                    <label for="city_from_id">
-                                        <i class="fas fa-map-marker-alt"></i> {{ __('Travel From') }}
-                                    </label>
-                                    <select class="form-select trip-search-select" name="city_from_id" id="city_from_id">
-                                        @foreach ($cities as $city)
-                                            <option value="{{ $city->id }}" {{ request()->city_from_id == $city->id ? 'selected' : '' }}>{{ $city->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="premium-mobile-input-card">
-                                    <label for="station_from_id">
-                                        <i class="fas fa-bus"></i> {{ __('From Station') }}
-                                    </label>
-                                    <select class="form-select trip-search-select" name="station_from_id" id="station_from_id"></select>
+                                <div class="bg-light rounded-4 p-3 border border-light-subtle">
+                                    <label class="text-muted overline-text d-block mb-1" style="font-size: 10px; font-weight: 800;">{{ __('FROM') }}</label>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="fa-solid fa-location-arrow text-main opacity-50"></i>
+                                        <select class="form-select border-0 bg-transparent p-0 fw-800 text-black shadow-none" name="city_from_id" id="city_from_id" style="font-size: 14px;">
+                                            @foreach ($cities as $city)
+                                                <option value="{{ $city->id }}" {{ request()->city_from_id == $city->id ? 'selected' : '' }}>{{ $city->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
 
-                            <!-- To Section -->
                             <div class="col-12">
-                                <div class="premium-mobile-input-card">
-                                    <label for="city_to_id">
-                                        <i class="fas fa-location-arrow"></i> {{ __('Travel To') }}
-                                    </label>
-                                    <select class="form-select trip-search-select" name="city_to_id" id="city_to_id">
-                                        @foreach ($cities as $city)
-                                            <option value="{{ $city->id }}" {{ request()->city_to_id == $city->id ? 'selected' : '' }}>{{ $city->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="premium-mobile-input-card">
-                                    <label for="station_to_id">
-                                        <i class="fas fa-flag-checkered"></i> {{ __('To Station') }}
-                                    </label>
-                                    <select class="form-select trip-search-select" name="station_to_id" id="station_to_id"></select>
+                                <div class="bg-light rounded-4 p-3 border border-light-subtle">
+                                    <label class="text-muted overline-text d-block mb-1" style="font-size: 10px; font-weight: 800;">{{ __('STATION') }}</label>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="fa-solid fa-bus text-main opacity-50"></i>
+                                        <select class="form-select border-0 bg-transparent p-0 fw-800 text-black shadow-none" name="station_from_id" id="station_from_id" style="font-size: 14px;"></select>
+                                    </div>
                                 </div>
                             </div>
 
-                            <!-- Date and Seats -->
-                            <div class="col-6 pe-2">
-                                <div class="premium-mobile-input-card">
-                                    <label for="search_modal_go_date">
-                                        <i class="fas fa-calendar-day"></i> {{ __('Date') }}
-                                    </label>
-                                    <input type="date" id="search_modal_go_date" class="form-control" value="{{ request()->go_date }}" name="go_date">
+                            <div class="col-12">
+                                <div class="bg-light rounded-4 p-3 border border-light-subtle">
+                                    <label class="text-muted overline-text d-block mb-1" style="font-size: 10px; font-weight: 800;">{{ __('TO') }}</label>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="fa-solid fa-location-dot text-success opacity-50"></i>
+                                        <select class="form-select border-0 bg-transparent p-0 fw-800 text-black shadow-none" name="city_to_id" id="city_to_id" style="font-size: 14px;">
+                                            @foreach ($cities as $city)
+                                                <option value="{{ $city->id }}" {{ request()->city_to_id == $city->id ? 'selected' : '' }}>{{ $city->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-6 ps-2">
-                                <div class="premium-mobile-input-card">
-                                    <label for="search_modal_seats">
-                                        <i class="fas fa-users"></i> {{ __('Passengers') }}
-                                    </label>
-                                    <input type="number" id="search_modal_seats" value="{{ request()->seats }}" class="form-control" name="seats" required min="1">
+
+                            <div class="col-12">
+                                <div class="bg-light rounded-4 p-3 border border-light-subtle">
+                                    <label class="text-muted overline-text d-block mb-1" style="font-size: 10px; font-weight: 800;">{{ __('DESTINATION STATION') }}</label>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="fa-solid fa-flag-checkered text-success opacity-50"></i>
+                                        <select class="form-select border-0 bg-transparent p-0 fw-800 text-black shadow-none" name="station_to_id" id="station_to_id" style="font-size: 14px;"></select>
+                                    </div>
                                 </div>
                             </div>
-                            <!-- Back Date for Round Trip -->
-                            <div class="col-12 mt-2">
-                                <div class="premium-mobile-input-card">
-                                    <label for="search_modal_back_date">
-                                        <i class="fas fa-history"></i> {{ __('Return Date') }}
-                                    </label>
-                                    <input type="date" id="search_modal_back_date" class="form-control" value="{{ request()->back_date }}" name="back_date">
+
+                            <div class="col-6">
+                                <div class="bg-light rounded-4 p-3 border border-light-subtle">
+                                    <label class="text-muted overline-text d-block mb-1" style="font-size: 10px; font-weight: 800;">{{ __('OUTBOUND') }}</label>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="fa-solid fa-calendar text-main opacity-50"></i>
+                                        <input type="date" class="form-control border-0 bg-transparent p-0 fw-800 text-black shadow-none" value="{{ request()->go_date }}" name="go_date" style="font-size: 13px;">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-6">
+                                <div class="bg-light rounded-4 p-3 border border-light-subtle">
+                                    <label class="text-muted overline-text d-block mb-1" style="font-size: 10px; font-weight: 800;">{{ __('RETURN') }}</label>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="fa-solid fa-history text-success opacity-50"></i>
+                                        <input type="date" class="form-control border-0 bg-transparent p-0 fw-800 text-black shadow-none" value="{{ request()->back_date }}" name="back_date" style="font-size: 13px;">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="bg-light rounded-4 p-3 border border-light-subtle">
+                                    <label class="text-muted overline-text d-block mb-1" style="font-size: 10px; font-weight: 800;">{{ __('PASSENGERS') }}</label>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="fa-solid fa-users text-main opacity-50"></i>
+                                        <input type="number" value="{{ request()->seats }}" class="form-control border-0 bg-transparent p-0 fw-800 text-black shadow-none" name="seats" required min="1" style="font-size: 14px;">
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="text-center mt-3">
-                            <button type="submit" class="hero-btn w-100 py-3 rounded-pill fw-bold shadow-lg">
-                                <i class="fas fa-search me-2"></i> {{ __('Search') }}
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-main w-100 py-3 rounded-pill fw-800 shadow-premium">
+                                <i class="fa-solid fa-magnifying-glass me-2"></i> {{ __('Apply Changes') }}
                             </button>
                         </div>
                     </form>

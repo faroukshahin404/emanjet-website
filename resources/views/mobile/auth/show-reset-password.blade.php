@@ -1,98 +1,131 @@
-@extends('layouts.master')
-
 @section('mobile-content')
-    <div class="mobile d-lg-none d-block" dir='rtl'>
+    <div class="mobile d-lg-none d-block" dir='{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}'>
         <div class="container mo-view mb-5 mt-3 px-4">
             <div class="row">
-                <div class="d-flex justify-content-between align-items-center">
-                    <a href="{{ route('auth.login') }}">
-                        <i class="fas fa-arrow-right fs-18 text-black"></i>
-                    </a>
-                    <p class="m-0 fs-25 text-black">{{ __('Verify your number') }}</p>
-                    <div></div>
+                <div class="d-flex justify-content-between align-items-center mb-4 wow animate__animated animate__fadeIn">
+                    <button type="button" onclick="window.history.back()" class="bg-white shadow-sm rounded-circle d-flex align-items-center justify-content-center border-light-subtle" style="width: 40px; height: 40px; border: 1px solid #eee;">
+                        @if (app()->getLocale() == 'ar')
+                            <i class="fas fa-arrow-right fs-16 text-black"></i>
+                        @else
+                            <i class="fas fa-arrow-left fs-16 text-black"></i>
+                        @endif
+                    </button>
+                    <h5 class="m-0 fw-800 text-black">{{ __('Reset Password') }}</h5>
+                    <div style="width: 40px;"></div>
                 </div>
 
-                <div class="mt-3 text-center">
-                    <p class="m-0">
-                        {{ __('Enter the code sent to your number') }}{{ $phone }}
+                <div class="text-center mt-3 mb-5 wow animate__animated animate__fadeIn">
+                    <div class="bg-main-light text-main rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 80px; height: 80px;">
+                        <i class="fas fa-key fs-30"></i>
+                    </div>
+                    <h4 class="fw-900 text-black mb-1">{{ __('Verify & Reset') }}</h4>
+                    <p class="text-muted fw-800 small mb-0 px-3">
+                        {{ __('Enter the code sent to') }}
+                        <span class="text-black fw-900 d-block mt-1">{{ $phone }}</span>
                     </p>
                 </div>
 
-                <div class="mt-5 d-flex justify-content-center align-items-center my-5">
-                    <img src="{{ asset('images/mobile/phone-chat.png') }}" alt="phone">
-                </div>
-
-                <form action="{{ route('auth.resetPassword') }}" method="POST" class="login-form">
+                <form action="{{ route('auth.resetPassword') }}" method="POST" class="wow animate__animated animate__fadeInUp">
                     @csrf
                     <input type="hidden" name="phone" value="{{ $phone }}">
                     <input type="hidden" id="initial-time" value="{{ $remainingTime ?? 0 }}">
-                    <div class="d-flex justify-content-center align-items-center gap-3" dir="ltr">
+                    
+                    <div class="d-flex justify-content-center align-items-center gap-3 mb-4" dir="ltr">
                         @for ($i = 0; $i < 4; $i++)
                         <input type="text"
-                        class="form-control text-center otp-box @error('otp') is-invalid @enderror"
-                        name="otp[]"
-                        maxlength="1"
-                        pattern="[0-9]"
-                        inputmode="numeric"
-                        style="
-                            width: 50px;
-                            height: 50px;
-                            font-size: 24px;
-                            background-color: #eee;
-                            border-radius: 8px;
-                            padding: 0;
-                            text-align: center;
-                            line-height: 50px;
-                        "
-                        required>
+                               class="form-control text-center otp-box-premium @error('otp') is-invalid @enderror"
+                               name="otp[]"
+                               maxlength="1"
+                               pattern="[0-9]"
+                               inputmode="numeric"
+                               required>
                         @endfor
                     </div>
+                    
                     @error('otp')
-                        <div class="invalid-feedback text-center">{{ $message }}</div>
+                        <div class="text-danger text-center fw-800 mb-4" style="font-size: 11px;">{{ $message }}</div>
                     @enderror
 
-                    <div class="mt-3 text-center">
-                        <p id="timer-section" class="{{ $remainingTime > 0 ? '' : 'd-none' }} text-main">
-                            <span id="countdown">00:00</span>
-                        </p>
-                        <div id="resend-section" class="{{ $remainingTime > 0 ? 'd-none' : '' }}">
-                            <p>
-                                {{ __('Didn\'t receive the code?') }}
-                                <a class="text-main" href="javascript:void(0)" onclick="resendOtp()">{{ __('Would you like to resend it?') }}</a>
+                    <div class="text-center mb-5 pb-3">
+                        <div id="timer-section" class="{{ $remainingTime > 0 ? '' : 'd-none' }}">
+                            <p class="text-main fw-800 mb-0" style="font-size: 11px;">
+                                <i class="fas fa-clock fs-11 me-1"></i>
+                                <span id="countdown">00:00</span>
                             </p>
+                        </div>
+                        <div id="resend-section" class="{{ $remainingTime > 0 ? 'd-none' : '' }}">
+                            <p class="text-muted fw-800 small mb-1">
+                                {{ __('Didn\'t receive the code?') }}
+                            </p>
+                            <a class="text-main fw-900 text-decoration-none" href="javascript:void(0)" onclick="resendOtp()">
+                                {{ __('Resend Code') }}
+                            </a>
                         </div>
                     </div>
 
-                    <div class="form-group mt-3">
-                        <label for="password" class="form-label">{{ __('New Password') }}</label>
-                        <input type="password"
-                               class="form-control rounded-6 @error('password') is-invalid @enderror"
-                               id="password"
-                               name="password"
-                               placeholder="{{ __('Enter new password') }}">
+                    <div class="mb-4">
+                        <label for="password" class="text-muted fw-800 overline-text mb-2 px-1 d-block" style="font-size: 9px;">{{ __('NEW PASSWORD') }}</label>
+                        <div class="input-group-premium">
+                            <i class="fa fa-key icon"></i>
+                            <input type="password"
+                                   class="form-control-premium @error('password') is-invalid @enderror"
+                                   id="password"
+                                   name="password"
+                                   placeholder="{{ __('••••••••') }}"
+                                   required>
+                        </div>
                         @error('password')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                            <div class="invalid-feedback px-1" style="font-size: 10px; font-weight: 800;">{{ $message }}</div>
                         @enderror
                     </div>
 
-                    <div class="form-group mt-3">
-                        <label for="password_confirmation" class="form-label">{{ __('Confirm Password') }}</label>
-                        <input type="password"
-                               class="form-control rounded-6"
-                               id="password_confirmation"
-                               name="password_confirmation"
-                               placeholder="{{ __('Re-enter your password') }}">
+                    <div class="mb-4">
+                        <label for="password_confirmation" class="text-muted fw-800 overline-text mb-2 px-1 d-block" style="font-size: 9px;">{{ __('CONFIRM NEW PASSWORD') }}</label>
+                        <div class="input-group-premium">
+                            <i class="fa fa-key icon"></i>
+                            <input type="password"
+                                   class="form-control-premium"
+                                   id="password_confirmation"
+                                   name="password_confirmation"
+                                   placeholder="{{ __('••••••••') }}"
+                                   required>
+                        </div>
                     </div>
 
-                    <div class="form-group mt-4">
-                        <button type="submit" class="btn btn-main w-100 rounded-6">{{ __('Reset Password') }}</button>
+                    <div class="mb-5 pt-2">
+                        <button type="submit" class="btn btn-main w-100 py-3 rounded-pill fw-800 shadow-premium">
+                            {{ __('Update & Login') }}
+                        </button>
                     </div>
-
                 </form>
             </div>
         </div>
         @include('mobile.layouts.footer')
     </div>
+
+    @push('styles')
+    <style>
+        .otp-box-premium {
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            font-weight: 900;
+            color: #000;
+            background-color: #f8f9fa;
+            border: 2px solid #eee;
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            padding: 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        }
+        .otp-box-premium:focus {
+            background-color: #fff;
+            border-color: var(--main-color);
+            box-shadow: var(--shadow-premium);
+            transform: translateY(-2px);
+        }
+    </style>
+    @endpush
 
     @push('scripts')
         <script>
@@ -103,6 +136,8 @@
                 const resendSection = document.getElementById('resend-section');
                 const countdownElement = document.getElementById('countdown');
                 let timeLeft = initialSeconds;
+
+                if (!timerSection || !resendSection || !countdownElement) return;
 
                 if (timeLeft <= 0) {
                     timerSection.classList.add('d-none');
@@ -117,7 +152,9 @@
                 timerInterval = setInterval(function() {
                     if (timeLeft > 0) {
                         timeLeft--;
-                        countdownElement.textContent = `00:${timeLeft.toString().padStart(2, '0')}`;
+                        const min = String(Math.floor(timeLeft / 60)).padStart(2, '0');
+                        const sec = String(timeLeft % 60).padStart(2, '0');
+                        countdownElement.textContent = `${min}:${sec}`;
                     } else {
                         clearInterval(timerInterval);
                         timerSection.classList.add('d-none');
@@ -128,7 +165,8 @@
 
             document.addEventListener('DOMContentLoaded', function() {
                 const inputs = document.querySelectorAll('input[name="otp[]"]');
-                const initialTime = document.getElementById('initial-time').value || 120;
+                const initialTimeElement = document.getElementById('initial-time');
+                const initialTime = initialTimeElement ? initialTimeElement.value : 120;
 
                 // Start timer with initial value
                 startTimer(parseInt(initialTime));
@@ -136,18 +174,15 @@
                 // Handle input for each box
                 inputs.forEach((input, index) => {
                     input.addEventListener('input', function(e) {
-                        // Remove any non-numeric characters
                         this.value = this.value.replace(/[^0-9]/g, '');
 
                         if (this.value.length === 1) {
-                            // Move to next input if available
                             if (index < inputs.length - 1) {
                                 inputs[index + 1].focus();
                             }
                         }
                     });
 
-                    // Handle backspace
                     input.addEventListener('keydown', function(e) {
                         if (e.key === 'Backspace' && !this.value && index > 0) {
                             inputs[index - 1].focus();
@@ -155,27 +190,29 @@
                     });
                 });
 
-                // Handle paste for OTP
-                document.querySelector('input[name="otp[]"]').addEventListener('paste', function(e) {
-                    e.preventDefault();
-                    const pastedData = (e.clipboardData || window.clipboardData)
-                        .getData('text')
-                        .replace(/[^0-9]/g, '')
-                        .substring(0, 4)
-                        .split('');
+                const firstInput = document.querySelector('input[name="otp[]"]');
+                if(firstInput) {
+                    firstInput.addEventListener('paste', function(e) {
+                        e.preventDefault();
+                        const pastedData = (e.clipboardData || window.clipboardData)
+                            .getData('text')
+                            .replace(/[^0-9]/g, '')
+                            .substring(0, 4)
+                            .split('');
 
-                    inputs.forEach((input, index) => {
-                        if (pastedData[index]) {
-                            input.value = pastedData[index];
+                        inputs.forEach((input, index) => {
+                            if (pastedData[index]) {
+                                input.value = pastedData[index];
+                            }
+                        });
+
+                        if (pastedData.length < 4) {
+                            inputs[pastedData.length].focus();
+                        } else {
+                            inputs[3].focus();
                         }
                     });
-
-                    if (pastedData.length < 4) {
-                        inputs[pastedData.length].focus();
-                    } else {
-                        inputs[3].focus();
-                    }
-                });
+                }
             });
 
             function resendOtp() {

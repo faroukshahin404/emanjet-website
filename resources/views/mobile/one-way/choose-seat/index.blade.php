@@ -1,15 +1,23 @@
 @extends('layouts.master')
 
 @section('mobile-content')
-    <div class="d-flex justify-content-between align-items-center mb-2">
-        <a href="javascript:history.back()">
-            <i class="fas fa-arrow-right fs-25 text-black"></i>
+    <div class="d-flex justify-content-between align-items-center mb-4 wow animate__animated animate__fadeIn">
+        <a href="javascript:history.back()" class="bg-white shadow-sm rounded-circle d-flex align-items-center justify-content-center border-light-subtle" style="width: 40px; height: 40px; border: 1px solid #eee;">
+            @if (app()->getLocale() == 'ar')
+                <i class="fas fa-arrow-right fs-16 text-black"></i>
+            @else
+                <i class="fas fa-arrow-left fs-16 text-black"></i>
+            @endif
         </a>
-        <p class="m-0 fs-25 text-black">{{ __('Choose your seat') }}</p>
-        <div></div>
+        <h5 class="m-0 fw-800 text-black">{{ __('Choose Seat') }}</h5>
+        <div style="width: 40px;"></div>
     </div>
-    @include('mobile.one-way.choose-seat.seat')
-    <form id="seat-booking-form" method="GET" action="{{ route('mobile.one-way.booking-summary') }}">
+
+    <div class="wow animate__animated animate__fadeInUp">
+        @include('mobile.one-way.choose-seat.seat')
+    </div>
+
+    <form id="seat-booking-form" method="GET" action="{{ route('mobile.one-way.booking-summary') }}" class="wow animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
         @csrf
         <input type="hidden" name="tripType" value="{{ request()->tripType }}" />
         <input type="hidden" name="city_from_id" value="{{ request()->city_from_id }}" />
@@ -23,21 +31,33 @@
         <input type="hidden" name="selected_trip_id" value="{{ request()->selected_trip_id }}" />
         <input type="hidden" id="num-of-seats" name="seats" value="{{ request()->seats }}" />
         <input type="hidden" name="selected_seats" id="selected-seats-input">
-        <div class="mt-4">
-            <button type="submit" id="confirm-booking" class="btn-pay-disabled" disabled>
-                <div class="d-flex justify-content-between align-items-center w-100 px-3">
-                    <div class="d-flex align-items-center gap-2">
-                        <div class="bg-white text-dark rounded-circle d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;">
-                            <span class="fw-bold small" id="selected-seats-count">0</span>
+        
+        <div class="fixed-bottom p-3 bg-white border-top border-light-subtle shadow-premium rounded-top-5" style="z-index: 1000;">
+            <div class="container-fluid p-0">
+                <div class="d-flex align-items-center justify-content-between mb-3 px-1">
+                    <div>
+                        <span class="text-muted fw-800 overline-text d-block" style="font-size: 9px;">{{ __('SELECTED') }}</span>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="fw-800 text-black fs-20" id="selected-seats-count">0</span>
+                            <span class="text-muted fw-800 small">{{ __('Seats') }}</span>
                         </div>
-                        <span class="fw-bold">{{ __('Book now') }}</span>
                     </div>
-                    <div class="fw-bold fs-5" id="total-price">
-                        0 {{ __('EGP') }}
+                    <div class="text-end">
+                        <span class="text-muted fw-800 overline-text d-block" style="font-size: 9px;">{{ __('TOTAL PRICE') }}</span>
+                        <div class="d-flex align-items-center gap-1 justify-content-end">
+                            <span class="fw-800 text-main fs-20" id="total-price">0</span>
+                            <span class="text-main fw-800 small">{{ __('EGP') }}</span>
+                        </div>
                     </div>
                 </div>
-            </button>
+                <button type="submit" id="confirm-booking" class="btn btn-main w-100 py-3 rounded-pill fw-800 shadow-premium d-flex align-items-center justify-content-center gap-2" disabled>
+                    <i class="fa-solid fa-check-double"></i>
+                    {{ __('Confirm Selection') }}
+                </button>
+            </div>
         </div>
+        <!-- Spacer to prevent content overlap -->
+        <div style="height: 140px;"></div>
     </form>
 
 @endsection

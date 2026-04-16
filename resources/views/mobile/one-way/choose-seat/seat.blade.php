@@ -1,45 +1,57 @@
 <div class="col-12 mb-3 chairs">
-    <div class="d-flex justify-content-center flex-wrap gap-3 mb-4">
-        <div class="legend-item">
-            <div class="your-chair"></div>
-            <span class="small">{{ __('Your Seat') }}</span>
-        </div>
-        <div class="legend-item">
-            <div class="available-chair"></div>
-            <span class="small">{{ __('Available') }}</span>
-        </div>
-        <div class="legend-item">
-            <div class="reserved-chair"></div>
-            <span class="small">{{ __('Reserved') }}</span>
+    <!-- Seat Legend -->
+    <div class="bg-white rounded-5 shadow-premium border border-light-subtle p-3 mb-4 wow animate__animated animate__fadeIn">
+        <div class="d-flex justify-content-center gap-4">
+            <div class="d-flex align-items-center gap-2">
+                <div class="bg-main rounded-2" style="width: 12px; height: 12px;"></div>
+                <span class="fw-800 text-muted" style="font-size: 10px;">{{ __('Your Seat') }}</span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <div class="bg-light border border-light-subtle rounded-2" style="width: 12px; height: 12px;"></div>
+                <span class="fw-800 text-muted" style="font-size: 10px;">{{ __('Available') }}</span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <div class="bg-dark opacity-10 rounded-2" style="width: 12px; height: 12px;"></div>
+                <span class="fw-800 text-muted" style="font-size: 10px;">{{ __('Reserved') }}</span>
+            </div>
         </div>
     </div>
 
-    <div class="bus-cabin" style="padding: 20px 10px 10px;">
-        <div class="bus-front" style="padding-bottom: 10px; margin-bottom: 15px;">
-            <svg class="steering-icon" viewBox="0 0 100 100" style="width: 25px; height: 25px;">
-                <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="5" />
-                <circle cx="50" cy="50" r="10" fill="currentColor" />
-                <line x1="50" y1="5" x2="50" y2="40" stroke="currentColor" stroke-width="5" />
-                <line x1="10" y1="75" x2="42" y2="58" stroke="currentColor" stroke-width="5" />
-                <line x1="90" y1="75" x2="58" y2="58" stroke="currentColor" stroke-width="5" />
-            </svg>
+    <div class="bus-cabin bg-white rounded-5 shadow-premium border border-light-subtle p-4 mb-4">
+        <!-- Bus Front / Driver Section -->
+        <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-dashed border-light-subtle">
+            <div class="bg-light rounded-pill px-3 py-1">
+                <span class="text-muted fw-800" style="font-size: 10px;">{{ __('Driver') }}</span>
+            </div>
+            <div class="bg-light text-muted rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                <svg class="steering-icon" viewBox="0 0 100 100" style="width: 20px; height: 20px; opacity: 0.5;">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="5" />
+                    <circle cx="50" cy="50" r="10" fill="currentColor" />
+                    <line x1="50" y1="5" x2="50" y2="40" stroke="currentColor" stroke-width="5" />
+                    <line x1="10" y1="75" x2="42" y2="58" stroke="currentColor" stroke-width="5" />
+                    <line x1="90" y1="75" x2="58" y2="58" stroke="currentColor" stroke-width="5" />
+                </svg>
+            </div>
         </div>
 
-        <div class="row g-0 justify-content-center" style="max-width: {{(@$busType->width??4) * 60}px;">
+        <!-- Seats Grid -->
+        <div class="row g-2 justify-content-center">
             @foreach ($seats as $seat)
                 @if ($seat['type'] == 1)
-                    <div class="chair-number" style="width: 44px; height: 44px; margin: 5px;">
+                    <div class="chair-number" style="width: 48px; height: 48px;">
                         <input type="checkbox"
                             data-price="{{ $seat['price'] }}"
                             data-name="{{ $seat['name'] }}"
                             data-seat-id="{{$seat['tripSeat_id']}}"
                             id="chair{{ $seat['tripSeat_id'] }}"
-                            class="chair-checkbox"
+                            class="chair-checkbox premium-seat-checkbox"
                             {{ $seat['available'] ? '' : 'disabled' }}>
-                        <label for="chair{{ $seat['tripSeat_id'] }}" style="border-radius: 10px; font-size: 11px;">{{ $seat['name'] }}</label>
+                        <label for="chair{{ $seat['tripSeat_id'] }}" class="fw-800 d-flex align-items-center justify-content-center" style="border-radius: 12px; font-size: 12px; transition: all 0.3s ease;">
+                            {{ $seat['name'] }}
+                        </label>
                     </div>
                 @else
-                    <div style="width: 54px; height: 54px;"></div>
+                    <div style="width: 48px; height: 48px;"></div>
                 @endif
             @endforeach
         </div>
