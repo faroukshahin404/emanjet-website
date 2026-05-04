@@ -20,8 +20,8 @@ class TestimonialsSeeder extends Seeder
                     'en' => 'Ahmed Abdullah',
                 ],
                 'content' => [
-                    'ar' => 'رحلة رائعة مع Super Jet! الباص نظيف ومريح، والطاقم محترف.',
-                    'en' => 'A wonderful trip with Super Jet! The bus is clean and comfortable, and the crew is professional.',
+                    'ar' => 'رحلة رائعة مع Eman Jet! الباص نظيف ومريح، والطاقم محترف.',
+                    'en' => 'A wonderful trip with Eman Jet! The bus is clean and comfortable, and the crew is professional.',
                 ],
                 'image' => 'https://placehold.co/150',
             ],
