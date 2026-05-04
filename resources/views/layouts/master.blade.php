@@ -144,7 +144,7 @@
         <nav class="mobile-header navbar navbar-light bg-white border-bottom sticky-top shadow-sm py-2 d-none">
             <div class="container-fluid d-flex justify-content-center">
                 <a class="navbar-brand p-0 m-0" href="{{ route('home') }}">
-                    <img src="{{ asset('images/logo.png') }}" alt="{{ config('app.name', 'Eman Jet') }}" style="height: 35px; width: auto;">
+                    <img src="{{ asset('images/logo.png') }}" alt="{{ config('app.name', __('Al Eman Jet')) }}" style="height: 35px; width: auto;">
                 </a>
             </div>
         </nav>

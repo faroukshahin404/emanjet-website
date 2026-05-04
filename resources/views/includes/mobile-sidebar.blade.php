@@ -89,7 +89,7 @@
             <div class="mt-4 pb-2">
                 <a href="{{ route('auth.login') }}" class="btn btn-main w-100 py-3 rounded-pill d-flex align-items-center justify-content-center gap-2 fs-6 shadow-premium fw-800">
                     <i class="fas fa-unlock me-1"></i>
-                    {{ __('Login to Eman Jet') }}
+                    {{ __('Login to :brand', ['brand' => __('Eman Jet')]) }}
                 </a>
             </div>
         @endguest

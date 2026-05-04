@@ -4,9 +4,9 @@
             {{-- Column 1: Brand & Description --}}
             <div class="col-lg-3 col-md-6">
                 <div class="footer-brand mb-4">
-                    <img src="{{ asset('images/logo.png') }}" alt="Eman Jet" class="img-fluid mb-3" style="max-height: 60px; filter: brightness(0) invert(1);">
+                    <img src="{{ asset('images/logo.png') }}" alt="{{ __('Eman Jet') }}" class="img-fluid mb-3" style="max-height: 60px; filter: brightness(0) invert(1);">
                     <p class="text-white-50 mb-4">
-                        {{ $footerAbout['description'] ?? __('Eman Jet is your trusted partner for comfortable and safe travel across the region. We provide premium bus services with a focus on quality and passenger satisfaction.') }}
+                        {{ $footerAbout['description'] ?? __(':brand is your trusted partner for comfortable and safe travel across the region. We provide premium bus services with a focus on quality and passenger satisfaction.', ['brand' => __('Eman Jet')]) }}
                     </p>
                 </div>
                 
@@ -81,7 +81,7 @@
     <div class="footer-bottom mt-5">
         <div class="container text-center">
             <p class="copyright-text">
-                &copy; {{ date('Y') }} {{ config('app.name', 'Eman Jet') }}. {{ $footerAbout['copyright-text'] ?? __('All rights reserved.') }}
+                &copy; {{ date('Y') }} {{ config('app.name', __('Eman Jet')) }}. {{ $footerAbout['copyright-text'] ?? __('All rights reserved.') }}
             </p>
         </div>
     </div>

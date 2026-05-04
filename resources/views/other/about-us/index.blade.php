@@ -46,7 +46,7 @@
                     </div>
 
                     <h1 class="display-4 fw-800 mb-3">
-                        {!! str_replace(config('app.name'), '<span class="text-main">' . config('app.name') . '</span>', $heroSection['title'] ?? __('About Eman Jet')) !!}
+                        {!! str_replace(config('app.name'), '<span class="text-main">' . config('app.name') . '</span>', $heroSection['title'] ?? __('About :brand', ['brand' => __('Eman Jet')])) !!}
                     </h1>
 
                     @if (!empty($heroSection['description']))

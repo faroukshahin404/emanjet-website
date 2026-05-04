@@ -62,7 +62,7 @@ class PageSeosSeeder extends Seeder
                         'get-it-on' => 'احصل عليه من',
                     ],
                     'en' => [
-                        'description' => 'Eman Jet is your trusted partner for comfortable and safe travel across the region. We provide premium bus services with a focus on quality and passenger satisfaction.',
+                        'description' => 'Al Eman Jet is your trusted partner for comfortable and safe travel across the region. We provide premium bus services with a focus on quality and passenger satisfaction.',
                         'quick-links-title' => 'Quick Links',
                         'support-title' => 'Support',
                         'copyright-text' => 'All rights reserved.',
@@ -113,7 +113,7 @@ class PageSeosSeeder extends Seeder
                         'card-title' => 'Book your trip now!',
                         'image' => 'https://placehold.co/1675x700',
                         'caption-title' => 'We are here to help you',
-                        'caption-description' => 'Book your trip with Eman Jet and pay with your credit card instantly!',
+                        'caption-description' => 'Book your trip with Al Eman Jet and pay with your credit card instantly!',
                     ],
                 ],
                 'order' => 1,
@@ -131,7 +131,7 @@ class PageSeosSeeder extends Seeder
                         'image' => 'https://placehold.co/745x677',
                     ],
                     'en' => [
-                        'title' => 'Eman Jet is with you anywhere',
+                        'title' => 'Al Eman Jet is with you anywhere',
                         'description' => 'But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful.',
                         'image' => 'https://placehold.co/745x677',
                     ],
@@ -240,8 +240,8 @@ class PageSeosSeeder extends Seeder
                         ]
                     ],
                     'en' => [
-                        'pre-title' => 'THE EMAN JET ADVANTAGE',
-                        'title' => 'Why Choose Eman Jet?',
+                        'pre-title' => 'THE AL EMAN JET ADVANTAGE',
+                        'title' => 'Why Choose Al Eman Jet?',
                         'description' => 'We provide a travel experience that combines safety, comfort, and state-of-the-art technology to ensure your journey is perfect.',
                         'items' => [
                             [
@@ -362,7 +362,7 @@ class PageSeosSeeder extends Seeder
                     'en' => [
                         'pre-title' => 'OUR ROUTES',
                         'title' => 'Discover Your Next Adventure',
-                        'description' => 'Explore the best destinations across the country with Eman Jet. Premium services, safe journeys, and unforgettable experiences.',
+                        'description' => 'Explore the best destinations across the country with Al Eman Jet. Premium services, safe journeys, and unforgettable experiences.',
                         'search-title' => 'Where are you traveling to?',
                         'image' => 'https://placehold.co/1657x600',
                     ],
@@ -429,8 +429,8 @@ class PageSeosSeeder extends Seeder
                     ],
                     'en' => [
                         'pre-title' => 'OUR STORIES',
-                        'title' => 'Eman Jet Blog',
-                        'description' => 'Explore a variety of distinctive destinations and stories we provide through our widespread lines across the republic. We guarantee you a comfortable and safe travel experience with Eman Jet!',
+                        'title' => 'Al Eman Jet Blog',
+                        'description' => 'Explore a variety of distinctive destinations and stories we provide through our widespread lines across the republic. We guarantee you a comfortable and safe travel experience with Al Eman Jet!',
                         'image' => 'https://placehold.co/805x668',
                     ],
                 ],
@@ -490,7 +490,7 @@ class PageSeosSeeder extends Seeder
                     'en' => [
                         'pre-title' => 'Who We Are',
                         'title' => 'About Us',
-                        'description' => 'At Eman Jet, we believe in the importance of comfort and safety for our customers, and we always strive to provide a distinguished travel experience that combines professionalism and quality. Our team is committed to providing the best amenities, 24/7 customer support, and innovative solutions that make your journey easier from start to finish.',
+                        'description' => 'At Al Eman Jet, we believe in the importance of comfort and safety for our customers, and we always strive to provide a distinguished travel experience that combines professionalism and quality. Our team is committed to providing the best amenities, 24/7 customer support, and innovative solutions that make your journey easier from start to finish.',
                         'image' => 'https://placehold.co/805x668',
                         'stats' => [
                             ['number' => '10+', 'label' => 'YEARS'],
@@ -571,13 +571,13 @@ class PageSeosSeeder extends Seeder
                             ],
                             [
                                 'icon' => 'fa-solid fa-building',
-                                'title' => 'Eman Jet Branches',
-                                'description' => 'Eman Jet Branches are spread to serve you. Our vision is to provide distinguished services that exceed the needs.'
+                                'title' => 'Al Eman Jet Branches',
+                                'description' => 'Al Eman Jet Branches are spread to serve you. Our vision is to provide distinguished services that exceed the needs.'
                             ],
                             [
                                 'icon' => 'fa-solid fa-bus',
-                                'title' => 'Eman Jet Routes',
-                                'description' => 'Eman Jet Routes: Our vision is to provide distinguished services that exceed the needs and expectations.'
+                                'title' => 'Al Eman Jet Routes',
+                                'description' => 'Al Eman Jet Routes: Our vision is to provide distinguished services that exceed the needs and expectations.'
                             ],
                             [
                                 'icon' => 'fa-solid fa-credit-card',

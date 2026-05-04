@@ -229,9 +229,9 @@
             <div class="home-section-head text-center wow animate__animated animate__fadeInUp">
                 <p class="pre-title mb-2">
                     <i class="fa-solid fa-star me-2"></i>
-                    {{ $advantageSection['pre-title'] ?? __('THE EMAN JET ADVANTAGE') }}
+                    {{ $advantageSection['pre-title'] ?? __('THE :brand ADVANTAGE', ['brand' => __('Eman Jet')]) }}
                 </p>
-                <h2>{{ $advantageSection['title'] ?? __('Why Choose Eman Jet?') }}</h2>
+                <h2>{{ $advantageSection['title'] ?? __('Why Choose :brand?', ['brand' => __('Eman Jet')]) }}</h2>
                 <div class="section-divider mx-auto"></div>
                 <p class="mt-3 opacity-75">{{ $advantageSection['description'] ?? __('We provide a travel experience that combines safety, comfort, and state-of-the-art technology to ensure your journey is perfect.') }}</p>
             </div>

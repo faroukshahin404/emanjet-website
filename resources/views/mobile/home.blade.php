@@ -6,7 +6,7 @@
                 <h5 class="fw-800 text-black mb-0">{{ auth()->user()->name }}</h5>
             @else
                 <span class="text-muted small fw-bold d-block">{{ __('Welcome to') }}</span>
-                <h5 class="fw-800 text-black mb-0">Superjet</h5>
+                <h5 class="fw-800 text-black mb-0">{{ __('Eman Jet') }}</h5>
             @endif
         </div>
         <div class="col-4 text-end">
@@ -223,7 +223,7 @@
                         <div class="mb-4">
                             <i class="fas fa-tags text-main fa-2x mb-3"></i>
                             <h4>{{ __('Get Exclusive Discounts!') }}</h4>
-                            <p>{{ __('Download the HighBus app now and enjoy special offers on your trips') }}</p>
+                            <p>{{ __('Download the Eman Jet app now and enjoy special offers on your trips') }}</p>
                         </div>
 
                         <div class="d-flex justify-content-center gap-3 mb-3">

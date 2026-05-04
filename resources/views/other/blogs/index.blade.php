@@ -186,13 +186,13 @@
                     </h1>
                     
                     <p class="lead opacity-90 text-muted" style="line-height: 1.8; max-width: 540px;">
-                        {{ $heroSection['description'] ?? __('Discover inspiring travel stories, tips, and the latest updates from Superjet.') }}
+                        {{ $heroSection['description'] ?? __('Discover inspiring travel stories, tips, and the latest updates from our routes.') }}
                     </p>
                 </div>
 
                 <div class="col-lg-6 wow animate__animated animate__fadeInRight">
                     <div class="blog-hero-img-wrap">
-                        <img src="{{ asset('images/hero-section.png') }}" alt="Superjet Blog" class="shadow-premium">
+                        <img src="{{ (isset($heroSection['image']) && !empty($heroSection['image']) && !str_contains($heroSection['image'], 'placehold.co')) ? $heroSection['image'] : asset('images/hero-section.png') }}" alt="{{ $heroSection['title'] ?? __('Blog') }}" class="shadow-premium">
                     </div>
                 </div>
             </div>

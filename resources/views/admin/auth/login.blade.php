@@ -6,7 +6,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Eman Jet — {{ __('Login') }}</title>
+    <title>{{ __('Eman Jet') }} — {{ __('Login') }}</title>
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100..900&display=swap");
 
@@ -151,7 +151,7 @@
 
 <body>
     <div class="login-container">
-        <img src="{{ asset('images/logo.png') }}" alt="Eman Jet" id="logo" />
+        <img src="{{ asset('images/logo.png') }}" alt="{{ __('Eman Jet') }}" id="logo" />
         <form method="POST" action="{{ route('admin.login.submit') }}">
             @csrf
             <h1>{{ __('Login') }}</h1>

@@ -59,7 +59,7 @@
         <meta property="og:description" content="{{ $seo['og_description'] }}">
         <meta property="og:image" content="{{ $seo['og_image'] }}">
     @else
-        <title>@yield('meta_title', 'Eman Jet')</title>
+        <title>@yield('meta_title', __('Eman Jet'))</title>
     @endif
 
     @stack('styles')

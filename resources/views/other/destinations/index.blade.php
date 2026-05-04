@@ -223,7 +223,7 @@
                     </h1>
                     
                     <p class="lead opacity-90 text-muted" style="line-height: 1.8; max-width: 540px;">
-                        {{ $heroSection['description'] ?? __('Explore the best destinations across the country with Eman Jet. Premium services, safe journeys, and unforgettable experiences.') }}
+                        {{ $heroSection['description'] ?? __('Explore the best destinations across the country with :brand. Premium services, safe journeys, and unforgettable experiences.', ['brand' => __('Eman Jet')]) }}
                     </p>
 
                     <form action="{{ route('destinations') }}" method="GET">

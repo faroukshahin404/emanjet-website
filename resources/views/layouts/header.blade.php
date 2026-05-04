@@ -5,7 +5,7 @@
 @endif
 <div class="container">
     <a class="navbar-brand mx-4" href="{{ route('home') }}">
-        <img src="{{ asset('images/logo.png') }}" alt="{{ config('app.name', 'Eman Jet') }}" class="d-inline-block" style="max-height: 48px; width: auto; height: auto;">
+        <img src="{{ asset('images/logo.png') }}" alt="{{ config('app.name', __('Eman Jet')) }}" class="d-inline-block" style="max-height: 48px; width: auto; height: auto;">
     </a>
 
     <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
