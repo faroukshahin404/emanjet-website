@@ -295,11 +295,12 @@
                 slider.scrollLeft = scrollLeft - walk;
             });
 
-            // Prevent link clicks if dragging
+            // Prevent link clicks ONLY if actually dragging
             const links = slider.querySelectorAll('button');
             links.forEach(link => {
                 link.addEventListener('click', (e) => {
-                    if (isDown) e.preventDefault();
+                    const walk = Math.abs(e.pageX - startX);
+                    if (isDown && walk > 10) e.preventDefault();
                 });
             });
         });

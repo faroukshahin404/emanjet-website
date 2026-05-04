@@ -1,6 +1,8 @@
+@extends('layouts.master')
+
 @section('mobile-content')
     <div class="row align-items-center mb-4 wow animate__animated animate__fadeIn">
-        <div class="col-8">
+        <div class="col-12">
             @if (auth()->check())
                 <span class="text-muted small fw-bold d-block">{{ __('Hello') }}</span>
                 <h5 class="fw-800 text-black mb-0">{{ auth()->user()->name }}</h5>
@@ -8,7 +10,6 @@
                 <span class="text-muted small fw-bold d-block">{{ __('Welcome to') }}</span>
                 <h5 class="fw-800 text-black mb-0">{{ __('Eman Jet') }}</h5>
             @endif
-        </div>
         </div>
     </div>
 
@@ -361,12 +362,18 @@
             // Function to keep passenger counts in sync across both UIs
             function syncPassengerCounts(value) {
                 // Update both displays
-                passengerCount.textContent = value;
-                passengerCount2.textContent = value;
+                if(passengerCount) passengerCount.textContent = value;
+                if(passengerCount2) passengerCount2.textContent = value;
 
                 // Update both hidden inputs
-                passengerCountInput.value = value;
-                passengerCountInput2.value = value;
+                if(passengerCountInput) passengerCountInput.value = value;
+                if(passengerCountInput2) passengerCountInput2.value = value;
+                
+                // Update display text
+                const passengerDisplay = document.getElementById('passengerDisplay');
+                if(passengerDisplay) {
+                    passengerDisplay.textContent = `${value} ${value > 1 ? '{{ __("Persons") }}' : '{{ __("Person") }}'}`;
+                }
             }
 
             // Passenger increment/decrement functions - now with syncing
@@ -386,35 +393,41 @@
                 }
             };
 
-            window.incrementPassengers2 = function() {
-                let count = parseInt(passengerCount2.textContent);
-                if (count < 9) {
-                    count++;
-                    syncPassengerCounts(count);
-                }
-            };
-
-            window.decrementPassengers2 = function() {
-                let count = parseInt(passengerCount2.textContent);
-                if (count > 1) {
-                    count--;
-                    syncPassengerCounts(count);
-                }
-            };
-
             // Add event listeners for trip type radio buttons
             oneWayRadio.addEventListener('change', updateFormAction);
             roundTripRadio.addEventListener('change', updateFormAction);
 
-            // Initialize the layout based on the default selection
+            // Initialize the layout and action based on the default selection
+            updateFormAction();
             updateTripLayout();
 
             // Define your routes here (replace with your actual route values)
             const oneWayRoute = "{{ route('mobile.one-way.trips') }}";
             const roundRoute = "{{ route('mobile.round.trips') }}";
 
-            // Swap button is handled by event delegation in home/index.blade.php
-            // so it works consistently for both desktop and mobile forms.
+            // Swap button logic
+            const swapBtn = document.getElementById('swap-btn');
+            if (swapBtn) {
+                swapBtn.addEventListener('click', function() {
+                    // Swap display text
+                    const fromText = fromLocationSpan.textContent;
+                    fromLocationSpan.textContent = toLocationSpan.textContent;
+                    toLocationSpan.textContent = fromText;
+
+                    // Swap hidden values
+                    const tempCityId = fromCityInput.value;
+                    fromCityInput.value = toCityInput.value;
+                    toCityInput.value = tempCityId;
+
+                    const tempStationId = fromStationInput.value;
+                    fromStationInput.value = toStationInput.value;
+                    toStationInput.value = tempStationId;
+                    
+                    // Add animation effect
+                    this.querySelector('i').style.transform = 'rotate(' + (this.dataset.rotated === '180' ? '0' : '180') + 'deg)';
+                    this.dataset.rotated = this.dataset.rotated === '180' ? '0' : '180';
+                });
+            }
 
             // Bottom sheet functionality continues...
             function showBottomSheet() {
@@ -583,9 +596,7 @@
             ];
         @endphp
         const monthsLocalized = @json($wheelMonthsLocalized);
-        const monthsEn = ["FROM": "من",
-    "FROM": "من",
-    "Faq": "الأسئلة الشائعة", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const monthsEn = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
         function initWheelColumns() {
             const dayCol = document.getElementById('dayColumn');
@@ -722,16 +733,7 @@
                     spaceBetween: 12,
                     loop: false,
                     rtl: isRTL,
-                    "Apply Filters": "تطبيق الفلاتر",
-    "Arrival": "الوصول",
-    "ARRIVAL AT": "الوصول إلى",
-    "Available Trips": "الرحلات المتاحة",
-    "Account Settings": "إعدادات الحساب",
-    "Round Trip": "ذهاب وعودة",
-    "Select Station": "اختر المحطة",
-    "TO": "إلى",
-    "Run merge": "تشغيل الدمج",
-    "OTP must be 4 digits": "رمز التحقق يجب أن يكون 4 أرقام",                  freeMode: true,
+                    freeMode: true,
                     breakpoints: {
                         375: {
                             slidesPerView: 2.3,
