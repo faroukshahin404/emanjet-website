@@ -229,46 +229,29 @@
             <div class="home-section-head text-center wow animate__animated animate__fadeInUp">
                 <p class="pre-title mb-2">
                     <i class="fa-solid fa-star me-2"></i>
-                    {{ __('THE EMAN JET ADVANTAGE') }}
+                    {{ $advantageSection['pre-title'] ?? __('THE EMAN JET ADVANTAGE') }}
                 </p>
-                <h2>{{ __('Why Choose Eman Jet?') }}</h2>
+                <h2>{{ $advantageSection['title'] ?? __('Why Choose Eman Jet?') }}</h2>
                 <div class="section-divider mx-auto"></div>
-                <p class="mt-3 opacity-75">{{ __('We provide a travel experience that combines safety, comfort, and state-of-the-art technology to ensure your journey is perfect.') }}</p>
+                <p class="mt-3 opacity-75">{{ $advantageSection['description'] ?? __('We provide a travel experience that combines safety, comfort, and state-of-the-art technology to ensure your journey is perfect.') }}</p>
             </div>
 
             <div class="row g-4">
-                {{-- Advantage 1 --}}
-                <div class="col-lg-4 wow animate__animated animate__fadeInUp" data-wow-delay="0.1s">
-                    <div class="advantage-card">
-                        <div class="advantage-icon">
-                            <i class="fa-solid fa-shield-heart"></i>
+                @if(!empty($advantageSection['items']))
+                    @foreach($advantageSection['items'] as $index => $item)
+                        <div class="col-lg-4 wow animate__animated animate__fadeInUp" data-wow-delay="{{ 0.1 * ($index + 1) }}s">
+                            <div class="advantage-card">
+                                <div class="advantage-icon">
+                                    <i class="{{ $item['icon'] ?? 'fa-solid fa-circle-check' }}"></i>
+                                </div>
+                                <h4>{{ $item['title'] }}</h4>
+                                <p>{{ $item['description'] }}</p>
+                            </div>
                         </div>
-                        <h4>{{ __('Safety & Comfort') }}</h4>
-                        <p>{{ __('Our fleet is maintained to the highest international standards with professional drivers for your peace of mind.') }}</p>
-                    </div>
-                </div>
-
-                {{-- Advantage 2 --}}
-                <div class="col-lg-4 wow animate__animated animate__fadeInUp" data-wow-delay="0.2s">
-                    <div class="advantage-card">
-                        <div class="advantage-icon">
-                            <i class="fa-solid fa-bus-simple"></i>
-                        </div>
-                        <h4>{{ __('Modern Fleet') }}</h4>
-                        <p>{{ __('Travel in our latest-model buses equipped with Wi-Fi, air conditioning, and ergonomic seating for a premium experience.') }}</p>
-                    </div>
-                </div>
-
-                {{-- Advantage 3 --}}
-                <div class="col-lg-4 wow animate__animated animate__fadeInUp" data-wow-delay="0.3s">
-                    <div class="advantage-card">
-                        <div class="advantage-icon">
-                            <i class="fa-solid fa-ticket-simple"></i>
-                        </div>
-                        <h4>{{ __('Easy Booking') }}</h4>
-                        <p>{{ __('Book your trips in seconds through our website or mobile app with multiple secure payment options.') }}</p>
-                    </div>
-                </div>
+                    @endforeach
+                @else
+                    {{-- Fallback or empty state --}}
+                @endif
             </div>
         </div>
     </div>
@@ -311,7 +294,7 @@
             <div class="home-section-head text-center wow animate__animated animate__fadeInUp">
                 <p class="pre-title mb-2">
                     <i class="fa-solid fa-map-location-dot me-2"></i>
-                    {{ __('EXPLORE EGYPT') }}
+                    {{ $popularDestinationsSection['pre-title'] ?? __('EXPLORE EGYPT') }}
                 </p>
                 <h2>{{ $popularDestinationsSection['title'] }}</h2>
                 <div class="section-divider mx-auto"></div>
@@ -458,34 +441,17 @@
     <div class="home-stats-section">
         <div class="container">
             <div class="row g-4 justify-content-center">
-                <div class="col-lg-3 col-md-6 wow animate__animated animate__fadeInUp" data-wow-delay="0.1s">
-                    <div class="premium-stats-card">
-                        <i class="fa-solid fa-calendar-check stat-icon"></i>
-                        <span class="stat-number">30+</span>
-                        <span class="stat-label">{{ __('Years of Excellence') }}</span>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 wow animate__animated animate__fadeInUp" data-wow-delay="0.2s">
-                    <div class="premium-stats-card">
-                        <i class="fa-solid fa-city stat-icon"></i>
-                        <span class="stat-number">50+</span>
-                        <span class="stat-label">{{ __('Cities Covered') }}</span>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 wow animate__animated animate__fadeInUp" data-wow-delay="0.3s">
-                    <div class="premium-stats-card">
-                        <i class="fa-solid fa-users-viewfinder stat-icon"></i>
-                        <span class="stat-number">2M+</span>
-                        <span class="stat-label">{{ __('Happy Travelers') }}</span>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 wow animate__animated animate__fadeInUp" data-wow-delay="0.4s">
-                    <div class="premium-stats-card">
-                        <i class="fa-solid fa-shield-halved stat-icon"></i>
-                        <span class="stat-number">100%</span>
-                        <span class="stat-label">{{ __('Safety Record') }}</span>
-                    </div>
-                </div>
+                @if(!empty($statsSection['items']))
+                    @foreach($statsSection['items'] as $index => $item)
+                        <div class="col-lg-3 col-md-6 wow animate__animated animate__fadeInUp" data-wow-delay="{{ 0.1 * ($index + 1) }}s">
+                            <div class="premium-stats-card">
+                                <i class="{{ $item['icon'] ?? 'fa-solid fa-chart-line' }} stat-icon"></i>
+                                <span class="stat-number">{{ $item['number'] }}</span>
+                                <span class="stat-label">{{ $item['label'] }}</span>
+                            </div>
+                        </div>
+                    @endforeach
+                @endif
             </div>
         </div>
     </div>
@@ -497,34 +463,27 @@
             <div class="home-section-head text-center wow animate__animated animate__fadeInUp mb-5">
                 <p class="pre-title mb-2">
                     <i class="fa-solid fa-award me-2"></i>
-                    {{ __('OUR COMMITMENT') }}
+                    {{ $commitmentSection['pre-title'] ?? __('OUR COMMITMENT') }}
                 </p>
-                <h2>{{ __('Your Comfort is Our Priority') }}</h2>
+                <h2>{{ $commitmentSection['title'] ?? __('Your Comfort is Our Priority') }}</h2>
                 <div class="section-divider mx-auto"></div>
             </div>
 
             <div class="row g-4">
-                <div class="col-lg-4 wow animate__animated animate__fadeInLeft">
-                    <div class="quality-card text-center">
-                        <i class="fa-solid fa-clock-rotate-left"></i>
-                        <h4 class="fw-800 mb-3">{{ __('Punctuality') }}</h4>
-                        <p class="text-muted">{{ __('We value your time. Our trips are scheduled with Swiss precision to ensure you reach your destination exactly when expected.') }}</p>
-                    </div>
-                </div>
-                <div class="col-lg-4 wow animate__animated animate__fadeInUp">
-                    <div class="quality-card text-center shadow-sm" style="border-top: 4px solid var(--main-color);">
-                        <i class="fa-solid fa-hand-holding-heart"></i>
-                        <h4 class="fw-800 mb-3">{{ __('Superior Service') }}</h4>
-                        <p class="text-muted">{{ __('From local support to professional onboard staff, we provide a hospitable environment that makes every mile a pleasure.') }}</p>
-                    </div>
-                </div>
-                <div class="col-lg-4 wow animate__animated animate__fadeInRight">
-                    <div class="quality-card text-center">
-                        <i class="fa-solid fa-snowflake"></i>
-                        <h4 class="fw-800 mb-3">{{ __('Premium Amenities') }}</h4>
-                        <p class="text-muted">{{ __('Enjoy high-speed Wi-Fi, refreshing climate control, and ergonomic seating designed for the longest Egyptian journeys.') }}</p>
-                    </div>
-                </div>
+                @if(!empty($commitmentSection['items']))
+                    @foreach($commitmentSection['items'] as $index => $item)
+                        @php
+                            $wowClass = $index == 0 ? 'animate__fadeInLeft' : ($index == 1 ? 'animate__fadeInUp' : 'animate__fadeInRight');
+                        @endphp
+                        <div class="col-lg-4 wow animate__animated {{ $wowClass }}">
+                            <div class="quality-card text-center {{ $index == 1 ? 'shadow-sm' : '' }}" {!! $index == 1 ? 'style="border-top: 4px solid var(--main-color);"' : '' !!}>
+                                <i class="{{ $item['icon'] ?? 'fa-solid fa-star' }}"></i>
+                                <h4 class="fw-800 mb-3">{{ $item['title'] }}</h4>
+                                <p class="text-muted">{{ $item['description'] }}</p>
+                            </div>
+                        </div>
+                    @endforeach
+                @endif
             </div>
         </div>
     </div>

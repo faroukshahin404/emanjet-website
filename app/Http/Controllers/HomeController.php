@@ -34,10 +34,10 @@ class HomeController extends Controller
             'card-title' => __('Book your trip now!'),
             'image' => asset('images/hero-section.png'),
             'caption-title' => __('We are here to help you'),
-            'caption-description' => __('Book your trip with Super Jet'),
+            'caption-description' => __('Book your trip with Eman Jet'),
         ]);
         $anyWhereSection = $this->getSectionContent($homePageSeos, 'any-where', [
-            'title' => __('Super Jet is with you anywhere'),
+            'title' => __('Eman Jet is with you anywhere'),
             'description' => '',
             'image' => 'https://placehold.co/745x677',
         ]);
@@ -54,6 +54,20 @@ class HomeController extends Controller
             'title' => '',
             'description' => '',
         ]);
+        $advantageSection = $this->getSectionContent($homePageSeos, 'advantage', [
+            'pre-title' => __('THE EMAN JET ADVANTAGE'),
+            'title' => __('Why Choose Eman Jet?'),
+            'description' => '',
+            'items' => []
+        ]);
+        $statsSection = $this->getSectionContent($homePageSeos, 'stats', [
+            'items' => []
+        ]);
+        $commitmentSection = $this->getSectionContent($homePageSeos, 'quality-commitment', [
+            'pre-title' => __('OUR COMMITMENT'),
+            'title' => __('Your Comfort is Our Priority'),
+            'items' => []
+        ]);
         $seo = $page ? getSeoData($page->toArray()) : $this->getDefaultSeo();
         $testimonials = Testimonial::inRandomOrder()->limit(3)->get();
         $blogs = Blog::inRandomOrder()->limit(6)->get();
@@ -67,6 +81,9 @@ class HomeController extends Controller
             'busTypesSection' => $busTypesSection,
             'popularDestinationsSection' => $popularDestinationsSection,
             'reservationSection' => $reservationSection,
+            'advantageSection' => $advantageSection,
+            'statsSection' => $statsSection,
+            'commitmentSection' => $commitmentSection,
             'seo' => $seo,
             'testimonials' => $testimonials,
             'blogs' => $blogs,
@@ -117,12 +134,21 @@ class HomeController extends Controller
         $contactForm = $this->getSectionContent($contactPageSeos, 'contact-form', [
             'title' => __('Contact Form'),
             'description' => '',
+            'form-title' => __('Send Us a Message'),
             'image' => '',
-            'button-text' => __('Send'),
+            'button-text' => __('Submit Message'),
+            'complaints-title' => __('Complaints & Feedback'),
+            'complaints-description' => __('Experience any issues? We are here to listen and improve our service.'),
         ]);
+        $generalPage = Page::where('slug', 'general')->first();
+        $generalSeos = $generalPage ? $generalPage->pageSeos()->get() : collect();
+        $socialMedia = $this->getSectionContent($generalSeos, 'social-media', []);
+        $contactUs = $socialMedia['contact'] ?? [];
         $seo = $page ? getSeoData($page->toArray()) : $this->getDefaultSeo();
+
         return view('other.contact-us.index')->with([
             'contactForm' => $contactForm,
+            'contactUs' => $contactUs,
             'seo' => $seo
         ]);
     }
@@ -219,14 +245,31 @@ class HomeController extends Controller
         $cities = $query->inRandomOrder()->limit(9)->get();
         $page = Page::where('slug', 'destinations')->first();
         $destinationsPageSeos = $page ? $page->pageSeos()->get() : collect();
-        $heroSection = $this->getSectionContent($destinationsPageSeos, 'hero-section', ['search-title' => __('Where are you traveling to?'), 'image' => '']);
-        $trySection = $this->getSectionContent($destinationsPageSeos, 'try', ['title' => '', 'description' => '', 'image' => '']);
+        $heroSection = $this->getSectionContent($destinationsPageSeos, 'hero-section', [
+            'pre-title' => __('OUR ROUTES'),
+            'title' => __('Discover Your Next Adventure'),
+            'description' => __('Explore the best destinations across the country with Eman Jet. Premium services, safe journeys, and unforgettable experiences.'),
+            'search-title' => __('Where are you traveling to?'),
+            'image' => ''
+        ]);
+        $popularCitiesSection = $this->getSectionContent($destinationsPageSeos, 'popular-cities', [
+            'pre-title' => __('TRAVEL THE COUNTRY'),
+            'title' => __('Explore Popular Cities'),
+            'description' => __('Curated routes for your ultimate comfort. Choose your destination and book your ticket in seconds.'),
+        ]);
+        $trySection = $this->getSectionContent($destinationsPageSeos, 'try', [
+            'title' => '',
+            'description' => '',
+            'button-text' => __('Find your trip now'),
+            'image' => ''
+        ]);
         $appSection = $this->getSectionContent($destinationsPageSeos, 'app', ['title' => '', 'description' => '', 'image' => '']);
         $seo = $page ? getSeoData($page->toArray()) : $this->getDefaultSeo();
 
         return view('other.destinations.index')->with([
             'cities' => $cities,
             'heroSection' => $heroSection,
+            'popularCitiesSection' => $popularCitiesSection,
             'trySection' => $trySection,
             'appSection' => $appSection,
             'seo' => $seo,
@@ -270,12 +313,12 @@ class HomeController extends Controller
     private function getDefaultSeo(): array
     {
         return [
-            'meta_title' => 'Super Jet',
-            'meta_description' => 'Super Jet - ' . __('Book your trip'),
-            'meta_keywords' => 'super jet, travel, booking',
+            'meta_title' => 'Eman Jet',
+            'meta_description' => 'Eman Jet - ' . __('Book your trip'),
+            'meta_keywords' => 'eman jet, travel, booking',
             'meta_image' => 'default-image.jpg',
-            'og_title' => 'Super Jet',
-            'og_description' => 'Super Jet - ' . __('Book your trip'),
+            'og_title' => 'Eman Jet',
+            'og_description' => 'Eman Jet - ' . __('Book your trip'),
             'og_image' => 'default-og-image.jpg',
         ];
     }

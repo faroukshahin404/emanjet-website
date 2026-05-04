@@ -47,6 +47,20 @@ class AppServiceProvider extends ServiceProvider
                 $legacyFlat
             );
             $socialMediaBranch = $socialMediaSeo?->translated_content_json ?? [];
+            
+            $footerAboutSeo = $generalPageSeos->where('section_type', 'footer-about')->where('status', true)->first();
+            $footerAbout = $footerAboutSeo?->translated_content_json ?? [
+                'description' => __('Eman Jet is your trusted partner for comfortable and safe travel across the region.')
+            ];
+
+            $newsletterSeo = $generalPageSeos->where('section_type', 'newsletter')->where('status', true)->first();
+            $newsletter = $newsletterSeo?->translated_content_json ?? [
+                'title' => __('Newsletter'),
+                'description' => __('Subscribe to our newsletter for the latest updates and offers.'),
+                'button-text' => __('Join'),
+                'email-placeholder' => __('Your Email')
+            ];
+
             $apps = $this->appLinksFromDashSettings();
             $pageSeo = $view->getData()['seo'] ?? null;
             $generalSeo = $generalPage ? getSeoData($generalPage->toArray()) : [];
@@ -54,6 +68,8 @@ class AppServiceProvider extends ServiceProvider
             $view->with([
                 'contactUs' => $contactUs,
                 'socialMedia' => SocialMediaLinks::forFooter($socialMediaBranch),
+                'footerAbout' => $footerAbout,
+                'newsletter' => $newsletter,
                 'apps' => $apps,
                 'seo' => $seo,
             ]);

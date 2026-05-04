@@ -27,7 +27,7 @@
                 {{-- Left: Contact Form --}}
                 <div class="col-lg-7 wow fadeInLeft" data-wow-delay="0.2s">
                     <div class="contact-card">
-                        <h4 class="fw-bold mb-4">{{ __('Send Us a Message') }}</h4>
+                        <h4 class="fw-bold mb-4">{{ $contactForm['form-title'] ?? __('Send Us a Message') }}</h4>
                         <form action="{{ route('submit-contact-form') }}" method="POST">
                             @csrf
                             <div class="row">
@@ -59,7 +59,7 @@
                                 </div>
                                 <div class="col-12">
                                     <button type="submit" class="contact-submit-btn">
-                                        {{ __('Submit Message') }}
+                                        {{ $contactForm['button-text'] ?? __('Submit Message') }}
                                         <i class="fa-solid fa-paper-plane"></i>
                                     </button>
                                 </div>
@@ -116,8 +116,8 @@
                         @if (!empty($contactUs['complaints_email']))
                             <div class="complaints-banner">
                                 <i class="fa-solid fa-headset corner-icon"></i>
-                                <h5>{{ __('Complaints & Feedback') }}</h5>
-                                <p>{{ __('Experience any issues? We are here to listen and improve our service.') }}</p>
+                                <h5>{{ $contactForm['complaints-title'] ?? __('Complaints & Feedback') }}</h5>
+                                <p>{{ $contactForm['complaints-description'] ?? __('Experience any issues? We are here to listen and improve our service.') }}</p>
                                 <a href="mailto:{{ $contactUs['complaints_email'] }}">
                                     {{ $contactUs['complaints_email'] }}
                                 </a>

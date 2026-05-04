@@ -15,7 +15,7 @@ class PageSeosSeeder extends Seeder
     public function run(): void
     {
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');  // تعطيل التحقق من القيود
-        PageSeo::truncate();  // حذف جميع السجلات من جدول الشهادات
+        PageSeo::truncate();  // حذف جميع السجلات
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');  // تفعيل التحقق من القيود
 
         $contactDefault = [
@@ -26,7 +26,7 @@ class PageSeosSeeder extends Seeder
         ];
         $linksSeed = [
             ['icon_class' => 'fa-brands fa-facebook-f', 'url' => 'https://www.facebook.com/emanjet', 'visible' => true],
-            ['icon_class' => 'fa-brands fa-x-twitter', 'url' => 'https://twitter.com/emanjet', 'visible' => true],
+            ['icon_class' => 'fa-brands fa-twitter', 'url' => 'https://twitter.com/emanjet', 'visible' => true],
             ['icon_class' => 'fa-brands fa-instagram', 'url' => 'https://www.instagram.com/emanjet', 'visible' => true],
             ['icon_class' => 'fa-brands fa-linkedin-in', 'url' => 'https://www.linkedin.com/company/emanjet', 'visible' => true],
         ];
@@ -50,6 +50,52 @@ class PageSeosSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'page_slug' => 'general',
+                'section_type' => 'footer-about',
+                'content_json' => [
+                    'ar' => [
+                        'description' => 'الإيمان جيت هي شريكك الموثوق لرحلات مريحة وآمنة عبر أنحاء المنطقة. نحن نقدم خدمات نقل فاخرة بتركيز عالٍ على الجودة ورضا المسافرين.',
+                        'quick-links-title' => 'روابط سريعة',
+                        'support-title' => 'الدعم',
+                        'copyright-text' => 'جميع الحقوق محفوظة.',
+                        'get-it-on' => 'احصل عليه من',
+                    ],
+                    'en' => [
+                        'description' => 'Eman Jet is your trusted partner for comfortable and safe travel across the region. We provide premium bus services with a focus on quality and passenger satisfaction.',
+                        'quick-links-title' => 'Quick Links',
+                        'support-title' => 'Support',
+                        'copyright-text' => 'All rights reserved.',
+                        'get-it-on' => 'Get It On',
+                    ],
+                ],
+                'order' => 2,
+                'status' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'page_slug' => 'general',
+                'section_type' => 'newsletter',
+                'content_json' => [
+                    'ar' => [
+                        'title' => 'النشرة البريدية',
+                        'description' => 'اشترك في نشرتنا البريدية للحصول على أحدث التحديثات والعروض.',
+                        'button-text' => 'انضم',
+                        'email-placeholder' => 'بريدك الإلكتروني',
+                    ],
+                    'en' => [
+                        'title' => 'Newsletter',
+                        'description' => 'Subscribe to our newsletter for the latest updates and offers.',
+                        'button-text' => 'Join',
+                        'email-placeholder' => 'Your Email',
+                    ],
+                ],
+                'order' => 3,
+                'status' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ];
 
         $homeSeos = [
@@ -61,7 +107,7 @@ class PageSeosSeeder extends Seeder
                         'card-title' => 'احجز رحلتك دلوقتي!',
                         'image' => 'https://placehold.co/1675x700',
                         'caption-title' => 'نحن هنا لمساعدتك',
-                        'caption-description' => 'احجز رحلتك مع إيمان جيت وادفع بالبطاقة الائتمانية في لحظة!',
+                        'caption-description' => 'احجز رحلتك مع الإيمان جيت وادفع بالبطاقة الائتمانية في لحظة!',
                     ],
                     'en' => [
                         'card-title' => 'Book your trip now!',
@@ -80,7 +126,7 @@ class PageSeosSeeder extends Seeder
                 'section_type' => 'any-where',
                 'content_json' => [
                     'ar' => [
-                        'title' => 'إيمان جيت معك في آي مكان',
+                        'title' => 'الإيمان جيت معك في آي مكان',
                         'description' => 'لكن لا بد أن أوضح لك أن كل هذه الأفكار المغلوطة حول استنكار النشوة وتمجيد الألم نشأت بالفعل، وسأعرض لك التفاصيل لتكتشف حقيقة وأساس تلك السعادة البشرية، فلا أحد يرفض أو يكره أو يتجنب الشعور بالسعادة، ولكن بفضل هؤلاء الأشخاص الذين لا يدركون بأن السعادة لا بد أن نستشعرها بصورة أكثر عقلانية ومنطقية فيعرضهم هذا لمواجهة الظروف الأليمة، وأكرر بأنه لا يوجد من يرغب في الحب ونيل المنال ويتلذذ بالآلام، الألم هو الألم ولكن نتيجة لظروف ما قد تكمن السعاده فيما نتحمله من كد وأسي.',
                         'image' => 'https://placehold.co/745x677',
                     ],
@@ -127,91 +173,26 @@ class PageSeosSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            // Make table for bus types (bus Categories)
-            // [
-            //     'page_slug' => 'home',
-            //     'section_type' => 'bus-types',
-            //     'content_json' => [
-            //         'ar' => [
-            //             [
-            //                 'name' => 'درجة أولى',
-            //                 'passengers' => 30,
-            //                 'image' => 'https://placehold.co/217x123',
-            //                 'rate' => 5,
-            //             ],
-            //             [
-            //                 'name' => 'درجة ثانية',
-            //                 'passengers' => 40,
-            //                 'image' => 'https://placehold.co/217x123',
-            //                 'rate' => 4.5,
-            //             ],
-            //             [
-            //                 'name' => 'درجة ثالثة',
-            //                 'passengers' => 50,
-            //                 'image' => 'https://placehold.co/217x123',
-            //                 'rate' => 3,
-            //             ],
-            //             [
-            //                 'name' => 'درجة رابعة',
-            //                 'passengers' => 60,
-            //                 'image' => 'https://placehold.co/217x123',
-            //                 'rate' => 2.5,
-            //             ],
-            //             [
-            //                 'name' => 'درجة خامسة',
-            //                 'passengers' => 70,
-            //                 'image' => 'https://placehold.co/217x123',
-            //                 'rate' => 2,
-            //             ],
-            //             [
-            //                 'name' => 'درجة سادسة',
-            //                 'passengers' => 80,
-            //                 'image' => 'https://placehold.co/217x123',
-            //                 'rate' => 1.5,
-            //             ]
-            //         ],
-            //         'en' => [
-            //             [
-            //                 'name' => 'First Class',
-            //                 'passengers' => 30,
-            //                 'image' => 'https://placehold.co/217x123',
-            //                 'rate' => 5,
-            //             ],
-            //             [
-            //                 'name' => 'Second Class',
-            //                 'passengers' => 40,
-            //                 'image' => 'https://placehold.co/217x123',
-            //                 'rate' => 4.5,
-            //             ],
-            //             [
-            //                 'name' => 'Third Class',
-            //                 'passengers' => 50,
-            //                 'image' => 'https://placehold.co/217x123',
-            //                 'rate' => 3,
-            //             ],
-            //             [
-            //                 'name' => 'Fourth Class',
-            //                 'passengers' => 60,
-            //                 'image' => 'https://placehold.co/217x123',
-            //                 'rate' => 2.5,
-            //             ],
-            //             [
-            //                 'name' => 'Fifth Class',
-            //                 'passengers' => 70,
-            //                 'image' => 'https://placehold.co/217x123',
-            //                 'rate' => 2,
-            //             ],
-            //             [
-            //                 'name' => 'Sixth Class',
-            //                 'passengers' => 80,
-            //                 'image' => 'https://placehold.co/217x123',
-            //                 'rate' => 1.5,
-            //             ]
-            //         ]
-            //     ],
-            //     'order' => 4,
-            //     'status' => true,
-            // ],
+            [
+                'page_slug' => 'home',
+                'section_type' => 'popular-destinations',
+                'content_json' => [
+                    'ar' => [
+                        'pre-title' => 'استكشف مصر',
+                        'title' => 'وجهات شائعة',
+                        'description' => 'استكشف أشهر الوجهات والمدن المصرية التي نصل إليها يومياً بأمان وراحة.',
+                    ],
+                    'en' => [
+                        'pre-title' => 'EXPLORE EGYPT',
+                        'title' => 'Popular Destinations',
+                        'description' => 'Explore the most popular destinations and Egyptian cities we reach daily with safety and comfort.',
+                    ],
+                ],
+                'order' => 4,
+                'status' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             [
                 'page_slug' => 'home',
                 'section_type' => 'reservation',
@@ -232,6 +213,138 @@ class PageSeosSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'page_slug' => 'home',
+                'section_type' => 'advantage',
+                'content_json' => [
+                    'ar' => [
+                        'pre-title' => 'مزايا الإيمان جيت',
+                        'title' => 'ليه تختار الإيمان جيت؟',
+                        'description' => 'نحن نقدم تجربة سفر تجمع بين الأمان والراحة وأحدث التقنيات لضمان أن تكون رحلتك مثالية.',
+                        'items' => [
+                            [
+                                'icon' => 'fa-solid fa-shield',
+                                'title' => 'الأمان والراحة',
+                                'description' => 'يتم صيانة أسطولنا وفقاً لأعلى المعايير الدولية مع سائقين محترفين لراحة بالك.'
+                            ],
+                            [
+                                'icon' => 'fa-solid fa-bus-simple',
+                                'title' => 'أسطول حديث',
+                                'description' => 'سافر في أحدث موديلات الحافلات المجهزة بواي فاي وتكييف ومقاعد مريحة لتجربة مميزة.'
+                            ],
+                            [
+                                'icon' => 'fa-solid fa-ticket-simple',
+                                'title' => 'حجز سهل',
+                                'description' => 'احجز رحلاتك في ثوانٍ من خلال موقعنا أو تطبيق الهاتف مع خيارات دفع آمنة متعددة.'
+                            ]
+                        ]
+                    ],
+                    'en' => [
+                        'pre-title' => 'THE EMAN JET ADVANTAGE',
+                        'title' => 'Why Choose Eman Jet?',
+                        'description' => 'We provide a travel experience that combines safety, comfort, and state-of-the-art technology to ensure your journey is perfect.',
+                        'items' => [
+                            [
+                                'icon' => 'fa-solid fa-shield',
+                                'title' => 'Safety & Comfort',
+                                'description' => 'Our fleet is maintained to the highest international standards with professional drivers for your peace of mind.'
+                            ],
+                            [
+                                'icon' => 'fa-solid fa-bus-simple',
+                                'title' => 'Modern Fleet',
+                                'description' => 'Travel in our latest-model buses equipped with Wi-Fi, air conditioning, and ergonomic seating for a premium experience.'
+                            ],
+                            [
+                                'icon' => 'fa-solid fa-ticket-simple',
+                                'title' => 'Easy Booking',
+                                'description' => 'Book your trips in seconds through our website or mobile app with multiple secure payment options.'
+                            ]
+                        ]
+                    ]
+                ],
+                'order' => 6,
+                'status' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'page_slug' => 'home',
+                'section_type' => 'stats',
+                'content_json' => [
+                    'ar' => [
+                        'items' => [
+                            ['icon' => 'fa-solid fa-calendar-check', 'number' => '30+', 'label' => 'عاماً من التميز'],
+                            ['icon' => 'fa-solid fa-city', 'number' => '50+', 'label' => 'مدينة نغطيها'],
+                            ['icon' => 'fa-solid fa-users-viewfinder', 'number' => '2M+', 'label' => 'مسافر سعيد'],
+                            ['icon' => 'fa-solid fa-shield', 'number' => '100%', 'label' => 'سجل أمان'],
+                        ]
+                    ],
+                    'en' => [
+                        'items' => [
+                            ['icon' => 'fa-solid fa-calendar-check', 'number' => '30+', 'label' => 'Years of Excellence'],
+                            ['icon' => 'fa-solid fa-city', 'number' => '50+', 'label' => 'Cities Covered'],
+                            ['icon' => 'fa-solid fa-users-viewfinder', 'number' => '2M+', 'label' => 'Happy Travelers'],
+                            ['icon' => 'fa-solid fa-shield', 'number' => '100%', 'label' => 'Safety Record'],
+                        ]
+                    ]
+                ],
+                'order' => 7,
+                'status' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'page_slug' => 'home',
+                'section_type' => 'quality-commitment',
+                'content_json' => [
+                    'ar' => [
+                        'pre-title' => 'التزامنا',
+                        'title' => 'راحتك هي أولويتنا',
+                        'items' => [
+                            [
+                                'icon' => 'fa-solid fa-clock-rotate-left',
+                                'title' => 'الدقة في المواعيد',
+                                'description' => 'نحن نقدر وقتك. رحلاتنا مجدولة بدقة سويسرية لضمان وصولك إلى وجهتك في الوقت المحدد تماماً.'
+                            ],
+                            [
+                                'icon' => 'fa-solid fa-hand-holding-heart',
+                                'title' => 'خدمة متميزة',
+                                'description' => 'من الدعم المحلي إلى طاقم العمل المحترف على متن الحافلة، نوفر بيئة ترحيبية تجعل كل ميل متعة.'
+                            ],
+                            [
+                                'icon' => 'fa-solid fa-snowflake',
+                                'title' => 'مرافق فاخرة',
+                                'description' => 'استمتع بواي فاي عالي السرعة، وتحكم منعش في المناخ، ومقاعد مريحة مصممة لأطول الرحلات المصرية.'
+                            ]
+                        ]
+                    ],
+                    'en' => [
+                        'pre-title' => 'OUR COMMITMENT',
+                        'title' => 'Your Comfort is Our Priority',
+                        'items' => [
+                            [
+                                'icon' => 'fa-solid fa-clock-rotate-left',
+                                'title' => 'Punctuality',
+                                'description' => 'We value your time. Our trips are scheduled with Swiss precision to ensure you reach your destination exactly when expected.'
+                            ],
+                            [
+                                'icon' => 'fa-solid fa-hand-holding-heart',
+                                'title' => 'Superior Service',
+                                'description' => 'From local support to professional onboard staff, we provide a hospitable environment that makes every mile a pleasure.'
+                            ],
+                            [
+                                'icon' => 'fa-solid fa-snowflake',
+                                'title' => 'Premium Amenities',
+                                'description' => 'Enjoy high-speed Wi-Fi, refreshing climate control, and ergonomic seating designed for the longest Egyptian journeys.'
+                            ]
+                        ]
+                    ]
+                ],
+                'order' => 8,
+                'status' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
         ];
 
         $destinationSeos = [
@@ -240,10 +353,16 @@ class PageSeosSeeder extends Seeder
                 'section_type' => 'hero-section',
                 'content_json' => [
                     'ar' => [
+                        'pre-title' => 'خطوطنا',
+                        'title' => 'اكتشف مغامرتك القادمة',
+                        'description' => 'استكشف أفضل الوجهات في جميع أنحاء البلاد مع الإيمان جيت. خدمات متميزة، رحلات آمنة، وتجارب لا تنسى.',
                         'search-title' => 'مسافر علي فين؟',
                         'image' => 'https://placehold.co/1657x600',
                     ],
                     'en' => [
+                        'pre-title' => 'OUR ROUTES',
+                        'title' => 'Discover Your Next Adventure',
+                        'description' => 'Explore the best destinations across the country with Eman Jet. Premium services, safe journeys, and unforgettable experiences.',
                         'search-title' => 'Where are you traveling to?',
                         'image' => 'https://placehold.co/1657x600',
                     ],
@@ -255,40 +374,42 @@ class PageSeosSeeder extends Seeder
             ],
             [
                 'page_slug' => 'destinations',
-                'section_type' => 'try',
+                'section_type' => 'popular-cities',
                 'content_json' => [
                     'ar' => [
-                        'title' => 'جربه الآن',
-                        'description' => 'احجز الآن واستمتع بتجربة فريدة',
-                        'image' => 'https://placehold.co/805x475',
+                        'pre-title' => 'سافر عبر البلاد',
+                        'title' => 'استكشف المدن الشائعة',
+                        'description' => 'مسارات منسقة لراحتك القصوى. اختر وجهتك واحجز تذكرتك في ثوانٍ.',
                     ],
                     'en' => [
-                        'title' => 'Try it now',
-                        'description' => 'Book now and enjoy a unique experience',
-                        'image' => 'https://placehold.co/805x475',
+                        'pre-title' => 'TRAVEL THE COUNTRY',
+                        'title' => 'Explore Popular Cities',
+                        'description' => 'Curated routes for your ultimate comfort. Choose your destination and book your ticket in seconds.',
                     ],
                 ],
-                'order' => 1,
+                'order' => 2,
                 'status' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'page_slug' => 'destinations',
-                'section_type' => 'app',
+                'section_type' => 'try',
                 'content_json' => [
                     'ar' => [
-                        'title' => 'تطبيقنا',
-                        'description' => 'قم بتنزيل تطبيقنا الآن واستمتع بتجربة فريدة',
-                        'image' => 'https://placehold.co/450x577',
+                        'title' => 'جربه الآن',
+                        'description' => 'احجز الآن واستمتع بتجربة مريحة',
+                        'button-text' => 'ابحث عن رحلتك الآن',
+                        'image' => 'https://placehold.co/805x475',
                     ],
                     'en' => [
-                        'title' => 'Our App',
-                        'description' => 'Download our app now and enjoy a unique experience',
-                        'image' => 'https://placehold.co/450x577',
+                        'title' => 'Try it now',
+                        'description' => 'Book now and enjoy a comfortable experience',
+                        'button-text' => 'Find your trip now',
+                        'image' => 'https://placehold.co/805x475',
                     ],
                 ],
-                'order' => 2,
+                'order' => 3,
                 'status' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -301,13 +422,15 @@ class PageSeosSeeder extends Seeder
                 'section_type' => 'hero-section',
                 'content_json' => [
                     'ar' => [
-                        'title' => 'وجهاتنا',
-                        'description' => 'استكشف مجموعة متنوعة من الوجهات المميزة التي نوفرها عبر خطوطنا المنتشرة في جميع أنحاء الجمهورية. سواء كنت تبحث عن رحلة عمل سريعة أو عطلة للاسترخاء، فإننا نقدم لك خيارات متعددة تناسب جميع احتياجاتك. نضمن لك تجربة سفر مريحة وآمنة، مع الالتزام بأعلى معايير الجودة والاحترافية. اكتشف الآن وجهتك القادمة مع إيمان جيت!',
+                        'pre-title' => 'قصصنا',
+                        'title' => 'مدونة الإيمان جيت',
+                        'description' => 'استكشف مجموعة متنوعة من الوجهات المميزة والقصص التي نوفرها عبر خطوطنا المنتشرة في جميع أنحاء الجمهورية. نضمن لك تجربة سفر مريحة وآمنة، مع الإيمان جيت!',
                         'image' => 'https://placehold.co/805x668',
                     ],
                     'en' => [
-                        'title' => 'Our Destinations',
-                        'description' => 'Explore a variety of distinctive destinations we provide through our widespread lines across the republic. Whether you\'re looking for a quick business trip or a relaxing vacation, we offer multiple options to suit all your needs. We guarantee you a comfortable and safe travel experience, while adhering to the highest standards of quality and professionalism. Discover your next destination with Eman Jet!',
+                        'pre-title' => 'OUR STORIES',
+                        'title' => 'Eman Jet Blog',
+                        'description' => 'Explore a variety of distinctive destinations and stories we provide through our widespread lines across the republic. We guarantee you a comfortable and safe travel experience with Eman Jet!',
                         'image' => 'https://placehold.co/805x668',
                     ],
                 ],
@@ -320,34 +443,31 @@ class PageSeosSeeder extends Seeder
                 'section_type' => 'trip-start',
                 'content_json' => [
                     'ar' => [
-                        'title' => 'ابدأ رحلتك',
-                        'description' => 'ابدأ مغامرتك مع إيمان جيت! احجز رحلتك بسهولة واستمتع بتجربة مريحة وآمنة عبر منصتنا الإلكترونية. اختر وجهتك المفضلة واستعد لاكتشاف عالم جديد من التنقل العصري.',
+                        'title' => 'رحلاتك تبدأ من هنا',
+                        'description' => 'انضم إلينا الآن وابدأ رحلتك القادمة مع أفضل خدمات النقل في مصر.',
                         'button-text' => 'احجز الآن',
                         'images' => [
-                            'https://placehold.co/208x292',
-                            'https://placehold.co/208x196',
-                            'https://placehold.co/209x127',
-                            'https://placehold.co/209x292',
-                            'https://placehold.co/209x127',
+                            'https://placehold.co/400x400?text=trip+1',
+                            'https://placehold.co/400x400?text=trip+2',
+                            'https://placehold.co/400x400?text=trip+3',
+                            'https://placehold.co/400x400?text=trip+4',
                         ],
                     ],
                     'en' => [
-                        'title' => 'Start Your Journey',
-                        'description' => 'Start your adventure with Eman Jet! Book your trip easily and enjoy a comfortable and safe experience through our electronic platform. Choose your favorite destination and get ready to discover a new world of modern transportation.',
+                        'title' => 'Your journeys start here',
+                        'description' => 'Join us now and start your next journey with the best transport services in Egypt.',
                         'button-text' => 'Book Now',
                         'images' => [
-                            'https://placehold.co/208x292',
-                            'https://placehold.co/208x196',
-                            'https://placehold.co/209x127',
-                            'https://placehold.co/209x292',
-                            'https://placehold.co/209x127',
+                            'https://placehold.co/400x400?text=trip+1',
+                            'https://placehold.co/400x400?text=trip+2',
+                            'https://placehold.co/400x400?text=trip+3',
+                            'https://placehold.co/400x400?text=trip+4',
                         ],
                     ],
                 ],
                 'order' => 2,
                 'status' => true,
                 'created_at' => now(),
-                'updated_at' => now(),
             ],
         ];
 
@@ -357,14 +477,26 @@ class PageSeosSeeder extends Seeder
                 'section_type' => 'hero-section',
                 'content_json' => [
                     'ar' => [
+                        'pre-title' => 'من نحن',
                         'title' => 'من نحن',
-                        'description' => 'نحن في إيمان جيت نؤمن بأهمية الراحة والأمان لعملائنا، ونسعى دائمًا لتقديم تجربة سفر متميزة تجمع بين الاحترافية والجودة. بفضل سنوات من الخبرة في مجال النقل والسفر، نعمل جاهدين على تحسين خدماتنا باستمرار لتلبي توقعات عملائنا وتفوقها. فريقنا ملتزم بتوفير أفضل وسائل الراحة، ودعم العملاء على مدار الساعة، وتقديم حلول مبتكرة تسهّل عليك رحلتك من البداية حتى النهاية.',
+                        'description' => 'نحن في الإيمان جيت نؤمن بأهمية الراحة والأمان لعملائنا، ونسعى دائمًا لتقديم تجربة سفر متميزة تجمع بين الاحترافية والجودة. فريقنا ملتزم بتوفير أفضل وسائل الراحة، ودعم العملاء على مدار الساعة، وتقديم حلول مبتكرة تسهّل عليك رحلتك من البداية حتى النهاية.',
                         'image' => 'https://placehold.co/805x668',
+                        'stats' => [
+                            ['number' => '10+', 'label' => 'سنوات الخبرة'],
+                            ['number' => '50+', 'label' => 'خطوط السفر'],
+                            ['number' => '+1M', 'label' => 'الركاب'],
+                        ]
                     ],
                     'en' => [
+                        'pre-title' => 'Who We Are',
                         'title' => 'About Us',
-                        'description' => 'At Eman Jet, we believe in the importance of comfort and safety for our customers, and we always strive to provide a distinguished travel experience that combines professionalism and quality. Thanks to years of experience in the field of transportation and travel, we work hard to continuously improve our services to meet and exceed our customers\' expectations. Our team is committed to providing the best amenities, 24/7 customer support, and innovative solutions that make your journey easier from start to finish.',
+                        'description' => 'At Eman Jet, we believe in the importance of comfort and safety for our customers, and we always strive to provide a distinguished travel experience that combines professionalism and quality. Our team is committed to providing the best amenities, 24/7 customer support, and innovative solutions that make your journey easier from start to finish.',
                         'image' => 'https://placehold.co/805x668',
+                        'stats' => [
+                            ['number' => '10+', 'label' => 'YEARS'],
+                            ['number' => '50+', 'label' => 'ROUTES'],
+                            ['number' => '+1M', 'label' => 'PASSENGERS'],
+                        ]
                     ],
                 ],
                 'order' => 1,
@@ -376,22 +508,88 @@ class PageSeosSeeder extends Seeder
                 'section_type' => 'services',
                 'content_json' => [
                     'ar' => [
-                        'vision' => 'رؤيتنا هي تقديم خدمات مميزة تتجاوز احتياجات وتوقعات عملائنا حتى تصبح الحل الأسهل والأكثر أماناً. فإننا نسعى دائماً جاهدين لنصبح شركة رائدة في مجال خدمات نقل الركاب بكافة الوسائل باستخدام كافة التقنيات الحديثة لتوفير الراحة والرفاهية لعملائنا.',
-                        'mission' => 'مهمتنا هي تقديم خدمات مميزة تتجاوز احتياجات وتوقعات عملائنا حتى تصبح الحل الأسهل والأكثر أماناً. فإننا نسعى دائماً جاهدين لنصبح شركة رائدة في مجال خدمات نقل الركاب بكافة الوسائل باستخدام كافة التقنيات الحديثة لتوفير الراحة والرفاهية لعملائنا.',
-                        'values' => 'قيمنا هي تقديم خدمات مميزة تتجاوز احتياجات وتوقعات عملائنا حتى تصبح الحل الأسهل والأكثر أماناً. فإننا نسعى دائماً جاهدين لنصبح شركة رائدة في مجال خدمات نقل الركاب بكافة الوسائل باستخدام كافة التقنيات الحديثة لتوفير الراحة والرفاهية لعملائنا.',
-                        'branches' => 'فروع إيمان جيت: رؤيتنا هي تقديم خدمات مميزة تتجاوز احتياجات وتوقعات عملائنا حتى تصبح الحل الأسهل والأكثر أماناً. فإننا نسعى دائماً جاهدين لنصبح شركة رائدة في مجال خدمات نقل الركاب بكافة الوسائل باستخدام كافة التقنيات الحديثة لتوفير الراحة والرفاهية لعملائنا.',
-                        'routes' => 'خطوط إيمان جيت: رؤيتنا هي تقديم خدمات مميزة تتجاوز احتياجات وتوقعات عملائنا حتى تصبح الحل الأسهل والأكثر أماناً. فإننا نسعى دائماً جاهدين لنصبح شركة رائدة في مجال خدمات نقل الركاب بكافة الوسائل باستخدام كافة التقنيات الحديثة لتوفير الراحة والرفاهية لعملائنا.',
-                        'payment_methods' => 'طرق الدفع: رؤيتنا هي تقديم خدمات مميزة تتجاوز احتياجات وتوقعات عملائنا حتى تصبح الحل الأسهل والأكثر أماناً. فإننا نسعى دائماً جاهدين لنصبح شركة رائدة في مجال خدمات نقل الركاب بكافة الوسائل باستخدام كافة التقنيات الحديثة لتوفير الراحة والرفاهية لعملائنا.',
-                        'safety_and_comfort' => 'رفاهية وأمان: رؤيتنا هي تقديم خدمات مميزة تتجاوز احتياجات وتوقعات عملائنا حتى تصبح الحل الأسهل والأكثر أماناً. فإننا نسعى دائماً جاهدين لنصبح شركة رائدة في مجال خدمات نقل الركاب بكافة الوسائل باستخدام كافة التقنيات الحديثة لتوفير الراحة والرفاهية لعملائنا.',
+                        'pre-title' => 'تميز الخدمة',
+                        'title' => 'تعرف أكثر علينا',
+                        'description' => 'اكتشف رؤيتنا ومهمتنا وقيمنا التي تدفعنا للأمام لتقديم أفضل خدمة سفر في المنطقة.',
+                        'items' => [
+                            [
+                                'icon' => 'fa-solid fa-eye',
+                                'title' => 'رؤيتنا',
+                                'description' => 'رؤيتنا هي تقديم خدمات مميزة تتجاوز احتياجات وتوقعات عملائنا حتى تصبح الحل الأسهل والأكثر أماناً. نسعى جاهدين لنصبح شركة رائدة في مجال خدمات نقل الركاب.'
+                            ],
+                            [
+                                'icon' => 'fa-solid fa-bullseye',
+                                'title' => 'مهمتنا',
+                                'description' => 'مهمتنا هي تقديم خدمات مميزة تتجاوز احتياجات وتوقعات عملائنا حتى تصبح الحل الأسهل والأكثر أماناً. نسعى دائماً لتوفير الراحة والرفاهية لعملائنا.'
+                            ],
+                            [
+                                'icon' => 'fa-solid fa-heart',
+                                'title' => 'قيمنا',
+                                'description' => 'قيمنا هي تقديم خدمات مميزة تتجاوز احتياجات وتوقعات عملائنا حتى تصبح الحل الأسهل والأكثر أماناً. نسعى جاهدين لنصبح شركة رائدة في مجال خدمات النقل.'
+                            ],
+                            [
+                                'icon' => 'fa-solid fa-building',
+                                'title' => 'فروع الإيمان جيت',
+                                'description' => 'فروع الإيمان جيت منتشرة لخدمتكم. رؤيتنا هي تقديم خدمات مميزة تتجاوز احتياجات وتوقعات عملائنا حتى تصبح الحل الأسهل والأكثر أماناً.'
+                            ],
+                            [
+                                'icon' => 'fa-solid fa-bus',
+                                'title' => 'خطوط الإيمان جيت',
+                                'description' => 'خطوط الإيمان جيت: رؤيتنا هي تقديم خدمات مميزة تتجاوز احتياجات وتوقعات عملائنا حتى تصبح الحل الأسهل والأكثر أماناً.'
+                            ],
+                            [
+                                'icon' => 'fa-solid fa-credit-card',
+                                'title' => 'طرق الدفع',
+                                'description' => 'طرق الدفع: رؤيتنا هي تقديم خدمات مميزة تتجاوز احتياجات وتوقعات عملائنا حتى تصبح الحل الأسهل والأكثر أماناً.'
+                            ],
+                            [
+                                'icon' => 'fa-solid fa-shield',
+                                'title' => 'رفاهية وأمان',
+                                'description' => 'رفاهية وأمان: رؤيتنا هي تقديم خدمات مميزة تتجاوز احتياجات وتوقعات عملائنا حتى تصبح الحل الأسهل والأكثر أماناً.'
+                            ],
+                        ]
                     ],
                     'en' => [
-                        'vision' => 'Our vision is to provide distinguished services that exceed the needs and expectations of our customers to become the easiest and safest solution. We always strive to become a leading company in passenger transportation services using all modern technologies to provide comfort and luxury to our customers.',
-                        'mission' => 'Our mission is to provide distinguished services that exceed the needs and expectations of our customers to become the easiest and safest solution. We always strive to become a leading company in passenger transportation services using all modern technologies to provide comfort and luxury to our customers.',
-                        'values' => 'Our values are to provide distinguished services that exceed the needs and expectations of our customers to become the easiest and safest solution. We always strive to become a leading company in passenger transportation services using all modern technologies to provide comfort and luxury to our customers.',
-                        'branches' => 'Eman Jet Branches: Our vision is to provide distinguished services that exceed the needs and expectations of our customers to become the easiest and safest solution. We always strive to become a leading company in passenger transportation services using all modern technologies to provide comfort and luxury to our customers.',
-                        'routes' => 'Eman Jet Routes: Our vision is to provide distinguished services that exceed the needs and expectations of our customers to become the easiest and safest solution. We always strive to become a leading company in passenger transportation services using all modern technologies to provide comfort and luxury to our customers.',
-                        'payment_methods' => 'Payment Methods: Our vision is to provide distinguished services that exceed the needs and expectations of our customers to become the easiest and safest solution. We always strive to become a leading company in passenger transportation services using all modern technologies to provide comfort and luxury to our customers.',
-                        'safety_and_comfort' => 'Safety and Comfort: Our vision is to provide distinguished services that exceed the needs and expectations of our customers to become the easiest and safest solution. We always strive to become a leading company in passenger transportation services using all modern technologies to provide comfort and luxury to our customers.',
+                        'pre-title' => 'EXPERIENCE EXCELLENCE',
+                        'title' => 'Learn More About Us',
+                        'description' => 'Discover our vision, mission, and values that drive us forward to provide the best travel service in the region.',
+                        'items' => [
+                            [
+                                'icon' => 'fa-solid fa-eye',
+                                'title' => 'Our Vision',
+                                'description' => 'Our vision is to provide distinguished services that exceed the needs and expectations of our customers to become the easiest and safest solution.'
+                            ],
+                            [
+                                'icon' => 'fa-solid fa-bullseye',
+                                'title' => 'Our Mission',
+                                'description' => 'Our mission is to provide distinguished services that exceed the needs and expectations of our customers to become the easiest and safest solution.'
+                            ],
+                            [
+                                'icon' => 'fa-solid fa-heart',
+                                'title' => 'Our Values',
+                                'description' => 'Our values are to provide distinguished services that exceed the needs and expectations of our customers to become the easiest and safest solution.'
+                            ],
+                            [
+                                'icon' => 'fa-solid fa-building',
+                                'title' => 'Eman Jet Branches',
+                                'description' => 'Eman Jet Branches are spread to serve you. Our vision is to provide distinguished services that exceed the needs.'
+                            ],
+                            [
+                                'icon' => 'fa-solid fa-bus',
+                                'title' => 'Eman Jet Routes',
+                                'description' => 'Eman Jet Routes: Our vision is to provide distinguished services that exceed the needs and expectations.'
+                            ],
+                            [
+                                'icon' => 'fa-solid fa-credit-card',
+                                'title' => 'Payment Methods',
+                                'description' => 'Payment Methods: Our vision is to provide distinguished services that exceed the needs and expectations.'
+                            ],
+                            [
+                                'icon' => 'fa-solid fa-shield',
+                                'title' => 'Safety & Comfort',
+                                'description' => 'Safety & Comfort: Our vision is to provide distinguished services that exceed the needs and expectations.'
+                            ],
+                        ]
                     ],
                 ],
                 'order' => 2,
@@ -408,61 +606,20 @@ class PageSeosSeeder extends Seeder
                     'ar' => [
                         'title' => 'نموذج الاتصال',
                         'description' => 'يرجى ملء النموذج أدناه وسنقوم بالرد عليك في أقرب وقت ممكن.',
+                        'form-title' => 'أرسل لنا رسالة',
                         'image' => 'https://placehold.co/805x668',
-                        'button-text' => 'إرسال',
+                        'button-text' => 'إرسال الرسالة',
+                        'complaints-title' => 'الشكاوى والاقتراحات',
+                        'complaints-description' => 'هل تواجه أي مشاكل؟ نحن هنا للاستماع إليك وتحسين خدمتنا.',
                     ],
                     'en' => [
                         'title' => 'Contact Form',
                         'description' => 'Please fill out the form below and we will get back to you as soon as possible.',
+                        'form-title' => 'Send Us a Message',
                         'image' => 'https://placehold.co/805x668',
-                        'button-text' => 'Send',
-                    ],
-                ],
-                'order' => 1,
-                'status' => true,
-                'created_at' => now(),
-            ],
-        ];
-
-        $privacySeos = [
-            [
-                'page_slug' => 'privacy-policy',
-                'section_type' => 'privacy-policy',
-                'content_json' => [
-                    'ar' => [
-                        'title' => 'سياسة الخصوصية',
-                        'description' => 'سياسة الخصوصية لشركة إيمان جيت في شركة إيمان جيت، نولي أهمية كبيرة لحماية خصوصيتك وبياناتك الشخصية. تهدف سياسة الخصوصية هذه إلى توضيح كيفية جمعنا للمعلومات، واستخدامها، ومشاركتها، وحمايتها عند استخدامك لخدماتنا. المعلومات التي نقوم بجمعها المعلومات الشخصية مثل الاسم، رقم الهاتف، البريد الإلكتروني، رقم الهوية، عند إنشاء حساب أو الحجز عبر الإنترنت بيانات الرحلات مثل مواعيد السفر، الوجهات، وأرقام التذاكر معلومات الموقع الجغرافي في حال تم تفعيلها البيانات التقنية مثل نوع الجهاز، نظام التشغيل، المتصفح، عنوان IP كيفية استخدام المعلومات لتأكيد الحجز ومعالجة المدفوعات للتواصل معك بخصوص الرحلات أو التحديثات أو العروض لتحسين جودة خدماتنا وتجربتك للامتثال للمتطلبات القانونية والتنظيمية مشاركة المعلومات لا نقوم بمشاركة بياناتك مع أي طرف ثالث إلا في الحالات التالية مع شركاء موثوقين لأغراض تشغيلية مثل شركات الدفع إذا طُلب منا ذلك بموجب القانون في حال وجود تهديد لأمن المستخدمين أو الخدمة حماية البيانات نستخدم أحدث تقنيات التشفير والتأمين لضمان حماية بياناتك يتم تخزين المعلومات على خوادم آمنة ويُسمح بالوصول إليها فقط للمصرح لهم ملفات تعريف الارتباط Cookies نستخدم ملفات تعريف الارتباط لتحسين تجربة المستخدم وتحليل استخدام الموقع. يمكنك تعطيلها من إعدادات المتصفح حقوق المستخدم يحق لك طلب نسخة من بياناتك أو تعديلها أو حذفها يمكنك سحب موافقتك على استخدام بياناتك في أي وقت التعديلات على سياسة الخصوصية قد نقوم بتحديث هذه السياسة من وقت لآخر، وسيتم نشر أي تغييرات على هذه الصفحة',
-                        'image' => 'https://placehold.co/805x668',
-                        'button-text' => 'موافق',
-                    ],
-                    'en' => [
-                        'title' => 'Privacy Policy',
-                        'description' => 'Privacy Policy of Eman Jet At Eman Jet, your privacy is important to us. This Privacy Policy outlines how we collect, use, share, and protect your information when you use our services. Information We Collect Personal information such as name, phone number, email, ID number, when creating an account or booking online Travel details such as trip schedules, destinations, and ticket numbers Geolocation data if enabled Technical data like device type, operating system, browser, and IP address How We Use the Information To confirm bookings and process payments To contact you about your trips, updates, or promotions To improve our services and user experience To comply with legal and regulatory requirements Information Sharing We do not share your personal data with third parties, except With trusted partners for operational purposes e.g., payment processors When required by law In case of a security threat to users or the service Data Security We use the latest encryption and security technologies to protect your information Data is stored on secure servers with restricted access Cookies We use cookies to enhance user experience and analyze website usage. You can disable cookies in your browser settings User Rights You have the right to request, modify, or delete your data You can withdraw your consent for data usage at any time Changes to the Privacy Policy We may update this policy occasionally. Any changes will be posted on this page',
-                        'image' => 'https://placehold.co/805x668',
-                        'button-text' => 'Agree',
-                    ],
-                ],
-                'order' => 1,
-                'status' => true,
-                'created_at' => now(),
-            ],
-        ];
-        $usageTermsSeos = [
-            [
-                'page_slug' => 'usage-terms',
-                'section_type' => 'usage-terms',
-                'content_json' => [
-                    'ar' => [
-                        'title' => 'سياسة الاستخدام',
-                        'description' => 'سياسة الاستخدام لشركة إيمان جيت يرجى قراءة هذه الشروط بعناية قبل استخدام موقع أو تطبيق شركة إيمان جيت. باستخدامك لأي من خدماتنا، فإنك توافق على الالتزام بسياسة الاستخدام التالية: 1. قبول الشروط باستخدام الموقع أو التطبيق، فإنك تقر بأنك قرأت وفهمت ووافقت على هذه السياسة، وفي حال عدم موافقتك، يُرجى عدم استخدام الخدمة. 2. استخدام الخدمة يجب أن تستخدم الخدمة فقط للأغراض المشروعة مثل الحجز أو الاستعلام عن الرحلات. يُحظر استخدام الخدمة لأي غرض تجاري غير مصرح به أو للتلاعب أو الاحتيال. 3. الحسابات والمعلومات تتحمل مسؤولية دقة المعلومات التي تقدمها. لا يجوز استخدام حسابك من قبل أي طرف ثالث دون إذن منك. يحق لنا تعليق أو إلغاء الحسابات التي تُستخدم بشكل مسيء أو مخالف للسياسات. 4. حقوق الملكية جميع المحتويات النصوص، الصور، الشعارات، العلامات التجارية مملوكة لشركة إيمان جيت أو للجهات المرخصة لها. لا يجوز إعادة استخدام أو نسخ أي جزء من الموقع أو التطبيق دون إذن كتابي مسبق. 5. حدود المسؤولية نسعى لتقديم معلومات دقيقة ولكن لا نضمن خلو الموقع من الأخطاء أو التوقفات المؤقتة. لسنا مسؤولين عن أي خسائر ناتجة عن استخدام الخدمة أو الاعتماد على المعلومات المعروضة. 6. التعديلات على السياسة نحتفظ بالحق في تعديل سياسة الاستخدام في أي وقت، وسيتم نشر التحديثات عبر الموقع. 7. القانون الواجب التطبيق تخضع هذه السياسة لقوانين جمهورية مصر العربية، ويكون لمحاكم القاهرة الاختصاص الحصري في حال نشوء أي نزاع.',
-                        'image' => 'https://placehold.co/805x668',
-                        'button-text' => 'موافق',
-                    ],
-                    'en' => [
-                        'title' => 'Usage Terms',
-                        'description' => 'Please read these terms carefully before using the website or app of Eman Jet. By using any of our services, you agree to be bound by the following terms: 1. Acceptance of Terms By using our platform, you confirm that you have read, understood, and agreed to these terms. If you do not agree, please do not use the service. 2. Use of the Service The service must be used only for lawful purposes, such as booking or checking trips. Unauthorized commercial use, manipulation, or fraud is strictly prohibited. 3. Accounts and Information You are responsible for the accuracy of the information you provide. Your account must not be used by others without your permission. We reserve the right to suspend or terminate accounts used in violation of our policies. 4. Intellectual Property All content text, images, logos, trademarks is owned by Eman Jet or its licensors. Reuse or reproduction of any part of the website/app without prior written consent is prohibited. 5. Limitation of Liability While we strive for accuracy, we do not guarantee that the site will be error-free or uninterrupted. We are not liable for any loss resulting from the use of the service or reliance on displayed information. 6. Changes to the Terms we reserve the right to update these terms at any time. Changes will be posted on the website. 7. Governing Law These terms are governed by the laws of the Arab Republic of Egypt. The courts of Cairo shall have exclusive jurisdiction over any disputes.',
-                        'image' => 'https://placehold.co/805x668',
-                        'button-text' => 'Agree',
+                        'button-text' => 'Submit Message',
+                        'complaints-title' => 'Complaints & Feedback',
+                        'complaints-description' => 'Experience any issues? We are here to listen and improve our service.',
                     ],
                 ],
                 'order' => 1,
@@ -478,12 +635,12 @@ class PageSeosSeeder extends Seeder
                 'content_json' => [
                     'ar' => [
                         'title' => 'الأسئلة الشائعة',
-                        'description' => 'في هذا القسم، جمعنا لك أبرز الأسئلة التي قد تدور في ذهنك حول خدماتنا، الحجز، وسائل الراحة، وسياسات السفر المختلفة. هدفنا هو تقديم تجربة سهلة وواضحة لجميع عملائنا، لذلك نحرص دائمًا على الإجابة على كل استفسار بدقة ووضوح. إذا لم تجد إجابتك هنا، لا تتردد في التواصل معنا وسنكون سعداء بمساعدتك.',
+                        'description' => 'في هذا القسم، جمعنا لك أبرز الأسئلة التي قد تدور في ذهنك حول خدماتنا.',
                         'image' => 'https://placehold.co/805x668',
                     ],
                     'en' => [
                         'title' => 'Frequently Asked Questions',
-                        'description' => 'In this section, we have collected the most prominent questions that may be on your mind about our services, reservations, amenities, and various travel policies. Our goal is to provide an easy and clear experience for all our customers, so we always strive to answer every inquiry accurately and clearly. If you don\'t find your answer here, feel free to contact us and we\'ll be happy to help you.',
+                        'description' => 'In this section, we have collected the most prominent questions about our services.',
                         'image' => 'https://placehold.co/805x668',
                     ],
                 ],
@@ -493,7 +650,55 @@ class PageSeosSeeder extends Seeder
             ],
         ];
 
-        $seos = array_merge($generalSeos, $homeSeos, $aboutSeos, $contactSeos, $destinationSeos, $blogsSeos, $faqsSeos, $privacySeos, $usageTermsSeos);
+        $privacySeos = [
+            [
+                'page_slug' => 'privacy-policy',
+                'section_type' => 'privacy-policy',
+                'content_json' => [
+                    'ar' => [
+                        'title' => 'سياسة الخصوصية',
+                        'description' => 'نحن نولي أهمية كبيرة لحماية خصوصيتك...',
+                        'button-text' => 'موافق',
+                        'image' => 'https://placehold.co/805x668',
+                    ],
+                    'en' => [
+                        'title' => 'Privacy Policy',
+                        'description' => 'We take your privacy very seriously...',
+                        'button-text' => 'Agree',
+                        'image' => 'https://placehold.co/805x668',
+                    ],
+                ],
+                'order' => 1,
+                'status' => true,
+                'created_at' => now(),
+            ],
+        ];
+
+        $usageTermsSeos = [
+            [
+                'page_slug' => 'usage-terms',
+                'section_type' => 'usage-terms',
+                'content_json' => [
+                    'ar' => [
+                        'title' => 'شروط الاستخدام',
+                        'description' => 'يرجى قراءة هذه الشروط بعناية قبل استخدام الموقع...',
+                        'button-text' => 'موافق',
+                        'image' => 'https://placehold.co/805x668',
+                    ],
+                    'en' => [
+                        'title' => 'Usage Terms',
+                        'description' => 'Please read these terms carefully before using the site...',
+                        'button-text' => 'Agree',
+                        'image' => 'https://placehold.co/805x668',
+                    ],
+                ],
+                'order' => 1,
+                'status' => true,
+                'created_at' => now(),
+            ],
+        ];
+
+        $seos = array_merge($generalSeos, $homeSeos, $aboutSeos, $contactSeos, $faqsSeos, $privacySeos, $usageTermsSeos, $destinationSeos, $blogsSeos);
 
         foreach ($seos as $seo) {
             $page = Page::where('slug', $seo['page_slug'])->first();

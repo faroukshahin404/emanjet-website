@@ -98,14 +98,28 @@
     /* Nav Links */
     .navbar-nav .nav-link {
         font-weight: 600;
-        color: #666;
+        color: #666; /* Default for non-home or scrolled */
         position: relative;
         padding: 0.5rem 1rem !important;
         margin: 0 0.5rem;
-        transition: color 0.3s ease;
+        transition: all 0.3s ease;
         letter-spacing: 0.3px;
         font-size: 1.05rem;
     }
+
+    @if(@$isHome)
+    .navbar#navbar:not(.scrolled) .navbar-nav .nav-link {
+        color: rgba(255, 255, 255, 0.9) !important;
+    }
+    .navbar#navbar:not(.scrolled) .navbar-nav .nav-link:hover,
+    .navbar#navbar:not(.scrolled) .navbar-nav .nav-link.active {
+        color: #fff !important;
+    }
+    /* White underline when transparent */
+    .navbar#navbar:not(.scrolled) .navbar-nav .nav-link::after {
+        background-color: #fff !important;
+    }
+    @endif
 
     .navbar-nav .nav-link:hover,
     .navbar-nav .nav-link.active {
@@ -189,6 +203,18 @@
         color: var(--main-color) !important;
         font-weight: bold;
     }
+
+    @if(@$isHome)
+    .navbar#navbar:not(.scrolled) .lang-btn {
+        background-color: rgba(255, 255, 255, 0.15) !important;
+        border-color: rgba(255, 255, 255, 0.3) !important;
+        color: #fff !important;
+        backdrop-filter: blur(4px);
+    }
+    .navbar#navbar:not(.scrolled) .lang-btn:hover {
+        background-color: rgba(255, 255, 255, 0.25) !important;
+    }
+    @endif
 
     /* Authenticated Dropdown */
     .dropdown-toggle {

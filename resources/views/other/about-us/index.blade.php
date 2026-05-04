@@ -19,6 +19,9 @@
         fn($key) => !empty($serviceSection[$key]),
         ARRAY_FILTER_USE_KEY
     );
+
+    // If we have dynamic items in serviceSection, we should consider it "filled"
+    $hasDynamicItems = !empty($serviceSection['items']);
 @endphp
 
 @section('content')
@@ -39,7 +42,7 @@
                 <div class="col-lg-6 about-hero-content wow animate__animated animate__fadeInLeft">
                     <div class="badge-label pulse-animation">
                         <i class="fa-solid fa-plane-departure"></i>
-                        {{ __('Who We Are') }}
+                        {{ $heroSection['pre-title'] ?? __('Who We Are') }}
                     </div>
 
                     <h1 class="display-4 fw-800 mb-3">
@@ -51,22 +54,36 @@
                     @endif
 
                     {{-- Quick stats strip --}}
-                    <div class="about-hero-stats">
-                        <div class="about-stat-item">
-                            <span class="stat-num">10+</span>
-                            <span class="stat-label">{{ __('Years') }}</span>
+                    @if(!empty($heroSection['stats']))
+                        <div class="about-hero-stats">
+                            @foreach($heroSection['stats'] as $index => $stat)
+                                <div class="about-stat-item">
+                                    <span class="stat-num">{{ $stat['number'] }}</span>
+                                    <span class="stat-label">{{ $stat['label'] }}</span>
+                                </div>
+                                @if(!$loop->last)
+                                    <div class="about-hero-stats-divider"></div>
+                                @endif
+                            @endforeach
                         </div>
-                        <div class="about-hero-stats-divider"></div>
-                        <div class="about-stat-item">
-                            <span class="stat-num">50+</span>
-                            <span class="stat-label">{{ __('Routes') }}</span>
+                    @else
+                        <div class="about-hero-stats">
+                            <div class="about-stat-item">
+                                <span class="stat-num">10+</span>
+                                <span class="stat-label">{{ __('Years') }}</span>
+                            </div>
+                            <div class="about-hero-stats-divider"></div>
+                            <div class="about-stat-item">
+                                <span class="stat-num">50+</span>
+                                <span class="stat-label">{{ __('Routes') }}</span>
+                            </div>
+                            <div class="about-hero-stats-divider"></div>
+                            <div class="about-stat-item">
+                                <span class="stat-num">1M+</span>
+                                <span class="stat-label">{{ __('Passengers') }}</span>
+                            </div>
                         </div>
-                        <div class="about-hero-stats-divider"></div>
-                        <div class="about-stat-item">
-                            <span class="stat-num">1M+</span>
-                            <span class="stat-label">{{ __('Passengers') }}</span>
-                        </div>
-                    </div>
+                    @endif
                 </div>
 
                 {{-- Image column --}}
@@ -89,7 +106,7 @@
     {{-- ════════════════════════════════════════════════════════ --}}
     {{-- FEATURE CARDS SECTION                                   --}}
     {{-- ════════════════════════════════════════════════════════ --}}
-    @if (!empty($filledSections))
+    @if (!empty($filledSections) || $hasDynamicItems)
         <section class="about-sections-wrap py-5">
             <div class="container py-lg-5">
 
@@ -97,30 +114,48 @@
                 <div class="home-section-head text-center wow animate__animated animate__fadeInUp">
                     <p class="pre-title mb-2" style="color: var(--main-color); letter-spacing: 2px; font-weight: 700;">
                         <i class="fa-solid fa-star me-2"></i>
-                        {{ __('EXPERIENCE EXCELLENCE') }}
+                        {{ $serviceSection['pre-title'] ?? __('EXPERIENCE EXCELLENCE') }}
                     </p>
-                    <h2>{{ __('Learn More About Us') }}</h2>
+                    <h2>{{ $serviceSection['title'] ?? __('Learn More About Us') }}</h2>
                     <div class="section-divider mx-auto"></div>
-                    <p class="mt-3 opacity-75">{{ __('Discover our vision, mission, and values that drive us forward to provide the best travel service in the region.') }}</p>
+                    <p class="mt-3 opacity-75">{{ $serviceSection['description'] ?? __('Discover our vision, mission, and values that drive us forward to provide the best travel service in the region.') }}</p>
                 </div>
 
                 {{-- Cards grid --}}
                 <div class="row g-4 mt-4">
-                    @foreach ($filledSections as $key => $meta)
-                        <div class="col-lg-4 col-md-6 wow animate__animated animate__fadeInUp" data-wow-delay="{{ $loop->index * 0.1 }}s">
-                            <div class="feature-card h-100">
-                                <div class="feature-card-icon">
-                                    <i class="fa-solid {{ $meta['icon'] }}"></i>
+                    @if(!empty($serviceSection['items']))
+                        @foreach ($serviceSection['items'] as $index => $item)
+                            <div class="col-lg-4 col-md-6 wow animate__animated animate__fadeInUp" data-wow-delay="{{ $index * 0.1 }}s">
+                                <div class="feature-card h-100">
+                                    <div class="feature-card-icon">
+                                        <i class="{{ $item['icon'] ?? 'fa-solid fa-star' }}"></i>
+                                    </div>
+                                    <h5 class="fw-800">{{ $item['title'] }}</h5>
+                                    <p class="fc-text">{{ $item['description'] }}</p>
+                                    <button class="fc-read-more-btn" style="display:none;">
+                                        <span class="btn-text">{{ __('Read more') }}</span>
+                                        <i class="fa-solid fa-chevron-down"></i>
+                                    </button>
                                 </div>
-                                <h5 class="fw-800">{{ $meta['label'] }}</h5>
-                                <p class="fc-text">{{ $serviceSection[$key] }}</p>
-                                <button class="fc-read-more-btn" style="display:none;">
-                                    <span class="btn-text">{{ __('Read more') }}</span>
-                                    <i class="fa-solid fa-chevron-down"></i>
-                                </button>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    @else
+                        @foreach ($filledSections as $key => $meta)
+                            <div class="col-lg-4 col-md-6 wow animate__animated animate__fadeInUp" data-wow-delay="{{ $loop->index * 0.1 }}s">
+                                <div class="feature-card h-100">
+                                    <div class="feature-card-icon">
+                                        <i class="fa-solid {{ $meta['icon'] }}"></i>
+                                    </div>
+                                    <h5 class="fw-800">{{ $meta['label'] }}</h5>
+                                    <p class="fc-text">{{ $serviceSection[$key] }}</p>
+                                    <button class="fc-read-more-btn" style="display:none;">
+                                        <span class="btn-text">{{ __('Read more') }}</span>
+                                        <i class="fa-solid fa-chevron-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        @endforeach
+                    @endif
                 </div>
 
             </div>
@@ -191,43 +226,73 @@ $(function () {
         </div>
 
         {{-- Quick stats strip (mobile) - Modernized with better contrast --}}
-        <div class="mx-3 d-flex justify-content-around rounded-5 p-4 mb-4"
-             style="background: linear-gradient(135deg, #0b0c10, #1c1d22); box-shadow: 0 15px 30px rgba(0,0,0,0.2);">
-            <div class="text-center">
-                <span class="d-block fw-800 fs-4 text-main">10+</span>
-                <span class="text-white opacity-75" style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px;">{{ __('Years') }}</span>
+        @if(!empty($heroSection['stats']))
+            <div class="mx-3 d-flex justify-content-around rounded-5 p-4 mb-4"
+                 style="background: linear-gradient(135deg, #0b0c10, #1c1d22); box-shadow: 0 15px 30px rgba(0,0,0,0.2);">
+                @foreach($heroSection['stats'] as $index => $stat)
+                    <div class="text-center">
+                        <span class="d-block fw-800 fs-4 text-main">{{ $stat['number'] }}</span>
+                        <span class="text-white opacity-75" style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px;">{{ $stat['label'] }}</span>
+                    </div>
+                    @if(!$loop->last)
+                        <div class="vr bg-white opacity-25"></div>
+                    @endif
+                @endforeach
             </div>
-            <div class="vr bg-white opacity-25"></div>
-            <div class="text-center">
-                <span class="d-block fw-800 fs-4 text-main">50+</span>
-                <span class="text-white opacity-75" style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px;">{{ __('Routes') }}</span>
+        @else
+            <div class="mx-3 d-flex justify-content-around rounded-5 p-4 mb-4"
+                 style="background: linear-gradient(135deg, #0b0c10, #1c1d22); box-shadow: 0 15px 30px rgba(0,0,0,0.2);">
+                <div class="text-center">
+                    <span class="d-block fw-800 fs-4 text-main">10+</span>
+                    <span class="text-white opacity-75" style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px;">{{ __('Years') }}</span>
+                </div>
+                <div class="vr bg-white opacity-25"></div>
+                <div class="text-center">
+                    <span class="d-block fw-800 fs-4 text-main">50+</span>
+                    <span class="text-white opacity-75" style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px;">{{ __('Routes') }}</span>
+                </div>
+                <div class="vr bg-white opacity-25"></div>
+                <div class="text-center">
+                    <span class="d-block fw-800 fs-4 text-main">1M+</span>
+                    <span class="text-white opacity-75" style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px;">{{ __('Passengers') }}</span>
+                </div>
             </div>
-            <div class="vr bg-white opacity-25"></div>
-            <div class="text-center">
-                <span class="d-block fw-800 fs-4 text-main">1M+</span>
-                <span class="text-white opacity-75" style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px;">{{ __('Passengers') }}</span>
-            </div>
-        </div>
+        @endif
 
         {{-- Section cards for mobile --}}
         <div class="px-3">
-            @foreach ($sections as $key => $meta)
-                @if (!empty($serviceSection[$key]))
+            @if(!empty($serviceSection['items']))
+                @foreach ($serviceSection['items'] as $index => $item)
                     <div class="bg-white rounded-5 shadow-sm p-4 mb-3 border border-light-subtle">
                         <div class="d-flex align-items-center gap-3 mb-3">
                             <div class="d-flex align-items-center justify-content-center rounded-4 flex-shrink-0 shadow-sm"
                                  style="width:50px; height:50px; background: rgba(var(--main-color-rgb), 0.1);">
-                                <i class="fa-solid {{ $meta['icon'] }} text-main fs-5"></i>
+                                <i class="{{ $item['icon'] ?? 'fa-solid fa-star' }} text-main fs-5"></i>
                             </div>
-                            <h6 class="fw-800 text-black mb-0" style="font-size: 1.05rem;">{{ $meta['label'] }}</h6>
+                            <h6 class="fw-800 text-black mb-0" style="font-size: 1.05rem;">{{ $item['title'] }}</h6>
                         </div>
-                        <p class="text-muted small mb-0" style="line-height: 1.8; font-size: 0.9rem;">{{ $serviceSection[$key] }}</p>
+                        <p class="text-muted small mb-0" style="line-height: 1.8; font-size: 0.9rem;">{{ $item['description'] }}</p>
                     </div>
-                @endif
-            @endforeach
+                @endforeach
+            @else
+                @foreach ($sections as $key => $meta)
+                    @if (!empty($serviceSection[$key]))
+                        <div class="bg-white rounded-5 shadow-sm p-4 mb-3 border border-light-subtle">
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                <div class="d-flex align-items-center justify-content-center rounded-4 flex-shrink-0 shadow-sm"
+                                     style="width:50px; height:50px; background: rgba(var(--main-color-rgb), 0.1);">
+                                    <i class="fa-solid {{ $meta['icon'] }} text-main fs-5"></i>
+                                </div>
+                                <h6 class="fw-800 text-black mb-0" style="font-size: 1.05rem;">{{ $meta['label'] }}</h6>
+                            </div>
+                            <p class="text-muted small mb-0" style="line-height: 1.8; font-size: 0.9rem;">{{ $serviceSection[$key] }}</p>
+                        </div>
+                    @endif
+                @endforeach
+            @endif
         </div>
 
-        @if (empty($filledSections))
+        @if (empty($filledSections) && !$hasDynamicItems)
             <div class="text-center py-5">
                 <i class="fa-solid fa-circle-info fa-3x text-main mb-3"></i>
                 <p class="text-muted">{{ __('No Information Available') }}</p>

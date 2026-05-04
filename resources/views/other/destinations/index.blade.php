@@ -215,15 +215,15 @@
                 <div class="col-lg-6 dest-hero-content wow animate__animated animate__fadeInLeft">
                     <div class="badge-label pulse-animation" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(var(--main-color-rgb), 0.12); color: #8a6200; border: 1px solid rgba(var(--main-color-rgb), 0.35); border-radius: 50px; padding: 6px 18px; font-size: 13px; font-weight: 700; margin-bottom: 1.5rem;">
                         <i class="fa-solid fa-map-location-dot"></i>
-                        {{ __('OUR ROUTES') }}
+                        {{ $heroSection['pre-title'] ?? __('OUR ROUTES') }}
                     </div>
                     
                     <h1 class="display-4 fw-800 mb-3" style="font-weight: 800; line-height: 1.15; color: #111;">
-                        {{ __('Discover Your Next') }} <span class="text-main">{{ __('Adventure') }}</span>
+                        {!! str_replace(['Adventure', 'المغامرة'], '<span class="text-main">' . ($heroSection['title-accent'] ?? __('Adventure')) . '</span>', $heroSection['title'] ?? __('Discover Your Next Adventure')) !!}
                     </h1>
                     
                     <p class="lead opacity-90 text-muted" style="line-height: 1.8; max-width: 540px;">
-                        {{ __('Explore the best destinations across the country with Superjet. Premium services, safe journeys, and unforgettable experiences.') }}
+                        {{ $heroSection['description'] ?? __('Explore the best destinations across the country with Eman Jet. Premium services, safe journeys, and unforgettable experiences.') }}
                     </p>
 
                     <form action="{{ route('destinations') }}" method="GET">
@@ -256,11 +256,11 @@
                 <div class="col-lg-7 mx-auto">
                     <p class="pre-title mb-2" style="color: var(--main-color); letter-spacing: 2px; font-weight: 700; text-transform: uppercase;">
                         <i class="fa-solid fa-star me-2"></i>
-                        {{ __('TRAVEL THE COUNTRY') }}
+                        {{ $popularCitiesSection['pre-title'] ?? __('TRAVEL THE COUNTRY') }}
                     </p>
-                    <h2 class="display-6 fw-800 text-black">{{ __('Explore Popular Cities') }}</h2>
+                    <h2 class="display-6 fw-800 text-black">{{ $popularCitiesSection['title'] ?? __('Explore Popular Cities') }}</h2>
                     <div class="section-divider mx-auto my-3" style="width: 60px; height: 4px; background: var(--main-color); border-radius: 2px;"></div>
-                    <p class="text-muted">{{ __('Curated routes for your ultimate comfort. Choose your destination and book your ticket in seconds.') }}</p>
+                    <p class="text-muted">{{ $popularCitiesSection['description'] ?? __('Curated routes for your ultimate comfort. Choose your destination and book your ticket in seconds.') }}</p>
                 </div>
             </div>
 
@@ -306,7 +306,7 @@
                         <h2 class="display-5 fw-800 mb-4">{{ $trySection['title'] }}</h2>
                         <p class="fs-5 opacity-75 mb-5">{{ $trySection['description'] }}</p>
                         <a href="{{ route('home') }}" class="btn btn-main btn-lg px-5 py-3 rounded-pill fw-bold shadow-lg">
-                            {{ __('Find your trip now') }}
+                            {{ $trySection['button-text'] ?? __('Find your trip now') }}
                             <i class="fas fa-search ms-2"></i>
                         </a>
                     </div>
