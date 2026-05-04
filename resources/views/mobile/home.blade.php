@@ -1,8 +1,6 @@
-@extends('layouts.master')
-
 @section('mobile-content')
     <div class="row align-items-center mb-4 wow animate__animated animate__fadeIn">
-        <div class="col-12">
+        <div class="col-8">
             @if (auth()->check())
                 <span class="text-muted small fw-bold d-block">{{ __('Hello') }}</span>
                 <h5 class="fw-800 text-black mb-0">{{ auth()->user()->name }}</h5>
@@ -10,6 +8,11 @@
                 <span class="text-muted small fw-bold d-block">{{ __('Welcome to') }}</span>
                 <h5 class="fw-800 text-black mb-0">{{ __('Eman Jet') }}</h5>
             @endif
+        </div>
+        <div class="col-4 text-end">
+            <div class="bg-white shadow-sm rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 45px; height: 45px; border: 1px solid #f0f0f0;">
+                <i class="fa-solid fa-bell text-main"></i>
+            </div>
         </div>
     </div>
 
@@ -74,7 +77,7 @@
             <input type="hidden" id="from-city" name="city_from_id" value="{{ $cities->get(0)?->id ?? '' }}">
             <input type="hidden" id="to-city" name="city_to_id" value="{{ $cities->get(1)?->id ?? '' }}">
             <input type="hidden" id="from-station" name="station_from_id" value="{{ $cities->get(0)?->stations?->first()?->id ?? '' }}">
-            <input type="hidden" id="to-station" name="station_to_id" value="{{ $cities->get(1)?->station_to_id ?? $cities->get(1)?->stations?->first()?->id ?? '' }}">
+            <input type="hidden" id="to-station" name="station_to_id" value="{{ $cities->get(1)?->stations?->first()?->id ?? '' }}">
 
             <!-- Start date and passenger number -->
             <div class="row g-3">
@@ -362,18 +365,12 @@
             // Function to keep passenger counts in sync across both UIs
             function syncPassengerCounts(value) {
                 // Update both displays
-                if(passengerCount) passengerCount.textContent = value;
-                if(passengerCount2) passengerCount2.textContent = value;
+                passengerCount.textContent = value;
+                passengerCount2.textContent = value;
 
                 // Update both hidden inputs
-                if(passengerCountInput) passengerCountInput.value = value;
-                if(passengerCountInput2) passengerCountInput2.value = value;
-                
-                // Update display text
-                const passengerDisplay = document.getElementById('passengerDisplay');
-                if(passengerDisplay) {
-                    passengerDisplay.textContent = `${value} ${value > 1 ? '{{ __("Persons") }}' : '{{ __("Person") }}'}`;
-                }
+                passengerCountInput.value = value;
+                passengerCountInput2.value = value;
             }
 
             // Passenger increment/decrement functions - now with syncing
@@ -393,41 +390,35 @@
                 }
             };
 
+            window.incrementPassengers2 = function() {
+                let count = parseInt(passengerCount2.textContent);
+                if (count < 9) {
+                    count++;
+                    syncPassengerCounts(count);
+                }
+            };
+
+            window.decrementPassengers2 = function() {
+                let count = parseInt(passengerCount2.textContent);
+                if (count > 1) {
+                    count--;
+                    syncPassengerCounts(count);
+                }
+            };
+
             // Add event listeners for trip type radio buttons
             oneWayRadio.addEventListener('change', updateFormAction);
             roundTripRadio.addEventListener('change', updateFormAction);
 
-            // Initialize the layout and action based on the default selection
-            updateFormAction();
+            // Initialize the layout based on the default selection
             updateTripLayout();
 
             // Define your routes here (replace with your actual route values)
             const oneWayRoute = "{{ route('mobile.one-way.trips') }}";
             const roundRoute = "{{ route('mobile.round.trips') }}";
 
-            // Swap button logic
-            const swapBtn = document.getElementById('swap-btn');
-            if (swapBtn) {
-                swapBtn.addEventListener('click', function() {
-                    // Swap display text
-                    const fromText = fromLocationSpan.textContent;
-                    fromLocationSpan.textContent = toLocationSpan.textContent;
-                    toLocationSpan.textContent = fromText;
-
-                    // Swap hidden values
-                    const tempCityId = fromCityInput.value;
-                    fromCityInput.value = toCityInput.value;
-                    toCityInput.value = tempCityId;
-
-                    const tempStationId = fromStationInput.value;
-                    fromStationInput.value = toStationInput.value;
-                    toStationInput.value = tempStationId;
-                    
-                    // Add animation effect
-                    this.querySelector('i').style.transform = 'rotate(' + (this.dataset.rotated === '180' ? '0' : '180') + 'deg)';
-                    this.dataset.rotated = this.dataset.rotated === '180' ? '0' : '180';
-                });
-            }
+            // Swap button is handled by event delegation in home/index.blade.php
+            // so it works consistently for both desktop and mobile forms.
 
             // Bottom sheet functionality continues...
             function showBottomSheet() {
