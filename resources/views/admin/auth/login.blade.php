@@ -55,7 +55,7 @@
         }
 
         form h1 {
-            color: #cda101;
+            color: #0066cc;
         }
 
         .input-container {
@@ -98,7 +98,7 @@
             font-weight: 600;
             padding: 0.25rem 2rem;
             border-radius: 2.5rem;
-            background-color: #cda101;
+            background-color: #0066cc;
             color: #fff;
             font-size: 20px;
             border: none;
@@ -114,7 +114,7 @@
 
         .hello-msg {
             width: 40%;
-            background: radial-gradient(#cda101, #cda101);
+            background: radial-gradient(#0066cc, #004d99);
             position: relative;
             display: flex;
             justify-content: center;
@@ -207,7 +207,7 @@
         <p>{{ __('We wish you a pleasant and energetic day.') }}</p>
 
         <svg width="143" height="164" viewBox="0 0 143 164" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path opacity="0.2" d="M142.165 163.72L0.555166 81.9616L142.165 0.203191L142.165 163.72Z" fill="#B27764" />
+            <path opacity="0.2" d="M142.165 163.72L0.555166 81.9616L142.165 0.203191L142.165 163.72Z" fill="#0066cc" />
         </svg>
     </div>
 </body>

@@ -18,7 +18,7 @@ class DashSettingSeeder extends Seeder
             ['key' => 'project_name', 'value' => config('app.name', 'Eman Jet'), 'type' => 'text', 'group' => 'general'],
             ['key' => 'copyright.link', 'value' => config('app.url', '#'), 'type' => 'url', 'group' => 'copyright'],
             ['key' => 'copyright.text', 'value' => config('app.name', 'Eman Jet'), 'type' => 'text', 'group' => 'copyright'],
-            ['key' => 'color.primary', 'value' => '#D52034', 'type' => 'color', 'group' => 'colors'],
+            ['key' => 'color.primary', 'value' => '#0066cc', 'type' => 'color', 'group' => 'colors'],
             ['key' => 'color.secondary', 'value' => '#3A3A3A', 'type' => 'color', 'group' => 'colors'],
             ['key' => 'color.success', 'value' => '#1B7F4F', 'type' => 'color', 'group' => 'colors'],
             ['key' => 'color.info', 'value' => '#0C4A6E', 'type' => 'color', 'group' => 'colors'],
