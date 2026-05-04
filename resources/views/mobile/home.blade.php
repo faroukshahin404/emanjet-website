@@ -9,11 +9,8 @@
                 <h5 class="fw-800 text-black mb-0">{{ __('Eman Jet') }}</h5>
             @endif
         </div>
-        <div class="col-4 text-end">
-            <div class="bg-white shadow-sm rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 45px; height: 45px; border: 1px solid #f0f0f0;">
-                <i class="fa-solid fa-bell text-main"></i>
-            </div>
         </div>
+    </div>
     </div>
 
     <div class="search-trip mt-3 wow animate__animated animate__fadeInUp">
@@ -77,7 +74,7 @@
             <input type="hidden" id="from-city" name="city_from_id" value="{{ $cities->get(0)?->id ?? '' }}">
             <input type="hidden" id="to-city" name="city_to_id" value="{{ $cities->get(1)?->id ?? '' }}">
             <input type="hidden" id="from-station" name="station_from_id" value="{{ $cities->get(0)?->stations?->first()?->id ?? '' }}">
-            <input type="hidden" id="to-station" name="station_to_id" value="{{ $cities->get(1)?->stations?->first()?->id ?? '' }}">
+            <input type="hidden" id="to-station" name="station_to_id" value="{{ $cities->get(1)?->station_to_id ?? $cities->get(1)?->stations?->first()?->id ?? '' }}">
 
             <!-- Start date and passenger number -->
             <div class="row g-3">
@@ -587,7 +584,8 @@
             ];
         @endphp
         const monthsLocalized = @json($wheelMonthsLocalized);
-        const monthsEn = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const monthsEn = ["FROM": "من",
+    "Faq": "الأسئلة الشائعة", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
         function initWheelColumns() {
             const dayCol = document.getElementById('dayColumn');
@@ -724,7 +722,11 @@
                     spaceBetween: 12,
                     loop: false,
                     rtl: isRTL,
-                    freeMode: true,
+                    "PAX": "الركاب",
+    "Pax": "فرد",
+    "One Way": "ذهاب فقط",
+    "ONE WAY": "ذهاب فقط",
+    "OTP must be 4 digits": "رمز التحقق يجب أن يكون 4 أرقام",                  freeMode: true,
                     breakpoints: {
                         375: {
                             slidesPerView: 2.3,
