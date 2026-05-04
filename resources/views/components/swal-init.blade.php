@@ -28,7 +28,7 @@
                 };
                 var t = type;
                 var defaultTitle = t ? t.charAt(0).toUpperCase() + t.slice(1) : 'Info';
-                return Swal.fire({
+                var swalOptions = {
                     title: title || defaultTitle,
                     text: message != null ? String(message) : '',
                     icon: icons[t] || 'info',
@@ -37,7 +37,14 @@
                     customClass: {
                         confirmButton: 'btn btn-primary'
                     }
-                });
+                };
+
+                if (t === 'success') {
+                    swalOptions.timer = 3000;
+                    swalOptions.timerProgressBar = true;
+                }
+
+                return Swal.fire(swalOptions);
             };
 
             window.showToast = function(type, message, title) {
