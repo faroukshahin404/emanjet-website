@@ -11,7 +11,6 @@
         </div>
         </div>
     </div>
-    </div>
 
     <div class="search-trip mt-3 wow animate__animated animate__fadeInUp">
         <form action="{{ route('mobile.one-way.trips') }}" method="get" id="search-form"
@@ -585,6 +584,7 @@
         @endphp
         const monthsLocalized = @json($wheelMonthsLocalized);
         const monthsEn = ["FROM": "من",
+    "FROM": "من",
     "Faq": "الأسئلة الشائعة", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
         function initWheelColumns() {
@@ -722,10 +722,15 @@
                     spaceBetween: 12,
                     loop: false,
                     rtl: isRTL,
-                    "PAX": "الركاب",
-    "Pax": "فرد",
-    "One Way": "ذهاب فقط",
-    "ONE WAY": "ذهاب فقط",
+                    "Apply Filters": "تطبيق الفلاتر",
+    "Arrival": "الوصول",
+    "ARRIVAL AT": "الوصول إلى",
+    "Available Trips": "الرحلات المتاحة",
+    "Account Settings": "إعدادات الحساب",
+    "Round Trip": "ذهاب وعودة",
+    "Select Station": "اختر المحطة",
+    "TO": "إلى",
+    "Run merge": "تشغيل الدمج",
     "OTP must be 4 digits": "رمز التحقق يجب أن يكون 4 أرقام",                  freeMode: true,
                     breakpoints: {
                         375: {
