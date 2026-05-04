@@ -444,11 +444,13 @@
                                         </div>
                                     </div>
 
+{{-- 
                                     <div class="mt-4 pb-4 d-flex justify-content-center">
                                         <button class="reserve-btn">
                                             {{ __('Book') }} {{ request()->seats }} {{ __('Seats') }}
                                         </button>
                                     </div>
+--}}
                                 </form>
                             </div>
                             <div id="no-selected-trip" style="text-align: center;">
@@ -516,7 +518,7 @@
                                             </div>
                                             <!-- vip -->
                                             <div>
-                                                <p class="m-0 text-white bg-main text-center vip">{{ $trip->degree }}</p>
+                                                <p class="m-0 text-white bg-accent text-center vip">{{ $trip->degree }}</p>
                                             </div>
 
                                         </div>

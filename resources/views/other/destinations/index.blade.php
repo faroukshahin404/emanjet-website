@@ -302,7 +302,7 @@
 
                 <div class="row align-items-center position-relative" style="z-index: 1; width: 100%;">
                     <div class="col-lg-7 text-white wow animate__animated animate__fadeInLeft">
-                        <div class="badge bg-main mb-3 px-3 py-2 rounded-pill fw-bold">{{ __('QUICK BOOKING') }}</div>
+                        <div class="badge bg-accent mb-3 px-3 py-2 rounded-pill fw-bold">{{ __('QUICK BOOKING') }}</div>
                         <h2 class="display-5 fw-800 mb-4">{{ $trySection['title'] }}</h2>
                         <p class="fs-5 opacity-75 mb-5">{{ $trySection['description'] }}</p>
                         <a href="{{ route('home') }}" class="btn btn-main btn-lg px-5 py-3 rounded-pill fw-bold shadow-lg">
@@ -384,7 +384,7 @@
                  style="background: linear-gradient(135deg, #0b0c10, #1c1d22); min-height: 200px;">
                 <i class="fa-solid fa-bus position-absolute text-white opacity-05" style="font-size: 8rem; bottom: -20px; right: -20px; z-index: 0;"></i>
                 <div class="position-relative" style="z-index: 1;">
-                    <span class="badge bg-main mb-2 small">{{ __('QUICK BOOK') }}</span>
+                    <span class="badge bg-accent mb-2 small">{{ __('QUICK BOOK') }}</span>
                     <h4 class="fw-800 mb-2">{{ $trySection['title'] }}</h4>
                     <p class="small opacity-75 mb-3">{{ $trySection['description'] }}</p>
                     <a href="{{ route('home') }}" class="btn btn-main rounded-pill w-100 py-2 fw-bold">{{ __('Find a Trip') }}</a>

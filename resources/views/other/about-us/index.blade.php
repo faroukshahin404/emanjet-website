@@ -8,8 +8,8 @@
         'vision'           => ['label' => __('Our Vision'),          'icon' => 'fa-eye'],
         'mission'          => ['label' => __('Our Mission'),         'icon' => 'fa-bullseye'],
         'values'           => ['label' => __('Our Values'),          'icon' => 'fa-heart'],
-        'branches'         => ['label' => __('Super Jet Branches'),  'icon' => 'fa-map-location-dot'],
-        'routes'           => ['label' => __('Superjet Airlines'),   'icon' => 'fa-route'],
+        'branches'         => ['label' => __('Eman Jet Branches'),  'icon' => 'fa-map-location-dot'],
+        'routes'           => ['label' => __('Eman Jet Airlines'),   'icon' => 'fa-route'],
         'payment_methods'  => ['label' => __('Payment Methods'),     'icon' => 'fa-credit-card'],
         'safety_and_comfort' => ['label' => __('Safety & Comfort'),  'icon' => 'fa-shield-heart'],
     ];
@@ -43,7 +43,7 @@
                     </div>
 
                     <h1 class="display-4 fw-800 mb-3">
-                        {!! str_replace(config('app.name'), '<span class="text-main">' . config('app.name') . '</span>', $heroSection['title'] ?? __('About Super Jet')) !!}
+                        {!! str_replace(config('app.name'), '<span class="text-main">' . config('app.name') . '</span>', $heroSection['title'] ?? __('About Eman Jet')) !!}
                     </h1>
 
                     @if (!empty($heroSection['description']))

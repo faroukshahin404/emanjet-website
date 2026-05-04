@@ -8,7 +8,7 @@
         .hero-section::before {
             background: linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0,
             0, 0.2) 100%),
-                url('{{ $heroSection['image'] ?? asset('images/hero-section.png') }}');
+                url('{{ (isset($heroSection['image']) && !empty($heroSection['image']) && !str_contains($heroSection['image'], 'placehold.co')) ? $heroSection['image'] : asset('images/hero-section.png') }}');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -229,9 +229,9 @@
             <div class="home-section-head text-center wow animate__animated animate__fadeInUp">
                 <p class="pre-title mb-2">
                     <i class="fa-solid fa-star me-2"></i>
-                    {{ __('THE SUPER JET ADVANTAGE') }}
+                    {{ __('THE EMAN JET ADVANTAGE') }}
                 </p>
-                <h2>{{ __('Why Choose Super Jet?') }}</h2>
+                <h2>{{ __('Why Choose Eman Jet?') }}</h2>
                 <div class="section-divider mx-auto"></div>
                 <p class="mt-3 opacity-75">{{ __('We provide a travel experience that combines safety, comfort, and state-of-the-art technology to ensure your journey is perfect.') }}</p>
             </div>
@@ -374,6 +374,7 @@
     </div>
     <!-- End Popular Destinations -->
 
+{{-- 
     <!-- start pay  -->
     <div class="pay py-3 mt-5">
         <div class="container">
@@ -393,6 +394,7 @@
         </div>
     </div>
     <!-- End pay  -->
+--}}
 
     <!-- start bus type  -->
     @if($busTypesSection->isNotEmpty())

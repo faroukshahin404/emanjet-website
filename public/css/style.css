@@ -58,9 +58,11 @@ a {
 }
 
 :root {
-    --main-color: #ebaa28;
-    --main-hover: #d09623;
-    --main-color-rgb: 235, 170, 40;
+    --main-color: #067fc9;
+    --main-hover: #056fb1;
+    --main-color-rgb: 6, 127, 201;
+    --accent-color: #ffa812;
+    --accent-color-rgb: 255, 168, 18;
     --glass-bg: rgba(255, 255, 255, 0.7);
     --glass-border: rgba(255, 255, 255, 0.3);
     --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
@@ -98,6 +100,28 @@ a {
     color: var(--main-color);
     border: 1px solid var(--main-color);
 }
+
+.bg-main-light {
+    background-color: rgba(var(--main-color-rgb), 0.08) !important;
+}
+
+.bg-accent-light {
+    background-color: rgba(var(--accent-color-rgb), 0.08) !important;
+}
+
+.bg-accent {
+    background-color: var(--accent-color) !important;
+}
+
+.text-accent {
+    color: var(--accent-color) !important;
+}
+
+.btn-accent {
+    background-color: var(--accent-color);
+    color: white;
+}
+
 
 .text-black {
     color: black;
@@ -4160,8 +4184,8 @@ footer .footer-links i {
 /* Premium placeholder: brand-colored mesh gradient */
 .popular-destination-placeholder {
     background:
-        radial-gradient(ellipse at 20% 20%, rgba(235, 170, 40, 0.55) 0%, transparent 55%),
-        radial-gradient(ellipse at 80% 80%, rgba(208, 150, 35, 0.4) 0%, transparent 55%),
+        radial-gradient(ellipse at 20% 20%, rgba(var(--main-color-rgb), 0.55) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 80%, rgba(var(--accent-color-rgb), 0.4) 0%, transparent 55%),
         radial-gradient(ellipse at 50% 50%, rgba(26, 26, 60, 0.9) 0%, transparent 80%),
         linear-gradient(145deg, #1a1a3e 0%, #2d2d5e 50%, #1a2a4a 100%);
     display: flex;
@@ -4177,7 +4201,7 @@ footer .footer-links i {
     inset: 0;
     opacity: 0.08;
     background-image:
-        radial-gradient(circle at 1px 1px, rgba(235, 170, 40, 0.8) 1px, transparent 0);
+        radial-gradient(circle at 1px 1px, rgba(var(--main-color-rgb), 0.8) 1px, transparent 0);
     background-size: 22px 22px;
     pointer-events: none;
 }
@@ -4186,8 +4210,8 @@ footer .footer-links i {
     position: relative;
     z-index: 1;
     font-size: clamp(2.2rem, 6vw, 3rem);
-    color: rgba(235, 170, 40, 0.75);
-    text-shadow: 0 0 30px rgba(235, 170, 40, 0.4);
+    color: rgba(var(--main-color-rgb), 0.75);
+    text-shadow: 0 0 30px rgba(var(--main-color-rgb), 0.4);
     margin-bottom: 0.5rem;
 }
 
@@ -4228,10 +4252,10 @@ footer .footer-links i {
     align-items: center;
     gap: 0.4rem;
     margin-top: 0.4rem;
-    background: rgba(235, 170, 40, 0.25);
+    background: rgba(var(--main-color-rgb), 0.25);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(235, 170, 40, 0.4);
+    border: 1px solid rgba(var(--main-color-rgb), 0.4);
     border-radius: 50px;
     padding: 4px 12px;
     font-size: 0.75rem;
@@ -4245,8 +4269,8 @@ footer .footer-links i {
 }
 
 .popular-dest-card:hover .popular-dest-card__glass-badge {
-    background: rgba(235, 170, 40, 0.45);
-    border-color: rgba(235, 170, 40, 0.7);
+    background: rgba(var(--main-color-rgb), 0.45);
+    border-color: rgba(var(--main-color-rgb), 0.7);
 }
 
 .popular-dest-card__name {
@@ -6316,7 +6340,7 @@ body[dir="ltr"] .form-control-premium,
 .form-control-premium:focus {
     background-color: #fff;
     border-color: var(--main-color);
-    box-shadow: 0 5px 15px rgba(230, 168, 34, 0.15);
+    box-shadow: 0 5px 15px rgba(var(--main-color-rgb), 0.15);
 }
 
 .input-group-premium .password-toggle,
