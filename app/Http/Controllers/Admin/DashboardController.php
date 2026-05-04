@@ -10,18 +10,18 @@ class DashboardController extends Controller
     public function index()
     {
         $stats = [
-            'total_reservations' => \App\Models\ReservationBookingRequest::count(),
-            'today_reservations' => \App\Models\ReservationBookingRequest::whereDate('created_at', \Carbon\Carbon::today())->count(),
-            'total_revenue'      => \App\Models\ReservationBookingRequest::sum('total'),
-            'total_users'        => \App\Models\User::count(),
-            'active_trips'       => \App\Models\RunTrip::where('available_online', 1)->count(),
+            'total_cities'       => \App\Models\City::count(),
+            'total_destinations' => \App\Models\Destination::count(),
+            'total_blogs'        => \App\Models\Blog::count(),
+            'total_faqs'         => \App\Models\Faq::count(),
+            'total_testimonials' => \App\Models\Testimonial::count(),
+            'total_pages'        => \App\Models\Page::count(),
+            'total_contacts'     => \App\Models\Contact::count(),
         ];
 
-        $recent_bookings = \App\Models\ReservationBookingRequest::with(['user', 'runTrip', 'stationFrom', 'stationTo'])
-            ->latest()
-            ->take(8)
-            ->get();
+        $recent_blogs = \App\Models\Blog::latest()->take(5)->get();
+        $recent_messages = \App\Models\Contact::latest()->take(5)->get();
 
-        return view('admin.pages.dashboard.index', compact('stats', 'recent_bookings'));
+        return view('admin.pages.dashboard.index', compact('stats', 'recent_blogs', 'recent_messages'));
     }
 }

@@ -52,14 +52,14 @@
     <!-- End Google Tag Manager -->
     {{-- Single document title: SEO payload or default / per-page override --}}
     @if (isset($seo) && !empty($seo))
-        <title>{{ $seo['meta_title'] }}</title>
+        <title>{{ __('Al Eman Jet') }} — {{ $seo['meta_title'] }}</title>
         <meta name="description" content="{{ $seo['meta_description'] }}">
         <meta name="keywords" content="{{ $seo['meta_keywords'] }}">
         <meta property="og:title" content="{{ $seo['og_title'] }}">
         <meta property="og:description" content="{{ $seo['og_description'] }}">
         <meta property="og:image" content="{{ $seo['og_image'] }}">
     @else
-        <title>@yield('meta_title', __('Eman Jet'))</title>
+        <title>{{ __('Al Eman Jet') }} @hasSection('meta_title') — @yield('meta_title') @endif</title>
     @endif
 
     @stack('styles')

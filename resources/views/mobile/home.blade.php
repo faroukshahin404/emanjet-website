@@ -480,16 +480,16 @@
 
             if (fromContainer) {
                 fromContainer.addEventListener('click', function() {
-                    activeInput = fromContainer.querySelector('#from-input');
-                    activeLocationSpan = fromContainer.querySelector('#from-location');
+                    activeInput = document.getElementById('from-input');
+                    activeLocationSpan = document.getElementById('from-location');
                     isFromSelection = true;
                     showBottomSheet();
                 });
             }
             if (toContainer) {
                 toContainer.addEventListener('click', function() {
-                    activeInput = toContainer.querySelector('#to-input');
-                    activeLocationSpan = toContainer.querySelector('#to-location');
+                    activeInput = document.getElementById('to-input');
+                    activeLocationSpan = document.getElementById('to-location');
                     isFromSelection = false;
                     showBottomSheet();
                 });
