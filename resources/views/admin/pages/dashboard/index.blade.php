@@ -11,7 +11,7 @@
                     <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
                         <div>
                             <span class="badge bg-white bg-opacity-25 text-white mb-2">{{ __('Real-time overview') }}</span>
-                            <h3 class="fw-bold text-white mb-2">@lang('SuperJet Operations Dashboard')</h3>
+                            <h3 class="fw-bold text-white mb-2">@lang('Eman Jet Operations Dashboard')</h3>
                             <p class="mb-0 opacity-90">
                                 {{ __('A unified snapshot for bookings, revenue, trips, and customers.') }}</p>
                         </div>
