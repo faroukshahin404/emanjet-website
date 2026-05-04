@@ -66,12 +66,13 @@ trait BookingTrait
         }
 
         $query->join('cities as fromCity', 'fromCity.id', '=', 'fromStation.city_id')
+        ->join('trip_data', 'trip_data.id' , '=', 'run_trips.tripData_id')
             ->join('cities as toCity', 'toCity.id', '=', 'toStation.city_id')
             ->join('trip_stations', function ($q) {
                 $q->on('trip_stations.station_id', '=', 'fromStation.id');
                 $q->on('trip_stations.tripData_id', '=', 'run_trips.tripData_id');
             })
-            ->join('bus_types', 'bus_types.id', '=', 'run_trips.busType_id')
+            ->join('bus_types', 'bus_types.id', '=', 'trip_data.busType_id')
             ->join('trip_degrees', 'trip_degrees.tripData_id', '=', 'run_trips.tripData_id')
             ->join('degrees', function ($join) {
                 $join->on('degrees.id', '=', 'trip_degrees.degree_id')

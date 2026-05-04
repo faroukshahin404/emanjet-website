@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('cities', function (Blueprint $table) {
-            $table->integer('rank')->nullable()->after('lng');
+            $table->integer('rank')->nullable();
             $table->tinyInteger('available_online')->default(0)->nullable()->after('active');
         });
     }
