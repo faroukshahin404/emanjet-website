@@ -10,11 +10,19 @@
                     <p class="text-gray">
                         {{ __('You have not verified your account yet. Please verify your phone number to continue using the site.') }}
                     </p>
-                    <div class="d-flex justify-content-center mt-4">
-                        <a href="{{ route('auth.otp') }}" class="btn-search">
-                            {{ __('Resend verification code') }}
-                        </a>
-                    </div>
+                    @if (config('auth.otp_enabled', true))
+                        <div class="d-flex justify-content-center mt-4">
+                            <a href="{{ route('auth.otp') }}" class="btn-search">
+                                {{ __('Resend verification code') }}
+                            </a>
+                        </div>
+                    @else
+                        <div class="d-flex justify-content-center mt-4">
+                            <a href="{{ route('home') }}" class="btn-search">
+                                {{ __('Go to Home') }}
+                            </a>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

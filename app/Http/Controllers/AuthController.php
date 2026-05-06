@@ -23,6 +23,11 @@ class AuthController extends Controller
         $this->authService = $authService;
     }
 
+    protected function otpEnabled(): bool
+    {
+        return $this->authService->isOtpEnabled();
+    }
+
     public function login()
     {
         return view('auth.login');
@@ -38,6 +43,15 @@ class AuthController extends Controller
         if (!$result['success']) {
             return redirect()->back()->with('error', $result['message']);
         }
+        if (! $this->otpEnabled()) {
+            $user = User::where('mobile', $request->phone)->first();
+            if ($user) {
+                Auth::login($user);
+            }
+
+            return redirect()->route('home')->with('success', __('Registration completed successfully.'));
+        }
+
         session(['otp_phone' => $request->phone]);
         return redirect()->route('auth.otp')->with('success', __('Otp Sent To your number'));
     }
@@ -64,7 +78,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        if (!$user->verified) {
+        if ($this->otpEnabled() && !$user->verified) {
             return redirect()->route('auth.verify');
         }
 
@@ -91,6 +105,20 @@ class AuthController extends Controller
             return redirect()->back()->with(['error' =>  __('User not found.')]);
         }
       
+        if (! $this->otpEnabled() && $request->has('password')) {
+            $request->validate([
+                'password' => 'required|string|min:6|confirmed',
+            ]);
+
+            $user->password = Hash::make($request->password);
+            $user->save();
+
+            Auth::login($user);
+            session()->forget(['reset_password_phone', 'reset_password_otp']);
+
+            return redirect()->route('home')->with('success', __('Password updated successfully. You are now logged in.'));
+        }
+
         // إذا كان الطلب لإعادة إرسال OTP
         if ($request->ajax()) {
 
@@ -204,6 +232,10 @@ class AuthController extends Controller
     // عرض صفحة OTP
     public function otp()
     {
+        if (! $this->otpEnabled()) {
+            return redirect()->route('auth.login');
+        }
+
         $phone = session('otp_phone');
 
         if (Auth::check() && !Auth::user()->verified) {
@@ -225,6 +257,10 @@ class AuthController extends Controller
     // معالجة OTP
     public function postOtp(Request $request)
     {
+        if (! $this->otpEnabled()) {
+            return redirect()->route('home');
+        }
+
         // التحقق من الـ OTP المدخل
         $request->validate([
             'otp' => 'required|array|size:4',
@@ -259,6 +295,10 @@ class AuthController extends Controller
 
     public function postOtpForPasswordReset(Request $request)
     {
+        if (! $this->otpEnabled()) {
+            return redirect()->route('auth.showNewPasswordForm');
+        }
+
         // التحقق من الـ OTP المدخل
         $request->validate([
             'otp' => 'required|array|size:4',
@@ -292,7 +332,9 @@ class AuthController extends Controller
 
     public function showNewPasswordForm()
     {
-        if (!session()->has('reset_password_phone') || !session()->has('reset_password_otp')) {
+        $requiresOtp = $this->otpEnabled();
+
+        if (!session()->has('reset_password_phone') || ($requiresOtp && !session()->has('reset_password_otp'))) {
             return redirect()->route('auth.login')->with('error', __('You are not allowed to access the new password page directly.'));
         }
 
@@ -303,6 +345,10 @@ class AuthController extends Controller
     // عرض صفحة إعادة تعيين كلمة المرور
     public function showResetPassword()
     {
+        if (! $this->otpEnabled()) {
+            return view('auth.new-password');
+        }
+
         $phone = session('reset_password_phone');
 
         if (!$phone) {
@@ -315,6 +361,10 @@ class AuthController extends Controller
     // التحقق من OTP لإعادة تعيين كلمة المرور
     public function verifyResetOtp(Request $request)
     {
+        if (! $this->otpEnabled()) {
+            return redirect()->route('auth.resetPasswordNew');
+        }
+
         $request->validate([
             'otp' => 'required|array|size:4',
         ], [
@@ -346,7 +396,7 @@ class AuthController extends Controller
         $phone = session('reset_password_phone');
         $otp = session('reset_password_otp');
 
-        if (!$phone || !$otp) {
+        if (!$phone || ($this->otpEnabled() && !$otp)) {
             return redirect()->route('auth.login')->with('error', __('You are not allowed to access the new password page directly.'));
         }
         return view('auth.new-password', compact('phone', 'otp'));
@@ -355,11 +405,18 @@ class AuthController extends Controller
     // تحديث كلمة المرور
     public function updatePassword(Request $request)
     {
+        $requiresOtp = $this->otpEnabled();
+
         // التحقق من المدخلات
-        $request->validate([
+        $rules = [
             "password" => "required|string|min:6|confirmed",
-            'otp' => 'required|numeric|digits:4',
-        ], [
+        ];
+
+        if ($requiresOtp) {
+            $rules['otp'] = 'required|numeric|digits:4';
+        }
+
+        $request->validate($rules, [
             'password.required' => __("Password is required"),
             'password.string' => __("Password must be a string"),
             'password.min' => __("Password must be at least 6 characters."),
@@ -403,6 +460,13 @@ class AuthController extends Controller
     // إعادة إرسال OTP
     public function resendOtp(Request $request)
     {
+        if (! $this->otpEnabled()) {
+            return response()->json([
+                'success' => false,
+                'message' => __('OTP is disabled.'),
+            ], 404);
+        }
+
         // التحقق من وجود رقم الهاتف في الطلب أو في الجلسة
         $phone = $request->phone ?? session('otp_phone');
 
@@ -453,6 +517,10 @@ class AuthController extends Controller
     // عرض صفحة التحقق
     public function showVerifyPage()
     {
+        if (! $this->otpEnabled()) {
+            return redirect()->route('home');
+        }
+
         return view('auth.verify');
     }
 

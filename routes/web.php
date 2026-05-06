@@ -26,8 +26,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
-
-
 // routes/web.php
 
 Route::middleware([
@@ -110,9 +108,11 @@ Route::middleware([
 
         // راوتات OTP والتوثيق - مفتوحة للمستخدم إذا لم يتم التحقق
         Route::get('phone', [AuthController::class, 'phone'])->name('phone');
-        Route::get('otp', [AuthController::class, 'otp'])->name('otp');
-        Route::post('otp', [AuthController::class, 'postOtp'])->name('postOtp');
-        Route::post('resend-otp', [AuthController::class, 'resendOtp'])->name('resendOtp');
+        if (config('auth.otp_enabled', true)) {
+            Route::get('otp', [AuthController::class, 'otp'])->name('otp');
+            Route::post('otp', [AuthController::class, 'postOtp'])->name('postOtp');
+            Route::post('resend-otp', [AuthController::class, 'resendOtp'])->name('resendOtp');
+        }
 
         // راوتات الضيف (غير مسجل الدخول)
         Route::middleware('guest')->group(function () {
@@ -127,7 +127,9 @@ Route::middleware([
             Route::get('/reset-password/new', [AuthController::class, 'showNewPasswordForm'])->name('showNewPasswordForm');
 
             Route::post('reset-password', [AuthController::class, 'resetPassword'])->name('resetPassword');
-            Route::post('verify-reset-otp', [AuthController::class, 'verifyResetOtp'])->name('verifyResetOtp');
+            if (config('auth.otp_enabled', true)) {
+                Route::post('verify-reset-otp', [AuthController::class, 'verifyResetOtp'])->name('verifyResetOtp');
+            }
             Route::get('reset-password-new', [AuthController::class, 'resetPasswordNew'])->name('resetPasswordNew');
             Route::post('update-password', [AuthController::class, 'updatePassword'])->name('updatePassword');
         });
@@ -137,9 +139,11 @@ Route::middleware([
             Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
             // إذا لم يتم التحقق
-            Route::get('verify', [AuthController::class, 'showVerifyPage'])
-                ->name('verify')
-                ->middleware('checkUserNotVerified');
+            if (config('auth.otp_enabled', true)) {
+                Route::get('verify', [AuthController::class, 'showVerifyPage'])
+                    ->name('verify')
+                    ->middleware('checkUserNotVerified');
+            }
 
             // إذا تم التحقق
             Route::middleware('checkUserVerified')->group(function () {

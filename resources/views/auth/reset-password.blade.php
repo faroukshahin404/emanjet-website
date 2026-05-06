@@ -25,26 +25,33 @@
                         </p>
                     </div>
 
-                    <form class="login-form" action="{{ route('auth.verifyResetOtp') }}" method="POST">
+                    <form class="login-form" action="{{ config('auth.otp_enabled', true) ? route('auth.verifyResetOtp') : route('auth.updatePassword') }}" method="POST">
                         @csrf
-                        <!-- Include the component here -->
-                        @include('auth.partials.otp-inputs')
+                        @if (config('auth.otp_enabled', true))
+                            @include('auth.partials.otp-inputs')
+                        @endif
 
-                        <p class="mt-3 text-center text-main">
-                            <span id="timer">02:00</span>
-                        </p>
-
-                        <div class="mt-4 d-flex justify-content-center">
-                            <p>
-                                {{ __("Didn't receive the code?") }}
-                                <a class="text-main" href="javascript:void(0)" onclick="resendOtp()" id="resendOtp">
-                                    {{ __('Do you want to resend it?') }}
-                                </a>
+                        @if (config('auth.otp_enabled', true))
+                            <p class="mt-3 text-center text-main">
+                                <span id="timer">02:00</span>
                             </p>
-                        </div>
+                        @endif
+
+                        @if (config('auth.otp_enabled', true))
+                            <div class="mt-4 d-flex justify-content-center">
+                                <p>
+                                    {{ __("Didn't receive the code?") }}
+                                    <a class="text-main" href="javascript:void(0)" onclick="resendOtp()" id="resendOtp">
+                                        {{ __('Do you want to resend it?') }}
+                                    </a>
+                                </p>
+                            </div>
+                        @endif
 
                         <div class="col-md-12 d-flex justify-content-center align-items-center mt-5">
-                            <button type="submit" class="submitBtn">{{ __('Verify') }}</button>
+                            <button type="submit" class="submitBtn">
+                                {{ config('auth.otp_enabled', true) ? __('Verify') : __('Update Password') }}
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -59,6 +66,10 @@
 
 @push('scripts')
     <script>
+        if (!@json(config('auth.otp_enabled', true))) {
+            return;
+        }
+
         // Timer functionality
         let timeLeft = 120;
         const timerElement = document.getElementById('timer');

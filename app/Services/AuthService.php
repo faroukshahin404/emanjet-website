@@ -16,6 +16,11 @@ use Log;
 
 class AuthService
 {
+    public function isOtpEnabled(): bool
+    {
+        return (bool) Config::get('auth.otp_enabled', true);
+    }
+
     protected function getOtpExpiryMinutes()
     {
         return Config::get('auth.otp_expiry_minutes', 2);
@@ -42,21 +47,34 @@ class AuthService
 
         DB::beginTransaction();
         try {
+            $isOtpEnabled = $this->isOtpEnabled();
+
             $user = User::create([
                 'name' => $request->name,
                 'mobile' => $request->phone,
                 'password' => Hash::make($request->password),
+                'verified' => ! $isOtpEnabled,
+                'phone_verified_at' => $isOtpEnabled ? null : Carbon::now(),
             ]);
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
             throw $e;
         }
-        $this->sendOtp($user);
+        if ($this->isOtpEnabled()) {
+            $this->sendOtp($user);
+        }
         return ['success' => true, 'message' => __('Registration completed successfully.')];
     }
     public function sendOtp($user)
     {
+        if (! $this->isOtpEnabled()) {
+            return [
+                'success' => true,
+                'message' => __('OTP is disabled.'),
+            ];
+        }
+
         $userCanSendOtp = $this->checkIfUserCanSendOtp($user);
  
         if (!$userCanSendOtp['success']) {
@@ -96,6 +114,10 @@ class AuthService
 
     public function verifyOtp($otpNumber, $phone)
     {
+        if (! $this->isOtpEnabled()) {
+            return $this->completeOtpVerificationForPhone($phone);
+        }
+
         if ($this->matchesMasterOtp((string) $otpNumber)) {
             return $this->completeOtpVerificationForPhone($phone);
         }

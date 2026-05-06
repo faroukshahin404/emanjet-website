@@ -17,6 +17,9 @@ class CheckUserNotVerified
      */
     public function handle(Request $request, Closure $next)
     {
+        if (! config('auth.otp_enabled', true)) {
+            return redirect()->route('home');
+        }
 
         if (!Auth::check()) {
             return redirect()->route('auth.login')->with('error', __('Please Login First.'));

@@ -119,6 +119,7 @@ return [
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
 
+    'otp_enabled' => filter_var(env('OTP_ENABLED', false), FILTER_VALIDATE_BOOLEAN),
     'otp_expiry_minutes' => env('OTP_EXPIRY_MINUTES', 5),
     'otp_max_attempts' => env('OTP_MAX_ATTEMPTS', 6),
     'otp_block_duration_minutes' => env('OTP_BLOCK_DURATION_MINUTES', 30),

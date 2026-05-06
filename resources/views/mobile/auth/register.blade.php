@@ -84,12 +84,14 @@
                     </div>
                 </div>
 
-                <div class="p-3 bg-light rounded-4 border border-light-subtle mb-4">
-                    <p class="text-muted fw-800 mb-0" style="font-size: 10px; line-height: 1.5;">
-                        <i class="fas fa-info-circle text-main me-1"></i>
-                        {{ __('Registration verification notice') }}
-                    </p>
-                </div>
+                @if (config('auth.otp_enabled', true))
+                    <div class="p-3 bg-light rounded-4 border border-light-subtle mb-4">
+                        <p class="text-muted fw-800 mb-0" style="font-size: 10px; line-height: 1.5;">
+                            <i class="fas fa-info-circle text-main me-1"></i>
+                            {{ __('Registration verification notice') }}
+                        </p>
+                    </div>
+                @endif
 
                 <div class="mb-4 pt-2">
                     <button type="submit" class="btn btn-main w-100 py-3 rounded-pill fw-800 shadow-premium">

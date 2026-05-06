@@ -46,7 +46,6 @@
                 </ul>
             </div>
 
-{{-- 
             @guest
                 <a class="loginBtn" href="{{ route('auth.login') }}">
                     <i class="fas fa-unlock"></i>
@@ -67,7 +66,6 @@
                     </ul>
                 </div>
             @endauth
---}}
         </div>
     </div>
 </div>

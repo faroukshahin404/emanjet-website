@@ -6,7 +6,7 @@
     position: relative;
 }
 .input-wrapper input {
-    padding-inline-end: 40px; /* logical inline padding for RTL/LTR */
+    padding-inline-end: 40px;
 }
 .input-wrapper .toggle-password {
     position: absolute;
@@ -16,13 +16,11 @@
     color: #6c757d;
 }
 
-/* RTL layout */
 html:dir(rtl) .input-wrapper .toggle-password {
     left: 10px;
     right: auto;
 }
 
-/* LTR layout */
 html:dir(ltr) .input-wrapper .toggle-password {
     right: 10px;
     left: auto;
@@ -32,7 +30,6 @@ html:dir(ltr) .input-wrapper .toggle-password {
 
 @endpush
 @section('content')
-    <!-- start register  -->
     <div class="register-desktop">
         <div class="container-fluid">
             <div class="row rounded-bottom-4 box-shadow pb-3">
@@ -42,7 +39,6 @@ html:dir(ltr) .input-wrapper .toggle-password {
                     <form action="{{ route('auth.postRegister') }}" method="POST" class="w-75 m-auto d-flex flex-column">
                         @csrf
 
-                        {{-- Name --}}
                         <div class="position-relative mb-3">
                             <i class="fa fa-user position-absolute top-50 translate-middle-y {{ app()->getLocale() == 'ar' ? 'end-0' : 'start-0' }} px-2"></i>
                             <input
@@ -57,7 +53,6 @@ html:dir(ltr) .input-wrapper .toggle-password {
                             >
                         </div>
 
-                        {{-- Phone --}}
                         <div class="position-relative mb-3">
                             <i class="fa fa-phone position-absolute top-50 translate-middle-y {{ app()->getLocale() == 'ar' ? 'end-0' : 'start-0' }} px-2"></i>
                             <input
@@ -72,7 +67,6 @@ html:dir(ltr) .input-wrapper .toggle-password {
                             >
                         </div>
 
-                       {{-- Password --}}
 <div class="position-relative mb-3 input-wrapper">
     <i class="fa fa-key position-absolute top-50 translate-middle-y {{ app()->getLocale() == 'ar' ? 'end-0' : 'start-0' }} px-2"></i>
     <input
@@ -87,7 +81,6 @@ html:dir(ltr) .input-wrapper .toggle-password {
     <i class="fa fa-eye toggle-password" toggle="#password"></i>
 </div>
 
-{{-- Confirm password --}}
 <div class="position-relative mb-3 input-wrapper">
     <i class="fa fa-key position-absolute top-50 translate-middle-y {{ app()->getLocale() == 'ar' ? 'end-0' : 'start-0' }} px-2"></i>
     <input
@@ -103,9 +96,11 @@ html:dir(ltr) .input-wrapper .toggle-password {
 </div>
 
 
-                        <p>
-                            {{ __('We will send a verification code to your phone number to confirm that you are the account owner and complete the verification successfully.') }}
-                        </p>
+                        @if (config('auth.otp_enabled', true))
+                            <p>
+                                {{ __('We will send a verification code to your phone number to confirm that you are the account owner and complete the verification successfully.') }}
+                            </p>
+                        @endif
 
                         <p class="text-center text-muted">
                             {{ __('If you already have an account, you can log in by clicking') }}
@@ -113,7 +108,7 @@ html:dir(ltr) .input-wrapper .toggle-password {
                         </p>
 
                         <div class="d-flex justify-content-center">
-                            <button type="submit" class="submitBtn mt-3">{{ __('Send') }}</button>
+                            <button type="submit" class="submitBtn mt-3">{{ __('Register') }}</button>
                         </div>
                     </form>
                 </div>
@@ -124,7 +119,6 @@ html:dir(ltr) .input-wrapper .toggle-password {
             </div>
         </div>
     </div>
-    <!-- end register  -->
 @endsection
 
 @section('mobile-content')

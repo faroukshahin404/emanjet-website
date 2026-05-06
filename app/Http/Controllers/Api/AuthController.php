@@ -20,6 +20,11 @@ class AuthController extends Controller
         $this->authService = $authService;
     }
 
+    protected function otpEnabled(): bool
+    {
+        return $this->authService->isOtpEnabled();
+    }
+
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -90,6 +95,10 @@ class AuthController extends Controller
     }
     public function resendOtp(Request $request)
     {
+        if (! $this->otpEnabled()) {
+            return response()->json(['status' => false, 'message' => __('OTP is disabled')], 404);
+        }
+
         $validator = Validator::make($request->all(), [
 
             'phone' => 'required|numeric|min:10|unique:users,mobile',
@@ -113,6 +122,10 @@ class AuthController extends Controller
 
     public function verify_register_otp(Request $request)
     {
+        if (! $this->otpEnabled()) {
+            return response()->json(['status' => false, 'message' => __('OTP is disabled')], 404);
+        }
+
         try {
             $validator = Validator::make($request->all(), [
 
@@ -185,20 +198,25 @@ class AuthController extends Controller
                 ]);
             }
 
-            // إرسال OTP
+            if (! $this->otpEnabled()) {
+                return response()->json([
+                    'status' => true,
+                    'message' => __('Proceed to reset password')
+                ]);
+            }
+
             $otp = $this->authService->sendOtp($user);
             if ($otp['success']) {
-
                 return response()->json([
                     'status' => true,
                     'message' => __('OTP sent successfully')
                 ]);
-            } else {
-                return response()->json([
-                    'status' => false,
-                    'message' => $otp['message']
-                ]);
             }
+
+            return response()->json([
+                'status' => false,
+                'message' => $otp['message']
+            ]);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['status' => false, 'message' => $e->getMessage()]);

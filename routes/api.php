@@ -10,8 +10,10 @@ Route::group(['prefix' => 'auth'], function () {
 
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/resend-otp', [AuthController::class, 'resendOtp']);
-    Route::post('/verify-register-otp', [AuthController::class, 'verify_register_otp']);
+    if (config('auth.otp_enabled', true)) {
+        Route::post('/resend-otp', [AuthController::class, 'resendOtp']);
+        Route::post('/verify-register-otp', [AuthController::class, 'verify_register_otp']);
+    }
     Route::get('/forgot-password', [AuthController::class, 'forgot_password']);
     Route::post('/reset-password', [AuthController::class, 'reset_password']);
     Route::get('/refresh-token', [AuthController::class, 'refresh_token']);
